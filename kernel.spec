@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package version
-%define mnbrel		1
+%define mnbrel		2
 
 # Kernel Makefile extraversion is substituted by kpatch/kgit/kstable which
 # can be:
@@ -1173,6 +1173,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sat Aug 30 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc5.2mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - apply_patches: fix integrity check of 3rdparty.series/series files
+      regarding unlisted patch files.
+
 * Fri Aug 29 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc5.1mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Move EeePc patch to eeepc-laptop
