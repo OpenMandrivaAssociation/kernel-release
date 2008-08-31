@@ -1156,6 +1156,7 @@ rm -rf %{buildroot}
 %{_kerneldir}/MAINTAINERS
 %{_kerneldir}/Makefile
 %{_kerneldir}/README
+%{_kerneldir}/README.ccs
 %{_kerneldir}/REPORTING-BUGS
 %doc README.MandrivaLinux
 %doc README.kernel-sources
@@ -1177,6 +1178,9 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - apply_patches: fix integrity check of 3rdparty.series/series files
       regarding unlisted patch files.
+    - Updated Tomoyo Linux patches to latest version from tomoyo svn
+      (r1499). It contains fixed code for locking problems with apparmor
+      patches applied (http://lkml.org/lkml/2008/8/30/75).
 
 * Fri Aug 29 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc5.1mnb
   o Pascal Terjan <pterjan@mandriva.com>
