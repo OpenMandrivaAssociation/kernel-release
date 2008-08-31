@@ -11,20 +11,16 @@
 %define patchlevel	6
 %define sublevel	27
 
-# Package version
-%define mnbrel		2
+# Package release
+%define mnbrel		1
 
-# Kernel Makefile extraversion is substituted by kpatch/kgit/kstable which
-# can be:
-#
-#	0   (empty)
-#	rc  (kpatch)
-#	git (kgit)
-#	stable release (kstable)
-#
+# kernel Makefile extraversion is substituted by 
+# kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
+# or stable release (kstable)
 %define kpatch		rc5
-%define kgit		0
 %define kstable		0
+# kernel.org -gitX patch (only the number after "git")
+%define kgit		2
 
 # Used when building update candidates
 #define uclevel uc1
@@ -41,7 +37,11 @@
 
 %define rpmtag		%manbo_distsuffix
 %if %kpatch
+%if %kgit
+%define rpmrel		%manbo_mkrel 0.%{kpatch}.%{kgit}.%{mnbrel}%{?uclevel:.%{uclevel}}
+%else
 %define rpmrel		%manbo_mkrel 0.%{kpatch}.%{mnbrel}%{?uclevel:.%{uclevel}}
+%endif
 %else
 %define rpmrel		%manbo_mkrel %{mnbrel}%{?uclevel:.%{uclevel}}
 %endif
@@ -51,7 +51,11 @@
 
 %define rpmtag		%distsuffix
 %if %kpatch
+%if %kgit
+%define rpmrel		%mkrel 0.%{kpatch}.%{kgit}.%{mnbrel}%{?uclevel:.%{uclevel}}
+%else
 %define rpmrel		%mkrel 0.%{kpatch}.%{mnbrel}%{?uclevel:.%{uclevel}}
+%endif
 %else
 %define rpmrel		%mkrel %{mnbrel}%{?uclevel:.%{uclevel}}
 %endif
@@ -82,7 +86,11 @@
 
 # Used for not making too long names for rpms or search paths
 %if %kpatch
+%if %kgit
+%define buildrpmrel     0.%{kpatch}.%{kgit}.%{mnbrel}%{?uclevel:.%{uclevel}}%{rpmtag}
+%else
 %define buildrpmrel     0.%{kpatch}.%{mnbrel}%{?uclevel:.%{uclevel}}%{rpmtag}
+%endif
 %else
 %define buildrpmrel     %{mnbrel}%{?uclevel:.%{uclevel}}%{rpmtag}
 %endif
@@ -202,8 +210,8 @@ Patch1:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/t
 Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}.bz2.sign
 %endif
 %if %kgit
-Patch2:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-%{kgit}.bz2
-Source11: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-%{kgit}.bz2.sign
+Patch2:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-git%{kgit}.bz2
+Source11: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-git%{kgit}.bz2.sign
 %endif
 %if %kstable
 Patch1:   	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}.bz2
@@ -1174,13 +1182,16 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sat Aug 30 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc5.2mnb
+* Sun Aug 31 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc5.2.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - apply_patches: fix integrity check of 3rdparty.series/series files
       regarding unlisted patch files.
     - Updated Tomoyo Linux patches to latest version from tomoyo svn
       (r1499). It contains fixed code for locking problems with apparmor
       patches applied (http://lkml.org/lkml/2008/8/30/75).
+    - Use git snapshot number in package release like is done currently
+      on kernel-linus package.
+    - Updated to 2.6.27-rc5-git2
 
 * Fri Aug 29 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc5.1mnb
   o Pascal Terjan <pterjan@mandriva.com>
