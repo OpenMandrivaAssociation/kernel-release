@@ -1186,6 +1186,10 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Include JMicron JMC2x0 series PCIe Ethernet Linux Device Driver
       from Guo-Fu Tseng, posted on netdev.
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Include r8169 patches for 8102 (patches 0001 to 0006 from 
+      http://userweb.kernel.org/~romieu/r8169/2.6.27-rc3/20080818/).
+      Fixes networking on Acer Aspire One and MSI Wind.
 
 * Sun Aug 31 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc5.2.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
