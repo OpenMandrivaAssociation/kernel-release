@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1182,6 +1182,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon Sep 01 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc5.2.2mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Include JMicron JMC2x0 series PCIe Ethernet Linux Device Driver
+      from Guo-Fu Tseng, posted on netdev.
+
 * Sun Aug 31 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc5.2.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - apply_patches: fix integrity check of 3rdparty.series/series files
