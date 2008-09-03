@@ -1185,6 +1185,7 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Include JMicron JMC2x0 series PCIe Ethernet Linux Device Driver
       from Guo-Fu Tseng, posted on netdev.
+    - Move dkms-rt2860 into kernel package.
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Include r8169 patches for 8102 (patches 0001 to 0006 from 
