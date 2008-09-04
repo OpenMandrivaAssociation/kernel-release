@@ -1195,6 +1195,11 @@ rm -rf %{buildroot}
       The main patch and code comes from Ubuntu (see main patch file for
       details), as they already made necessary ports to account for
       apparmor patch that we also share.
+    - Downgrade unionfs to version 1.4, the main unionfs patch also
+      comes from Ubuntu with minor adaptations, for the same reason as
+      with aufs: it has already integrated apparmor changes. We are
+      downgrading because of newer problems with unionfs 2.3 + linux
+      2.6.25+, we will keep it until the problems are sorted out.
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Include r8169 patches for 8102 (patches 0001 to 0006 from 
