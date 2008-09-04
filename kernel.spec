@@ -1191,6 +1191,10 @@ rm -rf %{buildroot}
       from Guo-Fu Tseng, posted on netdev.
     - Move dkms-rt2860 into kernel package.
     - Move dkms-et131x into kernel package.
+    - Add aufs into Mandriva kernel, can be used as an unionfs alternative.
+      The main patch and code comes from Ubuntu (see main patch file for
+      details), as they already made necessary ports to account for
+      apparmor patch that we also share.
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Include r8169 patches for 8102 (patches 0001 to 0006 from 
