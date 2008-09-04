@@ -20,7 +20,7 @@
 %define kpatch		rc5
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		2
+%define kgit		6
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1185,7 +1185,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Sep 01 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc5.2.2mnb
+* Thu Sep 04 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc5.6.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Include JMicron JMC2x0 series PCIe Ethernet Linux Device Driver
       from Guo-Fu Tseng, posted on netdev.
@@ -1199,6 +1199,9 @@ rm -rf %{buildroot}
 
   o Thomas Backlund <tmb@mandriva.org>
     - update TomoyoLinux to 1.6.4 final
+
+  o Luiz Capitulino <lcapitulino@mandriva.com.br>
+    - Update to 2.6.27-rc5-git6
     
 * Sun Aug 31 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc5.2.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
