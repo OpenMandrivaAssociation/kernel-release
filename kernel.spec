@@ -705,6 +705,10 @@ SaveDevel() {
 	cp -fR drivers/media/dvb/dvb-core/*.h $TempDevelRoot/drivers/media/dvb/dvb-core/
 	cp -fR drivers/media/dvb/frontends/lgdt330x.h $TempDevelRoot/drivers/media/dvb/frontends/
 
+	# config.mk from rt2860 3rdparty driver must be present
+	cp -fR 3rdparty/rt2860/os/linux/config.mk \
+	       $TempDevelRoot/3rdparty/rt2860/os/linux/config.mk
+
 	for i in alpha arm arm26 avr32 blackfin cris frv h8300 ia64 mips m32r \
 	         m68knommu parisc s390 sh sh64 v850 xtensa mn10300; do
 		rm -rf $TempDevelRoot/arch/$i
