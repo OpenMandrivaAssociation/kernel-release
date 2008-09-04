@@ -1200,6 +1200,8 @@ rm -rf %{buildroot}
       with aufs: it has already integrated apparmor changes. We are
       downgrading because of newer problems with unionfs 2.3 + linux
       2.6.25+, we will keep it until the problems are sorted out.
+      Also backported some fixes from newer unionfs versions that were
+      used on dkms-unionfs package.
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Include r8169 patches for 8102 (patches 0001 to 0006 from 
