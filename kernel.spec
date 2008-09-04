@@ -1202,7 +1202,8 @@ rm -rf %{buildroot}
 
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
     - Update to 2.6.27-rc5-git6
-    
+    - Fix boottime hang on nvidia C51 mobos (#43475) 
+
 * Sun Aug 31 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc5.2.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - apply_patches: fix integrity check of 3rdparty.series/series files
