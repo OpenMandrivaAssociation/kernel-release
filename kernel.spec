@@ -20,7 +20,7 @@
 %define kpatch		rc5
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		6
+%define kgit		7
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1185,7 +1185,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Sep 04 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc5.6.1mnb
+* Fri Sep 05 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc5.7.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Include JMicron JMC2x0 series PCIe Ethernet Linux Device Driver
       from Guo-Fu Tseng, posted on netdev.
@@ -1212,7 +1212,7 @@ rm -rf %{buildroot}
     - update TomoyoLinux to 1.6.4 final
 
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
-    - Update to 2.6.27-rc5-git6
+    - Update to 2.6.27-rc5-git7
     - Fix boottime hang on nvidia C51 mobos (#43475) 
 
 * Sun Aug 31 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc5.2.1mnb
