@@ -17,10 +17,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc5
+%define kpatch		rc6
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		7
+%define kgit		0
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1185,6 +1185,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Sep 10 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.1mnb
+  o Luiz Capitulino <lcapitulino@mandriva.com.br>
+    - Update to 2.6.27-rc6
+      * Drop clockevents patch series from Thomas Gleixner (already merged)
+
 * Fri Sep 05 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc5.7.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Include JMicron JMC2x0 series PCIe Ethernet Linux Device Driver
