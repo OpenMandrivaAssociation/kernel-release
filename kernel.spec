@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1185,6 +1185,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Sep 10 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.2mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Added fix to build warnings in rt2860 3rdparty driver.
+
 * Wed Sep 10 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
     - Update to 2.6.27-rc6
