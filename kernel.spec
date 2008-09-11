@@ -1189,6 +1189,8 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Added fix to build warnings in rt2860 3rdparty driver.
     - Fixed and added back mach64 drm support.
+    - usb-storage: fixed and added back In-System Design USS725 USB/IDE
+      bridge support patches.
 
 * Wed Sep 10 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
