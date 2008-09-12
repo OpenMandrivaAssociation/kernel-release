@@ -1193,6 +1193,9 @@ rm -rf %{buildroot}
       bridge support patches.
     - ALSA: update to v1.0.18rc3, and fix oopses from digital slaves
       addition.
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Set CONFIG_LEGACY_PTY_COUNT to 0. This can be changed on the command line if
+      needed and saves several seconds at boot time.
 
 * Wed Sep 10 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
