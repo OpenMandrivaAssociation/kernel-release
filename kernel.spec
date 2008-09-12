@@ -1191,7 +1191,8 @@ rm -rf %{buildroot}
     - Fixed and added back mach64 drm support.
     - usb-storage: fixed and added back In-System Design USS725 USB/IDE
       bridge support patches.
-    - ALSA: update to v1.0.18rc3
+    - ALSA: update to v1.0.18rc3, and fix oopses from digital slaves
+      addition.
 
 * Wed Sep 10 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
