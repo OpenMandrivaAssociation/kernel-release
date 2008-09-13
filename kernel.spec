@@ -1195,6 +1195,8 @@ rm -rf %{buildroot}
       addition.
     - Fix kernel regression in partition check code
       (http://bugzilla.kernel.org/show_bug.cgi?id=11554).
+    - Remove revert patch to workaround VirtualBox bug (#42776),
+      VirtualBox 2.0.2 now on cooker has the bug fixed.
   o Pascal Terjan <pterjan@mandriva.com>
     - Set CONFIG_LEGACY_PTY_COUNT to 0. This can be changed on the command line if
       needed and saves several seconds at boot time.
