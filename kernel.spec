@@ -1205,6 +1205,8 @@ rm -rf %{buildroot}
       issues when using intel dri. While at it also grabbed some
       minor additional bug fixes only patches from drm-next.
     - Include Intel G41 agpgart support patch posted on LKML.
+    - Add patches for detection of northbridge in family 0x11 AMD
+      processors from tip/x86/iommu tree.
   o Pascal Terjan <pterjan@mandriva.com>
     - Set CONFIG_LEGACY_PTY_COUNT to 0. This can be changed on the command line if
       needed and saves several seconds at boot time.
