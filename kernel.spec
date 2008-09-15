@@ -1209,6 +1209,12 @@ rm -rf %{buildroot}
       so use it instead of just fully reverting the kernel commits.
     - Added fix for 2.6.27 boot issue with xfs, fs can't be mounted rw
       (http://lkml.org/lkml/2008/9/14/135), reported by Frederik Himpe.
+    - Wireless bugfixes from linux-wireless ML applicable to 2.6.27:
+      iwlwifi: generic init calibrations framework
+      b43: Fix QoS defaults
+      b43legacy: Fix failure in rate-adjustment mechanism
+      b43legacy: Fix to enhance TX speed
+      libertas: clear current command on card removal
 
 * Mon Sep 15 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc6.3.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
