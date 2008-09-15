@@ -1204,6 +1204,7 @@ rm -rf %{buildroot}
       something really wanted, but possibly also fixes some stability
       issues when using intel dri. While at it also grabbed some
       minor additional bug fixes only patches from drm-next.
+    - Include Intel G41 agpgart support patch posted on LKML.
   o Pascal Terjan <pterjan@mandriva.com>
     - Set CONFIG_LEGACY_PTY_COUNT to 0. This can be changed on the command line if
       needed and saves several seconds at boot time.
