@@ -1192,6 +1192,22 @@ rm -rf %{buildroot}
       * Don't tar .svn to remove it afterwards
       * Don't include *~ in tarball
 
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Re-include a workaround for a virtualbox bug (#42776) removed in
+      previous release, even with Mandriva cooker/2009.0 having a newer
+      VirtualBox version that has the bug fixed. Before we had this as a
+      revert of both commits e587cadd8f47e202a30712e2906a65a0606d5865
+      and 2f1dafe50cc4e58a239fd81bd47f87f32042a1ee, but reverting the
+      later reintroduces another bug:
+      http://linux.derkeiler.com/Mailing-Lists/Kernel/2008-04/msg07574.html
+      Reverting the second one is needed when reverting the first one
+      that is which caught the bug in VirtualBox versions prior to 2.0.2.
+      The problem is that people using other distributions or older
+      Mandriva releases that contains old VirtualBox versions will not
+      be able to run and test Mandriva 2009.0, so we still need to apply
+      a workaround. Ubuntu has a less intrusive one (not using reverts),
+      so use it instead of just fully reverting the kernel commits.
+
 * Mon Sep 15 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc6.3.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Added fix to build warnings in rt2860 3rdparty driver.
