@@ -1207,6 +1207,8 @@ rm -rf %{buildroot}
       be able to run and test Mandriva 2009.0, so we still need to apply
       a workaround. Ubuntu has a less intrusive one (not using reverts),
       so use it instead of just fully reverting the kernel commits.
+    - Added fix for 2.6.27 boot issue with xfs, fs can't be mounted rw
+      (http://lkml.org/lkml/2008/9/14/135), reported by Frederik Himpe.
 
 * Mon Sep 15 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc6.3.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
