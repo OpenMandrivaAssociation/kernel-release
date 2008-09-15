@@ -1214,6 +1214,10 @@ rm -rf %{buildroot}
     - Set CONFIG_LEGACY_PTY_COUNT to 0. This can be changed on the command line if
       needed and saves several seconds at boot time.
     - Re-enable PROFILING and OPROFILE
+    - Changes in build scripts
+      * Use the to_add value even if it was already in the defconfig
+      * Don't tar .svn to remove it afterwards
+      * Don't include *~ in tarball
 
 * Wed Sep 10 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
