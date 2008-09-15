@@ -1197,6 +1197,13 @@ rm -rf %{buildroot}
       (http://bugzilla.kernel.org/show_bug.cgi?id=11554).
     - Remove revert patch to workaround VirtualBox bug (#42776),
       VirtualBox 2.0.2 now on cooker has the bug fixed.
+    - Add Intel ACPI IGD OpRegion support patch from drm-next, needed to
+      enable ACPI backlight control on some newer laptops with Intel
+      integrated graphics. Some other patches were needed to be applied
+      also because of conflicts, they do some a bit extra changes, not
+      something really wanted, but possibly also fixes some stability
+      issues when using intel dri. While at it also grabbed some
+      minor additional bug fixes only patches from drm-next.
   o Pascal Terjan <pterjan@mandriva.com>
     - Set CONFIG_LEGACY_PTY_COUNT to 0. This can be changed on the command line if
       needed and saves several seconds at boot time.
