@@ -1207,6 +1207,8 @@ rm -rf %{buildroot}
     - Include Intel G41 agpgart support patch posted on LKML.
     - Add patches for detection of northbridge in family 0x11 AMD
       processors from tip/x86/iommu tree.
+    - Add compatibility quirk for ALI M5229 patch posted on LKML, needed
+      by pata_ali libata driver to work with M5229 in some setups.
   o Pascal Terjan <pterjan@mandriva.com>
     - Set CONFIG_LEGACY_PTY_COUNT to 0. This can be changed on the command line if
       needed and saves several seconds at boot time.
