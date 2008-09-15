@@ -1185,7 +1185,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Sep 15 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.3.2mnb
+* Mon Sep 15 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc6.3.2mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Re-enable PROFILING and OPROFILE
     - Changes in build scripts
