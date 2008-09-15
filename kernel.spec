@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -20,7 +20,7 @@
 %define kpatch		rc6
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kgit		3
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1185,7 +1185,8 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Wed Sep 10 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.2mnb
+* Mon Sep 15 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc6.3.1mnb
+
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Added fix to build warnings in rt2860 3rdparty driver.
     - Fixed and added back mach64 drm support.
@@ -1193,8 +1194,7 @@ rm -rf %{buildroot}
       bridge support patches.
     - ALSA: update to v1.0.18rc3, and fix oopses from digital slaves
       addition.
-    - Fix kernel regression in partition check code
-      (http://bugzilla.kernel.org/show_bug.cgi?id=11554).
+    - Update to 2.6.27-rc5-git3
     - Remove revert patch to workaround VirtualBox bug (#42776),
       VirtualBox 2.0.2 now on cooker has the bug fixed.
     - Add Intel ACPI IGD OpRegion support patch from drm-next, needed to
@@ -1209,6 +1209,7 @@ rm -rf %{buildroot}
       processors from tip/x86/iommu tree.
     - Add compatibility quirk for ALI M5229 patch posted on LKML, needed
       by pata_ali libata driver to work with M5229 in some setups.
+
   o Pascal Terjan <pterjan@mandriva.com>
     - Set CONFIG_LEGACY_PTY_COUNT to 0. This can be changed on the command line if
       needed and saves several seconds at boot time.
