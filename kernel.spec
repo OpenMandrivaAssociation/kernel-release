@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1185,8 +1185,14 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Sep 15 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc6.3.1mnb
+* Mon Sep 15 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.3.2mnb
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Re-enable PROFILING and OPROFILE
+    - Changes in build scripts
+      * Don't tar .svn to remove it afterwards
+      * Don't include *~ in tarball
 
+* Mon Sep 15 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc6.3.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Added fix to build warnings in rt2860 3rdparty driver.
     - Fixed and added back mach64 drm support.
@@ -1213,11 +1219,8 @@ rm -rf %{buildroot}
   o Pascal Terjan <pterjan@mandriva.com>
     - Set CONFIG_LEGACY_PTY_COUNT to 0. This can be changed on the command line if
       needed and saves several seconds at boot time.
-    - Re-enable PROFILING and OPROFILE
     - Changes in build scripts
       * Use the to_add value even if it was already in the defconfig
-      * Don't tar .svn to remove it afterwards
-      * Don't include *~ in tarball
 
 * Wed Sep 10 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
