@@ -1185,7 +1185,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Sep 05 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.3.3mnb
+* Tue Sep 16 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.3.3mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Revert Intel ACPI IGD OpRegion support patch addition along with
       its needed patch series, we discovered a regression on a laptop
