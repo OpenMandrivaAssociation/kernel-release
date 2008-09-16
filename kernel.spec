@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		2
+%define mnbrel		3
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1185,6 +1185,17 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Sep 05 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.3.3mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Revert Intel ACPI IGD OpRegion support patch addition along with
+      its needed patch series, we discovered a regression on a laptop
+      with 855GM when using kde4 with gfx effects enabled (X hangs in
+      session startup). Probably is related to the change "i915: Add
+      support for MSI and interrupt mitigation." patch at first look
+      after some initial debugging made by Luiz Capitulino (we are not
+      sure, needs more investigation and upstream bug report that will
+      be done later, but reverting all patches for now works).
+
 * Mon Sep 15 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc6.3.2mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Re-enable PROFILING and OPROFILE
