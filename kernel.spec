@@ -1195,6 +1195,8 @@ rm -rf %{buildroot}
       after some initial debugging made by Luiz Capitulino (we are not
       sure, needs more investigation and upstream bug report that will
       be done later, but reverting all patches for now works).
+    - Remove alternative patch for kernel.org bug 7694, a proper patch
+      is already on mainline.
 
 * Mon Sep 15 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc6.3.2mnb
   o Pascal Terjan <pterjan@mandriva.com>
