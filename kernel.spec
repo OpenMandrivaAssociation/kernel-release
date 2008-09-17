@@ -1199,6 +1199,7 @@ rm -rf %{buildroot}
       is already on mainline.
   o Pascal Terjan <pterjan@mandriva.com>
     - Really disable braille console support when it is not used (#41999)
+    - Enable CONFIG_CIFS_EXPERIMENTAL to support Kerberos auth (#43933)
 
 * Mon Sep 15 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc6.3.2mnb
   o Pascal Terjan <pterjan@mandriva.com>
