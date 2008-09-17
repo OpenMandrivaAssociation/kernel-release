@@ -1197,7 +1197,8 @@ rm -rf %{buildroot}
       be done later, but reverting all patches for now works).
     - Remove alternative patch for kernel.org bug 7694, a proper patch
       is already on mainline.
-    - Add Hercules EC-900 mini-notebook to ich_laptop short cable list.
+    - Add Hercules EC-900 mini-notebook to ich_laptop short cable list
+      for both ata_piix and piix.
   o Pascal Terjan <pterjan@mandriva.com>
     - Really disable braille console support when it is not used (#41999)
     - Enable CONFIG_CIFS_EXPERIMENTAL to support Kerberos auth (#43933)
