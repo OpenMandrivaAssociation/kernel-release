@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		3
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -20,7 +20,7 @@
 %define kpatch		rc6
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		3
+%define kgit		5
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1185,7 +1185,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Sep 16 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.3.3mnb
+* Fri Sep 19 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Revert Intel ACPI IGD OpRegion support patch addition along with
       its needed patch series, we discovered a regression on a laptop
@@ -1200,9 +1200,14 @@ rm -rf %{buildroot}
     - Add Hercules EC-900 mini-notebook to ich_laptop short cable list
       for both ata_piix and piix.
     - ALSA: Fix ALC662 DAC mixer mutes also for auto config model.
+
   o Pascal Terjan <pterjan@mandriva.com>
     - Really disable braille console support when it is not used (#41999)
     - Enable CONFIG_CIFS_EXPERIMENTAL to support Kerberos auth (#43933)
+
+  o Luiz Capitulino <lcapitulino@mandriva.com.br>
+    - Update to 2.6.27-rc6-git5
+    - Update .configs
 
 * Mon Sep 15 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc6.3.2mnb
   o Pascal Terjan <pterjan@mandriva.com>
