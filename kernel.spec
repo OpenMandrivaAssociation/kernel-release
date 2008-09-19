@@ -1208,6 +1208,8 @@ rm -rf %{buildroot}
       * ath9k: connectivity is lost after Group rekeying is done
       * b43: Fix Bluetooth coexistence SPROM coding error for Motorola
         7010 variant of BCM4306
+    - Add "mute" kernel start-up parameter to disable all log messages,
+      from Tiago Salem Herrmann.
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Really disable braille console support when it is not used (#41999)
