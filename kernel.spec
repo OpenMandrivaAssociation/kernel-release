@@ -1200,7 +1200,9 @@ rm -rf %{buildroot}
     - Add Hercules EC-900 mini-notebook to ich_laptop short cable list
       for both ata_piix and piix.
     - ALSA: Fix ALC662 DAC mixer mutes also for auto config model.
-    - Updated atl2 driver from Jeff Garzik netdev-2.6 tree.
+    - New ethernet drivers from Jeff Garzik netdev-2.6 tree:
+      * updated atl2/jme drivers;
+      * Cisco 10G Ethernet NIC driver.
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Really disable braille console support when it is not used (#41999)
