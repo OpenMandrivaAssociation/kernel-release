@@ -1204,6 +1204,10 @@ rm -rf %{buildroot}
       * updated atl2/jme drivers;
       * enic: Cisco 10G Ethernet NIC driver;
       * qlge: New Qlogic 10Gb Ethernet Driver.
+    - Include following bug fixes from linux-wireless ML:
+      * ath9k: connectivity is lost after Group rekeying is done
+      * b43: Fix Bluetooth coexistence SPROM coding error for Motorola
+        7010 variant of BCM4306
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Really disable braille console support when it is not used (#41999)
