@@ -1185,6 +1185,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon Sep 22 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc7.1mnb
+  o Pascal Terjan <pterjan@mandriva.com>
+   - Support fn key on Apple Wireless keyboards (#44119)
+
 * Fri Sep 19 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Revert Intel ACPI IGD OpRegion support patch addition along with
