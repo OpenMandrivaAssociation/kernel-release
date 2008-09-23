@@ -17,10 +17,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc6
+%define kpatch		rc7
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		5
+%define kgit		1
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1185,9 +1185,15 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Sep 22 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc7.1mnb
+* Mon Sep 23 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc7.1.1mnb
   o Pascal Terjan <pterjan@mandriva.com>
-   - Support fn key on Apple Wireless keyboards (#44119)
+    - Support fn key on Apple Wireless keyboards (#44119)
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Update to 2.6.27-rc7-git1
+    - Disable e1000e module until a fix for its corruption issue is
+      available (#44147).
+    - Remove already applied fs-xfs-fix-remount-failure.patch
 
 * Fri Sep 19 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc6.5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
