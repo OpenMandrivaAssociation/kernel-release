@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1185,6 +1185,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon Sep 23 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc7.1.2mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Drop acpi-tc1100-wmi* patches, kernel already has all relevant
+      support.
+
 * Mon Sep 23 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc7.1.1mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Support fn key on Apple Wireless keyboards (#44119)
