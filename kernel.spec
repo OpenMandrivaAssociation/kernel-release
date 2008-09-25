@@ -1193,6 +1193,7 @@ rm -rf %{buildroot}
       for 2.6.27 (rename also to hid-usbhid-IBM-BladeCenterHS20-quirk.patch)
   o Pascal Terjan <pterjan@mandriva.com>
     - Fix function keys on EeePc, some NEC and some other laptops
+    - Fix Wlan and Webcam keyboard switching on EeePc
 
 * Mon Sep 23 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc7.1.1mnb
   o Pascal Terjan <pterjan@mandriva.com>
