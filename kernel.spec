@@ -1191,6 +1191,8 @@ rm -rf %{buildroot}
       support.
     - patches-broken: rediff and fix hid-usbhid-IBM-BaldeCenterHS20-HID.patch
       for 2.6.27 (rename also to hid-usbhid-IBM-BladeCenterHS20-quirk.patch)
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Fix function keys on EeePc, some NEC and some other laptops
 
 * Mon Sep 23 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc7.1.1mnb
   o Pascal Terjan <pterjan@mandriva.com>
