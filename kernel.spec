@@ -1194,6 +1194,7 @@ rm -rf %{buildroot}
   o Pascal Terjan <pterjan@mandriva.com>
     - Fix function keys on EeePc, some NEC and some other laptops
     - Fix Wlan and Webcam keyboard switching on EeePc
+    - Fix disable camera on EeePc breaking USB
 
 * Mon Sep 23 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc7.1.1mnb
   o Pascal Terjan <pterjan@mandriva.com>
