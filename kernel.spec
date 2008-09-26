@@ -20,7 +20,7 @@
 %define kpatch		rc7
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		1
+%define kgit		5
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1185,7 +1185,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Sep 23 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc7.1.2mnb
+* Fri Sep 26 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc7.5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Drop acpi-tc1100-wmi* patches, kernel already has all relevant
       support.
@@ -1197,10 +1197,19 @@ rm -rf %{buildroot}
       workaround could be used too for the problem, using cache_time
       parameter of battery module setting a larger value, but the patch
       to preempt acpi code is a better/definitive solution.
+
   o Pascal Terjan <pterjan@mandriva.com>
     - Fix function keys on EeePc, some NEC and some other laptops
     - Fix Wlan and Webcam keyboard switching on EeePc
     - Fix disable camera on EeePc breaking USB
+
+  o Luiz Capitulino <lcapitulino@mandriva.com.br>
+    - Update to 2.6.27-rc7-git5
+      * drop net-wireless-ath9k-connectivity-is-lost-after-Group-rekeying-is-done.patch
+        (merged)
+      * drop USB-revert-recovery-from-transient-errors.patch (merged)
+      * Update security-apparmor-2.6.27.patch due to change in mm/tiny-shmem.c
+      * Add usb-storage-uss725-build-fixes.patch
 
 * Mon Sep 23 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc7.1.1mnb
   o Pascal Terjan <pterjan@mandriva.com>
