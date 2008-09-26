@@ -1191,6 +1191,12 @@ rm -rf %{buildroot}
       support.
     - patches-broken: rediff and fix hid-usbhid-IBM-BaldeCenterHS20-HID.patch
       for 2.6.27 (rename also to hid-usbhid-IBM-BladeCenterHS20-quirk.patch)
+    - Include patch from linux-acpi to avoid stalls while inside acpi
+      code in slow machines, like when reading acpi battery info
+      (http://marc.info/?l=linux-acpi&m=122235488029621&w=2). A
+      workaround could be used too for the problem, using cache_time
+      parameter of battery module setting a larger value, but the patch
+      to preempt acpi code is a better/definitive solution.
   o Pascal Terjan <pterjan@mandriva.com>
     - Fix function keys on EeePc, some NEC and some other laptops
     - Fix Wlan and Webcam keyboard switching on EeePc
