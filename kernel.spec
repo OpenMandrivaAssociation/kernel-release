@@ -1203,6 +1203,8 @@ rm -rf %{buildroot}
       regression was "i915: Initialize hardware status page at device
       load when possible.", turned out also that this patch wasn't
       really needed in the series so it's safely dropped). Closes: #43061
+    - Drop Wacom ACPI patches: seems they were forgotten here, same
+      functionality should already be provided by drivers/serial/8250_pnp.c
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Fix function keys on EeePc, some NEC and some other laptops
