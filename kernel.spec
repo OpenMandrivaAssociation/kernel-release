@@ -1185,7 +1185,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Sep 26 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc7.5.1mnb
+* Sat Sep 27 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc7.5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Drop acpi-tc1100-wmi* patches, kernel already has all relevant
       support.
