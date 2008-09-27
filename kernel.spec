@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1197,6 +1197,12 @@ rm -rf %{buildroot}
       workaround could be used too for the problem, using cache_time
       parameter of battery module setting a larger value, but the patch
       to preempt acpi code is a better/definitive solution.
+    - Add again Intel ACPI IGD OpRegion support patch and its needed
+      patches, but now without the patch that introduced the regression
+      found with one 855GM based laptop (the patch that introduced the
+      regression was "i915: Initialize hardware status page at device
+      load when possible.", turned out also that this patch wasn't
+      really needed in the series so it's safely dropped). Closes: #43061
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Fix function keys on EeePc, some NEC and some other laptops
