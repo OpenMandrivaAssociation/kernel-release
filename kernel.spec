@@ -1205,6 +1205,8 @@ rm -rf %{buildroot}
       really needed in the series so it's safely dropped). Closes: #43061
     - Drop Wacom ACPI patches: seems they were forgotten here, same
       functionality should already be provided by drivers/serial/8250_pnp.c
+    - ALSA/hda-intel: map proper ALC662 model for Gigabyte 945GCM-S2L
+      and Foxconn 45CMX/45GMX/45CMX-K motherboards.
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Fix function keys on EeePc, some NEC and some other laptops
