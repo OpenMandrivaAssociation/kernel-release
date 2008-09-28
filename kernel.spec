@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1185,6 +1185,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sun Sep 28 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc7.5.2mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Fix sis190 ethernet device support on Asus P5SD2-VM motherboard
+      (kernel.org bug #11073).
+
 * Sat Sep 27 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc7.5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Drop acpi-tc1100-wmi* patches, kernel already has all relevant
