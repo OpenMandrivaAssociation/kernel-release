@@ -1191,6 +1191,9 @@ rm -rf %{buildroot}
       (kernel.org bug #11073).
     - Add fix for sata_nv regression in latest 2.6.27 rcs (kernel.org
       bug #11615). Closes: #44287
+    - Remove 3rdparty acx driver due to its dubious legal status
+      (unanswered questions about reverse engineering process done while
+      developing the driver).
 
 * Sat Sep 27 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc7.5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
