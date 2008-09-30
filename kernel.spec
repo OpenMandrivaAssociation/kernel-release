@@ -1197,6 +1197,8 @@ rm -rf %{buildroot}
     - Enable CONFIG_KARMA_PARTITION, otherwise Rio Karma mp3 player is
       unusable.
     - drbd fixes for Linux 2.6.27
+    - 3rdparty/rt2860: Fix x86_64 issues found while inspecting x86_64
+      build logs.
 
 * Sat Sep 27 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc7.5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
