@@ -1202,6 +1202,8 @@ rm -rf %{buildroot}
     - Add patch from LKML titled "Input: ALPS - add signature for
       DualPoint model found in Dell Latitude E6500" from Elvis
       Pranskevichus, reported/requested by Frederik Himpe.
+    - Fix typo in early boot parameter that enables mtrr cleanup, patch
+      from J.A. Magallon.
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Update to 2.6.27-rc8
