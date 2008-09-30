@@ -1199,6 +1199,10 @@ rm -rf %{buildroot}
     - drbd fixes for Linux 2.6.27
     - 3rdparty/rt2860: Fix x86_64 issues found while inspecting x86_64
       build logs.
+    - Add patch from LKML titled "Input: ALPS - add signature for
+      DualPoint model found in Dell Latitude" from Elvis Pranskevichus,
+      reported/requested by Frederik Himpe.
+
   o Pascal Terjan <pterjan@mandriva.com>
     - Update to 2.6.27-rc8
 
