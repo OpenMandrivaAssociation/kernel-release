@@ -12,15 +12,15 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc7
+%define kpatch		rc8
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		5
+%define kgit		0
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1185,7 +1185,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sun Sep 28 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc7.5.2mnb
+* Tue Sep 30 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc8.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Fix sis190 ethernet device support on Asus P5SD2-VM motherboard
       (kernel.org bug #11073).
@@ -1199,6 +1199,8 @@ rm -rf %{buildroot}
     - drbd fixes for Linux 2.6.27
     - 3rdparty/rt2860: Fix x86_64 issues found while inspecting x86_64
       build logs.
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Update to 2.6.27-rc8
 
 * Sat Sep 27 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-0.rc7.5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
