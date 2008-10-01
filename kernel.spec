@@ -1185,7 +1185,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Sep 30 2008 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.27-0.rc8.1mnb
+* Wed Oct 01 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27-0.rc8.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Fix sis190 ethernet device support on Asus P5SD2-VM motherboard
       (kernel.org bug #11073).
