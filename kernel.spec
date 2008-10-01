@@ -1204,6 +1204,9 @@ rm -rf %{buildroot}
       Pranskevichus, reported/requested by Frederik Himpe.
     - Fix typo in early boot parameter that enables mtrr cleanup, patch
       from J.A. Magallon.
+    - p4-clockmod: set reasonable default for scaling_min_freq, to
+      prevent too low performance with governors that use the lowest
+      frequency. Closes: #43155
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Update to 2.6.27-rc8
