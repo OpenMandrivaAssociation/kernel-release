@@ -1189,6 +1189,7 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Add i8042_nomux quirk for Dell XPS M1530 (#43532).
     - Merge enic, qlge and atl2 fixes from net-next tree.
+    - Add p4-clockmod support for Celeron Core processors (#43885).
 
 * Wed Oct 01 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27-0.rc8.2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
