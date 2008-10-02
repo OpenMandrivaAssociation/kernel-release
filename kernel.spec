@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1185,6 +1185,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Oct 01 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27-0.rc8.2mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Add fix for e1000e corruption bug and re-enable it
+      (http://lkml.org/lkml/2008/10/1/368). Closes #44147
+
 * Wed Oct 01 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27-0.rc8.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Fix sis190 ethernet device support on Asus P5SD2-VM motherboard
