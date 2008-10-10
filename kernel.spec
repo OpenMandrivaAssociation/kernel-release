@@ -1190,6 +1190,8 @@ rm -rf %{buildroot}
     - Add i8042_nomux quirk for Dell XPS M1530 (#43532).
     - Merge enic, qlge and atl2 fixes from net-next tree.
     - Add p4-clockmod support for Celeron Core processors (#43885).
+    - Add Panasonic Let's Note laptop extras driver from acpi-test. Now
+      dkms-pcc-acpi packages can be dropped.
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Update to 2.6.27 final
