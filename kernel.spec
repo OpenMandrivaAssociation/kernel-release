@@ -1192,6 +1192,7 @@ rm -rf %{buildroot}
     - Add p4-clockmod support for Celeron Core processors (#43885).
     - Add Panasonic Let's Note laptop extras driver from acpi-test. Now
       dkms-pcc-acpi packages can be dropped.
+    - Added superreadahead ext3 patch for tests to be done with it.
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Update to 2.6.27 final
