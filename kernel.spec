@@ -12,12 +12,12 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		3
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc8
+%define kpatch		0
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -1185,11 +1185,18 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Wed Oct 02 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27-0.rc8.3mnb
+* Fri Oct 10 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Add i8042_nomux quirk for Dell XPS M1530 (#43532).
     - Merge enic, qlge and atl2 fixes from net-next tree.
     - Add p4-clockmod support for Celeron Core processors (#43885).
+
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Update to 2.6.27 final
+      * Drop x86-enable_mtrr_cleanup-early-boot-param-typo-fix.patch (merged)
+      * Drop accessibility-braille-really-disable-by-default.patch (merged)
+      * Drop net-e1000e-write-protect-ICHx-NVM-to-prevent-malicious-write_erase.patch
+        (merged)
 
 * Wed Oct 01 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27-0.rc8.2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
