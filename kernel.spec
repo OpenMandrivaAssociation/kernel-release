@@ -1185,7 +1185,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Oct 10 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27-1mnb
+* Fri Oct 10 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Add i8042_nomux quirk for Dell XPS M1530 (#43532).
     - Merge enic, qlge and atl2 fixes from net-next tree.
