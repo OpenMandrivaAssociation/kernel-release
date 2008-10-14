@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1185,6 +1185,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue Oct 14 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-2mnb
+  o Luiz Capitulino <lcapitulino@mandriva.com.br>
+    - Enable CONFIG_KPROBES: needed for systemtap
+
 * Fri Oct 10 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Add i8042_nomux quirk for Dell XPS M1530 (#43532).
