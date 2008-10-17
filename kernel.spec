@@ -111,7 +111,7 @@
 %define build_doc 		1
 %define build_source 		1
 %define build_devel 		1
-%define build_debug 		0
+%define build_debug 		1
 
 # Build desktop i586 / 1GB
 %ifarch %{ix86}
@@ -331,6 +331,24 @@ If you want to build your own kernel, you need to install the full \
 							\
 %common_description_info				\
 							\
+%package -n	%{kname}-%{1}-debug-%{buildrel}		\
+Version:	%{fakever}				\
+Release:	%{fakerel}				\
+Summary:	Files with debug info for %{kname}-%{1}-%{buildrel} \
+Group:		Development/Kernel			\
+Provides:	kernel-debug = %{kverrel} 		\
+%ifarch %{ix86}						\
+Conflicts:	arch(x86_64)				\
+%endif							\
+%description -n %{kname}-%{1}-debug-%{buildrel}		\
+This package contains the files with debug info to aid in debug tasks \
+when using %{kname}-%{1}-%{buildrel}.			\
+							\
+If you need to look at debug information or use some application that \
+needs debugging info from the kernel, this package may help. \
+							\
+%common_description_info				\
+							\
 %package -n %{kname}-%{1}-latest			\
 Version:	%{kversion}				\
 Release:	%{rpmrel}				\
@@ -366,6 +384,22 @@ latest %{kname}-%{1}-devel installed...			\
 							\
 %common_description_info				\
 							\
+%package -n %{kname}-%{1}-debug-latest			\
+Version:	%{kversion}				\
+Release:	%{rpmrel}				\
+Summary:	Virtual rpm for latest %{kname}-%{1}-debug \
+Group:		Development/Kernel			\
+Requires:	%{kname}-%{1}-debug-%{buildrel}		\
+%ifarch %{ix86}						\
+Conflicts:	arch(x86_64)				\
+%endif							\
+Provides:	%{kname}-debug-latest			\
+%description -n %{kname}-%{1}-debug-latest		\
+This package is a virtual rpm that aims to make sure you always have the \
+latest %{kname}-%{1}-debug installed...			\
+							\
+%common_description_info				\
+							\
 %post -n %{kname}-%{1}-%{buildrel} -f kernel_files.%{1}-post \
 %preun -n %{kname}-%{1}-%{buildrel} -f kernel_files.%{1}-preun \
 %postun -n %{kname}-%{1}-%{buildrel} -f kernel_files.%{1}-postun \
@@ -381,8 +415,13 @@ latest %{kname}-%{1}-devel installed...			\
 %files -n %{kname}-%{1}-devel-%{buildrel} -f kernel_devel_files.%{1} \
 %files -n %{kname}-%{1}-devel-latest			\
 %defattr(-,root,root)					\
+%endif							\
+							\
+%if %build_debug					\
+%files -n %{kname}-%{1}-debug-%{buildrel} -f kernel_debug_files.%{1} \
+%files -n %{kname}-%{1}-debug-latest			\
+%defattr(-,root,root)					\
 %endif
-
 
 %ifarch %{ix86}
 #
@@ -855,12 +894,42 @@ exit 0
 EOF
 }
 
+SaveDebug() {
+	debug_flavour=$1
+
+	cp -f vmlinux \
+	      %{temp_boot}/vmlinux-%{kversion}-$debug_flavour-%{buildrpmrel}
+	kernel_debug_files=../kernel_debug_files.$debug_flavour
+	echo "%defattr(-,root,root)" > $kernel_debug_files
+	echo "%{_bootdir}/vmlinux-%{kversion}-$debug_flavour-%{buildrpmrel}" \
+		>> $kernel_debug_files
+
+	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel \
+		-name "*.ko" | \
+		%kxargs -I '{}' objcopy --only-keep-debug '{}' '{}'.debug
+	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel \
+		-name "*.ko" | %kxargs -I '{}' \
+		sh -c 'cd `dirname {}`; \
+		       objcopy --add-gnu-debuglink=`basename {}`.debug \
+		       --strip-debug `basename {}`'
+
+	pushd %{temp_modules}
+	find %{kversion}-$debug_flavour-%{buildrpmrel}/kernel \
+		-name "*.ko.debug" > debug_module_list
+	popd
+	cat %{temp_modules}/debug_module_list | \
+		sed 's|\(.*\)|%{_modulesdir}/\1|' >> $kernel_debug_files
+	cat %{temp_modules}/debug_module_list | \
+		sed 's|\(.*\)|%exclude %{_modulesdir}/\1|' \
+		>> ../kernel_exclude_debug_files.$debug_flavour
+	rm -f %{temp_modules}/debug_module_list
+}
 
 CreateFiles() {
 	kernel_flavour=$1
-	
+
 	kernel_files=../kernel_files.$kernel_flavour
-	
+
 ### Create the kernel_files.*
 cat > $kernel_files <<EOF
 %defattr(-,root,root)
@@ -874,6 +943,9 @@ cat > $kernel_files <<EOF
 %doc README.kernel-sources
 EOF
 
+	%if %build_debug
+	cat ../kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
+	%endif
 
 ### Create kernel Post script
 cat > $kernel_files-post <<EOF
@@ -949,6 +1021,9 @@ CreateKernel() {
 	BuildKernel %{kversion}-$flavour-%{buildrpmrel}
 	%if %build_devel
 		SaveDevel $flavour
+	%endif
+	%if %build_debug
+		SaveDebug $flavour
 	%endif
 	CreateFiles $flavour
 }
@@ -1188,6 +1263,13 @@ rm -rf %{buildroot}
 * Tue Oct 14 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-2mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
     - Enable CONFIG_KPROBES: needed for systemtap
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Create kernel debug packages with vmlinux and debugging symbols
+      from modules.
+    - Disable CONFIG_KALLSYMS_EXTRA_PASS were it was enabled, as Kconfig
+      description states this should only be enabled temporarily as a
+      workaround while something is broken in kallsyms.
 
 * Fri Oct 10 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
