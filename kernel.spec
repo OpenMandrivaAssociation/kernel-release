@@ -12,13 +12,13 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		0
+%define kstable		1
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1260,7 +1260,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Oct 14 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-2mnb
+* Fri Oct 17 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.1-1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
     - Enable CONFIG_KPROBES: needed for systemtap
 
@@ -1270,6 +1270,8 @@ rm -rf %{buildroot}
     - Disable CONFIG_KALLSYMS_EXTRA_PASS were it was enabled, as Kconfig
       description states this should only be enabled temporarily as a
       workaround while something is broken in kallsyms.
+    - Update to 2.6.27.1 (just cosmetic, luckily we didn't have
+      FTRACE+DYNAMIC_FTRACE enabled on supported archs).
 
 * Fri Oct 10 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
