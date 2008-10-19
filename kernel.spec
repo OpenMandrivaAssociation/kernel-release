@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		1
+%define kstable		2
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1260,7 +1260,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Oct 17 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.1-1mnb
+* Sat Oct 18 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.2-1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
     - Enable CONFIG_KPROBES: needed for systemtap
 
@@ -1270,8 +1270,11 @@ rm -rf %{buildroot}
     - Disable CONFIG_KALLSYMS_EXTRA_PASS were it was enabled, as Kconfig
       description states this should only be enabled temporarily as a
       workaround while something is broken in kallsyms.
-    - Update to 2.6.27.1 (just cosmetic, luckily we didn't have
-      FTRACE+DYNAMIC_FTRACE enabled on supported archs).
+    - Update to 2.6.27.2
+      * dropped net-wireless-b43legacy-Fix-failure-in-rate-adjustment-mechanism.patch
+        (merged)
+      * dropped net-wireless-libertas-clear-current-command-on-card-removal.patch
+        (merged)
 
 * Fri Oct 10 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
