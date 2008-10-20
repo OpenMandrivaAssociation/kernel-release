@@ -1260,6 +1260,21 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon Oct 20 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.2-2mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Update alsa 1.0.18rc3 to "final" version included in kernel 2.6.28
+      and dropped following patches:
+      * sound-alsa-revert-fixes.patch (not needed anymore)
+      * sound-hda-codec-add-Foxconn-45CMX_45GMX_45CMX-K-quirk.patch
+        (merged)
+      * sound-hda-codec-fix-ALC662-auto-config-mixer-mutes.patch
+        (merged)
+      * sound-hda-codec-slave_dig_outs-oops.patch (merged)
+      * sound-hda-codec-add-Gigabyte-945GCM-S2L-quirk.patch (merged)
+
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Drop Acer One alsa quirk, it works now better with "auto" model
+
 * Sat Oct 18 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.2-1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
     - Enable CONFIG_KPROBES: needed for systemtap
