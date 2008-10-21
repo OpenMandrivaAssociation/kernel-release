@@ -1275,6 +1275,9 @@ rm -rf %{buildroot}
   o Pascal Terjan <pterjan@mandriva.com>
     - Drop Acer One alsa quirk, it works now better with "auto" model
 
+  o Luiz Capitulino <lcapitulino@mandriva.com.br>
+    - Update .configs
+
 * Sat Oct 18 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.2-1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
     - Enable CONFIG_KPROBES: needed for systemtap
