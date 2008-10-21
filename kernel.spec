@@ -1277,6 +1277,7 @@ rm -rf %{buildroot}
 
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
     - Update .configs
+    - Fix USB ATM Speed Touch OOPS (#44803)
 
 * Sat Oct 18 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.2-1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
