@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		2
+%define mnbrel		3
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -897,7 +897,7 @@ EOF
 SaveDebug() {
 	debug_flavour=$1
 
-	cp -f vmlinux \
+	install -m 644 vmlinux \
 	      %{temp_boot}/vmlinux-%{kversion}-$debug_flavour-%{buildrpmrel}
 	kernel_debug_files=../kernel_debug_files.$debug_flavour
 	echo "%defattr(-,root,root)" > $kernel_debug_files
@@ -1260,6 +1260,15 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Oct 22 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.2-3mnb
+  o Luiz Capitulino <lcapitulino@mandriva.com.br>
+    - Update .configs
+    - Fix USB ATM Speed Touch OOPS (#44803)
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Don't install vmlinux as executable for debug packages to avoid
+      strip_and_check_elf_files from spec-helper stripping it.
+
 * Mon Oct 20 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.2-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Update alsa 1.0.18rc3 to "final" version included in kernel 2.6.28
@@ -1274,10 +1283,6 @@ rm -rf %{buildroot}
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Drop Acer One alsa quirk, it works now better with "auto" model
-
-  o Luiz Capitulino <lcapitulino@mandriva.com.br>
-    - Update .configs
-    - Fix USB ATM Speed Touch OOPS (#44803)
 
 * Sat Oct 18 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.2-1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
