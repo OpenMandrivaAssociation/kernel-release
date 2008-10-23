@@ -1263,6 +1263,7 @@ rm -rf %{buildroot}
 * Wed Oct 22 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.3-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Update to 2.6.27.3
+    - More alsa updates from 2.6.27-git* (2.6.28).
 
 * Wed Oct 22 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.2-3mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
