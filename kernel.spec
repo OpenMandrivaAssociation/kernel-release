@@ -12,13 +12,13 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		3
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		2
+%define kstable		3
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1260,6 +1260,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Oct 22 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.3-1mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Update to 2.6.27.3
+
 * Wed Oct 22 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.2-3mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
     - Update .configs
