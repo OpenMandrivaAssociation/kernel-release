@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1260,6 +1260,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Oct 23 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27.3-2mnb
+   o Pascal Terjan <pterjan@mandriva.com>
+     - Fix a oops when reading /proc/megaraid/hba0/diskdrives-ch* (upstream #11792)
+
 * Wed Oct 22 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.3-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Update to 2.6.27.3
