@@ -1263,7 +1263,8 @@ rm -rf %{buildroot}
 * Mon Oct 27 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27.4-1mnb
    o Pascal Terjan <pterjan@mandriva.com>
      - Fix a oops when reading /proc/megaraid/hba0/diskdrives-ch* (upstream #11792)
-     - Add Fastboot patches
+     - Add Fastboot patches (raid auto detection is now off by default, you can
+       enable it with raid=autodetect boot option)
 
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
      - Update to 2.6.27.4
