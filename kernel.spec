@@ -1267,6 +1267,7 @@ rm -rf %{buildroot}
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
      - Update to 2.6.27.4
        * Drop usb-atm-speedtch-2.6.27-fix.patch (merged)
+     - Restore ordering of TCP options (#43372)
 
 * Wed Oct 22 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.3-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
