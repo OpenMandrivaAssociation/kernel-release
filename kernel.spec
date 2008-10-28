@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1260,8 +1260,13 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue Oct 28 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27.4-2mnb
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Fix a oops in request_key when keyring is not already there
+      (Happens when mounting CIFS with kerberos)
+
 * Mon Oct 27 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27.4-1mnb
-   o Pascal Terjan <pterjan@mandriva.com>
+  o Pascal Terjan <pterjan@mandriva.com>
      - Fix a oops when reading /proc/megaraid/hba0/diskdrives-ch* (upstream #11792)
      - Add Fastboot patches (raid auto detection is now off by default, you can
        enable it with raid=autodetect boot option)
