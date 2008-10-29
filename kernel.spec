@@ -1262,7 +1262,10 @@ rm -rf %{buildroot}
 %changelog
 * Wed Oct 29 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27.4-2mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
-     - Fix eeepc shutdown hang caused by snd-hda-intel (#44752)
+    - Fix eeepc shutdown hang caused by snd-hda-intel (#44752)
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Backport uvcvideo fixes from 2.6.28 and linux-uvc svn.
 
 * Tue Oct 28 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27.4-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
