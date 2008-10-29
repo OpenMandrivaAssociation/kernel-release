@@ -1260,6 +1260,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Oct 29 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27.4-2mnb
+  o Luiz Capitulino <lcapitulino@mandriva.com.br>
+     - Fix eeepc shutdown hang caused by snd-hda-intel (#44752)
+
 * Tue Oct 28 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27.4-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Fix a oops in request_key when keyring is not already there
