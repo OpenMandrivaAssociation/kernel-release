@@ -1271,6 +1271,7 @@ rm -rf %{buildroot}
       * rediffed char-agp-intel-agp-add-support-for-G41-chipset.patch
       * dropped net-restore-ordering-of-tcp-options.patch (merged)
       * dropped sound-alsa-snd-hda-intel-fix-halt-hang.patch (merged)
+    - Alsa updates from 2.6.27-git* (2.6.28).
 
   o Thomas Backlund <tmb@mandriva.org>
     - fix drbd CN_IDX 0x4 conflict with v86d
