@@ -12,13 +12,13 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		4
+%define kstable		5
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1260,12 +1260,17 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Oct 31 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27.4-3mnb
+* Fri Oct 31 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27.5-1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
     - Fix eeepc shutdown hang caused by snd-hda-intel (#44752)
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Backport uvcvideo fixes from 2.6.28 and linux-uvc svn.
+    - Update to 2.6.27.5
+      * dropped acpi-ec-fast-transaction.patch (merged)
+      * rediffed char-agp-intel-agp-add-support-for-G41-chipset.patch
+      * dropped net-restore-ordering-of-tcp-options.patch (merged)
+      * dropped sound-alsa-snd-hda-intel-fix-halt-hang.patch (merged)
 
   o Thomas Backlund <tmb@mandriva.org>
     - fix drbd CN_IDX 0x4 conflict with v86d
