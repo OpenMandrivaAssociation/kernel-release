@@ -1275,6 +1275,7 @@ rm -rf %{buildroot}
     - Apply upstream change in acpi "ACPICA: Add function to dereference
       returned reference objects" (#44870).
     - Fix pcspkr disabled in kernel configs (#45319).
+    - Add patch to fix oops in prism2_usb (#44612).
 
   o Thomas Backlund <tmb@mandriva.org>
     - fix drbd CN_IDX 0x4 conflict with v86d
