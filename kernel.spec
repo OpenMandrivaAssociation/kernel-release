@@ -1279,6 +1279,7 @@ rm -rf %{buildroot}
 
   o Thomas Backlund <tmb@mandriva.org>
     - fix drbd CN_IDX 0x4 conflict with v86d
+    - fix md raid10 recovery bug
 
 * Tue Oct 28 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27.4-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
