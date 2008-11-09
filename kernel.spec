@@ -1260,7 +1260,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Oct 31 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27.5-1mnb
+* Sun Nov 09 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.5-1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
     - Fix eeepc shutdown hang caused by snd-hda-intel (#44752)
 
@@ -1279,7 +1279,7 @@ rm -rf %{buildroot}
 
   o Thomas Backlund <tmb@mandriva.org>
     - fix drbd CN_IDX 0x4 conflict with v86d
-    
+
 * Tue Oct 28 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.27.4-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Fix a oops in request_key when keyring is not already there
