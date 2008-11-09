@@ -1272,6 +1272,7 @@ rm -rf %{buildroot}
       * dropped net-restore-ordering-of-tcp-options.patch (merged)
       * dropped sound-alsa-snd-hda-intel-fix-halt-hang.patch (merged)
     - Alsa updates from 2.6.27-git* (2.6.28).
+      * fixed Realtek auto-mute bug (#45618)
     - Apply upstream change in acpi "ACPICA: Add function to dereference
       returned reference objects" (#44870).
     - Fix pcspkr disabled in kernel configs (#45319).
