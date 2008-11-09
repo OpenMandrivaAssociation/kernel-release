@@ -1274,6 +1274,7 @@ rm -rf %{buildroot}
     - Alsa updates from 2.6.27-git* (2.6.28).
     - Apply upstream change in acpi "ACPICA: Add function to dereference
       returned reference objects" (#44870).
+    - Fix pcspkr disabled in kernel configs (#45319).
 
   o Thomas Backlund <tmb@mandriva.org>
     - fix drbd CN_IDX 0x4 conflict with v86d
