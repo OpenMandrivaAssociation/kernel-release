@@ -1264,6 +1264,9 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Include r8169 WoL fixes from 2.6.28, related ticket: #41782
 
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Enable the Nokia 6300 quirk for new revisions
+
 * Sun Nov 09 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.5-1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
     - Fix eeepc shutdown hang caused by snd-hda-intel (#44752)
