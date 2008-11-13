@@ -1263,6 +1263,9 @@ rm -rf %{buildroot}
 * Sun Nov 09 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.5-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Include r8169 WoL fixes from 2.6.28, related ticket: #41782
+    - i915/drm: backported bug fix for suspend/resume with i915 on some
+      configurations (Save/restore MCHBAR_RENDER_STANDBY commit on
+      2.6.28).
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Enable the Nokia 6300 quirk for new revisions
