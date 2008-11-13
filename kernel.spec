@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1260,6 +1260,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sun Nov 09 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.5-1mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Include r8169 WoL fixes from 2.6.28, related ticket: #41782
+
 * Sun Nov 09 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.5-1mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
     - Fix eeepc shutdown hang caused by snd-hda-intel (#44752)
