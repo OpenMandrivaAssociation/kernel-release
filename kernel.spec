@@ -1273,6 +1273,8 @@ rm -rf %{buildroot}
       * dropped net-wireless-iwlwifi-generic-init-calibrations-framework.patch
         (merged)
       * dropped security-keys-request_key-oops.patch (merged)
+    - More alsa 1.0.18 updates, snd-hda-intel sigmatel codec fixes
+      among others.
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Enable the Nokia 6300 quirk for new revisions
