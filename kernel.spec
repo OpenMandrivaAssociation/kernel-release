@@ -12,13 +12,13 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		5
+%define kstable		6
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1260,12 +1260,19 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sun Nov 09 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.5-1mnb
+* Fri Nov 14 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.6-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Include r8169 WoL fixes from 2.6.28, related ticket: #41782
     - i915/drm: backported bug fix for suspend/resume with i915 on some
       configurations (Save/restore MCHBAR_RENDER_STANDBY commit on
       2.6.28).
+    - Update to 2.6.27.6
+      * dropped md-fix-bug-in-raid10-recovery.patch (merged)
+      * dropped net-r8169-get-ethtool-settings-through-the-generic-mii.patch
+        (merged)
+      * dropped net-wireless-iwlwifi-generic-init-calibrations-framework.patch
+        (merged)
+      * dropped security-keys-request_key-oops.patch (merged)
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Enable the Nokia 6300 quirk for new revisions
