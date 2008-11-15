@@ -1275,6 +1275,8 @@ rm -rf %{buildroot}
       * dropped security-keys-request_key-oops.patch (merged)
     - More alsa 1.0.18 updates, snd-hda-intel sigmatel codec fixes
       among others.
+    - unusual_ids usb-storage addition for Nokia XpressMusic 5200
+      (#44988).
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Enable the Nokia 6300 quirk for new revisions
