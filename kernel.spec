@@ -1277,6 +1277,8 @@ rm -rf %{buildroot}
       among others.
     - unusual_ids usb-storage addition for Nokia XpressMusic 5200
       (#44988).
+    - More unusual_devs additions for Nokia 5610/7610 (sources:
+      linux-usb ML and Ubuntu bug #287701).
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Enable the Nokia 6300 quirk for new revisions
