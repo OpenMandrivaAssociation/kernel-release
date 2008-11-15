@@ -1260,7 +1260,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Nov 14 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.6-1mnb
+* Sat Nov 15 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.6-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Include r8169 WoL fixes from 2.6.28, related ticket: #41782
     - i915/drm: backported bug fix for suspend/resume with i915 on some
