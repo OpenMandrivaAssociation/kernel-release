@@ -1268,6 +1268,8 @@ rm -rf %{buildroot}
     - Update to 2.6.27.7 (CVE-2008-5033)
       * dropped input-ALPS-add-signature-for-DualPoint-model-found-in-Dell-Latitude-E6500.patch
         (merged)
+    - Apply upstream workaround for #44891 (iwlagn: downgrade BUG_ON in
+      interrupt).
 
 * Sat Nov 15 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.6-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
