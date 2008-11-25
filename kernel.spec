@@ -1270,6 +1270,7 @@ rm -rf %{buildroot}
         (merged)
     - Apply upstream workaround for #44891 (iwlagn: downgrade BUG_ON in
       interrupt).
+    - Backport gspca m5602 driver from 2.6.28 (#44898).
 
 * Sat Nov 15 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.6-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
