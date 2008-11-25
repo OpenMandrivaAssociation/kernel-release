@@ -1260,7 +1260,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sat Nov 15 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.7-1mnb
+* Tue Nov 25 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.7-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Disable CONFIG_BLK_DEV_UB (#45599)
 
