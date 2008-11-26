@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1260,6 +1260,14 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Nov 26 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.7-2mnb
+  o Luiz Capitulino <lcapitulino@mandriva.com.br>
+    - Support for broadcom bluetooth dongle 0a5c:2009 in btusb (#44886)
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Sync alsa/uvc updates with kernel-2.6.27-0.uc1mnb2 available in
+      main/testing for 2009.0
+
 * Tue Nov 25 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.7-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Disable CONFIG_BLK_DEV_UB (#45599)
