@@ -12,7 +12,7 @@
 %define sublevel	27
 
 # Package release
-%define mnbrel		2
+%define mnbrel		3
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1260,6 +1260,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Nov 28 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.7-3mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Backport wireless hotplug support for eeepc from
+      http://lkml.org/lkml/2008/11/17/170 (#43332).
+
 * Wed Nov 26 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.7-2mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
     - Support for broadcom bluetooth dongle 0a5c:2009 in btusb (#44886)
