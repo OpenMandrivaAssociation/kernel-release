@@ -1269,6 +1269,8 @@ rm -rf %{buildroot}
       * acpi-eeepc-input.patch: add more hotkeys for newer eeepc models,
         keycode references from http://lkml.org/lkml/2008/11/17/161
     - Upstream alsa bug fixes/updates (1.0.18, 20081130 merge).
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Enable CONFIG_CIFS_DFS_UPCALL
 
 * Wed Nov 26 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.7-2mnb
   o Luiz Capitulino <lcapitulino@mandriva.com.br>
