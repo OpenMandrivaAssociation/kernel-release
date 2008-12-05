@@ -1260,7 +1260,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Nov 28 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.7-3mnb
+* Fri Dec 05 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.7-3mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Changes to eeepc-laptop based on changes made by Matthew Garrett
       and posted on LKML:
@@ -1269,6 +1269,7 @@ rm -rf %{buildroot}
       * acpi-eeepc-input.patch: add more hotkeys for newer eeepc models,
         keycode references from http://lkml.org/lkml/2008/11/17/161
     - Upstream alsa bug fixes/updates (1.0.18, 20081130 merge).
+
   o Pascal Terjan <pterjan@mandriva.com>
     - Enable CONFIG_CIFS_DFS_UPCALL
 
