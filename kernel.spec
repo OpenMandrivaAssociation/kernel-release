@@ -9,16 +9,16 @@
 #
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	27
+%define sublevel	28
 
 # Package release
-%define mnbrel		3
+%define mnbrel		0
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		7
+%define kpatch		rc7
+%define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1260,6 +1260,116 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon Dec 08 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28-0.rc7.1mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Updated to 2.6.28-rc7
+      * Dropped (merged):
+        x86-add-northbridge-pci-ids-for-fam-0x11-processors.patch
+        x86-add-detection-of-AMD-family-0x11-northbridges.patch
+        fastboot-1.patch
+        acpi-add-preemption-to-avoid-latency-issue.patch
+        acpi-ACPICA-Add-function-to-dereference-returned-referen.patch
+        ata-ata_piix-hercules-ec900-short-cable.patch
+        ide-pci-piix-hercules-ec900-short-cable.patch
+        scsi-megaraid-proc-oops.patch
+        gpu-drm-SiS-DRM-fix-a-pointer-cast-warning.patch
+        gpu-drm-fix-sysfs-error-path.patch
+        gpu-drm-radeon-fix-writeback-across-suspend-resume.patch
+        gpu-drm-i915-remove-settable-use_mi_batchbuffer_start.patch
+        gpu-drm-i915-Ignore-X-server-provided-mmio-address.patch
+        gpu-drm-i915-Use-more-consistent-names-for-regs-and-store.patch
+        gpu-drm-i915-Add-support-for-MSI-and-interrupt-mitigation.patch
+        gpu-drm-i915-Track-progress-inside-of-batchbuffers-for-dete.patch
+        gpu-drm-Add-Intel-ACPI-IGD-OpRegion-support.patch
+        gpu-drm-i915-save-restore-MCHBAR_RENDER_STANDBY.patch
+        media-video-uvc-implement-usb-reset-resume.patch
+        media-video-uvc-supress-spurious-EOF-in-empty-payload-trace-msg.patch
+        media-video-uvc-fix-incomplete-frame-drop-switch-variable-size.patch
+        media-video-uvc-dont-use-part-of-buffer-for-USB-transfer.patch
+        media-video-uvc-declare-missing-unit-controls.patch
+        media-video-uvc-control-cache-access-fix.patch
+        media-video-uvc-add-bison-quirk-fujitsu-amilo-si2636.patch
+        media-video-uvc-add-bison-quirk-advent-4211.patch
+        media-video-uvc-support-two-new-bison-webcams.patch
+        media-video-gspca-add-m5602-driver.patch
+        misc-add-panasonic-laptop-extras.patch
+        net-sis190-add-atheros-phy-ar8012.patch
+        net-r8169-Tx-performance-tweak-helper.patch
+        net-r8169-use-pci_find_capability-for-the-PCI-E-feature.patch
+        net-r8169-add-8168-8101-registers-description.patch
+        net-r8169-add-hw-start-helpers-for-the-8168-and-the-810.patch
+        net-r8169-additional-8101-and-8102-support.patch
+        net-r8169-WoL-fixes-part-1.patch
+        net-r8169-WoL-fixes-part-2.patch
+        net-wireless-b43-Fix-QoS-defaults.patch
+        net-wireless-b43legacy-Fix-to-enhance-TX-speed.patch
+        net-wireless-b43-Fix-Bluetooth-SPROM-coding-error-Motorola-7010-BCM4306.patch
+        net-atl2-add-atl2-driver.patch
+        net-atl2-add-tx-bytes-statistic.patch
+        net-enic-add-Cisco-10G-Ethernet-NIC-driver.patch
+        net-enic-Don-t-indicate-IPv6-pkts-using-soft-LRO.patch
+        net-enic-fixes-for-review-items-from-Ben-Hutchings.patch
+        net-enic-Bug-fix-Free-MSI-intr-with-correct-data-handl.patch
+        net-enic-bug-fix-don-t-set-netdev-name-too-early.patch
+        net-jme-JMicron-Gigabit-Ethernet-Driver.patch
+        net-qlge-New-Qlogic-10Gb-Ethernet-Driver.patch
+        net-qlge-Fix-warnings-in-debugging-code.patch
+        net-qlge-Protect-qlge_resume-with-CONFIG_PM.patch
+        net-bluetooth-apple-wireless-keyboard-fnkey.patch
+        net-wireless-iwlagn-downgrade-BUG_ON-in-interrupt.patch
+        sound-alsa-revert-for-20081011-merge.patch
+        sound-alsa-20081011-merge.patch
+        sound-alsa-20081013-merge.patch
+        sound-alsa-20081016-merge.patch
+        sound-alsa-20081017-merge.patch
+        sound-alsa-20081020_1-merge.patch
+        sound-alsa-20081020_2-merge.patch
+        sound-alsa-20081020_3-merge.patch
+        sound-alsa-20081023-merge.patch
+        sound-alsa-20081027-merge.patch
+        sound-alsa-pci_ioremap_bar-only-in-2.6.28.patch
+        sound-alsa-revert-for-20081030-merge.patch
+        sound-alsa-20081030-merge.patch
+        sound-alsa-20081103-merge.patch
+        sound-alsa-20081110-merge.patch
+        sound-alsa-20081112-merge.patch
+        sound-alsa-20081118-merge.patch
+        sound-alsa-20081130-merge.patch
+        usb-storage-nokia-6300.patch
+        usb-storage-unusual-devs-nokia-7610.patch
+      * Moved to patches-broken:
+        irq-debug-shared.patch
+        pci-default-nomsi.patch (continue to disable msi by default?)
+        scsi-sg-allow-dio-as-default.patch
+        hwmon-applesmc-retry-when-accessing-keys.patch (still needed?)
+        hwmon-applesmc_int.patch (useful?)
+        media-video-uvc-max-iso-pkts.patch
+        apparmor patches
+        aufs patches
+      * Redid/Rediffed following patches:
+        ide-pci-sis5513-965.patch
+        fs-dynamic-nls-default.patch
+        media-video-uvc-handle-failed-GET_MIN_MAX_DEF-more-gracefully.patch
+        net-netfilter-psd-mdv.patch
+        hid-usbhid-IBM-BladeCenterHS20-quirk.patch
+        hid-usbhid-quirk-multilaser.patch
+        3rd-3rdparty-merge.patch
+        gpu-drm-mach64.patch
+        gpu-drm-mach64-fixes.patch
+      * Removed kernel-add-mute-events-log-level.patch (not worth/sent
+        upstream).
+      * Removed fastboot-2.patch (asynchronous stuff not accepted
+        into 2.6.28).
+      * Removed acpi-asus-laptop-input.patch and acpi-eeepc-input.patch,
+        as different input support was merged for eeepc-laptop.
+      * Removed net-enic-build-fix.patch, not needed on 2.6.28
+      * Removed acpi-dsdt-initrd-fastboot.patch, not needed anymore.
+      * Removed net-wireless-at76_usb.patch, at76_usb is now in staging
+        tree.
+      * Updated drbd code for 2.6.28 (3rd-drbd-2.6.28.patch).
+      * Added patch from squashfs CVS to allow successful build on 2.6.28
+      * Removed 3rdparty prism25 which is now in staging.
+
 * Fri Dec 05 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.7-3mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Changes to eeepc-laptop based on changes made by Matthew Garrett
