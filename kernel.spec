@@ -12,12 +12,12 @@
 %define sublevel	28
 
 # Package release
-%define mnbrel		0
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc7
+%define kpatch		rc8
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -722,8 +722,10 @@ SaveDevel() {
 	%ifarch %{ix86} x86_64
 		cp -fR arch/x86/kernel/asm-offsets.{c,s} $TempDevelRoot/arch/x86/kernel/
 		cp -fR arch/x86/kernel/asm-offsets_{32,64}.c $TempDevelRoot/arch/x86/kernel/
+		cp -fR arch/x86/include $TempDevelRoot/arch/x86/
 	%else
 		cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} $TempDevelRoot/arch/%{target_arch}/kernel/
+		cp -fR arch/%{target_arch}/include $TempDevelRoot/arch/%{target_arch}/
 	%endif
 	%ifarch %{ix86} x86_64
 		cp -fR arch/x86/kernel/sigframe.h $TempDevelRoot/arch/x86/kernel/
@@ -747,33 +749,6 @@ SaveDevel() {
 	# config.mk from rt2860 3rdparty driver must be present
 	cp -fR 3rdparty/rt2860/os/linux/config.mk \
 	       $TempDevelRoot/3rdparty/rt2860/os/linux/config.mk
-
-	for i in alpha arm arm26 avr32 blackfin cris frv h8300 ia64 mips m32r \
-	         m68knommu parisc s390 sh sh64 v850 xtensa mn10300; do
-		rm -rf $TempDevelRoot/arch/$i
-		rm -rf $TempDevelRoot/include/asm-$i
-	done
-	
-	# ppc needs only m68k headers
-	rm -rf $TempDevelRoot/arch/m68k
-
-	%ifnarch ppc powerpc
-		rm -rf $TempDevelRoot/arch/ppc
-		rm -rf $TempDevelRoot/arch/powerpc
-		rm -rf $TempDevelRoot/include/asm-m68k
-		rm -rf $TempDevelRoot/include/asm-ppc
-		rm -rf $TempDevelRoot/include/asm-powerpc
-	%endif
-	%ifnarch sparc sparc64
-		rm -rf $TempDevelRoot/arch/sparc
-		rm -rf $TempDevelRoot/arch/sparc64
-		rm -rf $TempDevelRoot/include/asm-sparc
-		rm -rf $TempDevelRoot/include/asm-sparc64
-	%endif
-	%ifnarch %{ix86} x86_64
-		rm -rf $TempDevelRoot/arch/x86
-		rm -rf $TempDevelRoot/include/asm-x86
-	%endif
 
 	# Clean the scripts tree, and make sure everything is ok (sanity check)
 	# running prepare+scripts (tree was already "prepared" in build)
@@ -831,7 +806,6 @@ $DevelRoot/include/asm-ppc
 $DevelRoot/include/asm-sparc
 $DevelRoot/include/asm-sparc64
 %endif
-$DevelRoot/include/asm-um
 %ifarch %{ix86} x86_64
 $DevelRoot/include/asm-x86
 %endif
@@ -1260,9 +1234,9 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Dec 08 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28-0.rc7.1mnb
+* Thu Dec 11 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28-0.rc8.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
-    - Updated to 2.6.28-rc7
+    - Updated to 2.6.28-rc8
       * Dropped (merged):
         x86-add-northbridge-pci-ids-for-fam-0x11-processors.patch
         x86-add-detection-of-AMD-family-0x11-northbridges.patch
@@ -1368,7 +1342,7 @@ rm -rf %{buildroot}
         tree.
       * Updated drbd code for 2.6.28 (3rd-drbd-2.6.28.patch).
       * Added patch from squashfs CVS to allow successful build on 2.6.28
-      * Removed 3rdparty prism25 which is now in staging.
+      * Removed 3rdparty prism25 and et131x which are now in staging.
 
 * Fri Dec 05 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.27.7-3mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
