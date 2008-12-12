@@ -751,7 +751,7 @@ SaveDevel() {
 	cp -fR 3rdparty/rt2860/os/linux/config.mk \
 	       $TempDevelRoot/3rdparty/rt2860/os/linux/config.mk
 
-	for i in alpha arm avr32 blackfin cris frv h8300 ia64 m32r m68knommu
+	for i in alpha arm avr32 blackfin cris frv h8300 ia64 m32r m68knommu \
 	         mips mn10300 parisc s390 sh xtensa; do
 		rm -rf $TempDevelRoot/arch/$i
 		rm -rf $TempDevelRoot/include/asm-$i
