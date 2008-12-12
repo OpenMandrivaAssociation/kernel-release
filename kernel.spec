@@ -751,6 +751,28 @@ SaveDevel() {
 	cp -fR 3rdparty/rt2860/os/linux/config.mk \
 	       $TempDevelRoot/3rdparty/rt2860/os/linux/config.mk
 
+	for i in alpha arm avr32 blackfin cris frv h8300 ia64 m32r m68knommu
+	         mips mn10300 parisc s390 sh xtensa; do
+		rm -rf $TempDevelRoot/arch/$i
+		rm -rf $TempDevelRoot/include/asm-$i
+	done
+
+	# ppc needs only m68k headers
+	rm -rf $TempDevelRoot/arch/m68k
+
+	%ifnarch ppc powerpc
+		rm -rf $TempDevelRoot/arch/powerpc
+		rm -rf $TempDevelRoot/include/asm-m68k
+	%endif
+	%ifnarch sparc sparc64
+		rm -rf $TempDevelRoot/arch/sparc
+		rm -rf $TempDevelRoot/arch/sparc64
+	%endif
+	%ifnarch %{ix86} x86_64
+		rm -rf $TempDevelRoot/arch/x86
+		rm -rf $TempDevelRoot/include/asm-x86
+	%endif
+
 	# Clean the scripts tree, and make sure everything is ok (sanity check)
 	# running prepare+scripts (tree was already "prepared" in build)
 	pushd $TempDevelRoot >/dev/null
@@ -824,6 +846,7 @@ $DevelRoot/include/rdma
 $DevelRoot/include/rxrpc
 $DevelRoot/include/scsi
 $DevelRoot/include/sound
+$DevelRoot/include/trace
 $DevelRoot/include/video
 $DevelRoot/include/xen
 $DevelRoot/init
@@ -1197,6 +1220,7 @@ rm -rf %{buildroot}
 %{_kerneldir}/include/rxrpc
 %{_kerneldir}/include/scsi
 %{_kerneldir}/include/sound
+%{_kerneldir}/include/trace
 %{_kerneldir}/include/video
 %{_kerneldir}/include/xen
 %{_kerneldir}/init
