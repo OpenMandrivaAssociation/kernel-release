@@ -692,11 +692,12 @@ BuildKernel() {
 		%ifarch ppc
 			cp -f arch/ppc/boot/images/zImage.chrp-rs6k %{temp_boot}/vmlinuz-rs6k-$KernelVer
 		%endif
-	%endif
+	%else
 	%ifarch sparc sparc64
 		gzip -9c vmlinux > %{temp_boot}/vmlinuz-$KernelVer
 	%else
 		cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-$KernelVer
+	%endif
 	%endif
 
 	# modules
