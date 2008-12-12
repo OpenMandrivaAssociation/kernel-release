@@ -1180,7 +1180,6 @@ rm -rf %{buildroot}
 %{_kerneldir}/include/asm-sparc
 %{_kerneldir}/include/asm-sparc64
 %endif
-%{_kerneldir}/include/asm-um
 %ifarch %{ix86} x86_64
 %{_kerneldir}/include/asm-x86
 %endif
@@ -1320,7 +1319,8 @@ rm -rf %{buildroot}
         media-video-uvc-max-iso-pkts.patch
         apparmor patches
         aufs patches
-      * Redid/Rediffed following patches:
+      * Redid/Rediffed following patches (because of broken apply,
+        broken build or other updates for 2.6.28):
         ide-pci-sis5513-965.patch
         fs-dynamic-nls-default.patch
         media-video-uvc-handle-failed-GET_MIN_MAX_DEF-more-gracefully.patch
@@ -1330,6 +1330,9 @@ rm -rf %{buildroot}
         3rd-3rdparty-merge.patch
         gpu-drm-mach64.patch
         gpu-drm-mach64-fixes.patch
+        net-netfilter-IFWLOG-mdv.patch
+        net-netfilter-psd-mdv.patch
+      * Update ipt_set for netfilter/xtables changes in 2.6.28
       * Removed kernel-add-mute-events-log-level.patch (not worth/sent
         upstream).
       * Removed fastboot-2.patch (asynchronous stuff not accepted
