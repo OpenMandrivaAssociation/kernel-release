@@ -1258,7 +1258,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Dec 11 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28-0.rc8.1mnb
+* Fri Dec 12 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28-0.rc8.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Updated to 2.6.28-rc8
       * Dropped (merged):
