@@ -17,7 +17,7 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc8
+%define kpatch		0
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -1258,6 +1258,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon Dec 29 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.28-1mnb
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Updated to 2.6.28 final
+
 * Fri Dec 12 2008 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28-0.rc8.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Updated to 2.6.28-rc8
