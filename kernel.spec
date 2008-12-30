@@ -12,7 +12,7 @@
 %define sublevel	28
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1258,6 +1258,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue Dec 30 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.28-2mnb
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Support fn+* in Samsung NC10 
+
 * Mon Dec 29 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.28-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Updated to 2.6.28 final
