@@ -1260,7 +1260,7 @@ rm -rf %{buildroot}
 %changelog
 * Tue Dec 30 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.28-3mnb
   o Pascal Terjan <pterjan@mandriva.com>
-    - Add patch from upstream #19422 to allow X starting on some
+    - Add patch from upstream #12372 to allow X starting on some
       systems (#46384)
 
 * Tue Dec 30 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.28-2mnb
