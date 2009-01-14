@@ -1258,10 +1258,16 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Dec 30 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.28-3mnb
+* Wed Jan 14 2009 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.28-3mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Add patch from upstream #12372 to allow X starting on some
       systems (#46384)
+
+  o Luiz Capitulino <lcapitulino@mandriva.com.br>
+    - Update configs to 2.6.28: CONFIG_X86_PTRACE_BTS is being disabled because
+      it's marked as broken and as CONFIG_X86_DS depends on it it's also being
+      disabled
+    - Make CONFIG_IDE modular in all configs (asked by Thierry Vignaud)
 
 * Tue Dec 30 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.28-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
