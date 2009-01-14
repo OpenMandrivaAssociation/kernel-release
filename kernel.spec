@@ -1268,6 +1268,7 @@ rm -rf %{buildroot}
       it's marked as broken and as CONFIG_X86_DS depends on it it's also being
       disabled
     - Make CONFIG_IDE modular in all configs (asked by Thierry Vignaud)
+    - Fix rtc-cmos loading on x86_64 machines (patch suggested by Oden Eriksson)
 
 * Tue Dec 30 2008 Pascal Terjan <pterjan@mandriva.com> 2.6.28-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
