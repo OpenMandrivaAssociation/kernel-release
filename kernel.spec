@@ -12,7 +12,7 @@
 %define sublevel	28
 
 # Package release
-%define mnbrel		3
+%define mnbrel		4
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -300,6 +300,7 @@ Provides:	%kprovides				\
 Requires(pre):	%requires1 %requires2 %requires3 %requires4 \
 Requires:	%requires5				\
 Provides:	should-restart = system			\
+Suggests:	crda					\
 Obsoletes:	%kobsoletes				\
 Conflicts:	%kconflicts				\
 %ifarch %{ix86}						\
@@ -1258,6 +1259,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Jan 14 2009 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.28-4mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Add Suggests for crda in kernel packages.
+
 * Wed Jan 14 2009 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.28-3mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Add patch from upstream #12372 to allow X starting on some
