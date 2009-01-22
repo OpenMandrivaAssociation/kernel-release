@@ -12,13 +12,13 @@
 %define sublevel	28
 
 # Package release
-%define mnbrel		4
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		0
+%define kstable		1
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1259,9 +1259,15 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Wed Jan 14 2009 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.28-4mnb
+* Wed Jan 14 2009 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.28.1-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Add Suggests for crda in kernel packages.
+    - Updated to 2.6.28.1
+    - Add MSI quirk list for hda devices, to force enable_msi setting
+      parameter when needed (#44855).
+    - Enhance/fix some aspects related to STAC92HD71Bx and STAC92HD75Bx
+      support (#44855).
+    - Add hda-intel ALC889 model for Acer Aspire 8930 (#45838).
 
 * Wed Jan 14 2009 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.28-3mnb
   o Pascal Terjan <pterjan@mandriva.com>
