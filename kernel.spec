@@ -1268,8 +1268,12 @@ rm -rf %{buildroot}
     - Enhance/fix some aspects related to STAC92HD71Bx and STAC92HD75Bx
       support (#44855).
     - Add hda-intel ALC889 model for Acer Aspire 8930 (#45838).
+
   o Pascal Terjan <pterjan@mandriva.com>
-    - disable asus_acpi, we have asus-laptop and eeepc-laptop
+    - Disable asus_acpi, we have asus-laptop and eeepc-laptop
+    - Add back patch on asus-laptop to convert acpi events to input
+      * Update it for 2.6.28
+      * Emit the acpi event when the key is unknown
 
 * Wed Jan 14 2009 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.28-3mnb
   o Pascal Terjan <pterjan@mandriva.com>
