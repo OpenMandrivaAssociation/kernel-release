@@ -1274,6 +1274,7 @@ rm -rf %{buildroot}
     - Add back patch on asus-laptop to convert acpi events to input
       * Update it for 2.6.28
       * Emit the acpi event when the key is unknown
+    - Add id for Yuan PD378S DVB receiver (from Arnaud)
 
 * Wed Jan 14 2009 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.28-3mnb
   o Pascal Terjan <pterjan@mandriva.com>
