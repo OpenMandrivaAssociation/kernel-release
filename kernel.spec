@@ -1259,7 +1259,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Wed Jan 14 2009 Luiz Capitulino <lcapitulino@mandriva.com.br> 2.6.28.1-1mnb
+* Thu Jan 22 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.1-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Add Suggests for crda in kernel packages.
     - Updated to 2.6.28.1
