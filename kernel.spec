@@ -12,7 +12,7 @@
 %define sublevel	28
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1259,6 +1259,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Jan 23 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.1-2mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Fix snd-hda-intel oops with some alc883 models after addition of
+      model for Acer Aspire 8930 in previous release.
+
 * Thu Jan 22 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.1-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Add Suggests for crda in kernel packages.
