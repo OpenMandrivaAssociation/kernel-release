@@ -324,8 +324,9 @@ Provides:	kernel-devel = %{kverrel} 		\
 Conflicts:	arch(x86_64)				\
 %endif							\
 %description -n %{kname}-%{1}-devel-%{buildrel}		\
-This package contains the kernel-devel files that should be enough to build \
-3rdparty drivers against for use with %{kname}-%{1}-%{buildrel}. \
+This package contains the kernel files (headers and build tools) \
+that should be enough to build additional drivers for   \
+use with %{kname}-%{1}-%{buildrel}.                     \
 							\
 If you want to build your own kernel, you need to install the full \
 %{kname}-source-%{buildrel} rpm.			\
