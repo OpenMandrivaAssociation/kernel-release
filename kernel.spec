@@ -1270,6 +1270,7 @@ rm -rf %{buildroot}
         usb-storage-unusual-devs-nokia-5610.patch
       * rediff sound-alsa-hda-enhance_fix_stac92hd71bx_stac92hd75bx.patch
       * cosmetic changes at sound-alsa-hda-add-acer-alc889-model.patch
+    - Updates for sreadahead 1.0 support.
 
 * Fri Jan 23 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.1-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
