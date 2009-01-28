@@ -12,13 +12,13 @@
 %define sublevel	28
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		1
+%define kstable		2
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1260,6 +1260,17 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Jan 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.2-1mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Updated to 2.6.28.2
+      * removed following patches (already applied or obsolete with
+        "usb-storage: set CAPACITY_HEURISTICS flag for bad vendors"
+        change):
+        usb-storage-unusual_devs-nokia-5200.patch
+        usb-storage-unusual-devs-nokia-5610.patch
+      * rediff sound-alsa-hda-enhance_fix_stac92hd71bx_stac92hd75bx.patch
+      * cosmetic changes at sound-alsa-hda-add-acer-alc889-model.patch
+
 * Fri Jan 23 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.1-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Fix snd-hda-intel oops with some alc883 models after addition of
