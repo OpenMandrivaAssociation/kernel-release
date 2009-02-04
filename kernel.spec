@@ -1260,7 +1260,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Feb 03 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.3-1mnb
+* Wed Feb 04 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.3-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Updated to 2.6.28.3
       * removed x86-pat-1MB-nonram.patch (merged)
