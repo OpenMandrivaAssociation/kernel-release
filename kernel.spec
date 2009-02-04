@@ -1264,9 +1264,10 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Updated to 2.6.28.3
       * removed x86-pat-1MB-nonram.patch (merged)
-    - Added upstream fix for the exposed linux/ip.h header in
-      if_tunnel.h exported to userspace bug
-      (http://lists.mandriva.com/kernel-discuss/2009-02/msg00000.php).
+    - Added upstream fixes for the exported userspace headers (build
+      with linux/ip.h and linux/serial.h bugs). References:
+      http://lists.mandriva.com/kernel-discuss/2009-02/msg00000.php
+      https://qa.mandriva.com/show_bug.cgi?id=47313
 
 * Wed Jan 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
