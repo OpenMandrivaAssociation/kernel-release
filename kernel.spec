@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		3
+%define kstable		4
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1265,6 +1265,16 @@ rm -rf %{buildroot}
     - Build HID core as modules instead of built-in. Having it built-in
       makes no sense as both USB HID and Bluetooth HIDP are built as
       modules anyway.
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Remove previous applied enhancements/fixes to STAC92HD71Bx and
+      STAC92HD75Bx hda codec support, and reapply splitted changes
+      submitted upstream. Apply also additional fixes and HP dv quirks
+      in sound tree. Added additional quirk for HP dv7 to be submitted
+      after I get positive report about it.
+    - ALSA/hda: Map new ecs motherboard id 1019:2950 to STAC9221 ecs202
+      model.
+    - Updated to 2.6.28.4
 
 * Wed Feb 04 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.3-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
