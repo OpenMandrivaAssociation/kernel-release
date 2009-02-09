@@ -1260,7 +1260,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sat Feb 07 2009 Anssi Hannula <anssi@mandriva.org> unreleased
+* Mon Feb 09 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.4-1mnb
   o Anssi Hannula <anssi@mandriva.org>
     - Build HID core as modules instead of built-in. Having it built-in
       makes no sense as both USB HID and Bluetooth HIDP are built as
