@@ -1275,6 +1275,7 @@ rm -rf %{buildroot}
     - ALSA/hda: Map new ecs motherboard id 1019:2950 to STAC9221 ecs202
       model.
     - Updated to 2.6.28.4
+      * removed input-samsung-nc10.patch (merged)
 
 * Wed Feb 04 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.3-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
