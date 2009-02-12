@@ -9,16 +9,16 @@
 #
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	28
+%define sublevel	29
 
 # Package release
-%define mnbrel		1
+%define mnbrel		0
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		4
+%define kpatch		rc4
+%define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -730,9 +730,9 @@ SaveDevel() {
 		cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} $TempDevelRoot/arch/%{target_arch}/kernel/
 		cp -fR arch/%{target_arch}/include $TempDevelRoot/arch/%{target_arch}/
 	%endif
-	%ifarch %{ix86} x86_64
-		cp -fR arch/x86/kernel/sigframe.h $TempDevelRoot/arch/x86/kernel/
-	%endif
+	#%ifarch %{ix86} x86_64
+	#	cp -fR arch/x86/kernel/sigframe.h $TempDevelRoot/arch/x86/kernel/
+	#%endif
 	cp -fR .config Module.symvers $TempDevelRoot
 	cp -fR 3rdparty/mkbuild.pl $TempDevelRoot/3rdparty
 
@@ -748,10 +748,6 @@ SaveDevel() {
 	# Needed for external dvb tree (#41418)
 	cp -fR drivers/media/dvb/dvb-core/*.h $TempDevelRoot/drivers/media/dvb/dvb-core/
 	cp -fR drivers/media/dvb/frontends/lgdt330x.h $TempDevelRoot/drivers/media/dvb/frontends/
-
-	# config.mk from rt2860 3rdparty driver must be present
-	cp -fR 3rdparty/rt2860/os/linux/config.mk \
-	       $TempDevelRoot/3rdparty/rt2860/os/linux/config.mk
 
 	for i in alpha arm avr32 blackfin cris frv h8300 ia64 m32r m68knommu \
 	         mips mn10300 parisc s390 sh xtensa; do
@@ -1260,6 +1256,64 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue Feb 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Updated to 2.6.29-rc4
+      * Removed following merged patches:
+        x86-cpufreq-add-more-pcore-fsbs.patch
+        x86-cpufreq-add-celeron-core-to-p4-clockmod.patch
+        char-agp-intel-agp-add-support-for-G41-chipset.patch
+        fs-squashfs3.4.patch
+        fs-squashfs3.4-2.6.28.patch
+        media-video-uvc-add-support-for-samsung-q310-webcam.patch
+        media-video-uvc-add-support-for-thinkpad-sl500-webcam.patch
+        media-video-uvc-sort-the-frame-descriptors-during-parsing.patch
+        media-video-uvc-handle-failed-GET_MIN_MAX_DEF-more-gracefully.patch
+        media-video-uvc-commit-stream-param-when-enabling-stream.patch
+        misc-eeepc-laptop-check-return-values-from-rfkill_register.patch
+        misc-eeepc-laptop-implement-rfkill-hotplugging-in-eeepc-laptop.patch
+        misc-eeepc-laptop-add-support-for-extended-hotkeys.patch
+        net-fix-userland-breakage-wrt-if_tunnel.h.patch
+        serial-RS485-ioctl-structure-uses-__u32-include.patch
+        sound-alsa-hda-Add-quirk-for-another-HP-dv5-model.patch
+        btusb-add-broadcom-dongle.patch
+      * Rediffed/Redid following patches:
+        acpi-add-proc-event-regs.patch
+        fs-dynamic-nls-default.patch
+        media-dvb-add-Yuan-PD378S.patch
+        serial-docomo-F2402.patch
+        sound-alsa-hda-add-acer-alc889-model.patch
+        sound-alsa-hda-92hd71xxx-disable-unmute-support-for-code.patch
+        sound-alsa-hda-Additional-pin-nids-for-STAC92HD71Bx-and.patch
+        sound-alsa-hda-Dynamic-detection-of-dmics-dmuxes-smuxes.patch
+        sound-alsa-hda-Don-t-call-stac92xx_parse_auto_config-wi.patch
+        sound-alsa-hda-one-more-hp-dv7-quirk.patch
+        sound-alsa-hda-Don-t-touch-non-existent-port-f-on-4-por.patch
+        sound-alsa-hda-sigmatel-ecs202-new-quirk.patch
+        usb-storage-uss725-build-fixes.patch
+        bluetooth-hci_usb-disable-isoc-transfers.patch
+        hid-usbhid-quirk-multilaser.patch
+        3rd-3rdparty-merge.patch
+      * Pending/moved to patches-broken:
+        - acpi-asus-input.patch: same functionality merged upstream, but
+          needs extra checking on some extra/different key codes to be
+          dropped.
+        - hid-hotplug-racefix.patch: possibly fixed by commit "HID:
+          hiddev cleanup -- handle all error conditions properly"
+          upstream.
+      * Dropped from patches-broken:
+        - media-video-uvc-max-iso-pkts.patch: no machine/environment
+          available anymore to reproduce the problem.
+      * Added alc889 fixes submitted upstream for which
+        sound-alsa-hda-add-acer-alc889-model.patch depends:
+        sound-alsa-hda-consider-additional-capsrc-alc889.patch
+        sound-alsa-hda-alc882_auto_init_input_src-selector.patch 
+      * Updated tomoyo to 1.6.6-20090202, 2.6.29-rc3 build and kernel
+        log warning patches adapted.
+      * Adjusted drbd and unionfs for 2.6.29 changes.
+      * Removed rt2860 from additional 3rdparty drivers, it is now
+        included in staging.
+
 * Mon Feb 09 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.4-1mnb
   o Anssi Hannula <anssi@mandriva.org>
     - Build HID core as modules instead of built-in. Having it built-in
