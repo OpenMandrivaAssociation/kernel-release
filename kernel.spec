@@ -1313,6 +1313,10 @@ rm -rf %{buildroot}
       * Adjusted drbd and unionfs for 2.6.29 changes.
       * Removed rt2860 from additional 3rdparty drivers, it is now
         included in staging.
+    - ALSA/hda/idt: change HP dv7 (103c:30f4) quirk from hp-m4 to hp-dv5
+      model, to fix not working internal microphone. References:
+      https://qa.mandriva.com/show_bug.cgi?id=44855#c193
+      https://qa.mandriva.com/show_bug.cgi?id=44855#c196
 
 * Mon Feb 09 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.4-1mnb
   o Anssi Hannula <anssi@mandriva.org>
