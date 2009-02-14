@@ -1320,6 +1320,10 @@ rm -rf %{buildroot}
       https://qa.mandriva.com/show_bug.cgi?id=44855#c196
     - Fixed build warnings in agnx and rtl8187se staging drivers.
 
+  o Anssi Hannula <anssi@mandriva.org>
+    - Disable CONFIG_HID_COMPAT (hid-dummy module) as our udev supports
+      driver autoloading on all buses.
+
 * Mon Feb 09 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.4-1mnb
   o Anssi Hannula <anssi@mandriva.org>
     - Build HID core as modules instead of built-in. Having it built-in
