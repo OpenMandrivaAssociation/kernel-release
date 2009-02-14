@@ -240,7 +240,7 @@ http://www.mandriva.com/en/security/kernelupdate			\
 %define requires4	sysfsutils >= 1.3.0-1
 %define requires5	kernel-firmware >= 2.6.27-0.rc2.2mdv
 
-%define kprovides 	%{kname} = %{kverrel}, kernel = %{tar_ver}, alsa = 1.0.16, drbd-api = 86
+%define kprovides 	%{kname} = %{kverrel}, kernel = %{tar_ver}, alsa = 1.0.16, drbd-api = 88
 
 %define kconflicts	drakxtools-backend < 10.4.190-2
 
@@ -1323,6 +1323,9 @@ rm -rf %{buildroot}
   o Anssi Hannula <anssi@mandriva.org>
     - Disable CONFIG_HID_COMPAT (hid-dummy module) as our udev supports
       driver autoloading on all buses.
+
+  o Thomas Backlund <tmb@mandriva.org>
+    - update drbd to 8.3.0
 
 * Mon Feb 09 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.28.4-1mnb
   o Anssi Hannula <anssi@mandriva.org>
