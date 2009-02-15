@@ -17,7 +17,7 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc4
+%define kpatch		rc5
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -1258,7 +1258,7 @@ rm -rf %{buildroot}
 %changelog
 * Tue Feb 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
-    - Updated to 2.6.29-rc4
+    - Updated to 2.6.29-rc5
       * Removed following merged patches:
         x86-cpufreq-add-more-pcore-fsbs.patch
         x86-cpufreq-add-celeron-core-to-p4-clockmod.patch
