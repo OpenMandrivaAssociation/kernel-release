@@ -12,7 +12,7 @@
 %define sublevel	29
 
 # Package release
-%define mnbrel		0
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -730,9 +730,6 @@ SaveDevel() {
 		cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} $TempDevelRoot/arch/%{target_arch}/kernel/
 		cp -fR arch/%{target_arch}/include $TempDevelRoot/arch/%{target_arch}/
 	%endif
-	#%ifarch %{ix86} x86_64
-	#	cp -fR arch/x86/kernel/sigframe.h $TempDevelRoot/arch/x86/kernel/
-	#%endif
 	cp -fR .config Module.symvers $TempDevelRoot
 	cp -fR 3rdparty/mkbuild.pl $TempDevelRoot/3rdparty
 
@@ -1256,7 +1253,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Feb 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Mon Feb 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Updated to 2.6.29-rc5
       * Removed following merged patches:
