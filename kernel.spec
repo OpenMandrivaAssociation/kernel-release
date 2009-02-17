@@ -1253,6 +1253,14 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue Feb 17 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - ALSA/hda changes:
+      * Include new SND_PCI_QUIRK_MASK and SND_PCI_QUIRK_VENDOR macros,
+        cleanup IDT92HD7x HP quirks and backport SND_PCI_QUIRK_MASK
+        cleanup for stac922x ecs202 model from alsa tiwai's sound tree.
+      * Fix speaker output on HP DV4 1155-SE
+
 * Mon Feb 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Updated to 2.6.29-rc5
