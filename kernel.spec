@@ -1260,8 +1260,14 @@ rm -rf %{buildroot}
         cleanup IDT92HD7x HP quirks and backport SND_PCI_QUIRK_MASK
         cleanup for stac922x ecs202 model from alsa tiwai's sound tree.
       * Fix speaker output on HP DV4 1155-SE
-    - Disabled on kernel configs: CONFIG_MDIO_BITBANG, CONFIG_MDIO_GPIO,
-      CONFIG_UCB1400_CORE.
+    - Disabled on all kernel configs: CONFIG_MDIO_BITBANG,
+      CONFIG_MDIO_GPIO, CONFIG_UCB1400_CORE, CONFIG_TOUCHSCREEN_ADS7846,
+      CONFIG_TOUCHSCREEN_WM97XX, CONFIG_TOUCHSCREEN_TSC2007.
+    - Disabled on x86_64 config: CONFIG_TOUCHSCREEN_MK712.
+    - Disabled on powerpc config: CONFIG_TOUCHSCREEN_TOUCHIT213.
+    - Enabled (=m) on powerpc config: CONFIG_TOUCHSCREEN_ELO,
+      CONFIG_TOUCHSCREEN_MTOUCH, CONFIG_TOUCHSCREEN_PENMOUNT,
+      CONFIG_TOUCHSCREEN_TOUCHRIGHT, CONFIG_TOUCHSCREEN_TOUCHWIN.
 
 * Mon Feb 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
