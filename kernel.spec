@@ -1260,7 +1260,8 @@ rm -rf %{buildroot}
         cleanup IDT92HD7x HP quirks and backport SND_PCI_QUIRK_MASK
         cleanup for stac922x ecs202 model from alsa tiwai's sound tree.
       * Fix speaker output on HP DV4 1155-SE
-    - Disabled on kernel configs: CONFIG_MDIO_BITBANG, CONFIG_MDIO_GPIO.
+    - Disabled on kernel configs: CONFIG_MDIO_BITBANG, CONFIG_MDIO_GPIO,
+      CONFIG_UCB1400_CORE.
 
 * Mon Feb 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
