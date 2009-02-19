@@ -1271,6 +1271,7 @@ rm -rf %{buildroot}
     - Enabled (=m) on powerpc config: CONFIG_TOUCHSCREEN_ELO,
       CONFIG_TOUCHSCREEN_MTOUCH, CONFIG_TOUCHSCREEN_PENMOUNT,
       CONFIG_TOUCHSCREEN_TOUCHRIGHT, CONFIG_TOUCHSCREEN_TOUCHWIN.
+    - w1: add missing Kconfig/Makefile entries for DS2431 slave driver.
 
 * Mon Feb 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
