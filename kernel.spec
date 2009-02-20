@@ -1287,6 +1287,7 @@ rm -rf %{buildroot}
       CONFIG_TOUCHSCREEN_TOUCHRIGHT, CONFIG_TOUCHSCREEN_TOUCHWIN.
     - w1: add missing Kconfig/Makefile entries for DS2431 slave driver.
     - Updated to 2.6.29-rc5-git4
+      * fixed drbd build with BIO_RW_SYNC change.
 
   o Bogdano Arendartchuk <bogdano@mandriva.com.br>
     - Enabled CONFIG_MODVERSIONS and CONFIG_MODULE_SRCVERSION_ALL, as a
