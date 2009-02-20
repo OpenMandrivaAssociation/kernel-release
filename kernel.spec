@@ -20,7 +20,7 @@
 %define kpatch		rc5
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kgit		4
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1253,7 +1253,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Feb 17 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Fri Feb 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc5.4.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - ALSA/hda changes:
       * Include new SND_PCI_QUIRK_MASK and SND_PCI_QUIRK_VENDOR macros,
@@ -1286,6 +1286,7 @@ rm -rf %{buildroot}
       CONFIG_TOUCHSCREEN_MTOUCH, CONFIG_TOUCHSCREEN_PENMOUNT,
       CONFIG_TOUCHSCREEN_TOUCHRIGHT, CONFIG_TOUCHSCREEN_TOUCHWIN.
     - w1: add missing Kconfig/Makefile entries for DS2431 slave driver.
+    - Updated to 2.6.29-rc5-git4
 
   o Bogdano Arendartchuk <bogdano@mandriva.com.br>
     - Enabled CONFIG_MODVERSIONS and CONFIG_MODULE_SRCVERSION_ALL, as a
