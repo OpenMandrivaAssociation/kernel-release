@@ -1256,6 +1256,7 @@ rm -rf %{buildroot}
 * Fri Feb 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Tomoyo build patch update for 2.6.29-rc5
+    - Disabled CONFIG_USB_R8A66597_HCD on all configs.
 
 * Fri Feb 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc5.4.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
