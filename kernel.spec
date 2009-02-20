@@ -1253,6 +1253,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Feb 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Tomoyo build patch update for 2.6.29-rc5
+
 * Fri Feb 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc5.4.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - ALSA/hda changes:
