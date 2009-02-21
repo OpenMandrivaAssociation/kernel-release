@@ -1257,7 +1257,15 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Tomoyo build patch update for 2.6.29-rc5
     - Disabled on all kernel configs: CONFIG_USB_R8A66597_HCD,
-      CONFIG_PATA_PLATFORM.
+      CONFIG_PATA_PLATFORM, CONFIG_I2C_GPIO, CONFIG_I2C_OCORES,
+      CONFIG_I2C_SIMTEC, CONFIG_I2C_PCA_PLATFORM, CONFIG_I2C_STUB.
+    - Disabled on powerpc config: CONFIG_I2C_ISCH.
+    - Disabled on sparc config: CONFIG_I2C_ALI1535, CONFIG_I2C_ALI1563,
+      CONFIG_I2C_ALI15X3, CONFIG_I2C_AMD756, CONFIG_I2C_AMD8111,
+      CONFIG_I2C_I801, CONFIG_I2C_ISCH, CONFIG_I2C_NFORCE2,
+      CONFIG_I2C_PIIX4, CONFIG_I2C_SIS5595, CONFIG_I2C_SIS630,
+      CONFIG_I2C_SIS96X, CONFIG_I2C_VIA, CONFIG_I2C_VIAPRO.
+    - Enabled on powerpc config: CONFIG_COMPUTONE, CONFIG_I2C_VOODOO3.
 
 * Fri Feb 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc5.4.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
