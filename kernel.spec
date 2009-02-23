@@ -746,6 +746,9 @@ SaveDevel() {
 	cp -fR drivers/media/dvb/dvb-core/*.h $TempDevelRoot/drivers/media/dvb/dvb-core/
 	cp -fR drivers/media/dvb/frontends/lgdt330x.h $TempDevelRoot/drivers/media/dvb/frontends/
 
+	# add acpica header files, needed for fglrx build
+	cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
+
 	for i in alpha arm avr32 blackfin cris frv h8300 ia64 m32r m68knommu \
 	         mips mn10300 parisc s390 sh xtensa; do
 		rm -rf $TempDevelRoot/arch/$i
@@ -1273,6 +1276,9 @@ rm -rf %{buildroot}
     - Disabled on x86_64 config: CONFIG_LEDS_ALIX2.
     - Enabled on sparc config: CONFIG_NEW_LEDS, CONFIG_LEDS_CLASS,
       CONFIG_LEDS_SUNFIRE, CONFIG_LEDS_TRIGGERS*.
+
+  o Thomas Backlund <tmb@mandriva.org>
+    - add drivers/acpi/acpica header files to -devel rpms, needed by fglrx
 
 * Fri Feb 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc5.4.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
