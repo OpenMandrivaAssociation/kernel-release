@@ -17,10 +17,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc5
+%define kpatch		rc6
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		4
+%define kgit		0
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1256,7 +1256,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Feb 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Tue Feb 24 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Tomoyo build patch update for 2.6.29-rc5
     - Disabled on all kernel configs: CONFIG_USB_R8A66597_HCD,
@@ -1278,6 +1278,7 @@ rm -rf %{buildroot}
       CONFIG_LEDS_SUNFIRE, CONFIG_LEDS_TRIGGERS*.
 
   o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.29-rc6
     - add drivers/acpi/acpica header files to -devel rpms, needed by fglrx
 
 * Fri Feb 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc5.4.1mnb
