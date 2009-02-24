@@ -20,7 +20,7 @@
 %define kpatch		rc6
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kgit		1
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1278,7 +1278,7 @@ rm -rf %{buildroot}
       CONFIG_LEDS_SUNFIRE, CONFIG_LEDS_TRIGGERS*.
 
   o Thomas Backlund <tmb@mandriva.org>
-    - update to 2.6.29-rc6
+    - update to 2.6.29-rc6-git1
     - add drivers/acpi/acpica header files to -devel rpms, needed by fglrx
 
 * Fri Feb 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc5.4.1mnb
