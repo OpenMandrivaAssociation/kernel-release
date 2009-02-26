@@ -1283,6 +1283,7 @@ rm -rf %{buildroot}
       CONFIG_RTC_DRV_M41T80, CONFIG_RTC_DRV_PCF8563.
     - Enabled (=m) on sparc/powerpc configs: CONFIG_VIDEO_CX88*,
       CONFIG_RTC_DRV_ISL1208.
+    - Disabled on sparc/powerpc configs: CONFIG_RTC_INTF_PROC.
 
 * Tue Feb 24 2009 Pascal Terjan <pterjan@mandriva.com> 2.6.29-rc6.1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
