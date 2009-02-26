@@ -1264,6 +1264,8 @@ rm -rf %{buildroot}
     - Enabled (=m) on sparc config: CONFIG_PARPORT_SUNBPP.
     - Enabled (=y) on x86_64 config: PARPORT_PC_SUPERIO.
     - Enabled (=y) on i386/x86_64 configs: CONFIG_SONYPI_COMPAT.
+    - Change from =m to =y CONFIG_RTC_CLASS/CONFIG_RTC_LIB on powerpc
+      config.
 
 * Tue Feb 24 2009 Pascal Terjan <pterjan@mandriva.com> 2.6.29-rc6.1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
