@@ -1260,7 +1260,8 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Disabled on all kernel configs: CONFIG_MTD_PHYSMAP,
       CONFIG_MTD_PLATRAM, CONFIG_MTD_NAND_PLATFORM,
-      CONFIG_PARPORT_AX88796, CONFIG_RTC_DRV_DS1286.
+      CONFIG_PARPORT_AX88796, CONFIG_RTC_DRV_DS1286,
+      CONFIG_RTC_DRV_DS1511, CONFIG_RTC_DRV_DS1672.
     - Enabled (=m) on sparc config: CONFIG_PARPORT_SUNBPP.
     - Enabled (=y) on x86_64 config: PARPORT_PC_SUPERIO.
     - Enabled (=y) on i386/x86_64 configs: CONFIG_SONYPI_COMPAT.
@@ -1269,7 +1270,8 @@ rm -rf %{buildroot}
     - Disabled on i386/powerpc/x86_64 configs: CONFIG_RTC_DRV_BQ4802.
     - Enabled (=y) on sparc/powerpc configs:
       CONFIG_RTC_INTF_DEV_UIE_EMUL.
-    - Disabled on i386/x86_64 configs: CONFIG_RTC_DRV_DS1307.
+    - Disabled on i386/x86_64 configs: CONFIG_RTC_DRV_DS1307,
+      CONFIG_RTC_DRV_DS1553.
     - Enabled (=m) on powerpc config: CONFIG_RTC_DRV_DS1307.
     - Disabled on i386/sparc/x86_64 configs: CONFIG_RTC_DRV_DS1374.
 
