@@ -1269,6 +1269,9 @@ rm -rf %{buildroot}
     - Disabled on i386/powerpc/x86_64 configs: CONFIG_RTC_DRV_BQ4802.
     - Enabled (=y) on sparc/powerpc configs:
       CONFIG_RTC_INTF_DEV_UIE_EMUL.
+    - Disabled on i386/x86_64 configs: CONFIG_RTC_DRV_DS1307.
+    - Enabled (=m) on powerpc config: CONFIG_RTC_DRV_DS1307.
+    - Disabled on i386/sparc/x86_64 configs: CONFIG_RTC_DRV_DS1374.
 
 * Tue Feb 24 2009 Pascal Terjan <pterjan@mandriva.com> 2.6.29-rc6.1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
