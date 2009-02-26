@@ -1267,6 +1267,8 @@ rm -rf %{buildroot}
     - Change from =m to =y CONFIG_RTC_CLASS/CONFIG_RTC_LIB on powerpc
       config.
     - Disabled on i386/powerpc/x86_64 configs: CONFIG_RTC_DRV_BQ4802.
+    - Enabled (=y) on sparc/powerpc configs:
+      CONFIG_RTC_INTF_DEV_UIE_EMUL.
 
 * Tue Feb 24 2009 Pascal Terjan <pterjan@mandriva.com> 2.6.29-rc6.1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
