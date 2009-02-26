@@ -1260,7 +1260,7 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Disabled on all kernel configs: CONFIG_MTD_PHYSMAP,
       CONFIG_MTD_PLATRAM, CONFIG_MTD_NAND_PLATFORM,
-      CONFIG_PARPORT_AX88796.
+      CONFIG_PARPORT_AX88796, CONFIG_RTC_DRV_DS1286.
     - Enabled (=m) on sparc config: CONFIG_PARPORT_SUNBPP.
     - Enabled (=y) on x86_64 config: PARPORT_PC_SUPERIO.
     - Enabled (=y) on i386/x86_64 configs: CONFIG_SONYPI_COMPAT.
