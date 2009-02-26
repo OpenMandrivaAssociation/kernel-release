@@ -1256,6 +1256,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu Feb 26 2009 Pascal Terjan <pterjan@mandriva.com> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Disabled on all kernel configs: CONFIG_MTD_PHYSMAP,
+      CONFIG_MTD_PLATRAM, CONFIG_MTD_NAND_PLATFORM.
+
 * Tue Feb 24 2009 Pascal Terjan <pterjan@mandriva.com> 2.6.29-rc6.1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Tomoyo build patch update for 2.6.29-rc5
