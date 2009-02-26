@@ -1259,7 +1259,10 @@ rm -rf %{buildroot}
 * Thu Feb 26 2009 Pascal Terjan <pterjan@mandriva.com> unreleased
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Disabled on all kernel configs: CONFIG_MTD_PHYSMAP,
-      CONFIG_MTD_PLATRAM, CONFIG_MTD_NAND_PLATFORM.
+      CONFIG_MTD_PLATRAM, CONFIG_MTD_NAND_PLATFORM,
+      CONFIG_PARPORT_AX88796.
+    - Enabled (=m) on sparc config: CONFIG_PARPORT_SUNBPP.
+    - Enabled (=y) on x86_64 config: PARPORT_PC_SUPERIO.
 
 * Tue Feb 24 2009 Pascal Terjan <pterjan@mandriva.com> 2.6.29-rc6.1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
