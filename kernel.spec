@@ -1265,7 +1265,8 @@ rm -rf %{buildroot}
       CONFIG_RTC_DRV_FM3130, CONFIG_RTC_DRV_M48T35,
       CONFIG_RTC_DRV_M48T86, CONFIG_RTC_DRV_MAX6900,
       CONFIG_RTC_DRV_PCF8583, CONFIG_RTC_DRV_S35390A,
-      CONFIG_RTC_DRV_STK17TA8.
+      CONFIG_RTC_DRV_STK17TA8, CONFIG_RTC_DRV_TEST,
+      CONFIG_RTC_DRV_X1205.
     - Enabled (=m) on sparc config: CONFIG_PARPORT_SUNBPP,
       CONFIG_VIDEO_WM8775.
     - Enabled (=y) on x86_64 config: PARPORT_PC_SUPERIO.
@@ -1277,7 +1278,8 @@ rm -rf %{buildroot}
     - Enabled (=y) on sparc/powerpc configs:
       CONFIG_RTC_INTF_DEV_UIE_EMUL.
     - Disabled on i386/x86_64 configs: CONFIG_RTC_DRV_DS1307,
-      CONFIG_RTC_DRV_DS1553, CONFIG_RTC_DRV_DS1742.
+      CONFIG_RTC_DRV_DS1553, CONFIG_RTC_DRV_DS1742,
+      CONFIG_RTC_DRV_V3020.
     - Enabled (=m) on powerpc config: CONFIG_RTC_DRV_DS1307,
       CONFIG_RTC_DRV_DS1742.
     - Disabled on i386/sparc/x86_64 configs: CONFIG_RTC_DRV_DS1374,
