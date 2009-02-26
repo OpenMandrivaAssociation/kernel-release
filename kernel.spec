@@ -1276,7 +1276,8 @@ rm -rf %{buildroot}
       CONFIG_RTC_DRV_DS1553, CONFIG_RTC_DRV_DS1742.
     - Enabled (=m) on powerpc config: CONFIG_RTC_DRV_DS1307,
       CONFIG_RTC_DRV_DS1742.
-    - Disabled on i386/sparc/x86_64 configs: CONFIG_RTC_DRV_DS1374.
+    - Disabled on i386/sparc/x86_64 configs: CONFIG_RTC_DRV_DS1374,
+      CONFIG_RTC_DRV_M41T80.
     - Enabled (=m) on sparc/powerpc configs: CONFIG_VIDEO_CX88*,
       CONFIG_RTC_DRV_ISL1208.
 
