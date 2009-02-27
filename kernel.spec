@@ -1294,7 +1294,8 @@ rm -rf %{buildroot}
     - Enabled (=y) on sparc config: CONFIG_SERIAL_8250_EXTENDED,
       CONFIG_SERIAL_8250_SHARE_IRQ.
     - Enabled (=y) on all configs: CONFIG_SERIAL_8250_RSA.
-    - Enabled (=m) on i386 config: CONFIG_FB_ARC.
+    - Enabled (=m) on i386 config: CONFIG_FB_ARC, CONFIG_EFI_VARS.
+    - Enabled (=y) on i386 config: CONFIG_EFI, CONFIG_FB_EFI.
 
 * Tue Feb 24 2009 Pascal Terjan <pterjan@mandriva.com> 2.6.29-rc6.1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
