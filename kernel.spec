@@ -688,6 +688,7 @@ BuildKernel() {
 	install -d %{temp_boot}
 	install -m 644 System.map %{temp_boot}/System.map-$KernelVer
 	install -m 644 .config %{temp_boot}/config-$KernelVer
+	gzip -c Module.symvers > %{temp_boot}/symvers-$KernelVer.gz
 
         %ifarch ppc powerpc
 	        cp -f vmlinux %{temp_boot}/vmlinuz-$KernelVer
@@ -930,6 +931,7 @@ CreateFiles() {
 cat > $kernel_files <<EOF
 %defattr(-,root,root)
 %{_bootdir}/System.map-%{kversion}-$kernel_flavour-%{buildrpmrel}
+%{_bootdir}/symvers-%{kversion}-$kernel_flavour-%{buildrpmrel}.gz
 %{_bootdir}/config-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %{_bootdir}/vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %dir %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/
@@ -1296,6 +1298,10 @@ rm -rf %{buildroot}
     - Enabled (=y) on all configs: CONFIG_SERIAL_8250_RSA.
     - Enabled (=m) on i386 config: CONFIG_FB_ARC, CONFIG_EFI_VARS.
     - Enabled (=y) on i386 config: CONFIG_EFI, CONFIG_FB_EFI.
+
+  o Bogdano Arendartchuk <bogdano@mandriva.com.br>
+    - Keep Module.symvers as /boot/symvers-$version.gz in order to allow
+      partial kernel builds
 
 * Tue Feb 24 2009 Pascal Terjan <pterjan@mandriva.com> 2.6.29-rc6.1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
