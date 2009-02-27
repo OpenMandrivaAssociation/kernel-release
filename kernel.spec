@@ -1288,6 +1288,8 @@ rm -rf %{buildroot}
     - Enabled (=m) on sparc/powerpc configs: CONFIG_VIDEO_CX88*,
       CONFIG_RTC_DRV_ISL1208.
     - Disabled on sparc/powerpc configs: CONFIG_RTC_INTF_PROC.
+    - Enabled (=y) on sparc config: CONFIG_SERIAL_8250_EXTENDED,
+      CONFIG_SERIAL_8250_SHARE_IRQ.
 
 * Tue Feb 24 2009 Pascal Terjan <pterjan@mandriva.com> 2.6.29-rc6.1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
