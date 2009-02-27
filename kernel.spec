@@ -1267,7 +1267,8 @@ rm -rf %{buildroot}
       CONFIG_RTC_DRV_PCF8583, CONFIG_RTC_DRV_S35390A,
       CONFIG_RTC_DRV_STK17TA8, CONFIG_RTC_DRV_TEST,
       CONFIG_RTC_DRV_X1205, CONFIG_UIO_PDRV,
-      CONFIG_UIO_PDRV_GENIRQ, CONFIG_UIO_SMX.
+      CONFIG_UIO_PDRV_GENIRQ, CONFIG_UIO_SMX,
+      CONFIG_LCD_PLATFORM.
     - Enabled (=m) on sparc config: CONFIG_PARPORT_SUNBPP,
       CONFIG_VIDEO_WM8775.
     - Enabled (=y) on x86_64 config: PARPORT_PC_SUPERIO.
@@ -1288,10 +1289,12 @@ rm -rf %{buildroot}
       CONFIG_RTC_DRV_RS5C372, CONFIG_RTC_DRV_RX8581.
     - Enabled (=m) on sparc/powerpc configs: CONFIG_VIDEO_CX88*,
       CONFIG_RTC_DRV_ISL1208.
-    - Disabled on sparc/powerpc configs: CONFIG_RTC_INTF_PROC.
+    - Disabled on sparc/powerpc configs: CONFIG_RTC_INTF_PROC,
+      CONFIG_LCD_CLASS_DEVICE.
     - Enabled (=y) on sparc config: CONFIG_SERIAL_8250_EXTENDED,
       CONFIG_SERIAL_8250_SHARE_IRQ.
     - Enabled (=y) on all configs: CONFIG_SERIAL_8250_RSA.
+    - Enabled (=m) on i386 config: CONFIG_FB_ARC.
 
 * Tue Feb 24 2009 Pascal Terjan <pterjan@mandriva.com> 2.6.29-rc6.1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
