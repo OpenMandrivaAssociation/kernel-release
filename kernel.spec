@@ -1275,7 +1275,7 @@ rm -rf %{buildroot}
     - Change from =m to =y CONFIG_RTC_CLASS/CONFIG_RTC_LIB on powerpc
       config.
     - Disabled on i386/powerpc/x86_64 configs: CONFIG_RTC_DRV_BQ4802,
-      CONFIG_RTC_DRV_M48T59.
+      CONFIG_RTC_DRV_M48T59, CONFIG_USB_GPIO_VBUS, CONFIG_USB_OTG_UTILS.
     - Enabled (=y) on sparc/powerpc configs:
       CONFIG_RTC_INTF_DEV_UIE_EMUL.
     - Disabled on i386/x86_64 configs: CONFIG_RTC_DRV_DS1307,
