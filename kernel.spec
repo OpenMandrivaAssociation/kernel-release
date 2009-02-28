@@ -1283,7 +1283,7 @@ rm -rf %{buildroot}
       CONFIG_RTC_INTF_DEV_UIE_EMUL.
     - Disabled on i386/x86_64 configs: CONFIG_RTC_DRV_DS1307,
       CONFIG_RTC_DRV_DS1553, CONFIG_RTC_DRV_DS1742,
-      CONFIG_RTC_DRV_V3020.
+      CONFIG_RTC_DRV_V3020, CONFIG_FB_N411, CONFIG_FB_HECUBA.
     - Enabled (=m) on powerpc config: CONFIG_RTC_DRV_DS1307,
       CONFIG_RTC_DRV_DS1742.
     - Disabled on i386/sparc/x86_64 configs: CONFIG_RTC_DRV_DS1374,
