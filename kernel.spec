@@ -1297,8 +1297,10 @@ rm -rf %{buildroot}
       CONFIG_SERIAL_8250_SHARE_IRQ.
     - Enabled (=y) on all configs: CONFIG_SERIAL_8250_RSA.
     - Enabled (=m) on i386 config: CONFIG_FB_ARC, CONFIG_EFI_VARS.
-    - Enabled (=y) on i386 config: CONFIG_EFI, CONFIG_FB_EFI.
+    - Enabled (=y) on i386 config: CONFIG_EFI, CONFIG_FB_EFI,
+      CONFIG_FB_HGA_ACCEL.
     - n411: add missing Makefile entry.
+    - Disabled on x86_64 config: CONFIG_FB_HGA.
 
   o Bogdano Arendartchuk <bogdano@mandriva.com.br>
     - Keep Module.symvers as /boot/symvers-$version.gz in order to allow
