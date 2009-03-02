@@ -1272,7 +1272,8 @@ rm -rf %{buildroot}
       CONFIG_UIO_PDRV_GENIRQ, CONFIG_UIO_SMX,
       CONFIG_LCD_PLATFORM, CONFIG_FB_METRONOME.
     - Enabled (=m) on sparc config: CONFIG_PARPORT_SUNBPP,
-      CONFIG_VIDEO_WM8775.
+      CONFIG_VIDEO_WM8775, CONFIG_SND_MTPAV, CONFIG_SND_PORTMAN2X4,
+      CONFIG_SND_SERIAL_U16550.
     - Enabled (=y) on x86_64 config: PARPORT_PC_SUPERIO.
     - Enabled (=y) on i386/x86_64 configs: CONFIG_SONYPI_COMPAT.
     - Change from =m to =y CONFIG_RTC_CLASS/CONFIG_RTC_LIB on powerpc
@@ -1303,6 +1304,8 @@ rm -rf %{buildroot}
       CONFIG_FB_HGA_ACCEL.
     - n411: add missing Makefile entry.
     - Disabled on x86_64 config: CONFIG_FB_HGA.
+    - Enable group cpu scheduler, switch to cgroup scheduler on server
+      config.
 
   o Bogdano Arendartchuk <bogdano@mandriva.com.br>
     - Keep Module.symvers as /boot/symvers-$version.gz in order to allow
