@@ -1306,6 +1306,9 @@ rm -rf %{buildroot}
     - Disabled on x86_64 config: CONFIG_FB_HGA.
     - Enable group cpu scheduler, switch to cgroup scheduler on server
       config.
+    - Only enable namespaces support for server config.
+    - Only enable (=m) virtual ethernet pair device and MAC-VLAN for
+      server config.
 
   o Bogdano Arendartchuk <bogdano@mandriva.com.br>
     - Keep Module.symvers as /boot/symvers-$version.gz in order to allow
