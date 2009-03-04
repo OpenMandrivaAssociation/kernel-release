@@ -1309,6 +1309,11 @@ rm -rf %{buildroot}
     - Only enable namespaces support for server config.
     - Only enable (=m) virtual ethernet pair device and MAC-VLAN for
       server config.
+    - Fixes/enhancements for HP Educ.ar machine/alc888 3stack-hp model:
+      * Added additional 4 channel mode
+      * Added headphone automute support
+      * Map 3stack-hp model (ALC888) for HP Educ.ar
+    - ALSA: hda - Cleanup printk from alc888_6st_dell_unsol_event
 
   o Bogdano Arendartchuk <bogdano@mandriva.com.br>
     - Keep Module.symvers as /boot/symvers-$version.gz in order to allow
