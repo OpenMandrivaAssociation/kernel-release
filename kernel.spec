@@ -1316,6 +1316,7 @@ rm -rf %{buildroot}
     - ALSA: hda - Cleanup printk from alc888_6st_dell_unsol_event
     - Updated to 2.6.29-rc7
       * dropped w1-slaves-ds2431-kbuild.patch (merged)
+    - Turn on DEVPTS_MULTIPLE_INSTANCES for server kernels.
 
   o Bogdano Arendartchuk <bogdano@mandriva.com.br>
     - Keep Module.symvers as /boot/symvers-$version.gz in order to allow
