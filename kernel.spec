@@ -17,10 +17,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc6
+%define kpatch		rc7
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		1
+%define kgit		0
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1314,6 +1314,8 @@ rm -rf %{buildroot}
       * Added headphone automute support
       * Map 3stack-hp model (ALC888) for HP Educ.ar
     - ALSA: hda - Cleanup printk from alc888_6st_dell_unsol_event
+    - Updated to 2.6.29-rc7
+      * dropped w1-slaves-ds2431-kbuild.patch (merged)
 
   o Bogdano Arendartchuk <bogdano@mandriva.com.br>
     - Keep Module.symvers as /boot/symvers-$version.gz in order to allow
