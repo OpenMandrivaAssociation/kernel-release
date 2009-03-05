@@ -20,7 +20,7 @@
 %define kpatch		rc7
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kgit		1
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1314,7 +1314,7 @@ rm -rf %{buildroot}
       * Added headphone automute support
       * Map 3stack-hp model (ALC888) for HP Educ.ar
     - ALSA: hda - Cleanup printk from alc888_6st_dell_unsol_event
-    - Updated to 2.6.29-rc7
+    - Updated to 2.6.29-rc7-git1
       * dropped w1-slaves-ds2431-kbuild.patch (merged)
     - Turn on DEVPTS_MULTIPLE_INSTANCES for server kernels.
 
