@@ -1274,7 +1274,8 @@ rm -rf %{buildroot}
     - Enabled (=m) on sparc config: CONFIG_PARPORT_SUNBPP,
       CONFIG_VIDEO_WM8775, CONFIG_SND_MTPAV, CONFIG_SND_PORTMAN2X4,
       CONFIG_SND_SERIAL_U16550.
-    - Enabled (=y) on x86_64 config: PARPORT_PC_SUPERIO.
+    - Enabled (=y) on x86_64 config: CONFIG_PARPORT_PC_SUPERIO,
+      CONFIG_DIRECT_GBPAGES.
     - Enabled (=y) on i386/x86_64 configs: CONFIG_SONYPI_COMPAT.
     - Change from =m to =y CONFIG_RTC_CLASS/CONFIG_RTC_LIB on powerpc
       config.
