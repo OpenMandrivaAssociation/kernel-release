@@ -1317,6 +1317,10 @@ rm -rf %{buildroot}
     - Updated to 2.6.29-rc7-git1
       * dropped w1-slaves-ds2431-kbuild.patch (merged)
     - Turn on DEVPTS_MULTIPLE_INSTANCES for server kernels.
+    - Enable Xen guest support by default when available.
+    - create_configs: cleanup unused/gone config options, cosmetics,
+      enable xen when available (not only when customizing options for
+      server kernel).
 
   o Bogdano Arendartchuk <bogdano@mandriva.com.br>
     - Keep Module.symvers as /boot/symvers-$version.gz in order to allow
