@@ -1276,7 +1276,8 @@ rm -rf %{buildroot}
       CONFIG_SND_SERIAL_U16550.
     - Enabled (=y) on x86_64 config: CONFIG_PARPORT_PC_SUPERIO,
       CONFIG_DIRECT_GBPAGES.
-    - Enabled (=y) on i386/x86_64 configs: CONFIG_SONYPI_COMPAT.
+    - Enabled (=y) on i386/x86_64 configs: CONFIG_SONYPI_COMPAT,
+      CONFIG_PM_DEBUG, CONFIG_PM_TRACE_RTC.
     - Change from =m to =y CONFIG_RTC_CLASS/CONFIG_RTC_LIB on powerpc
       config.
     - Disabled on i386/powerpc/x86_64 configs: CONFIG_RTC_DRV_BQ4802,
