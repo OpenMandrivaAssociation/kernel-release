@@ -20,7 +20,7 @@
 %define kpatch		rc7
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		1
+%define kgit		4
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1258,7 +1258,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Feb 26 2009 Pascal Terjan <pterjan@mandriva.com> unreleased
+* Tue Mar 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc7.4.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Disabled on all kernel configs: CONFIG_MTD_PHYSMAP,
       CONFIG_MTD_PLATRAM, CONFIG_MTD_NAND_PLATFORM,
@@ -1316,7 +1316,7 @@ rm -rf %{buildroot}
       * Added headphone automute support
       * Map 3stack-hp model (ALC888) for HP Educ.ar
     - ALSA: hda - Cleanup printk from alc888_6st_dell_unsol_event
-    - Updated to 2.6.29-rc7-git1
+    - Updated to 2.6.29-rc7-git4
       * dropped w1-slaves-ds2431-kbuild.patch (merged)
     - Turn on DEVPTS_MULTIPLE_INSTANCES for server kernels.
     - Enable Xen guest support by default when available.
