@@ -1263,6 +1263,8 @@ rm -rf %{buildroot}
     - mac80211: deauth before flushing STA information.
       (handles mac80211 userspace notification issue when interface goes
       down pointed at ticket #43441).
+    - Enabled (=y) on all kernel configs: CONFIG_CPU_FREQ_STAT_DETAILS.
+    - Enabled cpufreq options on powerpc config.
 
 * Tue Mar 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc7.4.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
