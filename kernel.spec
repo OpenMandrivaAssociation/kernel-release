@@ -1258,6 +1258,12 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu Mar 12 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - mac80211: deauth before flushing STA information.
+      (handles mac80211 userspace notification issue when interface goes
+      down pointed at ticket #43441).
+
 * Tue Mar 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc7.4.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Disabled on all kernel configs: CONFIG_MTD_PHYSMAP,
