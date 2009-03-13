@@ -17,10 +17,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc7
+%define kpatch		rc8
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		4
+%define kgit		0
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1258,7 +1258,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Mar 12 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Fri Mar 13 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc8.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - mac80211: deauth before flushing STA information.
       (handles mac80211 userspace notification issue when interface goes
@@ -1269,6 +1269,7 @@ rm -rf %{buildroot}
       CONFIG_IPV6_PIMSM_V2.
     - Enabled cpufreq options on powerpc config.
     - Enabled CONFIG_TCP_MD5SIG on server kernels.
+    - Updated to 2.6.29-rc8
 
 * Tue Mar 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc7.4.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
