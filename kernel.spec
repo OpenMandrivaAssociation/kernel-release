@@ -1270,6 +1270,15 @@ rm -rf %{buildroot}
     - Enabled cpufreq options on powerpc config.
     - Enabled CONFIG_TCP_MD5SIG on server kernels.
     - Updated to 2.6.29-rc8
+    - Included following ext4 fixes from Theodore Ts'o git tree:
+      * Fixes for 2.6.29-rcX:
+      ext4: fix header check in ext4_ext_search_right() for deep extent trees
+      ext4: Print the find_group_flex() warning only once
+      * ext4+delayed allocation issues solution (reference:
+      http://thunk.org/tytso/blog/2009/03/12/delayed-allocation-and-the-zero-length-file-problem/)
+      ext4: add EXT4_IOC_ALLOC_DA_BLKS ioctl
+      ext4: Automatically allocate delay allocated blocks on close
+      ext4: Automatically allocate delay allocated blocks on rename
 
 * Tue Mar 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc7.4.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
