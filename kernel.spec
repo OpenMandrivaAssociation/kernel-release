@@ -1263,7 +1263,10 @@ rm -rf %{buildroot}
     - mac80211: deauth before flushing STA information.
       (handles mac80211 userspace notification issue when interface goes
       down pointed at ticket #43441).
-    - Enabled (=y) on all kernel configs: CONFIG_CPU_FREQ_STAT_DETAILS.
+    - Enabled (=y) on all kernel configs: CONFIG_CPU_FREQ_STAT_DETAILS,
+      CONFIG_IPV6_ROUTER_PREF, CONFIG_IPV6_ROUTE_INFO,
+      CONFIG_IPV6_OPTIMISTIC_DAD, CONFIG_IPV6_MROUTE,
+      CONFIG_IPV6_PIMSM_V2.
     - Enabled cpufreq options on powerpc config.
     - Enabled CONFIG_TCP_MD5SIG on server kernels.
 
