@@ -1258,6 +1258,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon Mar 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Rediff main uss725 patch, fixes In-System Design USS725 USB/IDE
+      probe error reported by Sergio Monteiro Basto.
+
 * Fri Mar 13 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc8.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - mac80211: deauth before flushing STA information.
