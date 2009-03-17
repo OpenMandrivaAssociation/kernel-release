@@ -1267,7 +1267,7 @@ rm -rf %{buildroot}
     - Disabled CONFIG_SYS_DEPRECATED* on all configs, report/reference:
       http://lists.mandriva.com/kernel-discuss/2009-03/msg00036.php
     - Disabled CONFIG_USB_DEVICE_CLASS on all configs, report/reference:
-      http://lists.mandriva.com/kernel-discuss/2009-03/msg00037.php)
+      http://lists.mandriva.com/kernel-discuss/2009-03/msg00037.php
 
 * Fri Mar 13 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc8.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
