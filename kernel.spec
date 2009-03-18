@@ -20,7 +20,7 @@
 %define kpatch		rc8
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kgit		3
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1258,7 +1258,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Mar 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Wed Mar 18 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc8.3.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Rediff main uss725 patch, fixes In-System Design USS725 USB/IDE
       probe error reported by Sergio Monteiro Basto.
@@ -1268,6 +1268,7 @@ rm -rf %{buildroot}
       http://lists.mandriva.com/kernel-discuss/2009-03/msg00036.php
     - Disabled CONFIG_USB_DEVICE_CLASS on all configs, report/reference:
       http://lists.mandriva.com/kernel-discuss/2009-03/msg00037.php
+    - Updated to 2.6.29-rc8-git3
 
 * Fri Mar 13 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc8.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
