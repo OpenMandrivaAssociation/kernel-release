@@ -1258,6 +1258,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu Mar 19 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Backported r6xx/r7xx support from drm-next tree.
+
 * Wed Mar 18 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc8.3.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Rediff main uss725 patch, fixes In-System Design USS725 USB/IDE
