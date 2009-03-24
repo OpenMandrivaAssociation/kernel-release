@@ -17,10 +17,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc8
+%define kpatch		0
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		3
+%define kgit		0
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1261,6 +1261,10 @@ rm -rf %{buildroot}
 * Thu Mar 19 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Backported r6xx/r7xx support from drm-next tree.
+    - Updated to 2.6.29
+      * dropped following merged patches:
+        fs-ext4-fix-header-check-in-ext4_ext_search_right-fo.patch
+        fs-ext4-Print-the-find_group_flex-warning-only-once.patch
 
 * Wed Mar 18 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc8.3.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
