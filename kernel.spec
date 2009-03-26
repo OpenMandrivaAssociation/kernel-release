@@ -1258,6 +1258,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu Mar 26 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Enabled CONFIG_X86_GENERICARCH for all i386 configs, as we set
+      NR_CPUS=32 (reported by Pascal Terjan).
+
 * Thu Mar 26 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Backported r6xx/r7xx support from drm-next tree.
