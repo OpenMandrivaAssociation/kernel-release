@@ -1258,13 +1258,19 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Mar 19 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Thu Mar 26 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Backported r6xx/r7xx support from drm-next tree.
     - Updated to 2.6.29
       * dropped following merged patches:
         fs-ext4-fix-header-check-in-ext4_ext_search_right-fo.patch
         fs-ext4-Print-the-find_group_flex-warning-only-once.patch
+    - Included x86 pat fixes, should fix problems reported at kernel.org
+      bug #12800, and fixes virtualbox regression without the workaround
+      setting VBOX_USE_INSERT_PAGE=1
+      Reference: http://www.virtualbox.org/ticket/3403
+    - Added bug fix for network stuck issue in 2.6.29 final
+      Reference: http://marc.info/?l=linux-kernel&m=123789980524715&w=2
 
 * Wed Mar 18 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-0.rc8.3.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
