@@ -1262,6 +1262,8 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Enabled CONFIG_X86_GENERICARCH for all i386 configs, as we set
       NR_CPUS=32 (reported by Pascal Terjan).
+    - Disabled CONFIG_WIRELESS_OLD_REGULATORY on all configs.
+
   o Pascal Terjan <pterjan@mandriva.com>
     - Add support for Wacom Intuos 4 tablets (based on linuxwacom cvs patches)
 
