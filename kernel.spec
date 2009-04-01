@@ -1264,6 +1264,7 @@ rm -rf %{buildroot}
       NR_CPUS=32 (reported by Pascal Terjan).
     - Disabled CONFIG_WIRELESS_OLD_REGULATORY on all configs.
     - Disabled CONFIG_USB_GADGET on configs where it was enabled.
+    - Tomoyo update to 1.6.7-20090401
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Add support for Wacom Intuos 4 tablets (based on linuxwacom cvs patches)
