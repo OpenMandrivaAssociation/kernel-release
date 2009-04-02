@@ -1268,6 +1268,8 @@ rm -rf %{buildroot}
     - Added parameter gem_enable to i915, based on patch/idea posted by
       Vasily Khoruzhick, for more information see following bug report:
       http://bugs.freedesktop.org/show_bug.cgi?id=16835
+    - Refresh gpu-drm-radeon-r6xx-r7xx.patch with additional commit
+      that adds RS780 new pci ids.
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Add support for Wacom Intuos 4 tablets (based on linuxwacom cvs patches)
