@@ -1276,6 +1276,7 @@ rm -rf %{buildroot}
       firmware 2.34
     - Add via card reader support (sd/mmc only) v5 patch from Joseph
       Chan.
+    - Removed already applied input-add-dell-xps-m1530-nomux-quirk.patch
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Add support for Wacom Intuos 4 tablets (based on linuxwacom cvs patches)
