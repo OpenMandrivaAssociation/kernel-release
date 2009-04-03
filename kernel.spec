@@ -1274,6 +1274,8 @@ rm -rf %{buildroot}
       keep with 2.6.29 stable series default.
     - elantech: apply upstream patch with workaround for jumpy cursor on
       firmware 2.34
+    - Add via card reader support (sd/mmc only) v5 patch from Joseph
+      Chan.
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Add support for Wacom Intuos 4 tablets (based on linuxwacom cvs patches)
