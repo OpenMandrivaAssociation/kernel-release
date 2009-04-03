@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		0
+%define kstable		1
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1258,7 +1258,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Mar 26 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Fri Apr  3 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Enabled CONFIG_X86_GENERICARCH for all i386 configs, as we set
       NR_CPUS=32 (reported by Pascal Terjan).
@@ -1273,6 +1273,9 @@ rm -rf %{buildroot}
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Add support for Wacom Intuos 4 tablets (based on linuxwacom cvs patches)
+
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.29.1
 
 * Thu Mar 26 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
