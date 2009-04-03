@@ -240,7 +240,7 @@ http://www.mandriva.com/en/security/kernelupdate			\
 %define requires4	sysfsutils >= 1.3.0-1
 %define requires5	kernel-firmware >= 2.6.27-0.rc2.2mdv
 
-%define kprovides 	%{kname} = %{kverrel}, kernel = %{tar_ver}, alsa = 1.0.16, drbd-api = 88
+%define kprovides 	%{kname} = %{kverrel}, kernel = %{tar_ver}, alsa = 1.0.19, drbd-api = 88
 
 %define kconflicts	drakxtools-backend < 10.4.190-2
 
