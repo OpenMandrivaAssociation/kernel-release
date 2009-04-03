@@ -1276,6 +1276,7 @@ rm -rf %{buildroot}
 
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.29.1
+    - update drbd to 8.3.1
 
 * Thu Mar 26 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
