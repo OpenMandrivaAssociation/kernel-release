@@ -1270,6 +1270,10 @@ rm -rf %{buildroot}
       http://bugs.freedesktop.org/show_bug.cgi?id=16835
     - Refresh gpu-drm-radeon-r6xx-r7xx.patch with additional commit
       that adds RS780 new pci ids.
+    - Removed pat cleanup (new vm flag to track full pfnmap at mmap),
+      keep with 2.6.29 stable series default.
+    - elantech: apply upstream patch with workaround for jumpy cursor on
+      firmware 2.34
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Add support for Wacom Intuos 4 tablets (based on linuxwacom cvs patches)
