@@ -1276,7 +1276,25 @@ rm -rf %{buildroot}
       firmware 2.34
     - Add via card reader support (sd/mmc only) v5 patch from Joseph
       Chan.
-    - Removed already applied input-add-dell-xps-m1530-nomux-quirk.patch
+    - Removed already applied patches:
+      input-add-dell-xps-m1530-nomux-quirk.patch
+      net-sis190-sis966.patch (similar fix merged)
+      net-bluetooth-fix-oops-in-l2cap_conn_del.patch
+      net-bluetooth-fix-esco-sync.patch (similar fix merged)
+    - scripts/apply_patches: use --fuzz=0 for patch (same default as for
+      general distro packages).
+    - Rediffed all fuzzy patches. Some styling/trailing spacing removal
+      fixes were done too.
+    - Drop x86-cpufreq-e_powersaver-print-voltage-mult-only-in-debug.patch,
+      stick with upstream default after change "[CPUFREQ] Remove
+      debugging message from e_powersaver".
+    - Renamed acpi-CELVO-M360S-disable_acpi_irq.patch to
+      acpi-CLEVO-M360S-disable_acpi_irq.patch, and rediffed.
+    - Removed unecessary patches:
+      net-bonding-alias.patch (possible easter egg? :-) )
+      usb-use-old_scheme_first.patch
+    - Updated acpi-dsdt-initrd patch with enhanced (with fixes) version.
+      (version v0.9c-2.6.28)
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Add support for Wacom Intuos 4 tablets (based on linuxwacom cvs patches)
