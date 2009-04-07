@@ -1268,8 +1268,10 @@ rm -rf %{buildroot}
     - Added parameter gem_enable to i915, based on patch/idea posted by
       Vasily Khoruzhick, for more information see following bug report:
       http://bugs.freedesktop.org/show_bug.cgi?id=16835
-    - Refresh gpu-drm-radeon-r6xx-r7xx.patch with additional commit
-      that adds RS780 new pci ids.
+    - Refresh gpu-drm-radeon-r6xx-r7xx.patch with following additional
+      commits:
+      radeon: add some new pci ids
+      drm/radeon: load the right microcode on rs780
     - Removed pat cleanup (new vm flag to track full pfnmap at mmap),
       keep with 2.6.29 stable series default.
     - elantech: apply upstream patch with workaround for jumpy cursor on
