@@ -1295,6 +1295,8 @@ rm -rf %{buildroot}
       usb-use-old_scheme_first.patch
     - Updated acpi-dsdt-initrd patch with enhanced/fixed version.
       (version v0.9c-2.6.28). Added more fixes on top of updated patch.
+    - Updated ipset to 2.4.9 (matches current userspace on cooker, and
+      fixes oops when running ipset tests).
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Add support for Wacom Intuos 4 tablets (based on linuxwacom cvs patches)
