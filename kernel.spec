@@ -1302,6 +1302,7 @@ rm -rf %{buildroot}
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Add support for Wacom Intuos 4 tablets (based on linuxwacom cvs patches)
+    - Add support for D-Link DWM 652 3G modem
 
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.29.1
