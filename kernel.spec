@@ -1258,7 +1258,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Apr  3 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Tue Apr  7 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Enabled CONFIG_X86_GENERICARCH for all i386 configs, as we set
       NR_CPUS=32 (reported by Pascal Terjan).
