@@ -1258,6 +1258,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue Apr  7 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Disable CONFIG_AES2501 (#40523)
+
 * Tue Apr  7 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Enabled CONFIG_X86_GENERICARCH for all i386 configs, as we set
