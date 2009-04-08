@@ -1262,6 +1262,9 @@ rm -rf %{buildroot}
   o Pascal Terjan <pterjan@mandriva.com>
     - Disable CONFIG_AES2501 (#40523)
 
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Unset CONFIG_UEVENT_HELPER_PATH, this shouldn't be needed anymore.
+
 * Tue Apr  7 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Enabled CONFIG_X86_GENERICARCH for all i386 configs, as we set
