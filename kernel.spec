@@ -1266,6 +1266,11 @@ rm -rf %{buildroot}
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Unset CONFIG_UEVENT_HELPER_PATH, this shouldn't be needed anymore.
+    - Disable gem automatically if it's not possible to do tiled
+      rendering, fixes 3d performance regression on some intel i945
+      based machines. Fix/patch made by Ander Conselvan de Oliveira.
+      With this remove previous gem_enable parameter added to i915,
+      obsolete by this solution.
 
 * Tue Apr  7 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
