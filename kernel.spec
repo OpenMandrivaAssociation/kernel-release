@@ -1261,6 +1261,8 @@ rm -rf %{buildroot}
 * Tue Apr  7 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Pascal Terjan <pterjan@mandriva.com>
     - Disable CONFIG_AES2501 (#40523)
+    - Hide unused interface in option for D-Link DWM-652 and ensure it is ignored
+      by usb-storage when in modem mode
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Unset CONFIG_UEVENT_HELPER_PATH, this shouldn't be needed anymore.
