@@ -12,7 +12,7 @@
 %define sublevel	29
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1258,7 +1258,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Apr  7 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Fri Apr 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Disable CONFIG_AES2501 (#40523)
     - Hide unused interface in option for D-Link DWM-652 and ensure it is ignored
