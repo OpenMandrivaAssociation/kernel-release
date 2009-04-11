@@ -1265,12 +1265,15 @@ rm -rf %{buildroot}
       by usb-storage when in modem mode
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
-    - Unset CONFIG_UEVENT_HELPER_PATH, this shouldn't be needed anymore.
     - Disable gem automatically if it's not possible to do tiled
       rendering, fixes 3d performance regression on some intel i945
       based machines. Fix/patch made by Ander Conselvan de Oliveira.
       With this remove previous gem_enable parameter added to i915,
       obsolete by this solution.
+    - rt2x00: prevent double kfree when failing to register hardware
+      (#46710).
+    - Enable and select minstrel as default mac80211 rate control
+      (should behave better than previous pid, 2.6.29 default).
 
 * Tue Apr  7 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
