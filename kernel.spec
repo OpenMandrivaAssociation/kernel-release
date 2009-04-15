@@ -1262,6 +1262,9 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - i915: disable gem automatically also for i8xx hardware, patch from
       Fedora. Reference: http://lists.mandriva.com/cooker/2009-04/msg00577.php
+    - Added back gem_enable parameter to i915 module in case someone
+      still needs it to workaround issues with gem.
+
   o Pascal Terjan <pterjan@mandriva.com>
     - Add some upstream ALSA patches
 
