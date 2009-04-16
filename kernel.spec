@@ -12,7 +12,7 @@
 %define sublevel	29
 
 # Package release
-%define mnbrel		2
+%define mnbrel		3
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -23,7 +23,7 @@
 %define kgit		0
 
 # Used when building update candidates
-%define uclevel uc1
+#define uclevel uc1
 %define devel_notice %{?uclevel:NOTE: This is work-in-progress (WIP) development kernel.}
 
 # kernel base name (also name of srpm)
@@ -1258,15 +1258,21 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Apr 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Tue Apr 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-3mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - i915: disable gem automatically also for i8xx hardware, patch from
       Fedora. Reference: http://lists.mandriva.com/cooker/2009-04/msg00577.php
     - Added back gem_enable parameter to i915 module in case someone
       still needs it to workaround issues with gem.
+    - Added patch scheduled for stable 2.6.29.x: "mm: define a UNIQUE
+      value for AS_UNEVICTABLE flag".
+    - Blacklist acer-wmi on Acer Aspire One, upstream patch scheduled
+      for -stable.
+    - More upstream ALSA patches which should help in pulseaudio issues.
+    - Minor WARN redefine fix in heci 3rdparty driver.
 
   o Pascal Terjan <pterjan@mandriva.com>
-    - Add some upstream ALSA patches
+    - Add upstream ALSA patches to deal with pulseaudio issues (#49826)
 
 * Fri Apr 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
