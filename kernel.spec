@@ -1258,7 +1258,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Apr 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-3mnb
+* Thu Apr 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-3mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - i915: disable gem automatically also for i8xx hardware, patch from
       Fedora. Reference: http://lists.mandriva.com/cooker/2009-04/msg00577.php
