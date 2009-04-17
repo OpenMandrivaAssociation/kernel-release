@@ -337,7 +337,7 @@ If you want to build your own kernel, you need to install the full \
 Version:	%{fakever}				\
 Release:	%{fakerel}				\
 Summary:	Files with debug info for %{kname}-%{1}-%{buildrel} \
-Group:		Development/Kernel			\
+Group:		Development/Debug			\
 Provides:	kernel-debug = %{kverrel} 		\
 %ifarch %{ix86}						\
 Conflicts:	arch(x86_64)				\
@@ -390,7 +390,7 @@ latest %{kname}-%{1}-devel installed...			\
 Version:	%{kversion}				\
 Release:	%{rpmrel}				\
 Summary:	Virtual rpm for latest %{kname}-%{1}-debug \
-Group:		Development/Kernel			\
+Group:		Development/Debug			\
 Requires:	%{kname}-%{1}-debug-%{buildrel}		\
 %ifarch %{ix86}						\
 Conflicts:	arch(x86_64)				\
@@ -1258,6 +1258,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Apr 17 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Fixed rpm group of debug packages.
+
 * Thu Apr 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-3mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - i915: disable gem automatically also for i8xx hardware, patch from
