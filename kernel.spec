@@ -1258,15 +1258,15 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Apr 20 2009 Pascal Terjan <pterjan@mandriva.com> 2.6.29.1-4mnb
+* Mon Apr 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-4mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Fixed rpm group of debug packages.
     - Back out addition of alsa patches intended for pulseaudio
       enhancements since it's causing regressions (#50120).
 
   o Pascal Terjan <pterjan@mandriva.com>
-   - Drop sound-alsa-pcm-midlevel-Add-more-strict-buffer-position-checks-based-on-jiffies.patch
-     it breaks sound in VirtualBox
+    - Drop sound-alsa-pcm-midlevel-Add-more-strict-buffer-position-checks-based-on-jiffies.patch
+      it breaks sound in VirtualBox
 
 * Thu Apr 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-3mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
