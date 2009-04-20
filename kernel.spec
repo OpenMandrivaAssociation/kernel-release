@@ -12,7 +12,7 @@
 %define sublevel	29
 
 # Package release
-%define mnbrel		3
+%define mnbrel		4
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1258,7 +1258,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Apr 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Mon Apr 20 2009 Pascal Terjan <pterjan@mandriva.com> 2.6.29.1-4mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Fixed rpm group of debug packages.
   o Pascal Terjan <pterjan@mandriva.com>
