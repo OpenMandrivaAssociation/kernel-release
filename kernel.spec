@@ -1258,9 +1258,12 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Apr 17 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Mon Apr 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Fixed rpm group of debug packages.
+  o Pascal Terjan <pterjan@mandriva.com>
+   - Drop sound-alsa-pcm-midlevel-Add-more-strict-buffer-position-checks-based-on-jiffies.patch
+     it breaks sound in VirtualBox
 
 * Thu Apr 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-3mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
