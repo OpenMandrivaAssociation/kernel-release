@@ -12,13 +12,13 @@
 %define sublevel	29
 
 # Package release
-%define mnbrel		4
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		1
+%define kstable		2
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1258,6 +1258,13 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed May 06 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.2-1mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Update to 2.6.29.2
+      * removed merged patches:
+        x86-platform-acer-wmi-Blacklist-Acer-Aspire-One.patch
+        mm-define-a-UNIQUE-value-for-AS_UNEVICTABLE-flag.patch
+
 * Mon Apr 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-4mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Fixed rpm group of debug packages.
@@ -1301,7 +1308,7 @@ rm -rf %{buildroot}
     - Enable and select minstrel as default mac80211 rate control
       (should behave better than previous pid, 2.6.29 default).
 
-* Tue Apr  7 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-1mnb
+* Tue Apr 07 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.1-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Enabled CONFIG_X86_GENERICARCH for all i386 configs, as we set
       NR_CPUS=32 (reported by Pascal Terjan).
