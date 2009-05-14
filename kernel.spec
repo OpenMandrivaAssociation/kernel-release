@@ -746,6 +746,8 @@ SaveDevel() {
 	# Needed for external dvb tree (#41418)
 	cp -fR drivers/media/dvb/dvb-core/*.h $TempDevelRoot/drivers/media/dvb/dvb-core/
 	cp -fR drivers/media/dvb/frontends/lgdt330x.h $TempDevelRoot/drivers/media/dvb/frontends/
+	# http://lists.mandriva.com/cooker/2009-05/msg00534.php
+	cp -fR drivers/ieee1394/*.h $TempDevelRoot/drivers/ieee1394/
 
 	# add acpica header files, needed for fglrx build
 	cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
@@ -1258,6 +1260,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu May 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Include drivers/ieee1394 headers for dkms-v4l-dvb-testing
+      (http://lists.mandriva.com/cooker/2009-05/msg00534.php)
+
 * Wed May 13 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.3-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Update to 2.6.29.3
