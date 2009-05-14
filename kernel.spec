@@ -1262,8 +1262,9 @@ rm -rf %{buildroot}
 %changelog
 * Thu May 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
-    - Include drivers/ieee1394 headers for dkms-v4l-dvb-testing
-      (http://lists.mandriva.com/cooker/2009-05/msg00534.php)
+    - Include drivers/ieee1394 headers in kernel-*-devel packages, used
+      by dkms-v4l-dvb-testing. Reference:
+      http://lists.mandriva.com/cooker/2009-05/msg00534.php
 
 * Wed May 13 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.3-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
