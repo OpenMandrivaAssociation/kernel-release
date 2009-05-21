@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		3
+%define kstable		4
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1260,11 +1260,14 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu May 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Wed May 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Include drivers/ieee1394 headers in kernel-*-devel packages, used
       by dkms-v4l-dvb-testing. Reference:
       http://lists.mandriva.com/cooker/2009-05/msg00534.php
+
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.29.4
 
 * Wed May 13 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.3-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
