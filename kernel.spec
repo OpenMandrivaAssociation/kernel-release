@@ -1332,6 +1332,12 @@ rm -rf %{buildroot}
         3rd-acerhk-proc_dir_entry-owner.patch
     - Don't allow -devel mrproper patches to be applied if fuzz factor
       is greater than zero in some hunk.
+    - Updated ndiswrapper to version 1.54
+      * Added following warning/build fixes on top:
+        3rd-ndiswrapper-dma_addr_t-print-warn-fix.patch
+        3rd-ndiswrapper-missing-ndo-fix.patch
+        3rd-ndiswrapper-irqreturn-warn-fix.patch
+      * Dropped merged 3rd-ndiswrapper-wext_compat_2.6.27.patch
 
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.29.4
