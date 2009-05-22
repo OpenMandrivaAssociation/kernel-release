@@ -9,7 +9,7 @@
 #
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	29
+%define sublevel	30
 
 # Package release
 %define mnbrel		1
@@ -17,8 +17,8 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		4
+%define kpatch		rc6
+%define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1265,6 +1265,68 @@ rm -rf %{buildroot}
     - Include drivers/ieee1394 headers in kernel-*-devel packages, used
       by dkms-v4l-dvb-testing. Reference:
       http://lists.mandriva.com/cooker/2009-05/msg00534.php
+    - Updated to 2.6.30-rc6
+      * Redid/rediff following patches:
+        hid-usbhid-quirk-multilaser.patch
+        net-netfilter-psd.patch
+        fs-sreadahead-1.0-trace-open.patch
+        input-wacom-intuos4.patch
+        acpi-dsdt-initrd-v0.9c-2.6.28.patch
+        sound-alsa-hda-add-acer-alc889-model.patch
+        acpi-dsdt-initrd-v0.9c-fixes.patch
+        x86-p4_clockmod-reasonable-default-for-scaling_min_freq.patch
+        usb-dlink-dwm652.patch
+        fs-unionfs-1.4.patch
+        fs-dynamic-nls-default.patch
+        gpu-drm-i915-add-gem-enable-parameter.patch
+        net-netfilter-IFWLOG.patch
+        acpi-add-proc-event-regs.patch
+        serial-docomo-F2402.patch
+        3rd-drbd-build-fixes.patch
+      * Removed merged fixes/additions (same patch or another solution):
+        mmc-Increase-power_up-delay-to-fix-TI-readers.patch
+        fs-ext4-add-EXT4_IOC_ALLOC_DA_BLKS-ioctl.patch
+        fs-ext4-Automatically-allocate-delay-allocated-blocks-on-close.patch
+        fs-ext4-Automatically-allocate-delay-allocated-blocks-on-rename.patch
+        gpu-drm-radeon-r6xx-r7xx.patch
+        gpu-drm-i915-no-gem-if-no-tiling.patch
+        input-elantech-provide-workaround-for-jumpy-cursor.patch
+        media-dvb-add-Yuan-PD378S.patch
+        rtc-cmos.c-fixed-alias.patch
+        net-mac80211-deauth-before-flushing-STA-information.patch
+        net-wireless-fix-rt2x00-double-free.patch
+        sound-alsa-hda-consider-additional-capsrc-alc889.patch
+        sound-alsa-hda-alc882_auto_init_input_src-selector.patch
+        sound-alsa-add-subdevice_mask-field-to-quirk-entries.patch
+        sound-alsa-hda-92hd71xxx-disable-unmute-support-for-code.patch
+        sound-alsa-hda-Additional-pin-nids-for-STAC92HD71Bx-and.patch
+        sound-alsa-hda-Dynamic-detection-of-dmics-dmuxes-smuxes.patch
+        sound-alsa-hda-Don-t-call-stac92xx_parse_auto_config-wi.patch
+        sound-alsa-hda-Don-t-touch-non-existent-port-f-on-4-por.patch
+        sound-alsa-hda-fix-speaker-output-on-hp-dv4-1155-se.patch
+        sound-alsa-hda-cleanup-idt92hd7x-hp-quirks.patch
+        sound-alsa-hda-cleanup-ecs202-quirks.patch
+        sound-alsa-hda-Add-4-channel-mode-for-3stack-hp-model.patch
+        sound-alsa-hda-Add-headphone-automute-support-for-3stac.patch
+        sound-alsa-hda-Map-3stack-hp-model-ALC888-for-HP-Educ.patch
+        sound-alsa-hda-Cleanup-printk-from-alc888_6st_dell_unso.patch
+        video-n411-add-missing-Makefile-entry.patch
+        staging-agnx-mac80211-hw-config-change-flags.patch
+        staging-rtl8187se-iw_handler-fixes.patch
+        security-tomoyo-1.6.7-20090401.patch
+        security-tomoyo-build.patch
+        security-tomoyo-change-boot-message-to-be-more-user-friendly.patch
+      * Moved sound-hda-codec-add-Sony-Vaio-VGN-FZ18M-to-quirk-table.patch
+        to patches-broken, the used Vaio quirk was removed.
+      * Moved uss725 patches to patches-broken: even fixing some issues
+        previously, uss725 isn't working properly from reports received,
+        not sure if worked well some point back in time. Stop carrying
+        the patches and deprecate them.
+      * Moved x86-UBUNTU-SAUCE-fix-kernel-oops-in-VirtualBox-during.patch
+        to patches-broken, doesn't apply, possibly not wanted anymore.
+      * Added patches with build fixes:
+        fs-unionfs-use-current_umask-helper.patch
+        3rd-acerhk-proc_dir_entry-owner.patch
 
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.29.4
