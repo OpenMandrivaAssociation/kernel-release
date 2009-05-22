@@ -753,7 +753,7 @@ SaveDevel() {
 	cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
 
 	for i in alpha arm avr32 blackfin cris frv h8300 ia64 m32r m68knommu \
-	         mips mn10300 parisc s390 sh xtensa; do
+	         microblaze mips mn10300 parisc s390 sh xtensa; do
 		rm -rf $TempDevelRoot/arch/$i
 		rm -rf $TempDevelRoot/include/asm-$i
 	done
@@ -1091,7 +1091,8 @@ chmod -R a+rX %{target_source}
 
 # we remove all the source files that we don't ship
 # first architecture files
-for i in alpha arm arm26 avr32 blackfin cris frv h8300 ia64 mips m32r m68knommu parisc s390 sh sh64 v850 xtensa mn10300; do
+for i in alpha arm arm26 avr32 blackfin cris frv h8300 ia64 m32r m68knommu \
+         microblaze mips parisc s390 sh sh64 v850 xtensa mn10300; do
 	rm -rf %{target_source}/arch/$i
 	rm -rf %{target_source}/include/asm-$i
 done
