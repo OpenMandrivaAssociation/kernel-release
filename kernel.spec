@@ -786,8 +786,8 @@ SaveDevel() {
 	chmod -R a+rX $TempDevelRoot
 
 	# disable mrproper in -devel rpms
-	patch -p1 -d $TempDevelRoot -i %{SOURCE2}
-	patch -p1 -d $TempDevelRoot -i %{SOURCE3}
+	patch -p1 --fuzz=0 -d $TempDevelRoot -i %{SOURCE2}
+	patch -p1 --fuzz=0 -d $TempDevelRoot -i %{SOURCE3}
 
 	kernel_devel_files=../kernel_devel_files.$devel_flavour
 
@@ -1283,6 +1283,8 @@ rm -rf %{buildroot}
         acpi-add-proc-event-regs.patch
         serial-docomo-F2402.patch
         3rd-drbd-build-fixes.patch
+        disable-mrproper-in-devel-rpms.patch
+        disable-prepare-scripts-configs-in-devel-rpms.patch
       * Removed merged fixes/additions (same patch or another solution):
         mmc-Increase-power_up-delay-to-fix-TI-readers.patch
         fs-ext4-add-EXT4_IOC_ALLOC_DA_BLKS-ioctl.patch
@@ -1327,6 +1329,8 @@ rm -rf %{buildroot}
       * Added patches with build fixes:
         fs-unionfs-use-current_umask-helper.patch
         3rd-acerhk-proc_dir_entry-owner.patch
+    - Don't allow -devel mrproper patches to be applied if fuzz factor
+      is greater than zero in some hunk.
 
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.29.4
