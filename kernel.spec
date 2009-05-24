@@ -17,7 +17,7 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc6
+%define kpatch		rc7
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -1340,7 +1340,13 @@ rm -rf %{buildroot}
       * Dropped merged 3rd-ndiswrapper-wext_compat_2.6.27.patch
 
   o Thomas Backlund <tmb@mandriva.org>
-    - update to 2.6.29.4
+    - update to 2.6.30-rc7
+      * rediffed the following:
+        acpi-add-proc-event-regs.patch
+        sound-hda-codec-add-Toshiba-Pro-A200-A210-to-quirk-table.patch
+      * drop the following merged patches:
+        sound-oss-mixer-name.patch
+    - update defconfigs
 
 * Wed May 13 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.29.3-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
