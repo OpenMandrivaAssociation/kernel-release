@@ -1261,7 +1261,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Wed May 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Mon May 25 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-0.rc7.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Include drivers/ieee1394 headers in kernel-*-devel packages, used
       by dkms-v4l-dvb-testing. Reference:
