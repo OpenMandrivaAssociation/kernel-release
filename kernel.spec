@@ -1318,7 +1318,6 @@ rm -rf %{buildroot}
         staging-rtl8187se-iw_handler-fixes.patch
         security-tomoyo-1.6.7-20090401.patch
         security-tomoyo-build.patch
-        security-tomoyo-change-boot-message-to-be-more-user-friendly.patch
       * Moved sound-hda-codec-add-Sony-Vaio-VGN-FZ18M-to-quirk-table.patch
         to patches-broken, the used Vaio quirk was removed.
       * Moved uss725 patches to patches-broken: even fixing some issues
@@ -1339,6 +1338,9 @@ rm -rf %{buildroot}
         3rd-ndiswrapper-irqreturn-warn-fix.patch
       * Dropped merged 3rd-ndiswrapper-wext_compat_2.6.27.patch
     - Add missing call to cap_bprm_set_creds in tomoyo.
+    - Renamed security-tomoyo-change-boot-message-to-be-more-user-friendly.patch
+      to security-tomoyo-friendly-ccs_loader-msg.patch; rebased to 2.6.30,
+      changed boot message and use printk_once instead of printk
 
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.30-rc7
