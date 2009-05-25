@@ -1338,6 +1338,7 @@ rm -rf %{buildroot}
         3rd-ndiswrapper-missing-ndo-fix.patch
         3rd-ndiswrapper-irqreturn-warn-fix.patch
       * Dropped merged 3rd-ndiswrapper-wext_compat_2.6.27.patch
+    - Add missing call to cap_bprm_set_creds in tomoyo.
 
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.30-rc7
