@@ -1261,6 +1261,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu May 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Switch to CONFIG_SND_DEBUG=y and CONFIG_SND_PCM_XRUN_DEBUG=y in
+      kernel configs.
+
 * Mon May 25 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-0.rc7.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Include drivers/ieee1394 headers in kernel-*-devel packages, used
