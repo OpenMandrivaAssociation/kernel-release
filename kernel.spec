@@ -1265,6 +1265,7 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Switch to CONFIG_SND_DEBUG=y and CONFIG_SND_PCM_XRUN_DEBUG=y in
       kernel configs.
+    - uvcvideo: workaround invalid formats exposed by buggy uvc webcams.
 
 * Mon May 25 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-0.rc7.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
