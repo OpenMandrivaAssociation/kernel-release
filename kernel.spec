@@ -17,7 +17,7 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc7
+%define kpatch		rc8
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -1261,11 +1261,13 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu May 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Wed Jun 03 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-0.rc8.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Switch to CONFIG_SND_DEBUG=y and CONFIG_SND_PCM_XRUN_DEBUG=y in
       kernel configs.
     - uvcvideo: workaround invalid formats exposed by buggy uvc webcams.
+    - Updated to 2.6.30-rc8
+      * dropped security-tomoyo-call-cap_bprm_set_creds.patch (merged)
 
 * Mon May 25 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-0.rc7.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
