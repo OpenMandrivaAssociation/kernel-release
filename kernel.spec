@@ -1271,6 +1271,9 @@ rm -rf %{buildroot}
       in 2.6.30
     - Unset CONFIG_UEVENT_HELPER_PATH, installer was adapted to not need
       this set in kernel config.
+    - Update media-video-uvc-workaround-invalid-formats.patch with
+      upstream final solution from Laurent Pinchart, "uvcvideo: Ignore
+      non-UVC trailing interface descriptors".
 
 * Wed Jun 03 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-0.rc8.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
