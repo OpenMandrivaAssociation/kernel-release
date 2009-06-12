@@ -1265,6 +1265,11 @@ rm -rf %{buildroot}
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.30 final
 
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Move gpu-drm-i915-disable-gem-on-i8xx.patch to patches-broken:
+      reevaluate the situation after the last drm/i915 fixes that went
+      in 2.6.30
+
 * Wed Jun 03 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-0.rc8.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Switch to CONFIG_SND_DEBUG=y and CONFIG_SND_PCM_XRUN_DEBUG=y in
