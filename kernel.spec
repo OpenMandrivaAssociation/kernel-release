@@ -1261,7 +1261,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Wed Jun 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Fri Jun 12 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.30 final
 
@@ -1269,6 +1269,8 @@ rm -rf %{buildroot}
     - Move gpu-drm-i915-disable-gem-on-i8xx.patch to patches-broken:
       reevaluate the situation after the last drm/i915 fixes that went
       in 2.6.30
+    - Unset CONFIG_UEVENT_HELPER_PATH, installer was adapted to not need
+      this set in kernel config.
 
 * Wed Jun 03 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-0.rc8.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
