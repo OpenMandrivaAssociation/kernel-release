@@ -1266,6 +1266,17 @@ rm -rf %{buildroot}
     - fix intel8x0 sound skipping introduced in 2.6.30-rc8
       (http://marc.info/?l=linux-kernel&m=124465853625485&w=2)
 
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Disabled CONFIG_COMEDI_PCI_DRIVERS. At least one module built with
+      it enabled (s626) claims the pci id 1131:7146 for all subvendors
+      and subdevice ids. The problem is that this will clash with many
+      media/dvb cards that have the same main pci vendor and device ids,
+      but properly specify/check subvendor and subdevice ids. For now
+      just disable comedi pci drivers, in this specific case s626
+      probably would need a specific subvendor/subdevice restriction in
+      its pci id table or additional checks to avoid freezing when it is
+      loaded on media/dvb cards with same vendor:device pci id. (#51314)
+
 * Fri Jun 12 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.30 final
