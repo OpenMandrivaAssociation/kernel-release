@@ -1261,7 +1261,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Jun 15 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Thu Jun 18 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - fix intel8x0 sound skipping introduced in 2.6.30-rc8
       (http://marc.info/?l=linux-kernel&m=124465853625485&w=2)
