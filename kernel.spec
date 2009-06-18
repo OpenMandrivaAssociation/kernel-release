@@ -1276,6 +1276,10 @@ rm -rf %{buildroot}
       probably would need a specific subvendor/subdevice restriction in
       its pci id table or additional checks to avoid freezing when it is
       loaded on media/dvb cards with same vendor:device pci id. (#51314)
+    - Include WMI stack corruption fix from Arch Linux
+      Reference: http://bbs.archlinux.org/viewtopic.php?id=73877
+    - Include tv/vga load-detect fix for drm/i915 from mainline
+      Reference: http://lists.mandriva.com/cooker/2009-06/msg00323.php
 
 * Fri Jun 12 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-1mnb
   o Thomas Backlund <tmb@mandriva.org>
