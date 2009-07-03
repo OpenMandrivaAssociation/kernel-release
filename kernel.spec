@@ -12,13 +12,13 @@
 %define sublevel	30
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		0
+%define kstable		1
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1261,6 +1261,12 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Jul  3 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    * update to 2.6.30.1
+      - drop merged patches:
+        sound-intel8x0-fix-sound-skipping-introduced-in-2.6.30-rc8.patch
+
 * Thu Jun 18 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - fix intel8x0 sound skipping introduced in 2.6.30-rc8
