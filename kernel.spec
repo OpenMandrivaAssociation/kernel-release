@@ -1272,6 +1272,13 @@ rm -rf %{buildroot}
         3rd-drbd-build-fixes.patch
       - add patch:
         3rd-drbd-usermode_helper.patch
+    - update ndiswrapper to 1.55
+      - rediff patch:
+        3rd-ndiswrapper-Makefile-build-fix.patch
+      - drop merged patches:
+        3rd-ndiswrapper-dma_addr_t-print-warn-fix.patch
+        3rd-ndiswrapper-irqreturn-warn-fix.patch
+        3rd-ndiswrapper-missing-ndo-fix.patch
 
 * Thu Jun 18 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-2mnb
   o Thomas Backlund <tmb@mandriva.org>
