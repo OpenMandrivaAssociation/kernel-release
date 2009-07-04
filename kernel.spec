@@ -1280,6 +1280,12 @@ rm -rf %{buildroot}
         3rd-ndiswrapper-irqreturn-warn-fix.patch
         3rd-ndiswrapper-missing-ndo-fix.patch
 
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Added atkbd quirk to report release events for mute, volume up and
+      volume down keys on Philco I4xSI.
+    - ALSA, hda: Apply upstream patch with STAC9205 new id 0x83847698
+      (#41385). Fixed quirk section mismatch.
+
 * Thu Jun 18 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - fix intel8x0 sound skipping introduced in 2.6.30-rc8
