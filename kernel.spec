@@ -1285,6 +1285,10 @@ rm -rf %{buildroot}
       volume down keys on Philco I4xSI.
     - ALSA, hda: Apply upstream patch with STAC9205 new id 0x83847698
       (#41385). Fixed quirk section mismatch.
+    - Enable drbd only in server kernels.
+    - Remove comment from drbd Kconfig.
+    - Restore 3rd-ndiswrapper-dma_addr_t-print-warn-fix.patch, not
+      merged, and fix its changelog.
 
 * Thu Jun 18 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30-2mnb
   o Thomas Backlund <tmb@mandriva.org>
