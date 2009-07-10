@@ -1261,6 +1261,12 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Jul 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - usb: Added A-Link 3GU device id 1e0e:9200 into option driver, from
+      Anssi Hannula.
+      Reference: http://lists.mandriva.com/kernel-discuss/2009-07/msg00003.php
+
 * Sat Jul 04 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.30.1
