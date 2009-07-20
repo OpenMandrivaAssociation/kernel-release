@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		1
+%define kstable		2
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1267,6 +1267,9 @@ rm -rf %{buildroot}
       Anssi Hannula.
       Reference: http://lists.mandriva.com/kernel-discuss/2009-07/msg00003.php
     - USB: option: add ZTE device ids and remove ONDA ids.
+
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.30.2 (CVE-2009-1895, CVE-2009-1897)
 
 * Sat Jul 04 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
