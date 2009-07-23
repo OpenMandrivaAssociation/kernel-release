@@ -244,7 +244,7 @@ http://www.mandriva.com/en/security/kernelupdate			\
 
 %define kconflicts	drakxtools-backend < 10.4.190-2
 
-%define kobsoletes	dkms-iwlwifi < 1.2.26, dkms-nouveau < 0.0.14
+%define kobsoletes	dkms-iwlwifi < 1.2.26
 
 BuildRoot: 		%{_tmppath}/%{kname}-%{kversion}-%{_arch}-build
 Autoreqprov: 		no
@@ -1297,7 +1297,7 @@ rm -rf %{buildroot}
 	    make hid-ntrig not detect HID_DG_INRANGE as TOUCH (O. Thauvin)
 	    fix rfkill_set_states to set the hw state
 	    fix reversed rfkill on acer-wmi
-	    add nouveau support (and obsolete dkms-nouveau)
+	    add nouveau support
 
 * Mon Jul 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
