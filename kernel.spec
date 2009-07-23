@@ -1266,6 +1266,18 @@ rm -rf %{buildroot}
 * Thu Jul 23 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31-rc4
+	- drop merged patches:
+	    gpu-drm-i915-hook-connector-to-encoder-during-load-detect.patch
+	    hwmon-coretemp-atom.patch
+	    input-appletouch.patch
+	    input-wacom-intuos4.patch
+	    media-video-uvc-workaround-invalid-formats.patch
+	    mmc-add-VIA-MSP-card-reader-driver-support.patch
+	    serial-8250_pci-add-OXCB950-id.patch
+	    sound-alsa-hda-add-acer-alc889-model.patch
+	    sound-alsa-hda-add-quirk-for-STAC92xx-SigmaTel-STAC9205.patch
+	    usb-dlink-dwm652.patch
+	    usb-option.c-add-a-link-3gu-device-id.patch
 
 * Mon Jul 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
