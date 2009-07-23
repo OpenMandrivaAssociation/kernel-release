@@ -1293,6 +1293,7 @@ rm -rf %{buildroot}
 	    video-mdk-logo.patch
 	- add patches:
 	    fix ndiswrapper build with 2.6.31
+	    fix mach64 build with 2.6.31
 
 * Mon Jul 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
