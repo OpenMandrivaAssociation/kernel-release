@@ -1278,6 +1278,19 @@ rm -rf %{buildroot}
 	    sound-alsa-hda-add-quirk-for-STAC92xx-SigmaTel-STAC9205.patch
 	    usb-dlink-dwm652.patch
 	    usb-option.c-add-a-link-3gu-device-id.patch
+	-rediff patches:
+	    acpi-dsdt-initrd-v0.9c-fixes.patch
+	    fs-dynamic-nls-default.patch
+	    fs-sreadahead-1.0-trace-open.patch
+	    gpu-drm-i915-add-gem-enable-parameter.patch
+	    gpu-drm-mach64.patch
+	    input-atkbd-philco-i4xsi-release-keys.patch
+	    net-sis190-fix-list-usage.patch
+	    scsi-ppscsi-2.6.2.patch
+	    serial-docomo-F2402.patch
+	    sound-hda-codec-add-Toshiba-Pro-A200-A210-to-quirk-table.patch
+	    usb-serial-option-add-ZTE-device-ids-and-remove-ONDA-ids.patch
+	    video-mdk-logo.patch
 
 * Mon Jul 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
