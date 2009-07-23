@@ -1291,6 +1291,8 @@ rm -rf %{buildroot}
 	    sound-hda-codec-add-Toshiba-Pro-A200-A210-to-quirk-table.patch
 	    usb-serial-option-add-ZTE-device-ids-and-remove-ONDA-ids.patch
 	    video-mdk-logo.patch
+	- add patches:
+	    fix ndiswrapper build with 2.6.31
 
 * Mon Jul 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
