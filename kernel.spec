@@ -1298,6 +1298,7 @@ rm -rf %{buildroot}
 	    fix rfkill_set_states to set the hw state
 	    fix reversed rfkill on acer-wmi
 	    add nouveau support
+	- update defconfigs
 
 * Mon Jul 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
