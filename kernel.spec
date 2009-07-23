@@ -9,7 +9,7 @@
 #
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	30
+%define sublevel	31
 
 # Package release
 %define mnbrel		1
@@ -17,8 +17,8 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		2
+%define kpatch		rc4
+%define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -240,7 +240,7 @@ http://www.mandriva.com/en/security/kernelupdate			\
 %define requires4	sysfsutils >= 1.3.0-1
 %define requires5	kernel-firmware >= 2.6.27-0.rc2.2mdv
 
-%define kprovides 	%{kname} = %{kverrel}, kernel = %{tar_ver}, alsa = 1.0.19, drbd-api = 88
+%define kprovides 	%{kname} = %{kverrel}, kernel = %{tar_ver}, alsa = 1.0.20, drbd-api = 88
 
 %define kconflicts	drakxtools-backend < 10.4.190-2
 
@@ -860,6 +860,7 @@ $DevelRoot/samples
 $DevelRoot/scripts
 $DevelRoot/security
 $DevelRoot/sound
+$DevelRoot/tools
 $DevelRoot/usr
 $DevelRoot/.config
 $DevelRoot/Kbuild
@@ -1237,6 +1238,7 @@ rm -rf %{buildroot}
 %{_kerneldir}/scripts
 %{_kerneldir}/security
 %{_kerneldir}/sound
+%{_kerneldir}/tools
 %{_kerneldir}/usr
 %{_kerneldir}/COPYING
 %{_kerneldir}/CREDITS
@@ -1261,6 +1263,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu Jul 23 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.31-rc4
+
 * Mon Jul 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - usb: Added A-Link 3GU device id 1e0e:9200 into option driver, from
