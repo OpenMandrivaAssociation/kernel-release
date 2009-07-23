@@ -1296,6 +1296,7 @@ rm -rf %{buildroot}
 	    fix mach64 build with 2.6.31
 	    make hid-ntrig not detect HID_DG_INRANGE as TOUCH (O. Thauvin)
 	    fix rfkill_set_states to set the hw state
+	    fix reversed rfkill on acer-wmi
 
 * Mon Jul 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
