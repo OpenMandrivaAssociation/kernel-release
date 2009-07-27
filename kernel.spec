@@ -1266,42 +1266,48 @@ rm -rf %{buildroot}
 * Thu Jul 23 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31-rc4
-	- drop merged patches:
-	    gpu-drm-i915-hook-connector-to-encoder-during-load-detect.patch
-	    hwmon-coretemp-atom.patch
-	    input-appletouch.patch
-	    input-wacom-intuos4.patch
-	    media-video-uvc-workaround-invalid-formats.patch
-	    mmc-add-VIA-MSP-card-reader-driver-support.patch
-	    serial-8250_pci-add-OXCB950-id.patch
-	    sound-alsa-hda-add-acer-alc889-model.patch
-	    sound-alsa-hda-add-quirk-for-STAC92xx-SigmaTel-STAC9205.patch
-	    usb-dlink-dwm652.patch
-	    usb-option.c-add-a-link-3gu-device-id.patch
-	-rediff patches:
-	    acpi-dsdt-initrd-v0.9c-fixes.patch
-	    fs-dynamic-nls-default.patch
-	    fs-sreadahead-1.0-trace-open.patch
-	    gpu-drm-i915-add-gem-enable-parameter.patch
-	    gpu-drm-mach64.patch
-	    input-atkbd-philco-i4xsi-release-keys.patch
-	    net-sis190-fix-list-usage.patch
-	    scsi-ppscsi-2.6.2.patch
-	    serial-docomo-F2402.patch
-	    sound-hda-codec-add-Toshiba-Pro-A200-A210-to-quirk-table.patch
-	    usb-serial-option-add-ZTE-device-ids-and-remove-ONDA-ids.patch
-	    video-mdk-logo.patch
-	- add patches:
-	    fix ndiswrapper build with 2.6.31
-	    fix mach64 build with 2.6.31
-	    make hid-ntrig not detect HID_DG_INRANGE as TOUCH (O. Thauvin)
-	    fix rfkill_set_states to set the hw state
-	    fix reversed rfkill on acer-wmi
-	    add nouveau support
-	    re-export find_task_by_vpid symbol again, needed for Ati fglrx
-	    fix dell-laptop rfkill state change logic
-	- update defconfigs
-	- enable Character device in Userpace support (CUSE)
+      - drop merged patches:
+        gpu-drm-i915-hook-connector-to-encoder-during-load-detect.patch
+        hwmon-coretemp-atom.patch
+        input-appletouch.patch
+        input-wacom-intuos4.patch
+        media-video-uvc-workaround-invalid-formats.patch
+        mmc-add-VIA-MSP-card-reader-driver-support.patch
+        serial-8250_pci-add-OXCB950-id.patch
+        sound-alsa-hda-add-acer-alc889-model.patch
+        sound-alsa-hda-add-quirk-for-STAC92xx-SigmaTel-STAC9205.patch
+        usb-dlink-dwm652.patch
+        usb-option.c-add-a-link-3gu-device-id.patch
+      - rediff patches:
+        acpi-dsdt-initrd-v0.9c-fixes.patch
+        fs-dynamic-nls-default.patch
+        fs-sreadahead-1.0-trace-open.patch
+        gpu-drm-i915-add-gem-enable-parameter.patch
+        gpu-drm-mach64.patch
+        input-atkbd-philco-i4xsi-release-keys.patch
+        net-sis190-fix-list-usage.patch
+        scsi-ppscsi-2.6.2.patch
+        serial-docomo-F2402.patch
+        sound-hda-codec-add-Toshiba-Pro-A200-A210-to-quirk-table.patch
+        usb-serial-option-add-ZTE-device-ids-and-remove-ONDA-ids.patch
+        video-mdk-logo.patch
+      - add patches:
+        fix ndiswrapper build with 2.6.31
+        fix mach64 build with 2.6.31
+        make hid-ntrig not detect HID_DG_INRANGE as TOUCH (O. Thauvin)
+        fix rfkill_set_states to set the hw state
+        fix reversed rfkill on acer-wmi
+        add nouveau support
+        re-export find_task_by_vpid symbol again, needed for Ati fglrx
+        fix dell-laptop rfkill state change logic
+      - update defconfigs
+      - enable Character device in Userpace support (CUSE)
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Disabled on 2.6.31 default configs: CONFIG_CAN_SJA1000_PLATFORM,
+      CONFIG_KEYBOARD_MATRIX, CONFIG_KEYBOARD_LM8323,
+      CONFIG_BATTERY_MAX17040, CONFIG_LEDS_LP3944
+      They shouldn't be needed by default pc/x86 hardware.
 
 * Mon Jul 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
