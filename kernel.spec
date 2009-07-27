@@ -1300,6 +1300,7 @@ rm -rf %{buildroot}
 	    add nouveau support
 	    re-export find_task_by_vpid symbol again, needed for Ati fglrx
 	- update defconfigs
+	- enable Character device in Userpace support (CUSE)
 
 * Mon Jul 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
