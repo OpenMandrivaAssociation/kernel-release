@@ -1299,6 +1299,7 @@ rm -rf %{buildroot}
 	    fix reversed rfkill on acer-wmi
 	    add nouveau support
 	    re-export find_task_by_vpid symbol again, needed for Ati fglrx
+	    fix dell-laptop rfkill state change logic
 	- update defconfigs
 	- enable Character device in Userpace support (CUSE)
 
