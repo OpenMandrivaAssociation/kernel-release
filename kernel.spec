@@ -1310,6 +1310,7 @@ rm -rf %{buildroot}
       They shouldn't be needed by default pc/x86 hardware.
     - Enabled (=m): CONFIG_USB_SERIAL_QUATECH2, CONFIG_RDC_17F3101X,
       CONFIG_FB_UDL.
+    - Enabled (=y): CONFIG_PCIE_ECRC.
 
 * Mon Jul 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.30.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
