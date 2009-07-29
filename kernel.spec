@@ -1263,6 +1263,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue Jul 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - unionfs: use atomic_long_read when reading struct file f_count
+      field (f_count is atomic_long_t).
+
 * Tue Jul 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc4.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31-rc4
