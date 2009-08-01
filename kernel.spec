@@ -12,7 +12,7 @@
 %define sublevel	31
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1263,6 +1263,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sat Aug 01 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - update nouveau to 20090801 git snapshot
+    - drop nouveau buildfix
+
 * Sat Aug 01 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - unionfs: use atomic_long_read when reading struct file f_count
