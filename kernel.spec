@@ -17,7 +17,7 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc4
+%define kpatch		rc5
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -1267,6 +1267,16 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - unionfs: use atomic_long_read when reading struct file f_count
       field (f_count is atomic_long_t).
+
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.31-rc5
+      - drop merged patches:
+	usb-serial-option-add-ZTE-device-ids-and-remove-ONDA-ids.patch
+	net-rfkill-fix-rfkill_set_states-to-set-the-hw-state.patch
+	platform-x86-acer-wmi-rfkill-reversion.patch
+      - add patches:
+        - fix nouveau build with 2.6.31-rc5
+      - update defconfigs
 
 * Tue Jul 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc4.1mnb
   o Thomas Backlund <tmb@mandriva.org>
