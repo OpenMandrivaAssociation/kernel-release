@@ -1267,6 +1267,7 @@ rm -rf %{buildroot}
   o Thomas Backlund <tmb@mandriva.org>
     - update nouveau to 20090801 git snapshot
     - drop nouveau buildfix
+    - fix crash in dvb-usb-af9015
 
 * Sat Aug 01 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc5.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
