@@ -1263,6 +1263,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sun Aug 02 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Add Sentelic touchpad support, from Dmitry Torokhov's input tree.
+
 * Sun Aug 02 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc5.2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update nouveau to 20090801 git snapshot
