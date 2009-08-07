@@ -1272,6 +1272,7 @@ rm -rf %{buildroot}
     - update nouveau to 2009-08-07 snapshot
     - drm: add radeon rs880 pci ids, radeon kms TTM patch,
       radeon kms suspend/resume fix
+    - net: core dev lockdep fix
 
 * Sun Aug 02 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc5.2mnb
   o Thomas Backlund <tmb@mandriva.org>
