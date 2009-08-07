@@ -1269,6 +1269,7 @@ rm -rf %{buildroot}
 
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31-rc5-git3
+    - update nouveau to 2009-08-07 snapshot
 
 * Sun Aug 02 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc5.2mnb
   o Thomas Backlund <tmb@mandriva.org>
