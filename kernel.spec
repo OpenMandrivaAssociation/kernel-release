@@ -1272,6 +1272,9 @@ rm -rf %{buildroot}
 	    net-core-dev-lockdep-fix.patch
 	    gpu-drm-git-fixes.patch
 
+  o Bogdano Arendartchuk <bogdano@mandriva.com.br>
+    - enabled the new subsystem for performance counters
+
 * Fri Aug 07 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc5.3.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Add Sentelic touchpad support, from Dmitry Torokhov's input tree.
