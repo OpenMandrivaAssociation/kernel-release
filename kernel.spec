@@ -1278,6 +1278,7 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Fix digital mic recording noise with ALC268 in auto config model,
       when only one digital mic input is available.
+    - Enable i915 KMS by default.
 
 * Fri Aug 07 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc5.3.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
