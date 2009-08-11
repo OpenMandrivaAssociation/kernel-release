@@ -1266,14 +1266,18 @@ rm -rf %{buildroot}
 * Sat Aug 08 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31-rc5-git5
-	- rediff patch:
-	    gpu-drm-i915-add-gem-enable-parameter.patch
-	- drop merged patches:
-	    net-core-dev-lockdep-fix.patch
-	    gpu-drm-git-fixes.patch
+      - rediff patch:
+        gpu-drm-i915-add-gem-enable-parameter.patch
+    - drop merged patches:
+      net-core-dev-lockdep-fix.patch
+      gpu-drm-git-fixes.patch
 
   o Bogdano Arendartchuk <bogdano@mandriva.com.br>
     - enabled the new subsystem for performance counters
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Fix digital mic recording noise with ALC268 in auto config model,
+      when only one digital mic input is available.
 
 * Fri Aug 07 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc5.3.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
