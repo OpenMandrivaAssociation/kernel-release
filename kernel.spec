@@ -1272,6 +1272,8 @@ rm -rf %{buildroot}
       net-core-dev-lockdep-fix.patch
       gpu-drm-git-fixes.patch
     - update nouveau to 2009-08-12 snapshot
+    - drop acerhk from 3rdparty. everything it does is now supported by
+      acer-wmi and the userspace rfkill utility
 
   o Bogdano Arendartchuk <bogdano@mandriva.com.br>
     - enabled the new subsystem for performance counters
