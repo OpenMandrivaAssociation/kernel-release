@@ -1271,6 +1271,7 @@ rm -rf %{buildroot}
     - drop merged patches:
       net-core-dev-lockdep-fix.patch
       gpu-drm-git-fixes.patch
+    - update nouveau to 2009-08-12 snapshot
 
   o Bogdano Arendartchuk <bogdano@mandriva.com.br>
     - enabled the new subsystem for performance counters
