@@ -20,7 +20,7 @@
 %define kpatch		rc5
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		5
+%define kgit		9
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1265,7 +1265,7 @@ rm -rf %{buildroot}
 %changelog
 * Sat Aug 08 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
-    - update to 2.6.31-rc5-git5
+    - update to 2.6.31-rc5-git9
       - rediff patch:
         gpu-drm-i915-add-gem-enable-parameter.patch
     - drop merged patches:
