@@ -1291,6 +1291,7 @@ rm -rf %{buildroot}
     - Enabled (=m): CONFIG_RING_BUFFER_BENCHMARK.
     - Enabled (=y) CONFIG_MMIOTRACE, reference:
       http://lists.mandriva.com/kernel-discuss/2009-08/msg00005.php
+    - Include patch with new devtmps from greg's tree.
 
 * Fri Aug 07 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc5.3.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
