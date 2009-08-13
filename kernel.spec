@@ -1279,6 +1279,18 @@ rm -rf %{buildroot}
     - Fix digital mic recording noise with ALC268 in auto config model,
       when only one digital mic input is available.
     - Enable i915 KMS by default.
+    - Apply patch series to make OSS device number claiming optional,
+      Reference: http://lists.mandriva.com/kernel-discuss/2009-08/msg00002.php
+    - Added "ALSA: pcm - Tell user that stream to be rewound is suspended"
+      change from sound tree.
+      Reference: http://lists.mandriva.com/kernel-discuss/2009-08/msg00004.php
+    - Enabled (=y): CONFIG_FTRACE, CONFIG_FUNCTION_TRACER, CONFIG_BOOT_TRACER,
+      CONFIG_SYSPROF_TRACER, CONFIG_SCHED_TRACER, CONFIG_FTRACE_SYSCALLS,
+      CONFIG_POWER_TRACER, CONFIG_STACK_TRACER, CONFIG_BLK_DEV_IO_TRACE,
+      CONFIG_DYNAMIC_FTRACE, CONFIG_FUNCTION_PROFILER.
+    - Enabled (=m): CONFIG_RING_BUFFER_BENCHMARK.
+    - Enabled (=y) CONFIG_MMIOTRACE, reference:
+      http://lists.mandriva.com/kernel-discuss/2009-08/msg00005.php
 
 * Fri Aug 07 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc5.3.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
