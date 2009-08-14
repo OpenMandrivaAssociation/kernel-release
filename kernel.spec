@@ -1263,7 +1263,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sat Aug 08 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Fri Aug 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc6.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31-rc6
       - rediff patch:
