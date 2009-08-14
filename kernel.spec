@@ -17,10 +17,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc5
+%define kpatch		rc6
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		9
+%define kgit		0
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1265,7 +1265,7 @@ rm -rf %{buildroot}
 %changelog
 * Sat Aug 08 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
-    - update to 2.6.31-rc5-git9
+    - update to 2.6.31-rc6
       - rediff patch:
         gpu-drm-i915-add-gem-enable-parameter.patch
     - drop merged patches:
