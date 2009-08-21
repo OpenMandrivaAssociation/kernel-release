@@ -1263,6 +1263,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Aug 21 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - rtl8187: always set MSR_LINK_ENEDCA flag with RTL8187B.
+
 * Fri Aug 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc6.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31-rc6
