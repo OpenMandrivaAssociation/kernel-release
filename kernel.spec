@@ -1275,6 +1275,7 @@ rm -rf %{buildroot}
     - disable MAC80211_DEFAULT_PS (powersaving) as it's known to cause 
       instabilities and performance regressions on wireless drivers 
       including iwlwifi and p54.
+    - enable CONFIG_ATH5K_DEBUG,CONFIG_ATH9K_DEBUG
 
 * Fri Aug 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc6.1mnb
   o Thomas Backlund <tmb@mandriva.org>
