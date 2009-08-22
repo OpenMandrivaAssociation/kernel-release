@@ -17,7 +17,7 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc6
+%define kpatch		rc7
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -1266,6 +1266,12 @@ rm -rf %{buildroot}
 * Fri Aug 21 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - rtl8187: always set MSR_LINK_ENEDCA flag with RTL8187B.
+
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.31-rc7
+    - drop merged patches:
+      dvb-usb-af9015-fix-crash.patch
+      sound-hda-codec-add-Toshiba-Pro-A210-to-quirk-table.patch
 
 * Fri Aug 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc6.1mnb
   o Thomas Backlund <tmb@mandriva.org>
