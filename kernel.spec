@@ -1272,6 +1272,9 @@ rm -rf %{buildroot}
     - drop merged patches:
       dvb-usb-af9015-fix-crash.patch
       sound-hda-codec-add-Toshiba-Pro-A210-to-quirk-table.patch
+    - disable MAC80211_DEFAULT_PS (powersaving) as it's known to cause 
+      instabilities and performance regressions on wireless drivers 
+      including iwlwifi and p54.
 
 * Fri Aug 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc6.1mnb
   o Thomas Backlund <tmb@mandriva.org>
