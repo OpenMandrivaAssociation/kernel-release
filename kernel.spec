@@ -1276,6 +1276,7 @@ rm -rf %{buildroot}
       instabilities and performance regressions on wireless drivers 
       including iwlwifi and p54.
     - enable CONFIG_ATH5K_DEBUG,CONFIG_ATH9K_DEBUG
+    - add workaround for broken bioses on vt-d enabled hardware
 
 * Fri Aug 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc6.1mnb
   o Thomas Backlund <tmb@mandriva.org>
