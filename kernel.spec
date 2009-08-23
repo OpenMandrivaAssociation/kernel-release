@@ -1277,6 +1277,16 @@ rm -rf %{buildroot}
       including iwlwifi and p54.
     - enable CONFIG_ATH5K_DEBUG,CONFIG_ATH9K_DEBUG
     - add workaround for broken bioses on vt-d enabled hardware
+    - initial fixes for ath9k (#52739)
+      downgrade ASSERT in ath_clone_txbuf
+      manipulate and report the correct RSSI
+      RX stucks during heavy traffic in HT40 mode
+      handle tx desc shortage more appropriately
+      trivial fix in Kconfig
+      update beacon RSSI
+      fix bug in PCI resume
+      set HW state properly
+      fix bug in retrieving average beacon rssi
 
 * Fri Aug 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc6.1mnb
   o Thomas Backlund <tmb@mandriva.org>
