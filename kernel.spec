@@ -20,7 +20,7 @@
 %define kpatch		rc7
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kgit		1
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1268,7 +1268,7 @@ rm -rf %{buildroot}
     - rtl8187: always set MSR_LINK_ENEDCA flag with RTL8187B.
 
   o Thomas Backlund <tmb@mandriva.org>
-    - update to 2.6.31-rc7
+    - update to 2.6.31-rc7-git1
     - drop merged patches:
       dvb-usb-af9015-fix-crash.patch
       sound-hda-codec-add-Toshiba-Pro-A210-to-quirk-table.patch
