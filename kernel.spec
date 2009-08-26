@@ -1263,11 +1263,13 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Aug 21 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Wed Aug 26 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc7.4.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - rtl8187: always set MSR_LINK_ENEDCA flag with RTL8187B.
     - Updated to 2.6.31-rc7-git4
     - Made all agp drivers built in (=y).
+    - rtl8187: fix circular locking (rtl8187_stop/rtl8187_work).
+    - rtl8187: Implement rfkill support.
 
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31-rc7-git1
