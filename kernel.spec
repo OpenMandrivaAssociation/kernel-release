@@ -20,7 +20,7 @@
 %define kpatch		rc7
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		1
+%define kgit		4
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1266,6 +1266,8 @@ rm -rf %{buildroot}
 * Fri Aug 21 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - rtl8187: always set MSR_LINK_ENEDCA flag with RTL8187B.
+    - Updated to 2.6.31-rc7-git4
+    - Made all agp drivers built in (=y).
 
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31-rc7-git1
