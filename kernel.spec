@@ -1266,6 +1266,7 @@ rm -rf %{buildroot}
 * Fri Aug 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - inotify: fix length reporting and size checking
+    - inotify: update the group mask on mark addition
 
 * Fri Aug 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc8.1mnb
   o Thomas Backlund <tmb@mandriva.org>
