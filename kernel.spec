@@ -1263,11 +1263,6 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Aug 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
-  o Thomas Backlund <tmb@mandriva.org>
-    - inotify: fix length reporting and size checking
-    - inotify: update the group mask on mark addition
-
 * Fri Aug 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc8.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31-rc8
@@ -1275,6 +1270,8 @@ rm -rf %{buildroot}
       platform-x86-wmi-stack-corruption.patch
     - enable IWLWIFI_DEBUG
     - fix inotify regression in -rc8 causing boot hang/failure
+    - inotify: fix length reporting and size checking
+    - inotify: update the group mask on mark addition
 
 * Wed Aug 26 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc7.4.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
