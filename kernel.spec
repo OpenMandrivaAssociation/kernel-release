@@ -17,10 +17,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc7
+%define kpatch		rc8
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		4
+%define kgit		0
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1263,6 +1263,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri  Aug 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.31-rc8
+
 * Wed Aug 26 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc7.4.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - rtl8187: always set MSR_LINK_ENEDCA flag with RTL8187B.
