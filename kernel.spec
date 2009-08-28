@@ -1268,6 +1268,7 @@ rm -rf %{buildroot}
     - update to 2.6.31-rc8
     - drop merged patch:
       platform-x86-wmi-stack-corruption.patch
+    - enable IWLWIFI_DEBUG
 
 * Wed Aug 26 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc7.4.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
