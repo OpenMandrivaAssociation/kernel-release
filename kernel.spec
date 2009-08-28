@@ -1269,7 +1269,7 @@ rm -rf %{buildroot}
     - drop merged patch:
       platform-x86-wmi-stack-corruption.patch
     - enable IWLWIFI_DEBUG
-    - fix inotify regresion in -rc8 causing boot hang/failure
+    - fix inotify regression in -rc8 causing boot hang/failure
 
 * Wed Aug 26 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc7.4.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
