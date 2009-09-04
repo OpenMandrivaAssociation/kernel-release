@@ -1263,6 +1263,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Sep 04 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Pascal Terjan <pterjan@mandriva.com>
+    - fix video-mdk-logo.patch broken in 2.6.31 rebase
+
 * Fri Aug 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc8.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31-rc8
