@@ -1274,6 +1274,9 @@ rm -rf %{buildroot}
       fs-inotify-fix-length-reporting-and-size-checking.patch
       fs-inotify-update-the-group-mask-on-mark-addition.patch
 
+  o Anssi Hannula <anssi@mandriva.org>
+    - enable kernel modesetting by default when using nouveau driver
+
 * Fri Aug 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc8.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31-rc8
