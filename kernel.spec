@@ -17,7 +17,7 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc8
+%define kpatch		rc9
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -1266,6 +1266,13 @@ rm -rf %{buildroot}
 * Fri Sep 04 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Pascal Terjan <pterjan@mandriva.com>
     - fix video-mdk-logo.patch broken in 2.6.31 rebase
+
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.31-rc9
+    - drop merged patches:
+      fs-inotify-do-not-send-a-block-of-zeros-when-no-pathname-is-available.patch
+      fs-inotify-fix-length-reporting-and-size-checking.patch
+      fs-inotify-update-the-group-mask-on-mark-addition.patch
 
 * Fri Aug 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc8.1mnb
   o Thomas Backlund <tmb@mandriva.org>
