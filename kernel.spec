@@ -1277,6 +1277,10 @@ rm -rf %{buildroot}
   o Anssi Hannula <anssi@mandriva.org>
     - enable kernel modesetting by default when using nouveau driver
 
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Add new topstar-laptop driver with support for hotkeys on
+      Topstar N01.
+
 * Fri Aug 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc8.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31-rc8
