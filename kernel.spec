@@ -1266,6 +1266,7 @@ rm -rf %{buildroot}
 * Thu Sep 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31 final
+    - enable kernel modesetting by default when using radeon driver
 
 * Mon Sep 07 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc9.1mnb
   o Pascal Terjan <pterjan@mandriva.com>
