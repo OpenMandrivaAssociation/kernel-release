@@ -17,7 +17,7 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc9
+%define kpatch		0
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -1263,6 +1263,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu Sep 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.31 final
+
 * Mon Sep 07 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc9.1mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - fix video-mdk-logo.patch broken in 2.6.31 rebase
