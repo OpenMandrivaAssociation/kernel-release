@@ -1263,10 +1263,14 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Sep 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Thu Sep 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31 final
     - enable kernel modesetting by default when using radeon driver
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Updated topstar-laptop driver (bug fix: make autoload of module
+      work, latest reviewed and sent upstream version).
 
 * Mon Sep 07 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-0.rc9.1mnb
   o Pascal Terjan <pterjan@mandriva.com>
