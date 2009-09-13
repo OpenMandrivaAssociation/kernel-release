@@ -1266,6 +1266,7 @@ rm -rf %{buildroot}
 * Sun Sep 13 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - disable radeon kernel modesetting again as it breaks too many systems
+    - Add AMD SB900 SATA/IDE controller device IDs
 
 * Thu Sep 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-1mnb
   o Thomas Backlund <tmb@mandriva.org>
