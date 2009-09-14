@@ -1263,10 +1263,13 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sun Sep 13 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Mon Sep 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - disable radeon kernel modesetting again as it breaks too many systems
     - Add AMD SB900 SATA/IDE controller device IDs
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - More topstar-laptop updates (linux-acpi review).
 
 * Thu Sep 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-1mnb
   o Thomas Backlund <tmb@mandriva.org>
