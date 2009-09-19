@@ -240,7 +240,7 @@ http://www.mandriva.com/en/security/kernelupdate			\
 %define requires4	sysfsutils >= 1.3.0-1
 %define requires5	kernel-firmware >= 2.6.27-0.rc2.2mdv
 
-%define kprovides 	%{kname} = %{kverrel}, kernel = %{tar_ver}, alsa = 1.0.20, drbd-api = 88
+%define kprovides 	%{kname} = %{kverrel}, kernel = %{tar_ver}, alsa = 1.0.21, drbd-api = 88
 
 %define kconflicts	drakxtools-backend < 10.4.190-2
 
@@ -313,6 +313,7 @@ Group:		System/Kernel and hardware		\
 							\
 %common_description_info				\
 							\
+%if %build_devel					\
 %package -n	%{kname}-%{1}-devel-%{buildrel}		\
 Version:	%{fakever}				\
 Release:	%{fakerel}				\
@@ -332,7 +333,9 @@ If you want to build your own kernel, you need to install the full \
 %{kname}-source-%{buildrel} rpm.			\
 							\
 %common_description_info				\
+%endif							\
 							\
+%if %build_debug					\
 %package -n	%{kname}-%{1}-debug-%{buildrel}		\
 Version:	%{fakever}				\
 Release:	%{fakerel}				\
@@ -350,6 +353,7 @@ If you need to look at debug information or use some application that \
 needs debugging info from the kernel, this package may help. \
 							\
 %common_description_info				\
+%endif							\
 							\
 %package -n %{kname}-%{1}-latest			\
 Version:	%{kversion}				\
@@ -368,6 +372,7 @@ latest %{kname}-%{1} installed...			\
 							\
 %common_description_info				\
 							\
+%if %build_devel					\
 %package -n %{kname}-%{1}-devel-latest			\
 Version:	%{kversion}				\
 Release:	%{rpmrel}				\
@@ -385,7 +390,9 @@ This package is a virtual rpm that aims to make sure you always have the \
 latest %{kname}-%{1}-devel installed...			\
 							\
 %common_description_info				\
+%endif							\
 							\
+%if %build_debug					\
 %package -n %{kname}-%{1}-debug-latest			\
 Version:	%{kversion}				\
 Release:	%{rpmrel}				\
@@ -401,13 +408,16 @@ This package is a virtual rpm that aims to make sure you always have the \
 latest %{kname}-%{1}-debug installed...			\
 							\
 %common_description_info				\
+%endif							\
 							\
 %post -n %{kname}-%{1}-%{buildrel} -f kernel_files.%{1}-post \
 %preun -n %{kname}-%{1}-%{buildrel} -f kernel_files.%{1}-preun \
 %postun -n %{kname}-%{1}-%{buildrel} -f kernel_files.%{1}-postun \
 							\
+%if %build_devel					\
 %post -n %{kname}-%{1}-devel-%{buildrel} -f kernel_devel_files.%{1}-post \
 %preun -n %{kname}-%{1}-devel-%{buildrel} -f kernel_devel_files.%{1}-preun \
+%endif							\
 							\
 %files -n %{kname}-%{1}-%{buildrel} -f kernel_files.%{1} \
 %files -n %{kname}-%{1}-latest				\
@@ -429,7 +439,6 @@ latest %{kname}-%{1}-debug installed...			\
 #
 # kernel-desktop586: i586, smp-alternatives, 4GB
 #
-
 %if %build_desktop586
 %define summary_desktop586 Linux kernel for desktop use with i586 & 4GB RAM
 %define info_desktop586 This kernel is compiled for desktop use, single or \
@@ -495,15 +504,16 @@ processor mode, use the "nosmp" boot parameter.
 #
 # kernel-source
 #
+%if %build_source
 %package -n %{kname}-source-%{buildrel}
 Version: 	%{fakever}
 Release: 	%{fakerel}
 Requires: 	glibc-devel, ncurses-devel, make, gcc, perl
-Summary: 	The Linux source code for %{kname}-%{buildrel}  
+Summary: 	The Linux source code for %{kname}-%{buildrel}
 Group: 		Development/Kernel
 Autoreqprov: 	no
 Provides: 	kernel-source = %{kverrel}, kernel-devel = %{kverrel}
-%ifarch %{ix86}	
+%ifarch %{ix86}
 Conflicts:	arch(x86_64)
 %endif
 
@@ -563,10 +573,12 @@ This package is a virtual rpm that aims to make sure you always have the
 latest %{kname}-source installed...
 
 %common_description_info
+%endif
 
 #
 # kernel-doc: documentation for the Linux kernel
 #
+%if %build_doc
 %package -n %{kname}-doc
 Version: 	%{kversion}
 Release: 	%{rpmrel}
@@ -584,6 +596,7 @@ this package if you need a reference to the options that can be passed to
 Linux kernel modules at load time.
 
 %common_description_info
+%endif
 
 #
 # End packages - here begins build stage
@@ -1249,11 +1262,9 @@ rm -rf %{buildroot}
 %{_kerneldir}/REPORTING-BUGS
 %doc README.MandrivaLinux
 %doc README.kernel-sources
-#endif build_source
 
 %files -n %{kname}-source-latest
 %defattr(-,root,root)
-
 %endif
 
 %if %build_doc
@@ -1263,6 +1274,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sat Sep 19 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - fix build warnings when building without source/debug/devel/doc rpms
+
 * Mon Sep 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - disable radeon kernel modesetting again as it breaks too many systems
