@@ -1279,6 +1279,7 @@ rm -rf %{buildroot}
     - fix build warnings when building without source/debug/devel/doc rpms
     - add back atom coretemp hwmon support that got removed by mistake 
       in the 2.6.31 rebase
+    - add Intel Lynnfield (i5/i7) support in coretemp
 
 * Mon Sep 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-2mnb
   o Thomas Backlund <tmb@mandriva.org>
