@@ -1281,6 +1281,10 @@ rm -rf %{buildroot}
       in the 2.6.31 rebase
     - add Intel Lynnfield (i5/i7) support in coretemp
 
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - rtc_cmos: avoid oops when ioctl RTC_AIE*/RTC_UIE* is done on
+      /dev/rtc* right after it's created.
+
 * Mon Sep 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - disable radeon kernel modesetting again as it breaks too many systems
