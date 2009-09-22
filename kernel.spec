@@ -1284,6 +1284,9 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - rtc_cmos: avoid oops when ioctl RTC_AIE*/RTC_UIE* is done on
       /dev/rtc* right after it's created.
+    - pwc: fix driver name shown in /proc/bus/devices and /sys, remove
+      display of list of device names supported in kernel log, from
+      Thierry Vignaud.
 
 * Mon Sep 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-2mnb
   o Thomas Backlund <tmb@mandriva.org>
