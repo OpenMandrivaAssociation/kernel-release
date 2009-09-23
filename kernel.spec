@@ -1287,6 +1287,9 @@ rm -rf %{buildroot}
     - pwc: fix driver name shown in /proc/bus/devices and /sys, remove
       display of list of device names supported in kernel log, from
       Thierry Vignaud.
+    - Disable build of aedsp16 oss driver: the snd-sc6000 alsa driver
+      should now handle all support for same cards it supports, as
+      stated in kernel changelog.
 
 * Mon Sep 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-2mnb
   o Thomas Backlund <tmb@mandriva.org>
