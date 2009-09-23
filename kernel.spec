@@ -1293,6 +1293,9 @@ rm -rf %{buildroot}
     - Apply upstream commit 70ba2a3 "drm/radeon/kms: add 32/64 ioctl
       support". Only affects radeon with kms enabled. Reference:
       http://lists.mandriva.com/kernel-discuss/2009-09/msg00002.php
+    - Apply SCHED_RESET_ON_FORK scheduling policy flag addition from
+      mainline. Reference:
+      http://lists.mandriva.com/kernel-discuss/2009-09/msg00006.php
 
 * Mon Sep 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-2mnb
   o Thomas Backlund <tmb@mandriva.org>
