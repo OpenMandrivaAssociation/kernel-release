@@ -1290,6 +1290,9 @@ rm -rf %{buildroot}
     - Disable build of aedsp16 oss driver: the snd-sc6000 alsa driver
       should now handle all support for same cards it supports, as
       stated in kernel changelog.
+    - Apply upstream commit 70ba2a3 "drm/radeon/kms: add 32/64 ioctl
+      support". Only affects radeon with kms enabled. Reference:
+      http://lists.mandriva.com/kernel-discuss/2009-09/msg00002.php
 
 * Mon Sep 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-2mnb
   o Thomas Backlund <tmb@mandriva.org>
