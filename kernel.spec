@@ -1280,6 +1280,7 @@ rm -rf %{buildroot}
     - add back atom coretemp hwmon support that got removed by mistake 
       in the 2.6.31 rebase
     - add Intel Lynnfield (i5/i7) support in coretemp
+    - driver core: extend devnode callbacks to provide permissions
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - rtc_cmos: avoid oops when ioctl RTC_AIE*/RTC_UIE* is done on
