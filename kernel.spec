@@ -1297,6 +1297,9 @@ rm -rf %{buildroot}
     - Apply SCHED_RESET_ON_FORK scheduling policy flag addition from
       mainline. Reference:
       http://lists.mandriva.com/kernel-discuss/2009-09/msg00006.php
+    - Disable otus staging driver: ar9170 in wireless tree should
+      already handle it. Also Kconfig otus description states that it
+      needs a special wpa_supplicant.
 
   o Pascal Terjan
     - Add upstream quirks for HP dv5/dv6 laptops (#53858)
