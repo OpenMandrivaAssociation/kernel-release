@@ -1274,7 +1274,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sat Sep 19 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Thu Sep 24 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - fix build warnings when building without source/debug/devel/doc rpms
     - add back atom coretemp hwmon support that got removed by mistake 
