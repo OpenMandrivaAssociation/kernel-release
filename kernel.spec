@@ -1298,6 +1298,9 @@ rm -rf %{buildroot}
       mainline. Reference:
       http://lists.mandriva.com/kernel-discuss/2009-09/msg00006.php
 
+  o Pascal Terjan
+    - Add upstream quirks for HP dv5/dv6 laptops (#53858)
+
 * Mon Sep 14 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31-2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - disable radeon kernel modesetting again as it breaks too many systems
