@@ -12,13 +12,13 @@
 %define sublevel	31
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		0
+%define kstable		1
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1281,6 +1281,7 @@ rm -rf %{buildroot}
       in the 2.6.31 rebase
     - add Intel Lynnfield (i5/i7) support in coretemp
     - driver core: extend devnode callbacks to provide permissions
+    - update to 2.6.31.1
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - rtc_cmos: avoid oops when ioctl RTC_AIE*/RTC_UIE* is done on
