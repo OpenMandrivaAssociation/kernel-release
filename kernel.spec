@@ -1301,6 +1301,9 @@ rm -rf %{buildroot}
     - Disable otus staging driver: ar9170 in wireless tree should
       already handle it. Also Kconfig otus description states that it
       needs a special wpa_supplicant.
+    - Apply "Driver core: add new device to bus's list before probing"
+      upstream change from mainline (commit 2023c61), fixes race with
+      udev/user programs in some cases.
 
   o Pascal Terjan
     - Add upstream quirks for HP dv5/dv6 laptops (#53858)
