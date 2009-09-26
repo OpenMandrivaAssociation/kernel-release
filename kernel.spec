@@ -12,7 +12,7 @@
 %define sublevel	31
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1274,6 +1274,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Satu Sep 26 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - clean ndiswrapper tarball (remove headers generated at buildtime)
+
 * Thu Sep 24 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - fix build warnings when building without source/debug/devel/doc rpms
