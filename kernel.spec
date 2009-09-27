@@ -1274,7 +1274,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Satu Sep 26 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Sat Sep 26 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - clean ndiswrapper tarball (remove headers generated at buildtime)
     - replace Intel Atom coretemp patch with patches merged upstream
