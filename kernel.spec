@@ -1281,6 +1281,10 @@ rm -rf %{buildroot}
     - replace Intel Lynnfield coretemp patch with patch merged upstream
     - add Intel Mobile Penryn support in coretemp
 
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Enable CONFIG_RTC_HCTOSYS and CONFIG_RTC_DRV_CMOS=y, as Mandriva
+      userspace will now support this configuration.
+
 * Thu Sep 24 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - fix build warnings when building without source/debug/devel/doc rpms
