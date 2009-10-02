@@ -1284,6 +1284,7 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Enable CONFIG_RTC_HCTOSYS and CONFIG_RTC_DRV_CMOS=y, as Mandriva
       userspace will now support this configuration.
+    - Staging: rtl8187se/rtl8192su: allow module unload.
 
 * Thu Sep 24 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
