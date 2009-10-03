@@ -12,13 +12,13 @@
 %define sublevel	31
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		1
+%define kpatch		rc1
+%define kstable		2
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -69,17 +69,16 @@
 
 # When we are using a pre/rc patch, the tarball is a sublevel -1
 %if %kpatch
-%define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}
+%define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}%{?kstable:.%{kstable}}
+%if %kstable
+%define tar_ver	  	%{kernelversion}.%{patchlevel}.%{sublevel}
+%else
 %define tar_ver	  	%{kernelversion}.%{patchlevel}.%(expr %{sublevel} - 1)
+%endif
 %define patch_ver 	%{kversion}-%{kpatch}-%{ktag}%{mnbrel}
 %else
-%if %kstable
-%define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}.%{kstable}
+%define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}%{?kstable:.%{kstable}}
 %define tar_ver   	%{kernelversion}.%{patchlevel}.%{sublevel}
-%else
-%define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}
-%define tar_ver   	%{kversion}
-%endif
 %define patch_ver 	%{kversion}-%{ktag}%{mnbrel}
 %endif
 %define kverrel   	%{kversion}-%{rpmrel}
@@ -206,16 +205,29 @@ Source100: 	linux-%{patch_ver}.tar.bz2
 # Pre linus patch: ftp://ftp.kernel.org/pub/linux/kernel/v2.6/testing
 
 %if %kpatch
-Patch1:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}.bz2
-Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}.bz2.sign
+%if %kstable
+Patch2:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/stable-review/patch-%{kversion}-%{kpatch}.bz2
+Source11:	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/stable-review/patch-%{kversion}-%{kpatch}.bz2.sign
+%else
+Patch1:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing/patch-%{kversion}-%{kpatch}.bz2
+Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing/patch-%{kversion}-%{kpatch}.bz2.sign
+%endif
 %endif
 %if %kgit
 Patch2:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-git%{kgit}.bz2
 Source11: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/snapshots/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}-git%{kgit}.bz2.sign
 %endif
 %if %kstable
+%if %kpatch
+%define prev_stable %(expr %{kstable} - 1)
+%if %prev_stable
+Patch1:   	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kernelversion}.%{patchlevel}.%{sublevel}.%{prev_stable}.bz2
+Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kernelversion}.%{patchlevel}.%{sublevel}.%{prev_stable}.bz2.sign
+%endif
+%else
 Patch1:   	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}.bz2
 Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}.bz2.sign
+%endif
 %endif
 
 #END
@@ -608,14 +620,23 @@ Linux kernel modules at load time.
 %define patches_dir ../%{patch_ver}/
 
 cd %src_dir
+
+%if %kstable
+%if %kpatch
+%if %prev_stable
+%patch1 -p1
+%endif
+%patch2 -p1
+%else
+%patch1 -p1
+%endif
+%else
 %if %kpatch
 %patch1 -p1
 %endif
+%endif
 %if %kgit
 %patch2 -p1
-%endif
-%if %kstable
-%patch1 -p1
 %endif
 
 %{patches_dir}/scripts/apply_patches
@@ -1288,6 +1309,10 @@ rm -rf %{buildroot}
     - Add acerhk back, there are still Acer laptops not supported by
       acer-wmi. Reference:
       http://lists.mandriva.com/kernel-discuss/2009-09/msg00036.php
+    - Added support to spec to build "stable-review" kernels.
+    - Updated to 2.6.31.2-rc1
+      * dropped driver-core-add-new-device-to-bus-s-list-before-prob.patch
+        (merged)
 
 * Thu Sep 24 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
