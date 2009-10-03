@@ -1318,6 +1318,8 @@ rm -rf %{buildroot}
       ACPI: fix Compaq Evo N800c (Pentium 4m) boot hang regression
       ACPI: Clarify resource conflict message
     - Backport Prolink SBTVD DVB adapter support from mainline.
+    - Apply ftdi_sio usb serial driver tty->low_latency fix from
+      http://patchwork.kernel.org/patch/49918/
 
 * Thu Sep 24 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
