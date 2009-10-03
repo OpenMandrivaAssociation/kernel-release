@@ -1313,6 +1313,10 @@ rm -rf %{buildroot}
     - Updated to 2.6.31.2-rc1
       * dropped driver-core-add-new-device-to-bus-s-list-before-prob.patch
         (merged)
+    - Apply two fixes from acpi upstream tree scheduled to 2.6.31.x
+      stable series:
+      ACPI: fix Compaq Evo N800c (Pentium 4m) boot hang regression
+      ACPI: Clarify resource conflict message
 
 * Thu Sep 24 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
