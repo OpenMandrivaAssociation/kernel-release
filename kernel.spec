@@ -1317,6 +1317,7 @@ rm -rf %{buildroot}
       stable series:
       ACPI: fix Compaq Evo N800c (Pentium 4m) boot hang regression
       ACPI: Clarify resource conflict message
+    - Backport Prolink SBTVD DVB adapter support from mainline.
 
 * Thu Sep 24 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
