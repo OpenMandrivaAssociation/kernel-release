@@ -1320,6 +1320,9 @@ rm -rf %{buildroot}
     - Backport Prolink SBTVD DVB adapter support from mainline.
     - Apply ftdi_sio usb serial driver tty->low_latency fix from
       http://patchwork.kernel.org/patch/49918/
+    - Fix bug introduced by the change for 2.6.31.2-rc1 "[CPUFREQ] Fix
+      NULL ptr regression in powernow-k8"
+      Reference: http://lkml.org/lkml/2009/10/3/121
 
 * Thu Sep 24 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
