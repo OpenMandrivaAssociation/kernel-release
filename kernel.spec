@@ -17,7 +17,7 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc1
+%define kpatch		0
 %define kstable		2
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -1295,6 +1295,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon Oct 05 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.31.2 final
+
 * Sat Oct 03 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.2-0.rc1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - clean ndiswrapper tarball (remove headers generated at buildtime)
