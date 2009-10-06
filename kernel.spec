@@ -1298,6 +1298,8 @@ rm -rf %{buildroot}
 * Mon Oct 05 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31.2 final
+    - wireless ath9k: redo patches and add additional ones based on
+      fixes merged in 2.6.32-rc1 (closes #52739)
 
 * Sat Oct 03 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.2-0.rc1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
