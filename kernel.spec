@@ -1300,6 +1300,8 @@ rm -rf %{buildroot}
     - update to 2.6.31.2 final
     - wireless ath9k: redo patches and add additional ones based on
       fixes merged in 2.6.32-rc1 (closes #52739)
+  o Pascal Terjan <pterjan@mandriva.com>
+    - add hctosys sysfs attribute 
 
 * Sat Oct 03 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.2-0.rc1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
