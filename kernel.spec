@@ -656,6 +656,15 @@ cd %src_dir
 %define debug --no-debug
 %endif
 
+# Make kernel packages backportable
+%if %{mdkversion} < 201000
+# disable debug for backports, it's enough already having them on cooker/stable
+%define debug --no-debug
+# disable modesetting by default, no plymouth for distros < 2010.0
+sed -i  's/\(CONFIG_DRM_[A-Z0-9]\+_KMS\)=y/# \1 is not set/' \
+        %{patches_dir}/configs/*.config
+%endif
+
 %{patches_dir}/scripts/create_configs %debug --user_cpu="%{target_arch}"
 
 # make sure the kernel has the sublevel we know it has...
@@ -1300,8 +1309,13 @@ rm -rf %{buildroot}
     - update to 2.6.31.2 final
     - wireless ath9k: redo patches and add additional ones based on
       fixes merged in 2.6.32-rc1 (closes #52739)
+
   o Pascal Terjan <pterjan@mandriva.com>
     - add hctosys sysfs attribute 
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Small adjustment to allow the package to be released as backports
+      for older distro versions.
 
 * Sat Oct 03 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.2-0.rc1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
