@@ -1309,6 +1309,7 @@ rm -rf %{buildroot}
     - update to 2.6.31.2 final
     - wireless ath9k: redo patches and add additional ones based on
       fixes merged in 2.6.32-rc1 (closes #52739)
+    - e1000e: fix jumbo frame support (kernel bz #14261)
 
   o Pascal Terjan <pterjan@mandriva.com>
     - add hctosys sysfs attribute 
