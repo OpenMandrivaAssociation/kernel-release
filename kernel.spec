@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		2
+%define kstable		3
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1313,6 +1313,7 @@ rm -rf %{buildroot}
 
   o Pascal Terjan <pterjan@mandriva.com>
     - add hctosys sysfs attribute 
+    - update to 2.6.31.3
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Small adjustment to allow the package to be released as backports
