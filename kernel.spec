@@ -119,7 +119,7 @@
 %define build_debug 		1
 %endif
 
-# Build desktop i586 / 1GB
+# Build desktop i586 / 4GB
 %ifarch %{ix86}
 %define build_desktop586	1
 %endif
@@ -585,7 +585,7 @@ Release: 	%{rpmrel}
 Summary: 	Virtual rpm for latest %{kname}-source
 Group:   	Development/Kernel
 Requires: 	%{kname}-source-%{buildrel}
-%ifarch %{ix86}	
+%ifarch %{ix86}
 Conflicts:	arch(x86_64)
 %endif
 
@@ -605,15 +605,15 @@ Version: 	%{kversion}
 Release: 	%{rpmrel}
 Summary: 	Various documentation bits found in the %{kname} source
 Group: 		Books/Computer books
-%ifarch %{ix86}	
+%ifarch %{ix86}
 Conflicts:	arch(x86_64)
 %endif
 
 %description -n %{kname}-doc
-This package contains documentation files from the %{kname} source. 
-Various bits of information about the Linux kernel and the device drivers 
-shipped with it are documented in these files. You also might want install 
-this package if you need a reference to the options that can be passed to 
+This package contains documentation files from the %{kname} source.
+Various bits of information about the Linux kernel and the device drivers
+shipped with it are documented in these files. You also might want install
+this package if you need a reference to the options that can be passed to
 Linux kernel modules at load time.
 
 %common_description_info
@@ -756,7 +756,7 @@ BuildKernel() {
 
 	# modules
 	install -d %{temp_modules}/$KernelVer
-	%smake INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer modules_install 
+	%smake INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer modules_install
 
 	# remove /lib/firmware, we use a separate kernel-firmware
 	rm -rf %{temp_root}/lib/firmware
@@ -1138,7 +1138,7 @@ cp -a %{temp_root} %{buildroot}
 
 # Create directories infastructure
 %if %build_source
-install -d %{target_source} 
+install -d %{target_source}
 
 tar cf - . | tar xf - -C %{target_source}
 chmod -R a+rX %{target_source}
@@ -1198,7 +1198,7 @@ done
 
 for i in *; do
 	pushd $i
-	echo "Creating module.description for $i"
+	echo "Creating modules.description for $i"
 	modules=`find . -name "*.ko.gz"`
 	echo $modules | %kxargs /sbin/modinfo \
 	| perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
@@ -1214,10 +1214,10 @@ popd
 rm -rf %{buildroot}
 
 
-# We don't want to remove this, the whole reason of its existence is to be 
-# able to do several rpm --short-circuit -bi for testing install 
+# We don't want to remove this, the whole reason of its existence is to be
+# able to do several rpm --short-circuit -bi for testing install
 # phase without repeating compilation phase
-#rm -rf %{temp_root} 
+#rm -rf %{temp_root}
 
 ###
 ### source and doc file lists
