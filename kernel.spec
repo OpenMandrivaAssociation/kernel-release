@@ -192,6 +192,8 @@ Source3:	disable-prepare-scripts-configs-in-devel-rpms.patch
 Source4: 	README.kernel-sources
 Source5: 	README.MandrivaLinux
 
+Source6:	compress-kernel-modules-on-installation.patch
+
 Source100: 	linux-%{patch_ver}.tar.bz2
 
 ####################################################################
@@ -1105,6 +1107,8 @@ CreateKernel server
 # We don't make to repeat the depend code at the install phase
 %if %build_source
     PrepareKernel "" %{buildrpmrel}custom
+    # compress modules at make modules_install (#54028)
+    patch -p1 --fuzz=0 -i %{SOURCE6}
 %smake -s mrproper
 %endif
 
@@ -1312,6 +1316,8 @@ rm -rf %{buildroot}
       fixes merged in 2.6.32-rc1 (closes #52739)
     - e1000e: fix jumbo frame support (kernel bz #14261)
     - dont create -debug rpms by default when backporting
+    - kernel-source: compress modules at 'make modules_install' time,
+      as it saves space for those building their own kernels (#54028)
 
   o Pascal Terjan <pterjan@mandriva.com>
     - add hctosys sysfs attribute 
