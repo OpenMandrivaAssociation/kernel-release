@@ -110,7 +110,14 @@
 %define build_doc 		1
 %define build_source 		1
 %define build_devel 		1
+
+# Make kernel packages backportable
+%if %{mdkversion} < 201000
+# disable debug rpms for backports, it's enough already having them on cooker/stable
+%define build_debug 		0
+%else
 %define build_debug 		1
+%endif
 
 # Build desktop i586 / 1GB
 %ifarch %{ix86}
@@ -654,8 +661,6 @@ cd %src_dir
 
 # Make kernel packages backportable
 %if %{mdkversion} < 201000
-# disable debug rpms for backports, it's enough already having them on cooker/stable
-%define build_debug 0
 # disable modesetting by default, no plymouth for distros < 2010.0
 sed -i  's/\(CONFIG_DRM_[A-Z0-9]\+_KMS\)=y/# \1 is not set/' \
         %{patches_dir}/configs/*.config
