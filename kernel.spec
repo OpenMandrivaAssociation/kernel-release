@@ -650,20 +650,21 @@ cd %src_dir
 
 # Prepare all the variables for calling create_configs
 
+# Make kernel packages backportable
+%if %{mdkversion} < 201000
+# disable debug rpms for backports, it's enough already having them on cooker/stable
+%define build_debug 0
+# disable modesetting by default, no plymouth for distros < 2010.0
+sed -i  's/\(CONFIG_DRM_[A-Z0-9]\+_KMS\)=y/# \1 is not set/' \
+        %{patches_dir}/configs/*.config
+%endif
+
 %if %build_debug
 %define debug --debug
 %else
 %define debug --no-debug
 %endif
 
-# Make kernel packages backportable
-%if %{mdkversion} < 201000
-# disable debug for backports, it's enough already having them on cooker/stable
-%define debug --no-debug
-# disable modesetting by default, no plymouth for distros < 2010.0
-sed -i  's/\(CONFIG_DRM_[A-Z0-9]\+_KMS\)=y/# \1 is not set/' \
-        %{patches_dir}/configs/*.config
-%endif
 
 %{patches_dir}/scripts/create_configs %debug --user_cpu="%{target_arch}"
 
@@ -1310,6 +1311,7 @@ rm -rf %{buildroot}
     - wireless ath9k: redo patches and add additional ones based on
       fixes merged in 2.6.32-rc1 (closes #52739)
     - e1000e: fix jumbo frame support (kernel bz #14261)
+    - dont create -debug rpms by default when backporting
 
   o Pascal Terjan <pterjan@mandriva.com>
     - add hctosys sysfs attribute 
