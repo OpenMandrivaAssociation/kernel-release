@@ -17,8 +17,8 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		3
+%define kpatch		rc2
+%define kstable		4
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1314,9 +1314,9 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Oct 05 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Sun Oct 11 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
-    - update to 2.6.31.2 final
+    - update to 2.6.31.4-rc2 (CVE-2009-2903)
     - wireless ath9k: redo patches and add additional ones based on
       fixes merged in 2.6.32-rc1 (closes #52739)
     - e1000e: fix jumbo frame support (kernel bz #14261)
