@@ -1314,6 +1314,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon Oct 12 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - pci: increase alignment to make more space for hidden code (#54137)
+
 * Mon Oct 12 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.4-0.rc2.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31.4-rc2 (CVE-2009-2903)
