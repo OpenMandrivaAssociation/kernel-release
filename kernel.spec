@@ -1314,7 +1314,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sun Oct 11 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Mon Oct 12 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.4-0.rc2.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31.4-rc2 (CVE-2009-2903)
     - wireless ath9k: redo patches and add additional ones based on
