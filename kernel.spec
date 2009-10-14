@@ -1319,6 +1319,9 @@ rm -rf %{buildroot}
     - update to 2.6.31.4 final
     - pci: increase alignment to make more space for hidden code (#54137)
 
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Enable 6pack hamradio driver on i386 configs (#32808).
+
 * Mon Oct 12 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.4-0.rc2.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31.4-rc2 (CVE-2009-2903)
