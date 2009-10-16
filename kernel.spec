@@ -1314,7 +1314,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Oct 12 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Fri Oct 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.4-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31.4 final
     - pci: increase alignment to make more space for hidden code (#54137)
