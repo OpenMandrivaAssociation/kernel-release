@@ -17,8 +17,8 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		4
+%define kpatch		rc1
+%define kstable		5
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1314,14 +1314,9 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Oct 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
-  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
-    - Added atkbd quirk to report release events for mute, volume up and
-      volume down keys on Positivo I30.
-
-* Fri Oct 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.4-1mnb
+* Fri Oct 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.5-0.rc1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
-    - update to 2.6.31.4 final
+    - update to 2.6.31.5-rc1
     - pci: increase alignment to make more space for hidden code (#54137)
     - hwmon: add Asus P7P55D support to asus_atk0110
     - alsa: hda-via: add support for:
@@ -1329,6 +1324,8 @@ rm -rf %{buildroot}
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Enable 6pack hamradio driver on i386 configs (#32808).
+    - Added atkbd quirk to report release events for mute, volume up and
+      volume down keys on Positivo I30.
 
 * Mon Oct 12 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.4-0.rc2.1mnb
   o Thomas Backlund <tmb@mandriva.org>
