@@ -1318,6 +1318,7 @@ rm -rf %{buildroot}
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31.4 final
     - pci: increase alignment to make more space for hidden code (#54137)
+    - hwmon: add Asus P7P55D support to asus_atk0110
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Enable 6pack hamradio driver on i386 configs (#32808).
