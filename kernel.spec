@@ -1320,7 +1320,7 @@ rm -rf %{buildroot}
     - pci: increase alignment to make more space for hidden code (#54137)
     - hwmon: add Asus P7P55D support to asus_atk0110
     - alsa: hda-via: add support for:
-      VT1702B-CE, VT1716S, VT1718S,VT1812, VT1828S, VT2002P, VT2020.
+      VT1702B-CE, VT1716S, VT1718S, VT1812, VT1828S, VT2002P, VT2020.
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Enable 6pack hamradio driver on i386 configs (#32808).
