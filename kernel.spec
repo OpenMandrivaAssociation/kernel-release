@@ -1314,6 +1314,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Oct 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Added atkbd quirk to report release events for mute, volume up and
+      volume down keys on Positivo I30.
+
 * Fri Oct 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.4-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31.4 final
