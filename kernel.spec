@@ -1322,6 +1322,9 @@ rm -rf %{buildroot}
     - Include patch from Claudio Matsuoka with new hda model for HP DC
       series machines with Analog ad1884a codec.
 
+  o Thomas Backlund <tmb@mandriva.org>
+    - ahci: Add the generic device ID for NVIDIA AHCI controller
+
 * Fri Oct 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.5-0.rc1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31.5-rc1
