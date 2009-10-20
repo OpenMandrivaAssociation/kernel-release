@@ -1314,6 +1314,14 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue Oct 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Backport "uvcvideo: Handle garbage at the end of streaming
+      interface descriptors", fixes bug with newer Bison webcams
+      (id 5986:0241).
+    - Include patch from Claudio Matsuoka with new hda model for HP DC
+      series machines with Analog ad1884a codec.
+
 * Fri Oct 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.5-0.rc1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31.5-rc1
