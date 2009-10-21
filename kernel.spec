@@ -1324,6 +1324,9 @@ rm -rf %{buildroot}
 
   o Thomas Backlund <tmb@mandriva.org>
     - ahci: Add the generic device ID for NVIDIA AHCI controller
+    - revert 'x86: unify stackprotector features', and disable
+      CC_STACKPROTECTOR_ALL, as it gives unvanted overhead and
+      makes atleast xfs blow up some times
 
 * Fri Oct 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.5-0.rc1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
