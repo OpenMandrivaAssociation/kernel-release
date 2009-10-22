@@ -199,8 +199,6 @@ Source3:	disable-prepare-scripts-configs-in-devel-rpms.patch
 Source4: 	README.kernel-sources
 Source5: 	README.MandrivaLinux
 
-Source6:	compress-kernel-modules-on-installation.patch
-
 Source100: 	linux-%{patch_ver}.tar.bz2
 
 ####################################################################
@@ -1112,8 +1110,6 @@ CreateKernel server
 # We don't make to repeat the depend code at the install phase
 %if %build_source
     PrepareKernel "" %{buildrpmrel}custom
-    # compress modules at make modules_install (#54028)
-    patch -p1 --fuzz=0 -i %{SOURCE6}
 %smake -s mrproper
 %endif
 
@@ -1321,6 +1317,9 @@ rm -rf %{buildroot}
       (id 5986:0241).
     - Include patch from Claudio Matsuoka with new hda model for HP DC
       series machines with Analog ad1884a codec.
+    - Don't apply compress-kernel-modules-on-installation.patch only at
+      kernel-source build, to avoid its extra options being asked when
+      building kernel-source using default configs.
 
   o Thomas Backlund <tmb@mandriva.org>
     - ahci: Add the generic device ID for NVIDIA AHCI controller
