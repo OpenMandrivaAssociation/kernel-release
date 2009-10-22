@@ -1320,6 +1320,8 @@ rm -rf %{buildroot}
     - Don't apply compress-kernel-modules-on-installation.patch only at
       kernel-source build, to avoid its extra options being asked when
       building kernel-source using default configs.
+    - Drop net-wireless-rt2800usb-comment-duplicated-ids.patch, it's
+      broken.
 
   o Thomas Backlund <tmb@mandriva.org>
     - ahci: Add the generic device ID for NVIDIA AHCI controller
