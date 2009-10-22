@@ -12,7 +12,7 @@
 %define sublevel	31
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1310,7 +1310,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Oct 20 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Thu Oct 22 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.5-0.rc1.2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Backport "uvcvideo: Handle garbage at the end of streaming
       interface descriptors", fixes bug with newer Bison webcams
