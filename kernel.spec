@@ -12,12 +12,12 @@
 %define sublevel	31
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc1
+%define kpatch		0
 %define kstable		5
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -1310,7 +1310,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Oct 22 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.5-0.rc1.2mnb
+* Thu Oct 22 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.5-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Backport "uvcvideo: Handle garbage at the end of streaming
       interface descriptors", fixes bug with newer Bison webcams
@@ -1322,6 +1322,7 @@ rm -rf %{buildroot}
       building kernel-source using default configs.
     - Drop net-wireless-rt2800usb-comment-duplicated-ids.patch, it's
       broken.
+    - Updated to 2.6.31.5
 
   o Thomas Backlund <tmb@mandriva.org>
     - ahci: Add the generic device ID for NVIDIA AHCI controller
