@@ -791,6 +791,8 @@ SaveDevel() {
 
 	# Needed for lirc_gpio (#39004)
 	cp -fR drivers/media/video/bt8xx/bttv{,p}.h $TempDevelRoot/drivers/media/video/bt8xx/
+	cp -fR drivers/media/video/bt8xx/bt848.h $TempDevelRoot/drivers/media/video/bt8xx/
+	cp -fR drivers/media/video/btcx-risc.h $TempDevelRoot/drivers/media/video/
 
 	# Needed for external dvb tree (#41418)
 	cp -fR drivers/media/dvb/dvb-core/*.h $TempDevelRoot/drivers/media/dvb/dvb-core/
@@ -1310,6 +1312,12 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon Oct 26 2009 Anssi Hannula <anssi@mandriva.org> unreleased
+  o Anssi Hannula <anssi@mandriva.org>
+    - include btcx-risc.h and bt848.h in kernel-devel, they are now
+      required by bttvp.h which is already included and required by
+      dkms-lirc-gpio (fixes #54907)
+
 * Thu Oct 22 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.5-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Backport "uvcvideo: Handle garbage at the end of streaming
