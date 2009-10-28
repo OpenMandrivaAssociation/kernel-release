@@ -1318,6 +1318,10 @@ rm -rf %{buildroot}
       required by bttvp.h which is already included and required by
       dkms-lirc-gpio (fixes #54907)
 
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Apply "jme: Fix unmatched tasklet_{enable|disable} pair" jme bug
+      fix from later kernels.
+
 * Thu Oct 22 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.5-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Backport "uvcvideo: Handle garbage at the end of streaming
