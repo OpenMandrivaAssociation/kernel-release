@@ -1924,7 +1924,7 @@ rm -rf %{buildroot}
       probe error reported by Sergio Monteiro Basto.
     - Select default CONFIG_SCTP_HMAC_MD5 on all configs (instead of
       CONFIG_SCTP_HMAC_NONE currently selected).
-    - Disabled CONFIG_SYS_DEPRECATED* on all configs, report/reference:
+    - Disabled CONFIG_SYSFS_DEPRECATED* on all configs, report/reference:
       http://lists.mandriva.com/kernel-discuss/2009-03/msg00036.php
     - Disabled CONFIG_USB_DEVICE_CLASS on all configs, report/reference:
       http://lists.mandriva.com/kernel-discuss/2009-03/msg00037.php
