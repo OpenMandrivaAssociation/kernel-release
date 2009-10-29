@@ -1321,6 +1321,8 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Apply "jme: Fix unmatched tasklet_{enable|disable} pair" jme bug
       fix from later kernels.
+    - Choose gzip instead of lzma for kernel-server's vmlinux
+      compression, to allow xen to load it (#54775).
 
 * Thu Oct 22 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.5-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
