@@ -17,8 +17,8 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		5
+%define kpatch		rc1
+%define kstable		6
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1312,7 +1312,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Oct 26 2009 Anssi Hannula <anssi@mandriva.org> unreleased
+* Mon Nov 09 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.6-0.rc1.1mnb
   o Anssi Hannula <anssi@mandriva.org>
     - include btcx-risc.h and bt848.h in kernel-devel, they are now
       required by bttvp.h which is already included and required by
@@ -1323,6 +1323,9 @@ rm -rf %{buildroot}
       fix from later kernels.
     - Choose gzip instead of lzma for vmlinux compression of kernel
       flavours with xen enabled, to allow xen to load it (#54775).
+    - Update to 2.6.31.6-rc1
+      * dropped pci-increase-alignment-to-make-more-space-for-hidden-code.patch
+        (merged)
 
 * Thu Oct 22 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.5-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
