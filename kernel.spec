@@ -1312,7 +1312,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Nov 10 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Mon Nov 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.6-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31.6 (CVE-2009-3547, CVE-2009-3612, CVE-2009-3621,
       CVE-2009-3624)
