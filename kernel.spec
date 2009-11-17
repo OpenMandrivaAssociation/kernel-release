@@ -1312,6 +1312,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue Nov 17 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Pascal Terjan <pterjan@mandriva.com>
+    - add samsung backlight driver from lkml
+
 * Mon Nov 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.6-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31.6 (CVE-2009-3547, CVE-2009-3612, CVE-2009-3621,
