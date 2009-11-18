@@ -664,6 +664,8 @@ sed -i  's/\(CONFIG_DRM_[A-Z0-9]\+_KMS\)=y/# \1 is not set/' \
         %{patches_dir}/configs/*.config
 %endif
 %if %{mdkversion} < 201010
+# cups 1.4.x doesn't need usblp anymore, 2010.0 has cups 1.4.x but it is
+# patched to still handle the situation of usblp in kernel
 sed -i  's/^# CONFIG_USB_PRINTER is not set/CONFIG_USB_PRINTER=m/' \
         %{patches_dir}/configs/*.config
 %endif
