@@ -663,6 +663,10 @@ cd %src_dir
 sed -i  's/\(CONFIG_DRM_[A-Z0-9]\+_KMS\)=y/# \1 is not set/' \
         %{patches_dir}/configs/*.config
 %endif
+%if %{mdkversion} < 201010
+sed -i  's/^# CONFIG_USB_PRINTER is not set/CONFIG_USB_PRINTER=m/' \
+        %{patches_dir}/configs/*.config
+%endif
 
 %if %build_debug
 %define debug --debug
@@ -1315,6 +1319,9 @@ rm -rf %{buildroot}
 * Tue Nov 17 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Pascal Terjan <pterjan@mandriva.com>
     - add samsung backlight driver from lkml
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Disabled CONFIG_USB_PRINTER (usblp), as cups is now using libusb.
 
 * Mon Nov 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.6-1mnb
   o Thomas Backlund <tmb@mandriva.org>
