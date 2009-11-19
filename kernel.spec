@@ -1325,6 +1325,9 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Disabled CONFIG_USB_PRINTER (usblp), as cups is now using libusb.
 
+  o Thomas Backlund <tmb@mandriva.org>
+    - xfs: fix bug in recovering logs when using quota
+
 * Mon Nov 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.6-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.31.6 (CVE-2009-3547, CVE-2009-3612, CVE-2009-3621,
