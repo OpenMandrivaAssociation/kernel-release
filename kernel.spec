@@ -1327,6 +1327,7 @@ rm -rf %{buildroot}
 
   o Thomas Backlund <tmb@mandriva.org>
     - xfs: fix bug in recovering logs when using quota
+    - ppp: enlarge upload buffer to support HSUPA upload speeds
 
 * Mon Nov 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.6-1mnb
   o Thomas Backlund <tmb@mandriva.org>
