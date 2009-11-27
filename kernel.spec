@@ -12,7 +12,7 @@
 %define sublevel	31
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1318,18 +1318,27 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Nov 17 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Fri Nov 27 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.6-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - add samsung backlight driver from lkml
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Disabled CONFIG_USB_PRINTER (usblp), as cups is now using libusb.
+    - Many machines with IDT codecs needs GPIO setup to enable sound,
+      backported changes from alsa in 2.6.32 which makes GPIO0 enabled
+      by default on IDT92HD73xx, STAC927x and IDT92HD71Bxx codecs.
+    - Fix rtl8187 oops on device removal (fix from upstream 2.6.32).
+    - rtl2800usb isn't in perfect shape in 2.6.31, fallback to ralink
+      staging drivers for ids common between them and tested devices
+      which work better with the staging drivers (#55527). Also disable
+      duplicated ids between rt2870sta and rt3070sta
 
   o Thomas Backlund <tmb@mandriva.org>
     - xfs: fix bug in recovering logs when using quota
     - ppp: enlarge upload buffer to support HSUPA upload speeds
     - hostap: Revert a toxic part of the conversion to net_device_ops
       (fixes MDV #55805, KBZ #14000)
+    - md: add missing cond_resched to raid1 and raid10
 
 * Mon Nov 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.6-1mnb
   o Thomas Backlund <tmb@mandriva.org>
