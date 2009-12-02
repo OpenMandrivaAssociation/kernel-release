@@ -1318,6 +1318,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Dec  2 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - bttv: add missing i2c addr to probe for ir (A. Williamson / J.Wilson)
+
 * Fri Nov 27 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.6-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - add samsung backlight driver from lkml
