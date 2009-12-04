@@ -1344,8 +1344,52 @@ rm -rf %{buildroot}
         hwmon-coretemp-Fix-Atom-CPU-support.patch
         hwmon-coretemp-Add-support-for-Penryn-mobile-CPUs.patch
         hwmon-coretemp-Add-Lynnfield-CPU.patch
+        hwmon-asus_atk0110-Refactor-the-code.patch
+        hwmon-asus_atk0110-Enable-the-EC.patch
+        input-add-new-driver-for-Sentelic-Finger-Sensing-Pad.patch
+        input-sentelic-add-protocol-documentation.patch
+        input-various-fixups-to-Sentelic-driver.patch
+        input-sentelic-remove-direct-access-to-PS-2-port.patch
+        input-sentelic-use-strict_strtoul.patch
+        input-sentelic-remove-batch-register-access.patch
+        input-sentelic-remove-acceleration-handling.patch
+        input-sentelic-fix-setreg-input-handling.patch
+        input-sentelic-drop-unused-variables-from-fsp_hw_sta.patch
+        net-wireless-ath9k-downgrade-ASSERT-in-ath_clone_txbuf.patch
+        net-wireless-ath9k-Make-sure-we-configure-a-non-zero-beacon-interval.patch
+        net-wireless-ath9k-differentiate-quality-reporting-between-legacy-and-HT-configurations.patch
+        net-wireless-ath9k-remove-unnecessary-STATION-mode-check.patch
+        net-wireless-ath9k-stop-ani-when-the-STA-gets-disconnected.patch
+        net-wireless-ath9k-race-condition-in-SCANNING-state-check-during-ANI-calibration.patch
+        net-wireless-ath9k-Handle-different-TX-and-RX-streams-properly.patch
+        net-wireless-ath9k-downgrade-assert-in-rc.c-for-invalid-rate.patch
+        net-wireless-ath9k-Manipulate-and-report-the-correct-RSSI.patch
+        net-wireless-ath9k-RX-stucks-during-heavy-traffic-in-HT40-mode.patch
+        net-wireless-ath9k-Fix-TX-hang-issue-with-Atheros-chipsets.patch
+        net-wireless-ath9k-Remove-bogus-assert-in-ath_clone_txbuf.patch
+        net-wireless-ath9k-Handle-tx-desc-shortage-more-appropriately.patch
+        net-wireless-ath9k-do-not-stop-the-queues-in-driver-stop.patch
+        net-wireless-ath9k-Trivial-fix-in-Kconfig.patch
+        net-wireless-ath9k-Update-beacon-RSSI.patch
+        net-wireless-ath9k-Fix-bug-in-PCI-resume.patch
+        net-wireless-ath9k-Set-HW-state-properly.patch
+        net-wireless-ath9k-Fix-TX-poll-cancelling.patch
+        net-wireless-ath9k-Fix-bug-in-retrieving-average-beacon-rssi.patch
+        net-wireless-ath9k-Fix-read-buffer-overflow.patch
+        net-wireless-ath9k-claim-irq-for-ath9k-not-ath-for-pci.patch
+        net-wireless-ath9k-Fix-bug-in-ANI-channel-handling.patch
+        net-wireless-ath9k-Do-a-full-reset-for-AR9280.patch
+        net-wireless-ath9k-Disable-autosleep-feature-by-default.patch
+        net-wireless-ath9k-Fix-RFKILL-bugs.patch
+        net-wireless-ath9k-fix-misplaced-semicolon-on-rate-control.patch
       * rediffed patches:
         acpi-dsdt-initrd-v0.9c-fixes.patch
+        input-atkbd-philco-i4xsi-release-keys.patch
+        input-atkbd-positivo-i30-release-keys.patch
+        net-netfilter-IFWLOG-mdv.patch
+        net-netfilter-psd-mdv.patch
+        net-wireless-zd1211rw-add-id.patch
+        net-usb-rndis-lite-samsung.patch
       * moved to patches-broken, to be decided if still needed to keep:
         fs-sreadahead-1.0-trace-open.patch
         gpu-drm-i915-add-gem-enable-parameter.patch
