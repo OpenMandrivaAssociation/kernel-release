@@ -9,16 +9,16 @@
 #
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	31
+%define sublevel	32
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		6
+%define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1321,6 +1321,34 @@ rm -rf %{buildroot}
 * Wed Dec  2 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - bttv: add missing i2c addr to probe for ir (A. Williamson / J.Wilson)
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Updated to 2.6.32
+      * dropped x86-revert-unify-stackprotector-features.patch,
+        CONFIG_CC_STACKPROTECTOR_ALL was removed.
+      * dropped merged patches:
+        kernel-sched-Introduce-SCHED_RESET_ON_FORK-scheduling-policy.patch
+        kernel-sched-Clean-up-SCHED_RESET_ON_FORK.patch
+        kernel-sched-Add-SCHED_RESET_ON_FORK-functionality-for-nice.patch
+        ahci-Add-AMD-SB900-SATA_IDE-controller-device-IDs.patch
+        ahci-Add-the-AHCI-controller-Linux-Device-ID-for-NVIDIA-chipsets.patch
+        md-raid1-raid10-add-cond_resched.patch
+        fs-xfs-bug-in-log-recover-with-quota.patch
+        fs-devtmpfs-kernel-maintained-tmpfs-based-dev.patch
+        char-mem_class-use-minor-as-index-instead-of-searching-the-array.patch
+        char-mem_class-fix-bug.patch
+        driver-core-extend-devnode-callbacks-to-provide-permissions.patch
+        drivers-media-video-dabusb-extend-devnode-callbacks-to-provide-permissions.patch
+        gpu-drm-radeon-kms-add-32-64-ioctl-support.patch
+        hwmon-coretemp-Add-Intel-Atom-support.patch
+        hwmon-coretemp-Fix-Atom-CPU-support.patch
+        hwmon-coretemp-Add-support-for-Penryn-mobile-CPUs.patch
+        hwmon-coretemp-Add-Lynnfield-CPU.patch
+      * rediffed patches:
+        acpi-dsdt-initrd-v0.9c-fixes.patch
+      * moved to patches-broken, to be decided if still needed to keep:
+        fs-sreadahead-1.0-trace-open.patch
+        gpu-drm-i915-add-gem-enable-parameter.patch
 
 * Fri Nov 27 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.6-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
