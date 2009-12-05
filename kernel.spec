@@ -1382,6 +1382,37 @@ rm -rf %{buildroot}
         net-wireless-ath9k-Disable-autosleep-feature-by-default.patch
         net-wireless-ath9k-Fix-RFKILL-bugs.patch
         net-wireless-ath9k-fix-misplaced-semicolon-on-rate-control.patch
+        net-wireless-rtl8187-fix-circular-locking-rtl8187_stop-rtl8187_work.patch
+        net-wireless-rtl8187-Implement-rfkill-support.patch
+        net-wireless-rtl8187-fix-kernel-oops-when-device-is-removed.patch
+        net-jme-fix-unmatched-tasklet_-enable-disable-pair.patch
+        net-wireless-hostap-Revert-a-toxic-part-of-the-conversion-to-net_device_ops.patch
+        platform-x86-add-topstar-laptop-driver.patch
+        rtc-add-boot_timesource-sysfs-attribute.patch
+        sound-alsa-hda-dont-select-unavailable-dmic.patch
+        sound-alsa-pcm-Tell-user-that-stream-to-be-rewound-is-susp.patch
+        fs-chrdev-implement-__re-unregister_chrdev.patch
+        sound-request-char-major-module-aliases-for-missing-OSS-devices.patch
+        sound-make-OSS-device-number-claiming-optional-and-schedule-its-removal.patch
+        sound-alsa-hda-Add-quirks-for-some-HP-laptops.patch
+        sound-alsa-hda-Add-support-for-HP-dv6.patch
+        sound-alsa-hda-set-default-GPIO-for-STAC-IDT-codecs.patch
+        sound-alsa-hda-set-default-GPIO-for-IDT92HD71bxx.patch
+        media-dvb-12197-Remove-unnecessary-semicolons.patch
+        media-dvb-12396-patch-Added-Support-for-STK7700D-DVB.patch
+        media-dvb-12584-Support-for-Kaiser-Baas-ExpressCard-Du.patch
+        media-dvb-12886-Added-new-Pinnacle-USB-devices.patch
+        media-dvb-12888-STK7770P-Add-support-for-STK7770P.patch
+        media-dvb-12889-DIB0700-added-USB-IDs-for-a-Terratec-D.patch
+        media-dvb-12892-DVB-API-add-support-for-ISDB-T-and-ISD.patch
+        media-dvb-12896-ISDB-T-add-mapping-of-LAYER_ENABLED-to.patch
+        media-dvb-12898-DiB0070-Update-to-latest-internal-rele.patch
+        media-dvb-12899-DiB0070-Indenting-driver-with-indent-l.patch
+        media-dvb-12900-DiB8000-added-support-for-DiBcom-ISDB-.patch
+        media-dvb-12901-DiB0700-add-support-for-STK807XP-and-S.patch
+        media-dvb-12903-DiB8000-fix-channel-search-parameter-i.patch
+        media-dvb-12906-dib0700-Add-support-for-Prolink-SBTVD.patch
+        staging-rtl8187se-rtl8192su-allow-module-unload.patch
       * rediffed patches:
         acpi-dsdt-initrd-v0.9c-fixes.patch
         input-atkbd-philco-i4xsi-release-keys.patch
@@ -1390,9 +1421,17 @@ rm -rf %{buildroot}
         net-netfilter-psd-mdv.patch
         net-wireless-zd1211rw-add-id.patch
         net-usb-rndis-lite-samsung.patch
+        include-kbuild-export-pci_ids.patch
+        sound-alsa-hda-ad1884a-hp-dc-model.patch
+        hid-usbhid-quirk-multilaser.patch
+        media-video-uvc-handle-garbage-at-the-end-of-streaming-interface-descriptors.patch
+        3rd-3rdparty-merge.patch
       * moved to patches-broken, to be decided if still needed to keep:
         fs-sreadahead-1.0-trace-open.patch
         gpu-drm-i915-add-gem-enable-parameter.patch
+        sound-alsa-hda-add-msi-quirk-list.patch (different fix in alsa now)
+      * drop net-wireless-rt2800-use-ralink-staging-driver.patch and
+        net-wireless-rt2800usb-move-ids.patch, reenable use of rt2800usb.
 
 * Fri Nov 27 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.6-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
