@@ -1432,6 +1432,7 @@ rm -rf %{buildroot}
         sound-alsa-hda-add-msi-quirk-list.patch (different fix in alsa now)
       * drop net-wireless-rt2800-use-ralink-staging-driver.patch and
         net-wireless-rt2800usb-move-ids.patch, reenable use of rt2800usb.
+      * updated nouveau to latest git snapshot.
 
 * Fri Nov 27 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.6-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
