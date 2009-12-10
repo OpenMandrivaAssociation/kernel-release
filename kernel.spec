@@ -809,6 +809,10 @@ SaveDevel() {
 	# add acpica header files, needed for fglrx build
 	cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
 
+	# config.mk from rt3090 must be present...
+	cp -fR drivers/staging/rt3090/config.mk \
+	       $TempDevelRoot/drivers/staging/rt3090/config.mk
+
 	for i in alpha arm avr32 blackfin cris frv h8300 ia64 m32r m68knommu \
 	         microblaze mips mn10300 parisc s390 sh xtensa; do
 		rm -rf $TempDevelRoot/arch/$i
@@ -1413,7 +1417,7 @@ rm -rf %{buildroot}
         media-dvb-12903-DiB8000-fix-channel-search-parameter-i.patch
         media-dvb-12906-dib0700-Add-support-for-Prolink-SBTVD.patch
         staging-rtl8187se-rtl8192su-allow-module-unload.patch
-      * rediffed patches:
+      * redid/rediffed patches:
         acpi-dsdt-initrd-v0.9c-fixes.patch
         input-atkbd-philco-i4xsi-release-keys.patch
         input-atkbd-positivo-i30-release-keys.patch
@@ -1426,6 +1430,8 @@ rm -rf %{buildroot}
         hid-usbhid-quirk-multilaser.patch
         media-video-uvc-handle-garbage-at-the-end-of-streaming-interface-descriptors.patch
         3rd-3rdparty-merge.patch
+        disable-mrproper-in-devel-rpms.patch
+        disable-prepare-scripts-configs-in-devel-rpms.patch
       * moved to patches-broken, to be decided if still needed to keep:
         fs-sreadahead-1.0-trace-open.patch
         gpu-drm-i915-add-gem-enable-parameter.patch
@@ -1433,6 +1439,9 @@ rm -rf %{buildroot}
       * drop net-wireless-rt2800-use-ralink-staging-driver.patch and
         net-wireless-rt2800usb-move-ids.patch, reenable use of rt2800usb.
       * updated nouveau to latest git snapshot.
+      * dropped hid-hid-ntrig-ingnore-HID_DG_INRANGE.patch because of different
+        fix upstream in 2.6.32.
+      * fixed heci build.
 
 * Fri Nov 27 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.6-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
