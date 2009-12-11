@@ -814,7 +814,7 @@ SaveDevel() {
 	       $TempDevelRoot/drivers/staging/rt3090/config.mk
 
 	for i in alpha arm avr32 blackfin cris frv h8300 ia64 m32r m68knommu \
-	         microblaze mips mn10300 parisc s390 sh xtensa; do
+	         microblaze mips mn10300 parisc s390 score sh xtensa; do
 		rm -rf $TempDevelRoot/arch/$i
 		rm -rf $TempDevelRoot/include/asm-$i
 	done
@@ -923,6 +923,7 @@ $DevelRoot/security
 $DevelRoot/sound
 $DevelRoot/tools
 $DevelRoot/usr
+$DevelRoot/virt
 $DevelRoot/.config
 $DevelRoot/Kbuild
 $DevelRoot/Makefile
@@ -1154,7 +1155,7 @@ chmod -R a+rX %{target_source}
 # we remove all the source files that we don't ship
 # first architecture files
 for i in alpha arm arm26 avr32 blackfin cris frv h8300 ia64 m32r m68knommu \
-         microblaze mips parisc s390 sh sh64 v850 xtensa mn10300; do
+         microblaze mips parisc s390 score sh sh64 v850 xtensa mn10300; do
 	rm -rf %{target_source}/arch/$i
 	rm -rf %{target_source}/include/asm-$i
 done
