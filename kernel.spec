@@ -1432,6 +1432,7 @@ rm -rf %{buildroot}
         3rd-3rdparty-merge.patch
         disable-mrproper-in-devel-rpms.patch
         disable-prepare-scripts-configs-in-devel-rpms.patch
+        3rd-ndiswrapper-keep-local-cmpxchg8b-for-2.6.31.patch
       * moved to patches-broken, to be decided if still needed to keep:
         fs-sreadahead-1.0-trace-open.patch
         gpu-drm-i915-add-gem-enable-parameter.patch
@@ -1442,6 +1443,7 @@ rm -rf %{buildroot}
       * dropped hid-hid-ntrig-ingnore-HID_DG_INRANGE.patch because of different
         fix upstream in 2.6.32.
       * fixed heci build.
+      * updated drbd to version 8.3.6
 
 * Fri Nov 27 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.31.6-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
