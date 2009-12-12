@@ -69,7 +69,6 @@
 
 # When we are using a pre/rc patch, the tarball is a sublevel -1
 %if %kpatch
-%define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}%{?kstable:.%{kstable}}
 %if %kstable
 %define tar_ver	  	%{kernelversion}.%{patchlevel}.%{sublevel}
 %else
@@ -77,9 +76,13 @@
 %endif
 %define patch_ver 	%{kversion}-%{kpatch}-%{ktag}%{mnbrel}
 %else
-%define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}%{?kstable:.%{kstable}}
 %define tar_ver   	%{kernelversion}.%{patchlevel}.%{sublevel}
 %define patch_ver 	%{kversion}-%{ktag}%{mnbrel}
+%endif
+%if %kstable
+%define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}.%{kstable}
+%else
+%define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}
 %endif
 %define kverrel   	%{kversion}-%{rpmrel}
 
@@ -1323,7 +1326,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Wed Dec  2 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Sat Dec 12 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - bttv: add missing i2c addr to probe for ir (A. Williamson / J.Wilson)
 
