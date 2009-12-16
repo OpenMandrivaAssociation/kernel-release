@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		0
+%define kstable		1
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1326,6 +1326,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Dec 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.1-1mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Updated to 2.6.32.1
+
 * Sat Dec 12 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - bttv: add missing i2c addr to probe for ir (A. Williamson / J.Wilson)
