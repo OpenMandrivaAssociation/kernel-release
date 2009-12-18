@@ -12,7 +12,7 @@
 %define sublevel	32
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1326,6 +1326,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Dec 18 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Switch to unionfs 2.x, it seems to work fine now
+
 * Wed Dec 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.1-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Updated to 2.6.32.1
