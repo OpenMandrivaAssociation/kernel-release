@@ -1330,6 +1330,9 @@ rm -rf %{buildroot}
   o Pascal Terjan <pterjan@mandriva.com>
     - Switch to unionfs 2.x, it seems to work fine now
 
+  o Thomas Backlund <tmb@mandriva.org>
+    - disable MULTICORE_RAID456, it's not production ready (reported by Anssi)
+
 * Wed Dec 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.1-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Updated to 2.6.32.1
