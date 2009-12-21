@@ -1335,6 +1335,7 @@ rm -rf %{buildroot}
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Updated to 2.6.32.2
+    - rtl8187: add radio led and fix warnings on suspend.
 
 * Wed Dec 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.1-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
