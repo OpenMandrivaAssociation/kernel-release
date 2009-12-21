@@ -12,13 +12,13 @@
 %define sublevel	32
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		1
+%define kstable		2
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1326,12 +1326,15 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Dec 18 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Mon Dec 21 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.2-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Switch to unionfs 2.x, it seems to work fine now
 
   o Thomas Backlund <tmb@mandriva.org>
     - disable MULTICORE_RAID456, it's not production ready (reported by Anssi)
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Updated to 2.6.32.2
 
 * Wed Dec 16 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.1-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
