@@ -1329,6 +1329,7 @@ rm -rf %{buildroot}
 * Mon Dec 21 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Pascal Terjan <pterjan@mandriva.com>
     - Add lzma support for squashfs
+    - Fix a oops when removing openoffice.org-voikko from a flash
 
 * Mon Dec 21 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.2-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
