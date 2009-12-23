@@ -12,7 +12,7 @@
 %define sublevel	32
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1326,10 +1326,13 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Dec 21 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Wed Dec 23 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.2-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Add lzma support for squashfs
     - Fix a oops when removing openoffice.org-voikko from a flash
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - ath9k: add support for new Atheros device (0x002c).
 
 * Mon Dec 21 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.2-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
