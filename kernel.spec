@@ -1326,6 +1326,13 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon Dec 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Enable namespaces support for all kernel flavours, not only for kernel
+      server, as more applications are starting to use it not only in server
+      configurations (for example google chrome using PID namespaces for
+      sandboxing).
+
 * Wed Dec 23 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.2-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Add lzma support for squashfs
