@@ -1326,7 +1326,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Dec 28 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Wed Jan 06 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.3-0.rc2.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Enable namespaces support for all kernel flavours, not only for kernel
       server, as more applications are starting to use it not only in server
@@ -1335,6 +1335,8 @@ rm -rf %{buildroot}
     - Updated to 2.6.32.3-rc2
       * revert potential quota deadlock on ext4 patch and fix rt61pci
         powersaving disable fix, based on LKML comments.
+    - Apply "remove dma mask setting in drm_pci_alloc" fix from
+      http://bugzilla.kernel.org/show_bug.cgi?id=14627#c30
 
 * Wed Dec 23 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.2-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
