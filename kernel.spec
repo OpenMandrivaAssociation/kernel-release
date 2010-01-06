@@ -1336,7 +1336,8 @@ rm -rf %{buildroot}
       * revert potential quota deadlock on ext4 patch and fix rt61pci
         powersaving disable fix, based on LKML comments.
     - Apply "remove dma mask setting in drm_pci_alloc" fix from
-      http://bugzilla.kernel.org/show_bug.cgi?id=14627#c30
+      http://bugzilla.kernel.org/show_bug.cgi?id=14627#c30, and fix
+      mach64 drm driver build with changed drm_pci_alloc.
 
 * Wed Dec 23 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.2-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
