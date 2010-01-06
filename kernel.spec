@@ -12,13 +12,13 @@
 %define sublevel	32
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		2
+%define kpatch		rc2
+%define kstable		3
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1332,6 +1332,9 @@ rm -rf %{buildroot}
       server, as more applications are starting to use it not only in server
       configurations (for example google chrome using PID namespaces for
       sandboxing).
+    - Updated to 2.6.32.3-rc2
+      * revert potential quota deadlock on ext4 patch and fix rt61pci
+        powersaving disable fix, based on LKML comments.
 
 * Wed Dec 23 2009 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.2-2mnb
   o Pascal Terjan <pterjan@mandriva.com>
