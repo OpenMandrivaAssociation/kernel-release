@@ -17,7 +17,7 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc2
+%define kpatch		0
 %define kstable		3
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -1326,6 +1326,15 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Jan 08 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.3-1mnb
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Updated to 2.6.32.3
+    - Apply following changes from alsa-kernel tree:
+      ALSA: pcm_lib.c - convert second xrun_debug() parameter to use defines
+      ALSA: pcm_lib - add possibility to log last 10 DMA ring buffer positions
+      ALSA: pcm_lib - cleanup & merge hw_ptr update functions
+      ALSA: pcm_lib - optimize wake_up() calls for PCM I/O
+
 * Wed Jan 06 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.3-0.rc2.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Enable namespaces support for all kernel flavours, not only for kernel
