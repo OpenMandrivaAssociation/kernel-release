@@ -1331,6 +1331,9 @@ rm -rf %{buildroot}
     - Apply following change from alsa-kernel tree:
       ALSA: pcm_lib: fix "something must be really wrong" condition
 
+  o Thomas Backlund <tmb@mandriva.org>
+    - fix quota regression introduced in 2.6.32.3
+
 * Fri Jan 08 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.3-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Updated to 2.6.32.3
