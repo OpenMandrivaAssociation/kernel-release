@@ -1326,6 +1326,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Jan 08 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Apply following change from alsa-kernel tree:
+      ALSA: pcm_lib: fix "something must be really wrong" condition
+
 * Fri Jan 08 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.3-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Updated to 2.6.32.3
