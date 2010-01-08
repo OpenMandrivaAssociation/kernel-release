@@ -12,7 +12,7 @@
 %define sublevel	32
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1326,7 +1326,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Jan 08 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Fri Jan 08 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.3-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Apply following change from alsa-kernel tree:
       ALSA: pcm_lib: fix "something must be really wrong" condition
