@@ -1326,6 +1326,12 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Jan 13 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Set CONFIG_EXT3_DEFAULTS_TO_ORDERED=y, default option was chosen
+      on a previous config rebase (follow same recent change on
+      kernel-linus and kernel-tmb packages).
+
 * Fri Jan 08 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.3-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Apply following change from alsa-kernel tree:
