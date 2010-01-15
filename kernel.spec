@@ -12,7 +12,7 @@
 %define sublevel	32
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1326,7 +1326,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Wed Jan 13 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Fri Jan 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.4-0.rc1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Set CONFIG_EXT3_DEFAULTS_TO_ORDERED=y, default option was chosen
       on a previous config rebase (follow same recent change on
