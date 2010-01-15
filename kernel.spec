@@ -17,8 +17,8 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		3
+%define kpatch		rc1
+%define kstable		4
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1333,6 +1333,10 @@ rm -rf %{buildroot}
       kernel-linus and kernel-tmb packages).
     - Apply following change from alsa-kernel tree:
       ALSA: pcm_lib - fix wrong delta print for jiffies check
+    - Updated to 2.6.32.4-rc1
+      * Dropped merged patches:
+        fs-quota-fix-reserved-space-management-for-ordinary-fs.patch
+        gpu-drm-remove-dma-mask-setting-in-drm_pci_alloc.patch
 
 * Fri Jan 08 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.3-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
