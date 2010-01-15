@@ -1331,6 +1331,8 @@ rm -rf %{buildroot}
     - Set CONFIG_EXT3_DEFAULTS_TO_ORDERED=y, default option was chosen
       on a previous config rebase (follow same recent change on
       kernel-linus and kernel-tmb packages).
+    - Apply following change from alsa-kernel tree:
+      ALSA: pcm_lib - fix wrong delta print for jiffies check
 
 * Fri Jan 08 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.3-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
