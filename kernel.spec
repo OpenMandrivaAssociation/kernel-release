@@ -1343,6 +1343,37 @@ rm -rf %{buildroot}
         net-ppp-enlarge-upload-buffer-to-cope-with-HSUPA-connections.patch
         net-wireless-rtl8187-add-radio-led-and-fix-warnings-on-suspend.patch
         platform-x86-dell-laptop-Fix-rfkill-state-setting.patch (fixed differently)
+        sound-alsa-hda-via-add-2nd-SPDIF-out-for-VT1708S-and-VT1702.patch
+        sound-alsa-hda-via-add-Jack-detect-feature-for-VT1708.patch
+        sound-alsa-hda-via-add-low-current-mode-for-power-saving.patch
+        sound-alsa-hda-via-add-smart5.1-function.patch
+        sound-alsa-hda-via-add-VIA_CTL_WIDGET_ANALOG_MUTE-control-type.patch
+        sound-alsa-hda-via-add-VIA_JACK_EVENT-process-in-via_unsol_event.patch
+        sound-alsa-hda-via-add-VT1708B-CE-codec-support.patch
+        sound-alsa-hda-via-add-VT1716S-support.patch
+        sound-alsa-hda-via-Add-VT1718S-support.patch
+        sound-alsa-hda-via-add-VT1812-support.patch
+        sound-alsa-hda-via-add-VT1828S-and-VT2020-support.patch
+        sound-alsa-hda-via-add-VT2002P-support.patch
+        sound-alsa-hda-via-Change-get_codec_type-argument-to-hda_codec-type.patch
+        sound-alsa-hda-via-change-PW4-connect-select-default-to-MW0.patch
+        sound-alsa-hda-via-change-VT1708S-VT1702-hp-mode-controls.patch
+        sound-alsa-hda-via-comments-update-copyright-changeset-etc.patch
+        sound-alsa-hda-via-limit-VT1702-AA-Path-max-volume.patch
+        sound-alsa-hda-via-modify-vt1708_auto_create_multi_out_ctls.patch
+        sound-alsa-hda-via-modify-vt1708_set_pinconfig_connect-function.patch
+        sound-alsa-hda-via-modify-vt1709_auto_create_multi_out_ctls.patch
+        sound-alsa-hda-via-move-backdoor-verbs-to-vt17xx_volume_init_verb.patch
+        sound-alsa-hda-via-only-cosmetic-changes.patch
+        sound-alsa-hda-via-refresh-front-playback-mute-in-via_hp_automute.patch
+        sound-alsa-hda-via-Remove-48k-sample-rate-limit-for-S_PDIF.patch
+        sound-alsa-hda-via-remove-unused-argument-of-via_new_analog_input.patch
+        sound-alsa-hda-via-remove-unused-IS_VT17xxVENDORID-macro.patch
+        sound-alsa-hda-via-rename-vt1708_control_templates.patch
+        sound-alsa-hda-via-replace-MIC_BOOST_VOLUME.patch
+        sound-alsa-hda-via-replace-via_playback_pcm_prepare-cleanup.patch
+        sound-alsa-hda-via-rewrite-via_independent_hp_put.patch
+        sound-alsa-hda-via-when-changing-input-source-update-power-state.patch
       * Update patches:
         * unionfs for 2.6.33 series kernels
 	* squashfs-lzma for 2.6.33 series kernels
