@@ -1340,10 +1340,12 @@ rm -rf %{buildroot}
         gpu-drm-nouveau.patch
         gpu-drm-nouveau-remove-double-export.patch
         gpu-drm-nouveau-revert-switch-to-the-drm-s-DP-helpers.patch
-    - Update patches:
+      * Update patches:
         * unionfs for 2.6.33 series kernels
 	* squashfs-lzma for 2.6.33 series kernels
-	* fix gpu-drm-mach64.patch to apply cleanly
+      * Rediff patches:
+        gpu-drm-mach64.patch
+        input-atkbd-positivo-i30-release-keys.patch
 
 * Fri Jan 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.4-0.rc1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
