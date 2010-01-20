@@ -1336,6 +1336,10 @@ rm -rf %{buildroot}
         3rd-drbd-makefile-fix.patch
         3rd-drbd-remove-Kconfig-comment.patch
         3rd-drbd-usermode_helper.patch
+        gpu-drm-nouveau-export-needed-ttm-symbols.patch
+        gpu-drm-nouveau.patch
+        gpu-drm-nouveau-remove-double-export.patch
+        gpu-drm-nouveau-revert-switch-to-the-drm-s-DP-helpers.patch
 
 * Fri Jan 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.4-0.rc1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
