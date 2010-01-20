@@ -1346,6 +1346,7 @@ rm -rf %{buildroot}
       * Rediff patches:
         gpu-drm-mach64.patch
         input-atkbd-positivo-i30-release-keys.patch
+        kbuild-really-dont-remove-bounds-asm-offsets-headers.patch
 
 * Fri Jan 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.4-0.rc1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
