@@ -1375,6 +1375,7 @@ rm -rf %{buildroot}
         sound-alsa-hda-via-rewrite-via_independent_hp_put.patch
         sound-alsa-hda-via-when-changing-input-source-update-power-state.patch
         media-video-uvc-handle-garbage-at-the-end-of-streaming-interface-descriptors.patch
+        media-video-bttv-add-another-i2c-addr-to-probe-for-ir.patch
       * Update patches:
         * unionfs for 2.6.33 series kernels
 	* squashfs-lzma for 2.6.33 series kernels
