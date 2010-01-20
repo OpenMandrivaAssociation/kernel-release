@@ -1391,6 +1391,7 @@ rm -rf %{buildroot}
         3rd-3rdparty-merge.patch
         disable-mrproper-in-devel-rpms.patch
         disable-prepare-scripts-configs-in-devel-rpms.patch
+    * update defconfigs
 
 * Fri Jan 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.4-0.rc1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
