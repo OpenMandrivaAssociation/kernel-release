@@ -1329,6 +1329,13 @@ rm -rf %{buildroot}
 * Wed Jan 20 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.33-rc4-git7
+      * Dropped merged patches:
+        3rd-drbd-8.3.6.tar
+        3rd-drbd-build-fixes.patch
+        3rd-drbd-in_flight-update.patch
+        3rd-drbd-makefile-fix.patch
+        3rd-drbd-remove-Kconfig-comment.patch
+        3rd-drbd-usermode_helper.patch
 
 * Fri Jan 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.4-0.rc1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
