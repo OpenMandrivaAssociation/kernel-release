@@ -1342,6 +1342,7 @@ rm -rf %{buildroot}
         gpu-drm-nouveau-revert-switch-to-the-drm-s-DP-helpers.patch
         net-ppp-enlarge-upload-buffer-to-cope-with-HSUPA-connections.patch
         net-wireless-rtl8187-add-radio-led-and-fix-warnings-on-suspend.patch
+        platform-x86-dell-laptop-Fix-rfkill-state-setting.patch (fixed differently)
       * Update patches:
         * unionfs for 2.6.33 series kernels
 	* squashfs-lzma for 2.6.33 series kernels
