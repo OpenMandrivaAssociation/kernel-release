@@ -1389,6 +1389,8 @@ rm -rf %{buildroot}
         serial-docomo-pinfree1p.patch
         sound-alsa-pcm_lib-add-possibility-to-log-last-10-DMA-ring.patch
         3rd-3rdparty-merge.patch
+        disable-mrproper-in-devel-rpms.patch
+        disable-prepare-scripts-configs-in-devel-rpms.patch
 
 * Fri Jan 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.4-0.rc1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
