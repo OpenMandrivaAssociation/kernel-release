@@ -1340,6 +1340,7 @@ rm -rf %{buildroot}
         gpu-drm-nouveau.patch
         gpu-drm-nouveau-remove-double-export.patch
         gpu-drm-nouveau-revert-switch-to-the-drm-s-DP-helpers.patch
+        net-ppp-enlarge-upload-buffer-to-cope-with-HSUPA-connections.patch
       * Update patches:
         * unionfs for 2.6.33 series kernels
 	* squashfs-lzma for 2.6.33 series kernels
