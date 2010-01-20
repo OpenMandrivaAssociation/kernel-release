@@ -1342,6 +1342,7 @@ rm -rf %{buildroot}
         gpu-drm-nouveau-revert-switch-to-the-drm-s-DP-helpers.patch
     - Update patches:
         * unionfs for 2.6.33 series kernels
+	* squashfs-lzma for 2.6.33 series kernels
 
 * Fri Jan 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.4-0.rc1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
