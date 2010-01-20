@@ -1384,6 +1384,7 @@ rm -rf %{buildroot}
         net-wireless-ath9k-ar2427.patch
         platform-x86-add-samsung-backlight-driver.patch
         serial-docomo-pinfree1p.patch
+        sound-alsa-pcm_lib-add-possibility-to-log-last-10-DMA-ring.patch
 
 * Fri Jan 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.4-0.rc1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
