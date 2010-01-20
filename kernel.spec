@@ -9,7 +9,7 @@
 #
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	32
+%define sublevel	33
 
 # Package release
 %define mnbrel		1
@@ -17,10 +17,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc1
-%define kstable		4
+%define kpatch		rc4
+%define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kgit		7
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1326,6 +1326,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Jan 20 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.33-rc4-git7
+
 * Fri Jan 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.4-0.rc1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Set CONFIG_EXT3_DEFAULTS_TO_ORDERED=y, default option was chosen
