@@ -812,14 +812,9 @@ SaveDevel() {
 	# add acpica header files, needed for fglrx build
 	cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
 
-	# config.mk from rt3090 must be present...
-	cp -fR drivers/staging/rt3090/config.mk \
-	       $TempDevelRoot/drivers/staging/rt3090/config.mk
-
 	for i in alpha arm avr32 blackfin cris frv h8300 ia64 m32r m68knommu \
 	         microblaze mips mn10300 parisc s390 score sh xtensa; do
 		rm -rf $TempDevelRoot/arch/$i
-		rm -rf $TempDevelRoot/include/asm-$i
 	done
 
 	# ppc needs only m68k headers
@@ -827,7 +822,6 @@ SaveDevel() {
 
 	%ifnarch ppc powerpc
 		rm -rf $TempDevelRoot/arch/powerpc
-		rm -rf $TempDevelRoot/include/asm-m68k
 	%endif
 	%ifnarch sparc sparc64
 		rm -rf $TempDevelRoot/arch/sparc
@@ -835,7 +829,6 @@ SaveDevel() {
 	%endif
 	%ifnarch %{ix86} x86_64
 		rm -rf $TempDevelRoot/arch/x86
-		rm -rf $TempDevelRoot/include/asm-x86
 	%endif
 
 	# Clean the scripts tree, and make sure everything is ok (sanity check)
@@ -883,23 +876,11 @@ $DevelRoot/firmware
 $DevelRoot/fs
 $DevelRoot/include/Kbuild
 $DevelRoot/include/acpi
-$DevelRoot/include/asm
 $DevelRoot/include/asm-generic
-%ifarch powerpc ppc
-$DevelRoot/include/asm-m68k
-$DevelRoot/include/asm-powerpc
-$DevelRoot/include/asm-ppc
-%endif
-%ifarch sparc sparc64
-$DevelRoot/include/asm-sparc
-$DevelRoot/include/asm-sparc64
-%endif
-%ifarch %{ix86} x86_64
-$DevelRoot/include/asm-x86
-%endif
 $DevelRoot/include/config
 $DevelRoot/include/crypto
 $DevelRoot/include/drm
+$DevelRoot/include/generated
 $DevelRoot/include/keys
 $DevelRoot/include/linux
 $DevelRoot/include/math-emu
@@ -1160,7 +1141,6 @@ chmod -R a+rX %{target_source}
 for i in alpha arm arm26 avr32 blackfin cris frv h8300 ia64 m32r m68knommu \
          microblaze mips parisc s390 score sh sh64 v850 xtensa mn10300; do
 	rm -rf %{target_source}/arch/$i
-	rm -rf %{target_source}/include/asm-$i
 done
 
 # ppc needs only m68k headers
@@ -1169,19 +1149,13 @@ rm -rf %{target_source}/arch/m68k
 %ifnarch ppc powerpc
 	rm -rf %{target_source}/arch/ppc
 	rm -rf %{target_source}/arch/powerpc
-	rm -rf %{target_source}/include/asm-m68k
-	rm -rf %{target_source}/include/asm-ppc
-	rm -rf %{target_source}/include/asm-powerpc
 %endif
 %ifnarch sparc sparc64
 	rm -rf %{target_source}/arch/sparc
 	rm -rf %{target_source}/arch/sparc64
-	rm -rf %{target_source}/include/asm-sparc
-	rm -rf %{target_source}/include/asm-sparc64
 %endif
 %ifnarch %{ix86} x86_64
 	rm -rf %{target_source}/arch/x86
-	rm -rf %{target_source}/include/asm-x86
 %endif
 
 # other misc files
@@ -1268,13 +1242,6 @@ rm -rf %{buildroot}
 %{_kerneldir}/include/m68k
 %{_kerneldir}/include/powerpc
 %{_kerneldir}/include/ppc
-%endif
-%ifarch sparc sparc64
-%{_kerneldir}/include/asm-sparc
-%{_kerneldir}/include/asm-sparc64
-%endif
-%ifarch %{ix86} x86_64
-%{_kerneldir}/include/asm-x86
 %endif
 %{_kerneldir}/include/crypto
 %{_kerneldir}/include/drm
@@ -1392,6 +1359,7 @@ rm -rf %{buildroot}
         disable-mrproper-in-devel-rpms.patch
         disable-prepare-scripts-configs-in-devel-rpms.patch
     * update defconfigs
+    * update file lists
 
 * Fri Jan 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.32.4-0.rc1.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
