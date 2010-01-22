@@ -17,10 +17,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc4
+%define kpatch		rc5
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		7
+%define kgit		0
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1293,9 +1293,9 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Wed Jan 20 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Fri Jan 22 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc5.1mnb
   o Thomas Backlund <tmb@mandriva.org>
-    - update to 2.6.33-rc4-git7
+    - update to 2.6.33-rc5
       * Dropped merged patches:
         3rd-drbd-8.3.6.tar
         3rd-drbd-build-fixes.patch
