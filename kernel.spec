@@ -20,7 +20,7 @@
 %define kpatch		rc5
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kgit		2
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1293,6 +1293,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue Jan 26 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc5.2.1mnb
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6-33-rc5-git2
+
 * Fri Jan 22 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc5.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.33-rc5
