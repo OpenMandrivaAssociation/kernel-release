@@ -1296,6 +1296,7 @@ rm -rf %{buildroot}
 * Tue Jan 26 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc5.2.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6-33-rc5-git2
+    - x86/agp: fix agp_amd64_init regression
 
 * Fri Jan 22 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc5.1mnb
   o Thomas Backlund <tmb@mandriva.org>
