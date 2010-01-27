@@ -1293,6 +1293,13 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue Jan 26 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Apply following changes from alsa-kernel tree:
+      * ALSA: pcm_core: Fix wake_up() optimization
+      * ALSA: pcm_lib - return back hw_ptr_interrupt
+      Last one should fix MDV #57010
+
 * Tue Jan 26 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc5.2.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6-33-rc5-git2
