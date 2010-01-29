@@ -17,10 +17,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc5
+%define kpatch		rc6
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		2
+%define kgit		0
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1293,7 +1293,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Jan 28 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Sat Jan 30 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc6.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Apply following changes from alsa-kernel tree:
       * ALSA: pcm_core: Fix wake_up() optimization
@@ -1301,6 +1301,7 @@ rm -rf %{buildroot}
       Last one should fix MDV #57010
 
   o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.33-rc6
     - Apply following changes from alsa-kernel tree:
       * ALSA: pcm_native: fix runtime boundary calculation
         (additional fix for #57010, requested by Colin)
