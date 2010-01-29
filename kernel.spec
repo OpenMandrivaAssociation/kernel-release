@@ -1304,7 +1304,8 @@ rm -rf %{buildroot}
     - Apply following changes from alsa-kernel tree:
       * ALSA: pcm_native: fix runtime boundary calculation
         (additional fix for #57010, requested by Colin)
-    - fix non-bootable dmraid due to oops in block_dev (#56768)
+    - fs: freeze_bdev: dont deactivate successfully frozen MS_RDONLY sb
+      (fixes non-bootable dmraid due to oops (#56768))
 
 * Tue Jan 26 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc5.2.1mnb
   o Thomas Backlund <tmb@mandriva.org>
