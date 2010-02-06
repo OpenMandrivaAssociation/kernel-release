@@ -12,7 +12,7 @@
 %define sublevel	33
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -20,7 +20,7 @@
 %define kpatch		rc6
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kgit		6
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1293,6 +1293,12 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sat Feb  6 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc6.6.2mnb
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.33-rc6-git6
+    - drop merged patch:
+      * x86-agp-fix-agp_amd64_init-regression.patch
+
 * Sat Jan 30 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc6.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Apply following changes from alsa-kernel tree:
