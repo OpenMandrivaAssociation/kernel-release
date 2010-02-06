@@ -1298,6 +1298,8 @@ rm -rf %{buildroot}
     - update to 2.6.33-rc6-git6
     - drop merged patch:
       * x86-agp-fix-agp_amd64_init-regression.patch
+    - update defconfigs:
+      * set CONFIG_SND_HDA_INPUT_BEEP_MODE=2
 
 * Sat Jan 30 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc6.1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
