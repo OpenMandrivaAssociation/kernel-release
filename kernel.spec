@@ -12,7 +12,7 @@
 %define sublevel	33
 
 # Package release
-%define mnbrel		2
+%define mnbrel		3
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1293,6 +1293,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sat Feb  6 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc6.6.3mnb
+  o Thomas Backlund <tmb@mandriva.org>
+    - add fixes from drm-intel git queue for 2.6.33
+
 * Sat Feb  6 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc6.6.2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.33-rc6-git6
