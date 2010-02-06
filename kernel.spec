@@ -1298,6 +1298,7 @@ rm -rf %{buildroot}
     - update to 2.6.33-rc7
     - drop merged patch:
       drm-intel-git-fixes.patch
+    - alsa: hda-intel: avoid divide-by-zero crash (potential local DoS)
 
 * Sat Feb  6 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc6.6.3mnb
   o Thomas Backlund <tmb@mandriva.org>
