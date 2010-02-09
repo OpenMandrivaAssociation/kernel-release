@@ -1293,6 +1293,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue Feb 09 2010 Anssi Hannula <anssi@mandriva.org> unreleased
+  o Anssi Hannula <anssi@mandriva.org>
+    - drm: nouveau: add ctxprogs generator for nv50/nv8x/nv9x (fixes
+      fd.o bug #23198)
+
 * Sun Feb  7 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc7.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.33-rc7
