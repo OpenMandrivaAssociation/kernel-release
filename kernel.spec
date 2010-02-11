@@ -1298,6 +1298,9 @@ rm -rf %{buildroot}
     - drm: nouveau: add ctxprogs generator for nv50/nv8x/nv9x (fixes
       fd.o bug #23198)
 
+  o Thomas Backlund <tmb@mandriva.org>
+    - update ndiswrapper to 1.56
+
 * Sun Feb  7 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc7.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.33-rc7
