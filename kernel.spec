@@ -1305,6 +1305,9 @@ rm -rf %{buildroot}
       fs-freeze_bdev-dont-deactivate-successfully-frozen-MS_RDONLY-sb.patch
       sound-alsa-hda-intel-avoid-divide-by-zero-crash.patch
 
+  o Pascal Terjan <pterjan@mandriva.com>
+    - add patches to fix Saitek X52 (#56765)
+
 * Sun Feb  7 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc7.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.33-rc7
