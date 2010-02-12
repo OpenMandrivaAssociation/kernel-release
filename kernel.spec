@@ -1299,8 +1299,11 @@ rm -rf %{buildroot}
       fd.o bug #23198)
 
   o Thomas Backlund <tmb@mandriva.org>
-    - update to 2.6.33-rc8
     - update ndiswrapper to 1.56
+    - update to 2.6.33-rc8
+    - drop merged pathces:
+      fs-freeze_bdev-dont-deactivate-successfully-frozen-MS_RDONLY-sb.patch
+      sound-alsa-hda-intel-avoid-divide-by-zero-crash.patch
 
 * Sun Feb  7 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc7.1mnb
   o Thomas Backlund <tmb@mandriva.org>
