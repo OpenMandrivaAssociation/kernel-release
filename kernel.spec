@@ -1306,6 +1306,7 @@ rm -rf %{buildroot}
       sound-alsa-hda-intel-avoid-divide-by-zero-crash.patch
     - add support for Atheros AR8151 and AR8152 to atl1c
     - mac80211: fix handling of null-rate control in rate_control_get_rate
+    - iwlwifi: fix broken AMSDU Rx functionality
 
   o Pascal Terjan <pterjan@mandriva.com>
     - add patches to fix Saitek X52 (#56765)
