@@ -1293,6 +1293,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sat Feb 13 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - HPET: Drop WARN_ON for mismatch on HPET_Tn_CMP readback
+
 * Sat Feb 13 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc8.1mnb
   o Anssi Hannula <anssi@mandriva.org>
     - drm: nouveau: add ctxprogs generator for nv50/nv8x/nv9x (fixes
