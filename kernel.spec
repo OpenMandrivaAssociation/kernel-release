@@ -1293,7 +1293,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Wed Feb 24 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Wed Feb 24 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - HPET: Drop WARN_ON for mismatch on HPET_Tn_CMP readback
     - b43: convert B43_PIO(_FORCE) to a module option (pio=1)
