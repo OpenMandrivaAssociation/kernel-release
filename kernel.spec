@@ -1306,6 +1306,7 @@ rm -rf %{buildroot}
 	  net-mac80211-fix-handling-of-null-rate-control-in-rate_control_get_rate.patch
 	* rediff patch:
 	  acpi-processor-M720SR-limit-to-C2.patch
+    - alsa: hda_intel: preallocate 4MB dma buffer (Request by Colin)
 
 * Sat Feb 13 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc8.1mnb
   o Anssi Hannula <anssi@mandriva.org>
