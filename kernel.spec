@@ -17,7 +17,7 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc8
+%define kpatch		0
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -1293,13 +1293,19 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sat Feb 13 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Wed Feb 24 2010 Thomas Backlund <tmb@mandriva.org> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - HPET: Drop WARN_ON for mismatch on HPET_Tn_CMP readback
     - b43: convert B43_PIO(_FORCE) to a module option (pio=1)
     - drop patch:
       kernel-pid-export-find_task_by_vpid-symbol-for-fglrx.patch
       (not needed anymore, confirmed by Anssi)
+    - update to 2.6.33 final
+	* drop merged patches:
+	  net-wireless-iwlwifi-fix-AMSDU-Rx-afte-paged-Rx-patch.patch
+	  net-mac80211-fix-handling-of-null-rate-control-in-rate_control_get_rate.patch
+	* rediff patch:
+	  acpi-processor-M720SR-limit-to-C2.patch
 
 * Sat Feb 13 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-0.rc8.1mnb
   o Anssi Hannula <anssi@mandriva.org>
