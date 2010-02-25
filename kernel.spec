@@ -1296,6 +1296,7 @@ rm -rf %{buildroot}
 * Wed Feb 24 2010 Thomas Backlund <tmb@mandriva.org> unrelesed
   o Thomas Backlund <tmb@mandriva.org>
     - security: fix error return path in ima_inode_alloc
+    - ahci: disable FPDMA auto-activate optimization on NVIDIA AHCI
 
 * Wed Feb 24 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-1mnb
   o Thomas Backlund <tmb@mandriva.org>
