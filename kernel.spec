@@ -1293,6 +1293,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Feb 24 2010 Thomas Backlund <tmb@mandriva.org> unrelesed
+  o Thomas Backlund <tmb@mandriva.org>
+    - security: fix error return path in ima_inode_alloc
+
 * Wed Feb 24 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - HPET: Drop WARN_ON for mismatch on HPET_Tn_CMP readback
