@@ -1297,6 +1297,9 @@ rm -rf %{buildroot}
   o Thomas Backlund <tmb@mandriva.org>
     - security: fix error return path in ima_inode_alloc
     - ahci: disable FPDMA auto-activate optimization on NVIDIA AHCI
+    - add HPET Erratum fix for triggering WARN_ON due to mismatch on
+      HPET_Tn_CMP readback (replaces HPET: Drop WARN_ON for mismatch
+      on HPET_Tn_CMP readback)
 
 * Wed Feb 24 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-1mnb
   o Thomas Backlund <tmb@mandriva.org>
