@@ -1293,6 +1293,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue Mar 16 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Fix mach64 to handle drm_ioctl unlocked_ioctl switch in 2.6.33
+
 * Tue Mar 16 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - security: fix error return path in ima_inode_alloc
