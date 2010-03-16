@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		0
+%define kstable		1
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1302,8 +1302,16 @@ rm -rf %{buildroot}
       on HPET_Tn_CMP readback)
     - btrfs: fix memory corruption on mount
     - update unionfs to 2.5.4
+
   o Pascal Terjan <pterjan@mandriva.com>
     - update unionfs oops patch
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Updated to 2.6.33.1
+      * drop following merged patches:
+        ahci-disable-FPDMA-auto-activate-optimization-on-NVIDIA-AHCI.patch
+        security-fix-error-return-path-in-ima_inode_alloc.patch
+      * rediff net-wireless-ath9k-ar2427.patch
 
 * Wed Feb 24 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-1mnb
   o Thomas Backlund <tmb@mandriva.org>
