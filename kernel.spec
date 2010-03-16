@@ -1302,6 +1302,8 @@ rm -rf %{buildroot}
       on HPET_Tn_CMP readback)
     - btrfs: fix memory corruption on mount
     - update unionfs to 2.5.4
+  o Pascal Terjan <pterjan@mandriva.com>
+    - update unionfs oops patch
 
 * Wed Feb 24 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-1mnb
   o Thomas Backlund <tmb@mandriva.org>
