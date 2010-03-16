@@ -1313,6 +1313,10 @@ rm -rf %{buildroot}
         security-fix-error-return-path-in-ima_inode_alloc.patch
       * rediff net-wireless-ath9k-ar2427.patch
 
+  o Anssi Hannula <anssi@mandriva.org>
+    - update nouveau to git snapshot (allowing and requiring the upgrade
+      of nouveau userspace)
+
 * Wed Feb 24 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - HPET: Drop WARN_ON for mismatch on HPET_Tn_CMP readback
