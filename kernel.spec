@@ -1299,6 +1299,8 @@ rm -rf %{buildroot}
     - Revert commit which breaks saa7134 tv output ("V4L/DVB (11906):
       saa7134: Use v4l bounding/alignment function").
     - saa7134: add one more remote control type for for Avermedia M135A.
+    - Fix advansys regression when firmware files are not found or
+      loading fails (MDV #53220).
 
 * Tue Mar 16 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
