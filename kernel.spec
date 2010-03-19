@@ -1296,6 +1296,9 @@ rm -rf %{buildroot}
 * Tue Mar 16 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Fix mach64 to handle drm_ioctl unlocked_ioctl switch in 2.6.33
+    - Revert commit which breaks saa7134 tv output ("V4L/DVB (11906):
+      saa7134: Use v4l bounding/alignment function").
+    - saa7134: add one more remote control type for for Avermedia M135A.
 
 * Tue Mar 16 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
