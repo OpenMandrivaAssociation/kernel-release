@@ -1301,6 +1301,9 @@ rm -rf %{buildroot}
     - saa7134: add one more remote control type for for Avermedia M135A.
     - Fix advansys regression when firmware files are not found or
       loading fails (MDV #53220).
+    - Apply n-trig patches from 2.6.34-rc2 to fix/add hardware support
+      on some newer dell notebook models.
+      Reference: http://lists.mandriva.com/kernel-discuss/2010-03/msg00005.php
 
 * Tue Mar 16 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
