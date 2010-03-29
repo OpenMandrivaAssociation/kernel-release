@@ -12,7 +12,7 @@
 %define sublevel	33
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1293,7 +1293,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Mar 16 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Mon Mar 29 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.1-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Fix mach64 to handle drm_ioctl unlocked_ioctl switch in 2.6.33
     - Revert commit which breaks saa7134 tv output ("V4L/DVB (11906):
