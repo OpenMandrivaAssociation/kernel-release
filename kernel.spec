@@ -1293,6 +1293,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu Apr 01 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - saa7134: Fix tuner_config setting for Avermedia M733A (from
+      Avermedia). Also add new pci id support.
+
 * Mon Mar 29 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.1-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Fix mach64 to handle drm_ioctl unlocked_ioctl switch in 2.6.33
