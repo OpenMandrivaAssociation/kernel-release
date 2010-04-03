@@ -12,13 +12,13 @@
 %define sublevel	33
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		1
+%define kstable		2
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1293,10 +1293,17 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Apr 01 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Sat Apr 03 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - saa7134: Fix tuner_config setting for Avermedia M733A (from
       Avermedia). Also add new pci id support.
+
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.33.2
+      * drop merged patch:
+	net-wireless-ath9k-ar2427.patch
+      * rediff patch:
+	gpu-drm-nouveau-git-20100316.patch
 
 * Mon Mar 29 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.1-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
