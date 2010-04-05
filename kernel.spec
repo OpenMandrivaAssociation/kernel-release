@@ -1293,7 +1293,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sat Apr 03 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Mon Apr 05 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - saa7134: Fix tuner_config setting for Avermedia M733A (from
       Avermedia). Also add new pci id support.
@@ -1301,9 +1301,9 @@ rm -rf %{buildroot}
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.33.2
       * drop merged patch:
-	net-wireless-ath9k-ar2427.patch
+        net-wireless-ath9k-ar2427.patch
       * rediff patch:
-	gpu-drm-nouveau-git-20100316.patch
+        gpu-drm-nouveau-git-20100316.patch
 
 * Mon Mar 29 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.1-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
