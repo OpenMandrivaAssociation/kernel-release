@@ -1298,6 +1298,8 @@ rm -rf %{buildroot}
     - wacom: update to linuxwacom.sf.net version 0.8.5-12 (updated
       hardware support). Reference:
       http://lists.mandriva.com/kernel-discuss/2010-04/msg00000.php
+    - Drop hid-usbhid-quirk-multilaser.patch (reset leds quirk): this is
+      obsolete, since commit 08ef08e in upstream kernel.
 
 * Mon Apr 05 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
