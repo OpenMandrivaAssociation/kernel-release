@@ -1293,6 +1293,12 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue Apr 06 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - wacom: update to linuxwacom.sf.net version 0.8.5-12 (updated
+      hardware support). Reference:
+      http://lists.mandriva.com/kernel-discuss/2010-04/msg00000.php
+
 * Mon Apr 05 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - saa7134: Fix tuner_config setting for Avermedia M733A (from
