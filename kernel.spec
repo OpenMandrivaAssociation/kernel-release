@@ -1329,6 +1329,7 @@ rm -rf %{buildroot}
     - Apply change "ALSA: pcm_lib - fix xrun functionality" from
       upstream kernel, bug fix to previously added patch
       sound-alsa-pcm_lib-add-possibility-to-log-last-10-DMA-ring.patch
+    - Updated ipset to version 4.2
 
   o Thomas Backlund <tmb@mandriva.org>
     - apply nouveau git update only for 2010.1
