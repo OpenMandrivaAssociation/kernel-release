@@ -240,6 +240,20 @@ Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}
 %endif
 %endif
 
+# Nouveau for 2010.1
+# Merge in nouveau git, i.e. patches ending up in 2.6.34
+# This includes the interface change to 0.0.16, allowing and requiring the use
+# of recent userspace.
+# last included commit: drm/nv50: fix fbcon when framebuffer above 4GiB mark
+Patch50:	gpu-drm-nouveau-git-20100316.patch
+# Fix locking in call to drm_gem_object_unreference(). This was fixed upstream
+# in "Use drm_gem_object_[handle_]unreference_unlocked where possible", but
+# fixed here in a different way as the upstream fix depends on 2.6.34 drm.
+Patch51:	gpu-drm-nouveau-fix-missing-locking.patch
+
+# Nouveau for 2010.0 backports
+Patch60:	gpu-drm-nouveau-add-nv50-nv8x-nv9x-ctxprogs-generator.patch
+
 #END
 ####################################################################
 
@@ -650,6 +664,16 @@ cd %src_dir
 %endif
 
 %{patches_dir}/scripts/apply_patches
+
+%if %{mdkversion} > 201000
+# nouveau for 2010.1 series
+# update nouveau to git-20100316
+%patch50 -p1
+%patch51 -p1
+%else
+# nouveau for 2010.0 backports
+%patch60 -p1
+%endif
 
 # PATCH END
 
@@ -1305,6 +1329,11 @@ rm -rf %{buildroot}
     - Apply change "ALSA: pcm_lib - fix xrun functionality" from
       upstream kernel, bug fix to previously added patch
       sound-alsa-pcm_lib-add-possibility-to-log-last-10-DMA-ring.patch
+
+  o Thomas Backlund <tmb@mandriva.org>
+    - apply nouveau git update only for 2010.1
+    - restore and apply nouveau ctxprogs generator for nv50/nv8x/nv9x
+      only for 2010.0 backports
 
 * Mon Apr 05 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
