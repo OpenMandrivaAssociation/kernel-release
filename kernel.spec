@@ -115,7 +115,7 @@
 %define build_devel 		1
 
 # Make kernel packages backportable
-%if %{mdkversion} < 201000
+%if %{mdkversion} < 201010
 # disable debug rpms for backports, it's enough already having them on cooker/stable
 %define build_debug 		0
 %else
@@ -1300,6 +1300,8 @@ rm -rf %{buildroot}
       http://lists.mandriva.com/kernel-discuss/2010-04/msg00000.php
     - Drop hid-usbhid-quirk-multilaser.patch (reset leds quirk): this is
       obsolete, since commit 08ef08e in upstream kernel.
+    - Don't create debug packages by default when building backport
+      packages for 2010.0
 
 * Mon Apr 05 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
