@@ -254,6 +254,11 @@ Patch51:	gpu-drm-nouveau-fix-missing-locking.patch
 # Nouveau for 2010.0 backports
 Patch60:	gpu-drm-nouveau-add-nv50-nv8x-nv9x-ctxprogs-generator.patch
 
+# netfilter ipset support (http://ipset.netfilter.org)
+# Patches for 2010.1/2010.0
+Patch70:	net-netfilter-ipset-4.2.patch
+Patch71:	net-netfilter-ipset-2.4.9.patch
+
 #END
 ####################################################################
 
@@ -665,14 +670,19 @@ cd %src_dir
 
 %{patches_dir}/scripts/apply_patches
 
+# FIXME: allow apply_patches to apply patches depending on distro version...
 %if %{mdkversion} > 201000
 # nouveau for 2010.1 series
 # update nouveau to git-20100316
 %patch50 -p1
 %patch51 -p1
+# ipset for 2010.1
+%patch70 -p1
 %else
 # nouveau for 2010.0 backports
 %patch60 -p1
+# ipset for 2010.0
+%patch71
 %endif
 
 # PATCH END
@@ -1329,7 +1339,8 @@ rm -rf %{buildroot}
     - Apply change "ALSA: pcm_lib - fix xrun functionality" from
       upstream kernel, bug fix to previously added patch
       sound-alsa-pcm_lib-add-possibility-to-log-last-10-DMA-ring.patch
-    - Updated ipset to version 4.2
+    - Updated ipset to version 4.2, and keep older version for building
+      2010.0 backported packages.
 
   o Thomas Backlund <tmb@mandriva.org>
     - apply nouveau git update only for 2010.1
