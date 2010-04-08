@@ -682,7 +682,7 @@ cd %src_dir
 # nouveau for 2010.0 backports
 %patch60 -p1
 # ipset for 2010.0
-%patch71
+%patch71 -p1
 %endif
 
 # PATCH END
