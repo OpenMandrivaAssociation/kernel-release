@@ -12,7 +12,7 @@
 %define sublevel	33
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1327,7 +1327,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Apr 06 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Thu Apr 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.2-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - wacom: update to linuxwacom.sf.net version 0.8.5-12 (updated
       hardware support). Reference:
