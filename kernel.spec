@@ -1341,6 +1341,9 @@ rm -rf %{buildroot}
       sound-alsa-pcm_lib-add-possibility-to-log-last-10-DMA-ring.patch
     - Updated ipset to version 4.2, and keep older version for building
       2010.0 backported packages.
+    - Apply fix from freedesktop.org bug #27449 (drm/i915: fix tiling
+      limits for i915 class hw). Reference:
+      http://lists.mandriva.com/kernel-discuss/2010-04/msg00004.php
 
   o Thomas Backlund <tmb@mandriva.org>
     - apply nouveau git update only for 2010.1
