@@ -1344,6 +1344,7 @@ rm -rf %{buildroot}
     - Apply fix from freedesktop.org bug #27449 (drm/i915: fix tiling
       limits for i915 class hw). Reference:
       http://lists.mandriva.com/kernel-discuss/2010-04/msg00004.php
+    - ALSA: hda - via - fix master mute and automute with VT1812/VT2002P
 
   o Thomas Backlund <tmb@mandriva.org>
     - apply nouveau git update only for 2010.1
