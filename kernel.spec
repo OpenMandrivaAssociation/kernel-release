@@ -1327,6 +1327,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Apr 16 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Apply "ALSA: hda - Add position_fix quirk for Biostar mobo", fix
+      for issue reported on Cooker ML.
+
 * Thu Apr 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.2-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - wacom: update to linuxwacom.sf.net version 0.8.5-12 (updated
