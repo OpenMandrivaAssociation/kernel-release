@@ -1331,6 +1331,8 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Apply "ALSA: hda - Add position_fix quirk for Biostar mobo", fix
       for issue reported on Cooker ML.
+    - Apply updated upstream patch (v2) for freedesktop.org bug #27449
+      Reference: http://lists.mandriva.com/kernel-discuss/2010-04/msg00007.php
 
 * Thu Apr 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.2-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
