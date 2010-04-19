@@ -1333,6 +1333,10 @@ rm -rf %{buildroot}
       for issue reported on Cooker ML.
     - Apply updated upstream patch (v2) for freedesktop.org bug #27449
       Reference: http://lists.mandriva.com/kernel-discuss/2010-04/msg00007.php
+    - Add new alps signature for touchpad found on Acer 7740G
+      (MDV #58811). See https://bugzilla.kernel.org/show_bug.cgi?id=15359#c9,
+      included was same patch mentioned there as it's the same signature
+      from bug report.
 
 * Thu Apr 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.2-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
