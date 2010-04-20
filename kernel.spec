@@ -1338,6 +1338,9 @@ rm -rf %{buildroot}
       included was same patch mentioned there as it's the same signature
       from bug report.
 
+  o Arnaud Patard <apatard@mandriva.com>
+    - Prevent a crash on VirtualBox x86_64 without IO-APIC
+
 * Thu Apr 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.2-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - wacom: update to linuxwacom.sf.net version 0.8.5-12 (updated
