@@ -1327,6 +1327,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu Apr 22 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Add ispnp async init patch from Ubuntu (requested by fcrozat)
+
 * Thu Apr 22 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.2-3mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Apply "ALSA: hda - Add position_fix quirk for Biostar mobo", fix
