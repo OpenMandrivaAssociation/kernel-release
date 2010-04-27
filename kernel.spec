@@ -12,13 +12,13 @@
 %define sublevel	33
 
 # Package release
-%define mnbrel		3
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		2
+%define kstable		3
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1327,9 +1327,16 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Apr 22 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Tue Apr 27 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Pascal Terjan <pterjan@mandriva.com>
     - Add ispnp async init patch from Ubuntu (requested by fcrozat)
+
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.33.3
+      * drop merged patches:
+        x86-Erratum-workaround-for-read-after-write-of-HPET-comparator.patch 
+        net-wireless-b43-allow-pio-at-runtime.patch 
+        sound-alsa-hda-Add-position_fix-quirk-for-Biostar-mobo.patch
 
 * Thu Apr 22 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.2-3mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
