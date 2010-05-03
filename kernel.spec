@@ -1344,6 +1344,9 @@ rm -rf %{buildroot}
       linux-input ML.
     - Add upstream bug fix for bnx2 timeout with MSI enabled, requested
       on http://lists.mandriva.com/kernel-discuss/2010-04/msg00015.php
+    - Replace previously added synce 'dirty patch' from John Carr, by
+      upstream sent fix "rndis_host: Poll status channel before control
+      channel" from Ben Hutchings.
 
 * Thu Apr 22 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.2-3mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
