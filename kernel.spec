@@ -1327,6 +1327,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+
+* Mon May 03 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Replace fs-btrfs-fix-memory-corruption-on-mount.patch with correct one (#59051)
+
 * Mon May 03 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.3-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Add ispnp async init patch from Ubuntu (requested by fcrozat)
