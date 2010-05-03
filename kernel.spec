@@ -1327,15 +1327,15 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Apr 27 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Mon May 03 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.3-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Add ispnp async init patch from Ubuntu (requested by fcrozat)
 
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.33.3
       * drop merged patches:
-        x86-Erratum-workaround-for-read-after-write-of-HPET-comparator.patch 
-        net-wireless-b43-allow-pio-at-runtime.patch 
+        x86-Erratum-workaround-for-read-after-write-of-HPET-comparator.patch
+        net-wireless-b43-allow-pio-at-runtime.patch
         sound-alsa-hda-Add-position_fix-quirk-for-Biostar-mobo.patch
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
