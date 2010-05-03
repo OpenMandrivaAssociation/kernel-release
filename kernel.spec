@@ -1347,6 +1347,7 @@ rm -rf %{buildroot}
     - Replace previously added synce 'dirty patch' from John Carr, by
       upstream sent fix "rndis_host: Poll status channel before control
       channel" from Ben Hutchings.
+    - Sync advansys fix for MDV #53220 with upstream applied patches.
 
 * Thu Apr 22 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.2-3mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
