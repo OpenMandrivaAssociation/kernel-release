@@ -1327,6 +1327,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue May 04 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Retry commands with UNIT_ATTENTION sense codes to fix ext3/ext4 I/O error
+
 * Tue May 04 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.3-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Add ispnp async init patch from Ubuntu (requested by fcrozat)
