@@ -1350,6 +1350,7 @@ rm -rf %{buildroot}
     - p54usb: add USB ID for Thomson SpeedTouch 120g
     - ar9170: add support for NEC WL300NU-G USB dongle
     - ahci: add missing nVidia mcp64-73 ids
+    - pata_marvell: fix sata port ahci fallback
 
 * Tue May 04 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.3-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
