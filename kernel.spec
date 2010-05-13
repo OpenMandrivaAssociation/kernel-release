@@ -1342,6 +1342,7 @@ rm -rf %{buildroot}
   o Thomas Backlund <tmb@mandriva.org>
     - Revert "ALSA: hda/realtek: quirk for D945GCLF2 mainboard" as it's not
       valid for all revisions of the D945GCLF2 mainboard
+    - ALSA: hda - fix DG45ID SPDIF output
 
 * Tue May 04 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.3-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
