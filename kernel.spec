@@ -1343,6 +1343,7 @@ rm -rf %{buildroot}
     - Revert "ALSA: hda/realtek: quirk for D945GCLF2 mainboard" as it's not
       valid for all revisions of the D945GCLF2 mainboard
     - ALSA: hda - fix DG45ID SPDIF output
+    - ALSA: hda: Fix 0 dB for Lenovo models using Conexant CX20549 (Venice)
 
 * Tue May 04 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.3-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
