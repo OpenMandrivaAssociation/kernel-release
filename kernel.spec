@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		3
+%define kstable		4
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1330,6 +1330,14 @@ rm -rf %{buildroot}
 * Tue May 04 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Pascal Terjan <pterjan@mandriva.com>
     - Retry commands with UNIT_ATTENTION sense codes to fix ext3/ext4 I/O error
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Updated to 2.6.33.4
+      * Drop following merged patches:
+        scsi-retry-commands-with-UNIT_ATTENTION-sense-codes-to-fix-ext3-ext4-io-error.patch
+        gpu-drm-i915-fix-tiling-limits-for-i915-class-hw-v2.patch
+        gpu-drm-i915-build-fix-for-fix-tiling-limits-change.patch
+        net-bnx2-Fix-lost-MSI-X-problem-on-5709-NICs.patch
 
 * Tue May 04 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.3-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
