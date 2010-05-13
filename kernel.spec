@@ -1351,6 +1351,7 @@ rm -rf %{buildroot}
     - ar9170: add support for NEC WL300NU-G USB dongle
     - ahci: add missing nVidia mcp64-73 ids
     - pata_marvell: fix sata port ahci fallback
+    - cifs: guard against hardlinking directories
 
 * Tue May 04 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.3-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
