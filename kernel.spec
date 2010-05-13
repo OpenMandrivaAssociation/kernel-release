@@ -1339,6 +1339,10 @@ rm -rf %{buildroot}
         gpu-drm-i915-build-fix-for-fix-tiling-limits-change.patch
         net-bnx2-Fix-lost-MSI-X-problem-on-5709-NICs.patch
 
+  o Thomas Backlund <tmb@mandriva.org>
+    - Revert "ALSA: hda/realtek: quirk for D945GCLF2 mainboard" as it's not
+      valid for all revisions of the D945GCLF2 mainboard
+
 * Tue May 04 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.3-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Add ispnp async init patch from Ubuntu (requested by fcrozat)
