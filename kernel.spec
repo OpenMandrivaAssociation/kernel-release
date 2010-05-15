@@ -1327,7 +1327,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue May 04 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Sat May 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.4-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Retry commands with UNIT_ATTENTION sense codes to fix ext3/ext4 I/O error
 
