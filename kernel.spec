@@ -1330,6 +1330,7 @@ rm -rf %{buildroot}
 * Sun May 16 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - drm/i915: use PIPE_CONTROL instruction on Ironlake and Sandy Bridge
+    - drm/i915: fix non-Ironlake 965 class PIPE_CONTROL crashes
 
 * Sat May 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.4-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
