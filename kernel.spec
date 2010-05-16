@@ -1327,6 +1327,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sun May 16 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - drm/i915: use PIPE_CONTROL instruction on Ironlake and Sandy Bridge
+
 * Sat May 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.4-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Retry commands with UNIT_ATTENTION sense codes to fix ext3/ext4 I/O error
