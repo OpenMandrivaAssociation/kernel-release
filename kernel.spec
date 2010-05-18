@@ -1333,6 +1333,8 @@ rm -rf %{buildroot}
     - drm/i915: fix non-Ironlake 965 class PIPE_CONTROL crashes
     - drm/i915: Disable FBC on 915GM and 945GM as it causes hangs after suspend/resume
     - alsa: hda-intel: Add a PCI controller id found on new Dell laptops
+    - x86: cacheinfo: Turn off L3 cache index disable feature in virtualized
+      environments, fixes crash on boot on xen.
 
 * Sat May 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.4-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
