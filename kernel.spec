@@ -1332,6 +1332,7 @@ rm -rf %{buildroot}
     - drm/i915: use PIPE_CONTROL instruction on Ironlake and Sandy Bridge
     - drm/i915: fix non-Ironlake 965 class PIPE_CONTROL crashes
     - drm/i915: Disable FBC on 915GM and 945GM as it causes hangs after suspend/resume
+    - alsa: hda-intel: Add a PCI controller id found on new Dell laptops
 
 * Sat May 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.4-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
