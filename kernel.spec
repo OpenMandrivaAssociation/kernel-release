@@ -1335,6 +1335,8 @@ rm -rf %{buildroot}
     - alsa: hda-intel: Add a PCI controller id found on new Dell laptops
     - x86: cacheinfo: Turn off L3 cache index disable feature in virtualized
       environments, fixes crash on boot on xen.
+    - x86, amd: Check X86_FEATURE_OSVW bit before accessing OSVW MSRs, prevents
+      GP fault
 
 * Sat May 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.4-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
