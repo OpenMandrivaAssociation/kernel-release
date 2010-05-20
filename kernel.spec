@@ -1337,6 +1337,9 @@ rm -rf %{buildroot}
       environments, fixes crash on boot on xen.
     - x86, amd: Check X86_FEATURE_OSVW bit before accessing OSVW MSRs, prevents
       GP fault
+    - ath9k: revert: "ath9k: fix lockdep warning when unloading module" introduced
+      in 2.6.33.2, as it wasn't meant for kernels <=2.6.34 (fixes warning in #56614)
+      (Reference: http://marc.info/?l=linux-kernel&m=127430485607989&w=2)
 
 * Sat May 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.4-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
