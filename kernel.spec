@@ -1337,6 +1337,9 @@ rm -rf %{buildroot}
     - drm/i915: Configure the TV sense state correctly on GM45 to make TV 
       detection reliable
 
+  o Pascal Terjan <pterjan@mandriva.com>
+    - Add patches to support phy module autoloading (#57958)
+
 * Fri May 21 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.4-2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - drm/i915: use PIPE_CONTROL instruction on Ironlake and Sandy Bridge
