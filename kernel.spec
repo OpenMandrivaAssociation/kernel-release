@@ -1343,7 +1343,7 @@ rm -rf %{buildroot}
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Fix oops with plymouthd quiting on vesafb after i915 with
-      modesetting is loaded.
+      modesetting is loaded (#59260).
     - Apply "drm/i915: Stop trying to use ACPI lid status to determine
       LVDS connection.", fixes lost display after closing lid on some
       laptops (#59133)
