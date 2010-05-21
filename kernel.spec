@@ -1327,6 +1327,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri May 21 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - firmware_class: fix memory leak introduced by the patch 6e03a201bbe:
+      firmware: speed up request_firmware()
+
 * Fri May 21 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.4-2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - drm/i915: use PIPE_CONTROL instruction on Ironlake and Sandy Bridge
