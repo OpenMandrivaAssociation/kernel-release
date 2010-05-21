@@ -1332,6 +1332,7 @@ rm -rf %{buildroot}
     - firmware_class: fix memory leak introduced by the patch 6e03a201bbe:
       firmware: speed up request_firmware()
     - drm/edid: Fix 1024x768@85Hz
+    - drm/radeon/kms/atom: fix typo in LVDS panel info parsing
 
 * Fri May 21 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.4-2mnb
   o Thomas Backlund <tmb@mandriva.org>
