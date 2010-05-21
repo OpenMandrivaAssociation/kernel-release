@@ -1347,6 +1347,8 @@ rm -rf %{buildroot}
     - Apply "drm/i915: Stop trying to use ACPI lid status to determine
       LVDS connection.", fixes lost display after closing lid on some
       laptops (#59133)
+    - Replace "dev_set_drvdata before rtc_device_register in rtc_cmos"
+      fix with same solution applied upstream.
 
 * Sat May 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.4-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
