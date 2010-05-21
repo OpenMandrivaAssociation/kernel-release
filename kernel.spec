@@ -1341,6 +1341,10 @@ rm -rf %{buildroot}
       in 2.6.33.2, as it wasn't meant for kernels <=2.6.34 (fixes warning in #56614)
       (Reference: http://marc.info/?l=linux-kernel&m=127430485607989&w=2)
 
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Fix oops with plymouthd quiting on vesafb after i915 with
+      modesetting is loaded.
+
 * Sat May 15 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.4-1mnb
   o Pascal Terjan <pterjan@mandriva.com>
     - Retry commands with UNIT_ATTENTION sense codes to fix ext3/ext4 I/O error
