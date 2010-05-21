@@ -1334,6 +1334,8 @@ rm -rf %{buildroot}
     - drm/edid: Fix 1024x768@85Hz
     - drm/radeon/kms/atom: fix typo in LVDS panel info parsing
     - drm/radeon/kms: reset ddc_bus in object header parsing
+    - drm/i915: Configure the TV sense state correctly on GM45 to make TV 
+      detection reliable
 
 * Fri May 21 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.4-2mnb
   o Thomas Backlund <tmb@mandriva.org>
