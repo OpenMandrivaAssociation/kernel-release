@@ -1333,6 +1333,7 @@ rm -rf %{buildroot}
       firmware: speed up request_firmware()
     - drm/edid: Fix 1024x768@85Hz
     - drm/radeon/kms/atom: fix typo in LVDS panel info parsing
+    - drm/radeon/kms: reset ddc_bus in object header parsing
 
 * Fri May 21 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.4-2mnb
   o Thomas Backlund <tmb@mandriva.org>
