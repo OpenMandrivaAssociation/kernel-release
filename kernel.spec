@@ -12,7 +12,7 @@
 %define sublevel	33
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1327,7 +1327,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sun May 16 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Fri May 21 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.4-2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - drm/i915: use PIPE_CONTROL instruction on Ironlake and Sandy Bridge
     - drm/i915: fix non-Ironlake 965 class PIPE_CONTROL crashes
