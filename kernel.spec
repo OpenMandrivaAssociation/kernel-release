@@ -1339,6 +1339,7 @@ rm -rf %{buildroot}
       detection reliable
     - md: fix read balancing in RAID1 and RAID10 on drives > 2TB
     - md: fix counting of write targets on raid1
+    - md: avoid possible-oops and array stop on linear layout
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Add patches to support phy module autoloading (#57958)
