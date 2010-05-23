@@ -1341,6 +1341,7 @@ rm -rf %{buildroot}
     - md: fix counting of write targets on raid1
     - md: avoid possible-oops and array stop on linear layout
     - pci: disable MSI on Via K8M800 (fixes problems with AHCI)
+    - pci: disable MSI for MCP55 on P5N32-E SLI (fixes NIC problems)
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Add patches to support phy module autoloading (#57958)
