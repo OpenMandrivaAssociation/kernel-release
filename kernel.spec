@@ -1331,10 +1331,11 @@ rm -rf %{buildroot}
   o Thomas Backlund <tmb@mandriva.org>
     - firmware_class: fix memory leak introduced by the patch 6e03a201bbe:
       firmware: speed up request_firmware()
-    - drm/edid: Fix 1024x768@85Hz
+    - drm/edid: fix 1024x768@85Hz
+    - drm/edid: fix 1600x1200@75Hz
     - drm/radeon/kms/atom: fix typo in LVDS panel info parsing
     - drm/radeon/kms: reset ddc_bus in object header parsing
-    - drm/i915: Configure the TV sense state correctly on GM45 to make TV 
+    - drm/i915: Configure the TV sense state correctly on GM45 to make TV
       detection reliable
 
   o Pascal Terjan <pterjan@mandriva.com>
