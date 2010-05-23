@@ -1337,6 +1337,7 @@ rm -rf %{buildroot}
     - drm/radeon/kms: reset ddc_bus in object header parsing
     - drm/i915: Configure the TV sense state correctly on GM45 to make TV
       detection reliable
+    - md: Fix read balancing in RAID1 and RAID10 on drives > 2TB
 
   o Pascal Terjan <pterjan@mandriva.com>
     - Add patches to support phy module autoloading (#57958)
