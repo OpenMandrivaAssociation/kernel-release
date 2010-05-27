@@ -12,13 +12,13 @@
 %define sublevel	33
 
 # Package release
-%define mnbrel		3
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		4
+%define kstable		5
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1327,6 +1327,25 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu May 27 2010 Pascal Terjan <pterjan@mandriva.com> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.33.5
+      * Drop merged patches:
+	fs-cifs-guard-against-hardlinking-directories.patch
+	gpu-drm-i915-disable-fbc-on-915gm-and-945gm.patch
+	gpu-drm-i915-fix-non-ironlake-965-class-crashes.patch
+	gpu-drm-i915-use-pipe_control-instruction-on-ironlake-and-sandy-bridge.patch
+	net-ipv4-udp-fix-short-packet-and-bad-checksum-logging.patch
+	net-wireless-REVERT-ath9k-fix-lockdep-warning-when-unloading-module.patch
+	sound-alsa-hda-Fix-0-dB-for-Lenovo-models-using-Conexant-C.patch
+	sound-alsa-hda-fix-dg45id-spdif-output.patch
+	sound-alsa-hda-new-intel-hda-controller.patch
+	sound-alsa-ice1724-Fix-ESI-Maya44-capture-source-control.patch
+	sound-alsa-revert-alsa-hda-realtek-quirk-for-d945gclf2-mainboard.patch
+	sound-alsa-virtuoso-fix-Xonar-D1-DX-front-panel-microphone.patch
+	x86-amd-check-x86_feature_osvw-bit-before-accessing-osvw-msrs.patch
+	x86-cacheinfo-turn-off-l3-cache-index-disable-feature-in-virtualized-environments.patch
+
 * Tue May 25 2010 Pascal Terjan <pterjan@mandriva.com> 2.6.33.4-3mnb
   o Thomas Backlund <tmb@mandriva.org>
     - firmware_class: fix memory leak introduced by the patch 6e03a201bbe:
