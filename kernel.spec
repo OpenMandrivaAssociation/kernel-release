@@ -12,7 +12,7 @@
 %define sublevel	33
 
 # Package release
-%define mnbrel		1
+%define mnbrel		0.1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -119,7 +119,7 @@
 # disable debug rpms for backports, it's enough already having them on cooker/stable
 %define build_debug 		0
 %else
-%define build_debug 		1
+%define build_debug 		0
 %endif
 
 # Build desktop i586 / 4GB
@@ -1327,7 +1327,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu May 27 2010 Pascal Terjan <pterjan@mandriva.com> unreleased
+* Thu May 27 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33.5-0.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.33.5
       * Drop merged patches:
@@ -1345,6 +1345,8 @@ rm -rf %{buildroot}
 	sound-alsa-virtuoso-fix-Xonar-D1-DX-front-panel-microphone.patch
 	x86-amd-check-x86_feature_osvw-bit-before-accessing-osvw-msrs.patch
 	x86-cacheinfo-turn-off-l3-cache-index-disable-feature-in-virtualized-environments.patch
+    - drop patch (that got reverted upstream in commit d4b74bf07873da2e94219a7b67a334fc1c3ce649):
+	gpu-drm_i915-Configure-the-TV-sense-state-correctly-on-GM45-to-make-TV-detection-reliable.patch
 
 * Tue May 25 2010 Pascal Terjan <pterjan@mandriva.com> 2.6.33.4-3mnb
   o Thomas Backlund <tmb@mandriva.org>
