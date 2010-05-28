@@ -12,7 +12,7 @@
 %define sublevel	33
 
 # Package release
-%define mnbrel		0.1
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -119,7 +119,7 @@
 # disable debug rpms for backports, it's enough already having them on cooker/stable
 %define build_debug 		0
 %else
-%define build_debug 		0
+%define build_debug 		1
 %endif
 
 # Build desktop i586 / 4GB
@@ -1327,7 +1327,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu May 27 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33.5-0.1mnb
+* Thu May 27 2010 Pascal Terjan <pterjan@mandriva.com> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.33.5
       * Drop merged patches:
