@@ -1349,6 +1349,8 @@ rm -rf %{buildroot}
 	gpu-drm_i915-Configure-the-TV-sense-state-correctly-on-GM45-to-make-TV-detection-reliable.patch
     - Prioritize synchronous signals over 'normal' signals
       (fixes Wine deadlocking the kernel (#59545))
+    - panic: call console_verbose() in panic to ensure a directly
+      called panic will print a backtrace.
 
 * Tue May 25 2010 Pascal Terjan <pterjan@mandriva.com> 2.6.33.4-3mnb
   o Thomas Backlund <tmb@mandriva.org>
