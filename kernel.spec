@@ -1353,6 +1353,7 @@ rm -rf %{buildroot}
       called panic will print a backtrace.
     - posix_timer: Fix error path in timer_create
     - powernow-k8: Add core performance boost support
+    - x86, cpu: Add AMD core boosting feature flag to /proc/cpuinfo
 
 * Tue May 25 2010 Pascal Terjan <pterjan@mandriva.com> 2.6.33.4-3mnb
   o Thomas Backlund <tmb@mandriva.org>
