@@ -1351,6 +1351,7 @@ rm -rf %{buildroot}
       (fixes Wine deadlocking the kernel (#59545))
     - panic: call console_verbose() in panic to ensure a directly
       called panic will print a backtrace.
+    - posix_timer: Fix error path in timer_create
 
 * Tue May 25 2010 Pascal Terjan <pterjan@mandriva.com> 2.6.33.4-3mnb
   o Thomas Backlund <tmb@mandriva.org>
