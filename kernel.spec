@@ -1347,6 +1347,8 @@ rm -rf %{buildroot}
 	x86-cacheinfo-turn-off-l3-cache-index-disable-feature-in-virtualized-environments.patch
     - drop patch (that got reverted upstream in commit d4b74bf07873da2e94219a7b67a334fc1c3ce649):
 	gpu-drm_i915-Configure-the-TV-sense-state-correctly-on-GM45-to-make-TV-detection-reliable.patch
+    - Prioritize synchronous signals over 'normal' signals
+      (fixes Wine deadlocking the kernel (#59545))
 
 * Tue May 25 2010 Pascal Terjan <pterjan@mandriva.com> 2.6.33.4-3mnb
   o Thomas Backlund <tmb@mandriva.org>
