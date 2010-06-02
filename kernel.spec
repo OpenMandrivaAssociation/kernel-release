@@ -1358,6 +1358,9 @@ rm -rf %{buildroot}
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Include fix for CVE-2010-1641 (kernel: GFS2: The setflags ioctl()
       doesn't check file ownership).
+    - Apply change "ALSA: pcm: fix the fix of the runtime->boundary
+      calculation" from upstream kernel, bug fix to previously added
+      patch sound-alsa-pcm_native-fix-runtime-boundary-calculation.patch
 
 * Tue May 25 2010 Pascal Terjan <pterjan@mandriva.com> 2.6.33.4-3mnb
   o Thomas Backlund <tmb@mandriva.org>
