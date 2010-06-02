@@ -1331,22 +1331,22 @@ rm -rf %{buildroot}
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.33.5
       * Drop merged patches:
-	fs-cifs-guard-against-hardlinking-directories.patch
-	gpu-drm-i915-disable-fbc-on-915gm-and-945gm.patch
-	gpu-drm-i915-fix-non-ironlake-965-class-crashes.patch
-	gpu-drm-i915-use-pipe_control-instruction-on-ironlake-and-sandy-bridge.patch
-	net-ipv4-udp-fix-short-packet-and-bad-checksum-logging.patch
-	net-wireless-REVERT-ath9k-fix-lockdep-warning-when-unloading-module.patch
-	sound-alsa-hda-Fix-0-dB-for-Lenovo-models-using-Conexant-C.patch
-	sound-alsa-hda-fix-dg45id-spdif-output.patch
-	sound-alsa-hda-new-intel-hda-controller.patch
-	sound-alsa-ice1724-Fix-ESI-Maya44-capture-source-control.patch
-	sound-alsa-revert-alsa-hda-realtek-quirk-for-d945gclf2-mainboard.patch
-	sound-alsa-virtuoso-fix-Xonar-D1-DX-front-panel-microphone.patch
-	x86-amd-check-x86_feature_osvw-bit-before-accessing-osvw-msrs.patch
-	x86-cacheinfo-turn-off-l3-cache-index-disable-feature-in-virtualized-environments.patch
+        fs-cifs-guard-against-hardlinking-directories.patch
+        gpu-drm-i915-disable-fbc-on-915gm-and-945gm.patch
+        gpu-drm-i915-fix-non-ironlake-965-class-crashes.patch
+        gpu-drm-i915-use-pipe_control-instruction-on-ironlake-and-sandy-bridge.patch
+        net-ipv4-udp-fix-short-packet-and-bad-checksum-logging.patch
+        net-wireless-REVERT-ath9k-fix-lockdep-warning-when-unloading-module.patch
+        sound-alsa-hda-Fix-0-dB-for-Lenovo-models-using-Conexant-C.patch
+        sound-alsa-hda-fix-dg45id-spdif-output.patch
+        sound-alsa-hda-new-intel-hda-controller.patch
+        sound-alsa-ice1724-Fix-ESI-Maya44-capture-source-control.patch
+        sound-alsa-revert-alsa-hda-realtek-quirk-for-d945gclf2-mainboard.patch
+        sound-alsa-virtuoso-fix-Xonar-D1-DX-front-panel-microphone.patch
+        x86-amd-check-x86_feature_osvw-bit-before-accessing-osvw-msrs.patch
+        x86-cacheinfo-turn-off-l3-cache-index-disable-feature-in-virtualized-environments.patch
     - drop patch (that got reverted upstream in commit d4b74bf07873da2e94219a7b67a334fc1c3ce649):
-	gpu-drm_i915-Configure-the-TV-sense-state-correctly-on-GM45-to-make-TV-detection-reliable.patch
+      gpu-drm_i915-Configure-the-TV-sense-state-correctly-on-GM45-to-make-TV-detection-reliable.patch
     - Prioritize synchronous signals over 'normal' signals
       (fixes Wine deadlocking the kernel (#59545))
     - panic: call console_verbose() in panic to ensure a directly
