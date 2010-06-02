@@ -1327,7 +1327,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu May 27 2010 Pascal Terjan <pterjan@mandriva.com> unreleased
+* Wed Jun 02 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.5-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.33.5
       * Drop merged patches:
@@ -1354,6 +1354,10 @@ rm -rf %{buildroot}
     - posix_timer: Fix error path in timer_create
     - powernow-k8: Add core performance boost support
     - x86, cpu: Add AMD core boosting feature flag to /proc/cpuinfo
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Include fix for CVE-2010-1641 (kernel: GFS2: The setflags ioctl()
+      doesn't check file ownership).
 
 * Tue May 25 2010 Pascal Terjan <pterjan@mandriva.com> 2.6.33.4-3mnb
   o Thomas Backlund <tmb@mandriva.org>
