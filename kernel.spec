@@ -1361,6 +1361,9 @@ rm -rf %{buildroot}
     - Apply change "ALSA: pcm: fix the fix of the runtime->boundary
       calculation" from upstream kernel, bug fix to previously added
       patch sound-alsa-pcm_native-fix-runtime-boundary-calculation.patch
+    - Apply change "ALSA: pcm: fix delta calculation at boundary
+      wraparound" from upstream kernel, bug fix to previously added
+      sound-alsa-pcm_lib-cleanup-merge-hw_ptr-update-functions.patch
 
 * Tue May 25 2010 Pascal Terjan <pterjan@mandriva.com> 2.6.33.4-3mnb
   o Thomas Backlund <tmb@mandriva.org>
