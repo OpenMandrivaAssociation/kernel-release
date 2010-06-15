@@ -1327,6 +1327,13 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sun Jun 13 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33.5-1.1mnb
+  o Thomas Backlund <tmb@mandriva.org>
+    - add upstream fixes for r8169: (fixes #59723)
+	- fix rtl8169_rx_interrupt()
+	- fix random mdio_write failures
+	- fix mdio_read and update mdio_write according to hw specs
+
 * Wed Jun 02 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.5-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.33.5
