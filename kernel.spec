@@ -1341,6 +1341,8 @@ rm -rf %{buildroot}
        by open(). This leads to infinite loop of AN -> MEDIA_CHANGE uevent ->
        udev open() to check media -> AN)
     - staging: vt6655: Fix kernel BUG on driver wpa initialization
+    - ext4: Prevent creation of files larger than RLIMIT_FSIZE using fallocate
+      (fixes Ext4 Security Bypass Vulnerability)
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Patch for CVE-2010-2071
