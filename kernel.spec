@@ -1333,6 +1333,7 @@ rm -rf %{buildroot}
       * fix rtl8169_rx_interrupt()
       * fix random mdio_write failures
       * fix mdio_read and update mdio_write according to hw specs
+    - drm/i915: Fix 82854 PCI ID, and treat it like other 85X
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Patch for CVE-2010-2071
