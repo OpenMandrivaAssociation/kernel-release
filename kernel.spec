@@ -1334,6 +1334,8 @@ rm -rf %{buildroot}
       * fix random mdio_write failures
       * fix mdio_read and update mdio_write according to hw specs
     - drm/i915: Fix 82854 PCI ID, and treat it like other 85X
+    - V4L/DVB: gspca - stv06xx: Remove the 046d:08da from the stv06xx driver
+      (fixes nonworking QuickCam Messenger)
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Patch for CVE-2010-2071
