@@ -1327,7 +1327,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sun Jun 13 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33.5-1.1mnb
+* Thu Jun 17 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - add upstream fixes for r8169: (fixes #59723)
       * fix rtl8169_rx_interrupt()
