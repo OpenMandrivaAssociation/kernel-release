@@ -1340,6 +1340,7 @@ rm -rf %{buildroot}
       (Fixes issue with ATAPI devices which raise AN when hit by commands issued
        by open(). This leads to infinite loop of AN -> MEDIA_CHANGE uevent ->
        udev open() to check media -> AN)
+    - staging: vt6655: Fix kernel BUG on driver wpa initialization
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Patch for CVE-2010-2071
