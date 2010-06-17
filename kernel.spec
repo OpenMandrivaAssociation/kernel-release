@@ -1336,6 +1336,10 @@ rm -rf %{buildroot}
     - drm/i915: Fix 82854 PCI ID, and treat it like other 85X
     - V4L/DVB: gspca - stv06xx: Remove the 046d:08da from the stv06xx driver
       (fixes nonworking QuickCam Messenger)
+    - libata: disable ATAPI AN by default
+      (Fixes issue with ATAPI devices which raise AN when hit by commands issued
+       by open(). This leads to infinite loop of AN -> MEDIA_CHANGE uevent ->
+       udev open() to check media -> AN)
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Patch for CVE-2010-2071
