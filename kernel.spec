@@ -1343,6 +1343,8 @@ rm -rf %{buildroot}
     - staging: vt6655: Fix kernel BUG on driver wpa initialization
     - ext4: Prevent creation of files larger than RLIMIT_FSIZE using fallocate
       (fixes Ext4 Security Bypass Vulnerability)
+    - sctp: Fix skb_over_panic resulting from multiple invalid parameter
+      errors (CVE-2010-1173)
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Patch for CVE-2010-2071
