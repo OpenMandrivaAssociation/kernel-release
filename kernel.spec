@@ -1347,7 +1347,7 @@ rm -rf %{buildroot}
       errors (CVE-2010-1173)
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
-    - Patch for CVE-2010-2071
+    - Btrfs: add a permission check for setfacl (CVE-2010-2071)
     - ALSA: hda-intel: add ideapad model for Conexant 5051
 
 * Wed Jun 02 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.5-1mnb
