@@ -1327,6 +1327,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sat Jun 19 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - Fix rebooting on Dell Precision WorkStation T7400 (#58017)
+
 * Thu Jun 17 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.5-2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - add upstream fixes for r8169: (fixes #59723)
