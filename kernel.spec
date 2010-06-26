@@ -1341,6 +1341,7 @@ rm -rf %{buildroot}
       * H3C Dual Band 802.11n USB Adapter
       * WNC Generic 11n USB dongle
     - ar9170usb: fix panic triggered by undersized rxstream buffer
+    - option: add support for ZTE, Pirelli, Cinteron and Olicard100 products
     - p54usb: Add device ID for Dell WLA3310 USB
     - pci: Disable MSI on VIA K8T890 systems
     - pci: disable msi on AMD rs4xx internal gfx bridges
