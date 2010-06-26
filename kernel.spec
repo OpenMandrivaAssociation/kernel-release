@@ -1352,6 +1352,7 @@ rm -rf %{buildroot}
     - sata_via: magic vt6421 fix for transmission problems with recent WD drives
     - tmpfs: insert tmpfs cache pages to inactive list at first
       (fixes OOM killer triggering on parallel file copy on tmpfs)
+    - x86/amd-iommu: Fix crash when request_mem_region fails
 
 * Thu Jun 17 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.5-2mnb
   o Thomas Backlund <tmb@mandriva.org>
