@@ -1333,6 +1333,7 @@ rm -rf %{buildroot}
     - acpi/video: fix acpi_backlight=video parameter to correctly enable
       ACPI_VIDEO_BACKLIGHT_FORCE_VIDEO
     - acpi/video: be more liberal in validating _BQC behaviour
+    - ahci: add pci quirk for JMicron JMB362
 
 * Thu Jun 17 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.5-2mnb
   o Thomas Backlund <tmb@mandriva.org>
