@@ -1344,6 +1344,9 @@ rm -rf %{buildroot}
     - p54usb: Add device ID for Dell WLA3310 USB
     - pci: Disable MSI on VIA K8T890 systems
     - pci: disable msi on AMD rs4xx internal gfx bridges
+    - sata_nv: don't diddle with nIEN on mcp55, as it gets stuck once set,
+      and mcp55 has its own IRQ masking mechanism so there's no reason to
+      mess with nIEN in the first place. (fixes liteon bluray iHOS104-08 error)
 
 * Thu Jun 17 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.5-2mnb
   o Thomas Backlund <tmb@mandriva.org>
