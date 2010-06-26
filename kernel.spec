@@ -1342,6 +1342,7 @@ rm -rf %{buildroot}
       * WNC Generic 11n USB dongle
     - ar9170usb: fix panic triggered by undersized rxstream buffer
     - p54usb: Add device ID for Dell WLA3310 USB
+    - pci: Disable MSI on VIA K8T890 systems
 
 * Thu Jun 17 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.5-2mnb
   o Thomas Backlund <tmb@mandriva.org>
