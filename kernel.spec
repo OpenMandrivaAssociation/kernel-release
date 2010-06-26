@@ -1352,6 +1352,7 @@ rm -rf %{buildroot}
       (fixes IRQ assignment failure in legacy mode)
     - sata_via: magic vt6421 fix for transmission problems with recent WD drives
     - ext4: check s_log_groups_per_flex in online resize code
+    - ext4: Make sure the MOVE_EXT ioctl can't overwrite append-only files
     - nfsd: don't report compiled-out versions as present
     - tmpfs: insert tmpfs cache pages to inactive list at first
       (fixes OOM killer triggering on parallel file copy on tmpfs)
