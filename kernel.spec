@@ -1357,6 +1357,8 @@ rm -rf %{buildroot}
     - drm/i915: Reject bind_to_gtt() early if object > aperture, before
       evicting everything in a vain attempt to find space
     - drm/i915: Rebind bo if currently bound with incorrect alignment
+    - drm/radeon: r100/r200 ums: block ability for userspace app to
+      trash 0 page and beyond
 
 * Thu Jun 17 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.5-2mnb
   o Thomas Backlund <tmb@mandriva.org>
