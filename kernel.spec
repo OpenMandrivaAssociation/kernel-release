@@ -1327,9 +1327,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sat Jun 19 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Sat Jun 26 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - Fix rebooting on Dell Precision WorkStation T7400 (#58017)
+    - acpi/video: fix acpi_backlight=video parameter to correctly enable
+      ACPI_VIDEO_BACKLIGHT_FORCE_VIDEO
 
 * Thu Jun 17 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.5-2mnb
   o Thomas Backlund <tmb@mandriva.org>
