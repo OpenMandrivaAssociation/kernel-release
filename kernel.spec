@@ -1334,6 +1334,12 @@ rm -rf %{buildroot}
       ACPI_VIDEO_BACKLIGHT_FORCE_VIDEO
     - acpi/video: be more liberal in validating _BQC behaviour
     - ahci: add pci quirk for JMicron JMB362
+    - ar9170usb: add support for more devices:
+      * Netgear WNA1000
+      * Proxim ORiNOCO Dual Band 802.11n USB Adapter
+      * 3Com Dual Band 802.11n USB Adapter
+      * H3C Dual Band 802.11n USB Adapter
+      * WNC Generic 11n USB dongle
 
 * Thu Jun 17 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.5-2mnb
   o Thomas Backlund <tmb@mandriva.org>
