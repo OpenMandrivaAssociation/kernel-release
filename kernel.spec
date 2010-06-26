@@ -1351,6 +1351,7 @@ rm -rf %{buildroot}
     - sata_nv: use ata_pci_sff_activate_host() instead of ata_host_activate()
       (fixes IRQ assignment failure in legacy mode)
     - sata_via: magic vt6421 fix for transmission problems with recent WD drives
+    - nfsd: don't report compiled-out versions as present
     - tmpfs: insert tmpfs cache pages to inactive list at first
       (fixes OOM killer triggering on parallel file copy on tmpfs)
     - x86/amd-iommu: Fix crash when request_mem_region fails
