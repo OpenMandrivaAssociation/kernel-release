@@ -1354,6 +1354,7 @@ rm -rf %{buildroot}
     - tmpfs: insert tmpfs cache pages to inactive list at first
       (fixes OOM killer triggering on parallel file copy on tmpfs)
     - x86/amd-iommu: Fix crash when request_mem_region fails
+    - x86/amd-iommu: Fall back to GART if initialization fails
     - drm/i915: Reject bind_to_gtt() early if object > aperture, before
       evicting everything in a vain attempt to find space
     - drm/i915: Rebind bo if currently bound with incorrect alignment
