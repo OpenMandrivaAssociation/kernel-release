@@ -1343,7 +1343,8 @@ rm -rf %{buildroot}
     - ar9170usb: fix panic triggered by undersized rxstream buffer
     - option: add support for ZTE, Pirelli, Cinteron and Olicard100 products
     - p54usb: Add device ID for Dell WLA3310 USB
-    - staging: add Add Sitecom WL-349 to rtl8192su
+    - staging: rtl8192su: add Sitecom WL-349 device ID
+    - staging: rt2870: add MelCo.,Inc. WLI-UC-G301N device ID
     - pci: Disable MSI on VIA K8T890 systems
     - pci: disable msi on AMD rs4xx internal gfx bridges
     - sata_nv: don't diddle with nIEN on mcp55, as it gets stuck once set,
