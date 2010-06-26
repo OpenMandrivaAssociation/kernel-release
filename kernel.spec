@@ -1347,6 +1347,8 @@ rm -rf %{buildroot}
     - sata_nv: don't diddle with nIEN on mcp55, as it gets stuck once set,
       and mcp55 has its own IRQ masking mechanism so there's no reason to
       mess with nIEN in the first place. (fixes liteon bluray iHOS104-08 error)
+    - sata_nv: use ata_pci_sff_activate_host() instead of ata_host_activate()
+      (fixes IRQ assignment failure in legacy mode)
 
 * Thu Jun 17 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.5-2mnb
   o Thomas Backlund <tmb@mandriva.org>
