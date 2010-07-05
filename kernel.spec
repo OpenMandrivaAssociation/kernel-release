@@ -12,13 +12,13 @@
 %define sublevel	33
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		5
+%define kstable		6
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1327,44 +1327,28 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sat Jun 26 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Mon Jul  5 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
-    - Fix rebooting on Dell Precision WorkStation T7400 (#58017)
-    - acpi/video: fix acpi_backlight=video parameter to correctly enable
-      ACPI_VIDEO_BACKLIGHT_FORCE_VIDEO
+    - update to 2.6.33.6
+      * drop merged patches:
+        ata-libata-disable-atapi-an-by-default.patch
+        fs-btrfs-should-add-a-permission-check-for-setfacl.patch
+        fs-gfs2-fix-permissions-checking-for-setflags-ioctl.patch
+        gpu-drm_edid-Fix-1024x768-at-85Hz.patch
+        gpu-drm-i915-fix-82854-pci-id-and-treat-it-like-other-85x.patch
+        gpu-drm_radeon_kms_atom-fix-typo-in-LVDS-panel-info-parsing.patch
+        gpu-drm_radeon_kms-reset-ddc_bus-in-object-header-parsing.patch
+        kernel-posix_timer-Fix-error-path-in-timer_create.patch
+        md-Fix-read-balancing-in-RAID1-and-RAID10-on-drives-bigger-than-2TB.patch
+        md-linear-avoid-possible-oops-and-array-stop.patch
+        md-raid1-fix-counting-of-write-targets.patch
+        media-v4l-dvb-gspca-stv06xx-remove-the-046d-08da-from-the-stv06xx-driver.patch
+        net-sctp-Fix-skb_over_panic-resulting-from-multiple-invalid-parameter-errors_CVE-2010-1173.patch
+        pci-disable-msi-for-MCP55-on-P5N32-E-SLI.patch
+        rtc-cmos-do-dev_set_drvdata-earlier-in-the-initialization.patch
+        staging-vt6655-fix-kernel-bug-on-driver-wpa-initialization.patch
+    - fix rebooting on Dell Precision WorkStation T7400 (#58017)
     - acpi/video: be more liberal in validating _BQC behaviour
-    - ahci: add pci quirk for JMicron JMB362
-    - ar9170usb: add support for more devices:
-      * Netgear WNA1000
-      * Proxim ORiNOCO Dual Band 802.11n USB Adapter
-      * 3Com Dual Band 802.11n USB Adapter
-      * H3C Dual Band 802.11n USB Adapter
-      * WNC Generic 11n USB dongle
-    - ar9170usb: fix panic triggered by undersized rxstream buffer
-    - option: add support for ZTE, Pirelli, Cinteron and Olicard100 products
-    - p54usb: Add device ID for Dell WLA3310 USB
-    - staging: rtl8192su: add Sitecom WL-349 device ID
-    - staging: rt2870: add MelCo.,Inc. WLI-UC-G301N device ID
-    - pci: Disable MSI on VIA K8T890 systems
-    - pci: disable msi on AMD rs4xx internal gfx bridges
-    - sata_nv: don't diddle with nIEN on mcp55, as it gets stuck once set,
-      and mcp55 has its own IRQ masking mechanism so there's no reason to
-      mess with nIEN in the first place. (fixes liteon bluray iHOS104-08 error)
-    - sata_nv: use ata_pci_sff_activate_host() instead of ata_host_activate()
-      (fixes IRQ assignment failure in legacy mode)
-    - sata_via: magic vt6421 fix for transmission problems with recent WD drives
-    - ext4: check s_log_groups_per_flex in online resize code
-    - ext4: Make sure the MOVE_EXT ioctl can't overwrite append-only files
-    - nfsd: don't report compiled-out versions as present
-    - tmpfs: insert tmpfs cache pages to inactive list at first
-      (fixes OOM killer triggering on parallel file copy on tmpfs)
-    - x86/amd-iommu: Fix crash when request_mem_region fails
-    - x86/amd-iommu: Fall back to GART if initialization fails
-    - drm/i915: Reject bind_to_gtt() early if object > aperture, before
-      evicting everything in a vain attempt to find space
-    - drm/i915: Rebind bo if currently bound with incorrect alignment
-    - drm/radeon: r100/r200 ums: block ability for userspace app to
-      trash 0 page and beyond
 
 * Thu Jun 17 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.5-2mnb
   o Thomas Backlund <tmb@mandriva.org>
