@@ -1350,6 +1350,9 @@ rm -rf %{buildroot}
     - fix rebooting on Dell Precision WorkStation T7400 (#58017)
     - acpi/video: be more liberal in validating _BQC behaviour
 
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - agp/intel: add new host bridge id for Q57 system
+
 * Thu Jun 17 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.5-2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - add upstream fixes for r8169: (fixes #59723)
