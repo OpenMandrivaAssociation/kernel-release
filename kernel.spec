@@ -1352,6 +1352,12 @@ rm -rf %{buildroot}
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - agp/intel: add new host bridge id for Q57 system
+    - backport coretemp fixes/updates (new hardware support):
+      hwmon: (coretemp) Fix cpu model output
+      drivers/hwmon/coretemp.c: detect the thermal sensors by CPUID
+      drivers/hwmon/coretemp.c: get TjMax value from MSR
+      hwmon: (coretemp) Skip duplicate CPU entries
+      hwmon: (coretemp) Properly label the sensors
 
 * Thu Jun 17 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.33.5-2mnb
   o Thomas Backlund <tmb@mandriva.org>
