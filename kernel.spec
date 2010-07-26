@@ -1350,6 +1350,7 @@ rm -rf %{buildroot}
     - fix rebooting on Dell Precision WorkStation T7400 (#58017)
     - acpi/video: be more liberal in validating _BQC behaviour
     - CIFS: Fix a malicious redirect problem in the DNS lookup code (CVE-2010-2524)
+    - x86: Send a SIGTRAP for user icebp traps, fixes Wine apps breakage (mdv #60067)
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - agp/intel: add new host bridge id for Q57 system
