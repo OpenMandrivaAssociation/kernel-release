@@ -1349,6 +1349,7 @@ rm -rf %{buildroot}
         staging-vt6655-fix-kernel-bug-on-driver-wpa-initialization.patch
     - fix rebooting on Dell Precision WorkStation T7400 (#58017)
     - acpi/video: be more liberal in validating _BQC behaviour
+    - CIFS: Fix a malicious redirect problem in the DNS lookup code (CVE-2010-2524)
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - agp/intel: add new host bridge id for Q57 system
