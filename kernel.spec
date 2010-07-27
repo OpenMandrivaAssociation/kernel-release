@@ -1327,7 +1327,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Jul  5 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Tue Jul 26 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33.6-2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.33.6
       * drop merged patches:
