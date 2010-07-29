@@ -12,7 +12,7 @@
 %define sublevel	33
 
 # Package release
-%define mnbrel		2
+%define mnbrel		3
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1327,6 +1327,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Jul 28 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - add back missing Kconfig option so samsung-backlight is built (mdv #60386)
+
 * Tue Jul 27 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33.6-2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.33.6
