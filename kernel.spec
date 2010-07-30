@@ -196,8 +196,7 @@ Source1: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/
 NoSource: 0
 %endif
 # This is for disabling *config, mrproper, prepare, scripts on -devel rpms
-Source2: 	disable-mrproper-in-devel-rpms.patch
-Source3:	disable-prepare-scripts-configs-in-devel-rpms.patch
+Source2: 	disable-mrproper-prepare-scripts-configs-in-devel-rpms.patch
 
 Source4: 	README.kernel-sources
 Source5: 	README.MandrivaLinux
@@ -844,7 +843,6 @@ SaveDevel() {
 
 	# disable mrproper in -devel rpms
 	patch -p1 --fuzz=0 -d $TempDevelRoot -i %{SOURCE2}
-	patch -p1 --fuzz=0 -d $TempDevelRoot -i %{SOURCE3}
 
 	kernel_devel_files=../kernel_devel_files.$devel_flavour
 
@@ -1383,6 +1381,7 @@ rm -rf %{buildroot}
     - adapt unionfs for vfs changes in 2.6.35
     - rebase squashfs lzma support
     - drop ipset-2.4.9 patches (used for backporting 2010.1 kernel to 2010.0)
+    - merge source2 and source3 into one patch
 
 * Tue Jul 27 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33.6-2mnb
   o Thomas Backlund <tmb@mandriva.org>
