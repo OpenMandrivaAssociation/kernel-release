@@ -1316,9 +1316,25 @@ rm -rf %{buildroot}
         ata-ahci-add-missing-nv-IDs.patch
         ata-pata_marvell-CONFIG_AHCI-is-really-CONFIG_SATA_AHCI.patch
         base-firmware_class-fix-memory-leak-free-allocated-pages.patch
+        fs-btrfs-fix-memory-corruption-on-mount.patch
+        fs-cifs-fix-a-malicious-redirect-problem-in-the-DNS-lookup-code_CVE-2010-2524.patch
+        fs-ext4-Prevent-creation-of-files-larger-than-RLIMIT_FSIZE-using-fallocate.patch
+        gpu-drm-edid-fix-typo-in-1600x1200-75-mode.patch
+        gpu-drm-i915-stop-trying-to-use-ACPI-lid-status.patch
         gpu-drm-nouveau-add-nv50-nv8x-nv9x-ctxprogs-generator.patch
         gpu-drm-nouveau-fix-missing-locking.patch
         gpu-drm-nouveau-git-20100316.patch
+        hwmon-coretemp-update.patch
+        input-add-an-option-to-force-the-use-of-the-elantech-extension.patch
+        input-atkbd-philco-i4xsi-release-keys.patch
+        input-atkbd-positivo-i30-release-keys.patch
+        input-elantech-firmware-versions-ge-2.48-use-6-byte-packets.patch
+        input-elantech-ignore-high-bits-in-the-position-coordinates.patch
+        input-elantech-update-elantech-documentation.patch
+        input-elantech-whitelist-new-models-with-firmware-version-4.1.patch
+        input-hid-extend-mask-for-BUTTON-usage-page.patch
+        input-hid-handle-joysticks-with-large-number-of-buttons.patch
+        input-tablet-linuxwacom-0.8.5-12.patch
         kernel-panic-call-console_verbose-in-panic.patch
         kernel-Prioritize-synchronous-signals-over-normal-signals.patch
         pci-no-dmar.patch
@@ -1330,6 +1346,7 @@ rm -rf %{buildroot}
         x86-powernow-k8-Add-core-performance-boost-support.patch
       * rediff patches:
         acpi-add-proc-event-regs.patch
+        char-agp-intel-new-Q57-id.patch
     - rebase unionfs 2.5.4 for 2.6.35
     - adapt unionfs for vfs changes in 2.6.35
     - rebase squashfs lzma support
