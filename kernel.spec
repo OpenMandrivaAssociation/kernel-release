@@ -1312,16 +1312,24 @@ rm -rf %{buildroot}
     - add back missing Kconfig option so samsung-backlight is built (mdv #60386)
     - upgrade to 2.6.35-rc6-git
       * drop merged patches:
+        acpi-video-Be-more-liberal-in-validating-_BQC-behaviour.patch
+        ata-ahci-add-missing-nv-IDs.patch
+        ata-pata_marvell-CONFIG_AHCI-is-really-CONFIG_SATA_AHCI.patch
         base-firmware_class-fix-memory-leak-free-allocated-pages.patch
         gpu-drm-nouveau-add-nv50-nv8x-nv9x-ctxprogs-generator.patch
         gpu-drm-nouveau-fix-missing-locking.patch
         gpu-drm-nouveau-git-20100316.patch
         kernel-panic-call-console_verbose-in-panic.patch
         kernel-Prioritize-synchronous-signals-over-normal-signals.patch
+        pci-no-dmar.patch
+        scsi-advansys-fix-regression-with-request_firmware-change.patch
+        scsi-advansys-fix-narrow-board-error-path.patch
         x86-cpu-Add-AMD-core-boosting-feature-flag-to-proc-cpuinfo.patch
         x86-kernel-Send-a-SIGTRAP-for-user-icebp-traps.patch
         x86-kernel-set_bios_reboot-is-needed-for-Dell-Precision-WorkStation-T7400.patch
         x86-powernow-k8-Add-core-performance-boost-support.patch
+      * rediff patches:
+        acpi-add-proc-event-regs.patch
 
 * Tue Jul 27 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33.6-2mnb
   o Thomas Backlund <tmb@mandriva.org>
