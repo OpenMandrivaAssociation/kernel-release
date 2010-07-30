@@ -1324,6 +1324,20 @@ rm -rf %{buildroot}
         gpu-drm-nouveau-add-nv50-nv8x-nv9x-ctxprogs-generator.patch
         gpu-drm-nouveau-fix-missing-locking.patch
         gpu-drm-nouveau-git-20100316.patch
+        hid-Support-for-3M-multitouch-panel.patch
+        hid-add-support-for-Stantum-multitouch-panel.patch
+        hid-fixed-bug-in-single-touch-emulation-on-the-stant.patch
+        hid-add-pressure-support-for-the-Stantum-multitouch-.patch
+        hid-add-support-for-Acer-T230H-multitouch.patch
+        hid-add-support-for-Pixart-Imaging-Optical-Touch-Scr.patch
+        hid-let-hid-input-accept-digitizers.patch
+        hid-Support-for-MosArt-multitouch-panel.patch
+        hid-remove-MODULE_VERSION-from-new-drivers.patch
+        hid-ntrig-add-multi-input-quirk-and-clean-up.patch
+        hid-n-trig-remove-unnecessary-tool-switching.patch
+        hid-ntrig-multitouch-cleanup-and-fix.patch
+        hid-ntrig-Single-touch-mode-tap.patch
+        hid-ntrig-fix-touch-events.patch
         hwmon-coretemp-update.patch
         input-add-an-option-to-force-the-use-of-the-elantech-extension.patch
         input-atkbd-philco-i4xsi-release-keys.patch
@@ -1350,6 +1364,7 @@ rm -rf %{buildroot}
         pci-no-dmar.patch
         scsi-advansys-fix-regression-with-request_firmware-change.patch
         scsi-advansys-fix-narrow-board-error-path.patch
+        sound-alsa-hda-add-ideapad-model-for-conexant-5051.patch
         sound-alsa-hda-via-fix-master-mute-and-automute-with-VT1812_VT2002P.patch
         sound-alsa-pcm_lib.c-convert-second-xrun_debug-parameter.patch
         sound-alsa-pcm_lib-add-possibility-to-log-last-10-DMA-ring.patch
@@ -1372,6 +1387,7 @@ rm -rf %{buildroot}
         char-agp-intel-new-Q57-id.patch
         include-kbuild-export-pci_ids.patch
         platform-x86-add-samsung-backlight-driver.patch
+        sound-alsa-hda_intel-prealloc-4mb-dmabuffer.patch
     - rebase unionfs 2.5.4 for 2.6.35
     - adapt unionfs for vfs changes in 2.6.35
     - rebase squashfs lzma support
