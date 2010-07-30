@@ -240,11 +240,6 @@ Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}
 %endif
 %endif
 
-# netfilter ipset support (http://ipset.netfilter.org)
-# Patches for 2010.1/2010.0
-Patch70:	net-netfilter-ipset-4.2.patch
-Patch71:	net-netfilter-ipset-2.4.9.patch
-
 #END
 ####################################################################
 
@@ -655,15 +650,6 @@ cd %src_dir
 %endif
 
 %{patches_dir}/scripts/apply_patches
-
-# FIXME: allow apply_patches to apply patches depending on distro version...
-%if %{mdkversion} > 201000
-# ipset for 2010.1
-%patch70 -p1
-%else
-# ipset for 2010.0
-%patch71 -p1
-%endif
 
 # PATCH END
 
@@ -1396,6 +1382,7 @@ rm -rf %{buildroot}
     - rebase unionfs 2.5.4 for 2.6.35
     - adapt unionfs for vfs changes in 2.6.35
     - rebase squashfs lzma support
+    - drop ipset-2.4.9 patches (used for backporting 2010.1 kernel to 2010.0)
 
 * Tue Jul 27 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33.6-2mnb
   o Thomas Backlund <tmb@mandriva.org>
