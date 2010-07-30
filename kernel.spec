@@ -1351,6 +1351,9 @@ rm -rf %{buildroot}
         input-tablet-linuxwacom-0.8.5-12.patch
         kernel-panic-call-console_verbose-in-panic.patch
         kernel-Prioritize-synchronous-signals-over-normal-signals.patch
+        media-dvb-saa7134-avr-m135a-more-remotes.patch
+        media-dvb-saa7134-add-support-for-m733a.patch
+        media-video-revert-V4L-DVB-11906-saa7134-Use-v4l-bounding-alignment.patch
         net-atl1c-add-support-for-AR8151-AR8152.patch
         net-phylib-Support-phy-module-autoloading.patch
         net-phylib-Add-module-table-to-all-existing-phy-drivers.patch
@@ -1378,11 +1381,13 @@ rm -rf %{buildroot}
         sound-alsa-pcm_lib-fix-xrun-functionality.patch
         sound-alsa-pcm-fix-the-fix-of-the-runtime-boundary-calculation.patch
         sound-alsa-pcm-fix-delta-calculation-at-boundary-wraparound.patch
+        video-fb-fix-unregister_framebuffer-fb_destroy.patch
         x86-cpu-Add-AMD-core-boosting-feature-flag-to-proc-cpuinfo.patch
         x86-kernel-Send-a-SIGTRAP-for-user-icebp-traps.patch
         x86-kernel-set_bios_reboot-is-needed-for-Dell-Precision-WorkStation-T7400.patch
         x86-powernow-k8-Add-core-performance-boost-support.patch
       * rediff patches:
+        3rd-3rdparty-merge.patch
         acpi-add-proc-event-regs.patch
         char-agp-intel-new-Q57-id.patch
         include-kbuild-export-pci_ids.patch
