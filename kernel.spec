@@ -240,20 +240,6 @@ Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}
 %endif
 %endif
 
-# Nouveau for 2010.1
-# Merge in nouveau git, i.e. patches ending up in 2.6.34
-# This includes the interface change to 0.0.16, allowing and requiring the use
-# of recent userspace.
-# last included commit: drm/nv50: fix fbcon when framebuffer above 4GiB mark
-Patch50:	gpu-drm-nouveau-git-20100316.patch
-# Fix locking in call to drm_gem_object_unreference(). This was fixed upstream
-# in "Use drm_gem_object_[handle_]unreference_unlocked where possible", but
-# fixed here in a different way as the upstream fix depends on 2.6.34 drm.
-Patch51:	gpu-drm-nouveau-fix-missing-locking.patch
-
-# Nouveau for 2010.0 backports
-Patch60:	gpu-drm-nouveau-add-nv50-nv8x-nv9x-ctxprogs-generator.patch
-
 # netfilter ipset support (http://ipset.netfilter.org)
 # Patches for 2010.1/2010.0
 Patch70:	net-netfilter-ipset-4.2.patch
@@ -672,15 +658,9 @@ cd %src_dir
 
 # FIXME: allow apply_patches to apply patches depending on distro version...
 %if %{mdkversion} > 201000
-# nouveau for 2010.1 series
-# update nouveau to git-20100316
-%patch50 -p1
-%patch51 -p1
 # ipset for 2010.1
 %patch70 -p1
 %else
-# nouveau for 2010.0 backports
-%patch60 -p1
 # ipset for 2010.0
 %patch71 -p1
 %endif
@@ -1331,6 +1311,10 @@ rm -rf %{buildroot}
   o Thomas Backlund <tmb@mandriva.org>
     - add back missing Kconfig option so samsung-backlight is built (mdv #60386)
     - upgrade to 2.6.35-rc6-git
+      * drop merged patches:
+        gpu-drm-nouveau-add-nv50-nv8x-nv9x-ctxprogs-generator.patch
+        gpu-drm-nouveau-fix-missing-locking.patch
+        gpu-drm-nouveau-git-20100316.patch
 
 * Tue Jul 27 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33.6-2mnb
   o Thomas Backlund <tmb@mandriva.org>
