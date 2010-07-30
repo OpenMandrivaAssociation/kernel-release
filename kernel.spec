@@ -1337,9 +1337,32 @@ rm -rf %{buildroot}
         input-tablet-linuxwacom-0.8.5-12.patch
         kernel-panic-call-console_verbose-in-panic.patch
         kernel-Prioritize-synchronous-signals-over-normal-signals.patch
+        net-atl1c-add-support-for-AR8151-AR8152.patch
+        net-phylib-Support-phy-module-autoloading.patch
+        net-phylib-Add-module-table-to-all-existing-phy-drivers.patch
+        net-phylib-fix-typo-in-bcm6xx-PHY-driver-table.patch
+        net-r8169-Fix-rtl8169_rx_interrupt.patch
+        net-r8169-fix-random-mdio_write-failures.patch
+        net-r8169-fix-mdio_read-and-update-mdio_write-according-to-hw-specs.patch
+        net-sis190-link-status-poll.patch
+        net-wireless-Add-USB-ID-for-Thomson-SpeedTouch-120g-to-p54usb-id-.patch
+        net-wireless-ar9170-add-support-for-NEC-WL300NU-G-USB-dongle.patch
         pci-no-dmar.patch
         scsi-advansys-fix-regression-with-request_firmware-change.patch
         scsi-advansys-fix-narrow-board-error-path.patch
+        sound-alsa-hda-via-fix-master-mute-and-automute-with-VT1812_VT2002P.patch
+        sound-alsa-pcm_lib.c-convert-second-xrun_debug-parameter.patch
+        sound-alsa-pcm_lib-add-possibility-to-log-last-10-DMA-ring.patch
+        sound-alsa-pcm_lib-cleanup-merge-hw_ptr-update-functions.patch
+        sound-alsa-pcm_lib-optimize-wake_up-calls-for-PCM-I-O.patch
+        sound-alsa-pcm_lib-fix-something-must-be-really-wrong-condition.patch
+        sound-alsa-pcm_lib-fix-wrong-delta-print-for-jiffies-check.patch
+        sound-alsa-pcm_core-Fix-wake_up-optimization.patch
+        sound-alsa-pcm_lib-return-back-hw_ptr_interrupt.patch
+        sound-alsa-pcm_native-fix-runtime-boundary-calculation.patch
+        sound-alsa-pcm_lib-fix-xrun-functionality.patch
+        sound-alsa-pcm-fix-the-fix-of-the-runtime-boundary-calculation.patch
+        sound-alsa-pcm-fix-delta-calculation-at-boundary-wraparound.patch
         x86-cpu-Add-AMD-core-boosting-feature-flag-to-proc-cpuinfo.patch
         x86-kernel-Send-a-SIGTRAP-for-user-icebp-traps.patch
         x86-kernel-set_bios_reboot-is-needed-for-Dell-Precision-WorkStation-T7400.patch
@@ -1347,6 +1370,8 @@ rm -rf %{buildroot}
       * rediff patches:
         acpi-add-proc-event-regs.patch
         char-agp-intel-new-Q57-id.patch
+        include-kbuild-export-pci_ids.patch
+        platform-x86-add-samsung-backlight-driver.patch
     - rebase unionfs 2.5.4 for 2.6.35
     - adapt unionfs for vfs changes in 2.6.35
     - rebase squashfs lzma support
