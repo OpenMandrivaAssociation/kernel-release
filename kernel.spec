@@ -1330,6 +1330,8 @@ rm -rf %{buildroot}
         x86-powernow-k8-Add-core-performance-boost-support.patch
       * rediff patches:
         acpi-add-proc-event-regs.patch
+    - rebase unionfs 2.5.4 for 2.6.35
+    - adapt unionfs for vfs changes in 2.6.35
 
 * Tue Jul 27 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33.6-2mnb
   o Thomas Backlund <tmb@mandriva.org>
