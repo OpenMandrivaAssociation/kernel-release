@@ -1383,6 +1383,8 @@ rm -rf %{buildroot}
     - drop ipset-2.4.9 patches (used for backporting 2010.1 kernel to 2010.0)
     - merge source2 and source3 into one patch
     - enable CGROUPS for all kernels, update defconfigs
+    - add buildfixes for 2.6.35 for ndiswrapper, viahss, samsung-backlight,
+      and netfilter IFWLOG, ipset and psd modules
 
 * Tue Jul 27 2010 Thomas Backlund <tmb@mandriva.org> 2.6.33.6-2mnb
   o Thomas Backlund <tmb@mandriva.org>
