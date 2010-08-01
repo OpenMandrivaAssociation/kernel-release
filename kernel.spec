@@ -115,7 +115,7 @@
 %define build_devel 		1
 
 # Make kernel packages backportable
-%if %{mdkversion} < 201010
+%if %{mdkversion} < 201100
 # disable debug rpms for backports, it's enough already having them on cooker/stable
 %define build_debug 		0
 %else
@@ -261,7 +261,7 @@ http://www.mandriva.com/en/security/kernelupdate			\
 %define requires4	sysfsutils >= 1.3.0-1
 %define requires5	kernel-firmware >= 2.6.27-0.rc2.2mdv
 
-%define kprovides 	%{kname} = %{kverrel}, kernel = %{tar_ver}, alsa = 1.0.21, drbd-api = 88
+%define kprovides 	%{kname} = %{kverrel}, kernel = %{tar_ver}, alsa = 1.0.23, drbd-api = 88
 
 %define kconflicts	drakxtools-backend < 10.4.190-2
 
@@ -658,19 +658,6 @@ cd %src_dir
 #
 
 # Prepare all the variables for calling create_configs
-
-# Make kernel packages backportable
-%if %{mdkversion} < 201000
-# disable modesetting by default, no plymouth for distros < 2010.0
-sed -i  's/\(CONFIG_DRM_[A-Z0-9]\+_KMS\)=y/# \1 is not set/' \
-        %{patches_dir}/configs/*.config
-%endif
-%if %{mdkversion} < 201010
-# cups 1.4.x doesn't need usblp anymore, 2010.0 has cups 1.4.x but it is
-# patched to still handle the situation of usblp in kernel
-sed -i  's/^# CONFIG_USB_PRINTER is not set/CONFIG_USB_PRINTER=m/' \
-        %{patches_dir}/configs/*.config
-%endif
 
 %if %build_debug
 %define debug --debug
