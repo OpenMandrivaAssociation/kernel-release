@@ -180,7 +180,9 @@ Version: 	%{kversion}
 Release: 	%{rpmrel}
 License: 	GPLv2
 Group: 	 	System/Kernel and hardware
-ExclusiveArch: %{ix86} ppc powerpc x86_64 amd64 sparc sparc64
+# make 3.82 broke powerpc build
+#ExclusiveArch: %{ix86} ppc powerpc x86_64 amd64 sparc sparc64
+ExclusiveArch: %{ix86} x86_64 amd64 sparc sparc64
 ExclusiveOS: 	Linux
 URL:            http://wiki.mandriva.com/en/Manbo_Core2_kernel
 
@@ -1278,10 +1280,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Wed Jul 28 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Mon Aug  2 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - add back missing Kconfig option so samsung-backlight is built (mdv #60386)
-    - upgrade to 2.6.35-rc6-git
+    - upgrade to 2.6.35
       * drop merged patches:
         acpi-video-Be-more-liberal-in-validating-_BQC-behaviour.patch
         ata-ahci-add-missing-nv-IDs.patch
