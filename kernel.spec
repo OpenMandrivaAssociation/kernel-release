@@ -12,7 +12,7 @@
 %define sublevel	35
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1280,6 +1280,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu Aug  5 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - sched: Revert nohz_ratelimit(), as it causes excessive wakeups
+
 * Mon Aug  2 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - add back missing Kconfig option so samsung-backlight is built (mdv #60386)
