@@ -180,9 +180,7 @@ Version: 	%{kversion}
 Release: 	%{rpmrel}
 License: 	GPLv2
 Group: 	 	System/Kernel and hardware
-# make 3.82 broke powerpc build
-#ExclusiveArch: %{ix86} ppc powerpc x86_64 amd64 sparc sparc64
-ExclusiveArch: %{ix86} x86_64 amd64 sparc sparc64
+ExclusiveArch: %{ix86} ppc powerpc x86_64 amd64 sparc sparc64
 ExclusiveOS: 	Linux
 URL:            http://wiki.mandriva.com/en/Manbo_Core2_kernel
 
