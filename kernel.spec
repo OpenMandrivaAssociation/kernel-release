@@ -1282,6 +1282,7 @@ rm -rf %{buildroot}
   o Thomas Backlund <tmb@mandriva.org>
     - sched: Revert nohz_ratelimit(), as it causes excessive wakeups
     - powerpc: fix build breakage with make 3.82 (Sam Ravnborg)
+    - md: fix deadlock on raid10 during resync
 
 * Mon Aug  2 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35-1mnb
   o Thomas Backlund <tmb@mandriva.org>
