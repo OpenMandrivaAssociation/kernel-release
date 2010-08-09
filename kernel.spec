@@ -1284,6 +1284,12 @@ rm -rf %{buildroot}
     - powerpc: fix build breakage with make 3.82 (Sam Ravnborg)
     - md: fix deadlock on raid10 during resync
 
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Backport "vmscan: raise the bar to PAGEOUT_IO_SYNC stalls" and
+      "vmscan: synchronous lumpy reclaim don't call congestion_wait()"
+      changes (should fix behaviour reported at
+      http://lkml.org/lkml/2010/4/4/86).
+
 * Mon Aug  2 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - add back missing Kconfig option so samsung-backlight is built (mdv #60386)
