@@ -12,13 +12,13 @@
 %define sublevel	35
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		0
+%define kstable		1
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1278,8 +1278,9 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Aug  5 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Tue Aug 10 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.35.1
     - sched: Revert nohz_ratelimit(), as it causes excessive wakeups
     - powerpc: fix build breakage with make 3.82 (Sam Ravnborg)
     - md: fix deadlock on raid10 during resync
