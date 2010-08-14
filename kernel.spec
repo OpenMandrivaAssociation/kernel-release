@@ -1292,6 +1292,8 @@ rm -rf %{buildroot}
     - add Lenovo IdeaPad ACPI Laptop Extras support
     - ideapad: Only allow camera state to be set to 0 or 1
     - ideapad: Stop using global variables
+    - mm: fix page table unmap for stack guard page properly
+      (fixes 2.6.35.2 breakage (mostly triggered with PAE / HIGHPTE))
 
 * Tue Aug 10 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
