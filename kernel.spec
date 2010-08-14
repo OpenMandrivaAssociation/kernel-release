@@ -1290,7 +1290,6 @@ rm -rf %{buildroot}
 
   o Thomas Backlund <tmb@mandriva.org>
     - add Lenovo IdeaPad ACPI Laptop Extras support
-    - merge samsung-backlight with samsung-laptop that got merged upstream
 
 * Tue Aug 10 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
