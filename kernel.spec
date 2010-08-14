@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		1
+%define kstable		2
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1278,6 +1278,16 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sat Aug 14 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Update to 2.6.35.2, dropped merged patches:
+      arch-powerpc-fix-build-with-make-3.82.patch
+      kernel-sched-Revert-nohz_ratelimit.patch
+      pci-disable-MSI-on-Via-K8M800.patch
+      md-raid10-avoid-deadlock-on-resync.patch
+    - Updated ramzswap staging module to latest zram, (hg 193, see
+      http://code.google.com/p/compcache/issues/detail?id=68)
+
 * Tue Aug 10 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.35.1
