@@ -1288,6 +1288,9 @@ rm -rf %{buildroot}
     - Updated ramzswap staging module to latest zram, (hg 193, see
       http://code.google.com/p/compcache/issues/detail?id=68)
 
+  o Thomas Backlund <tmb@mandriva.org>
+    - add Lenovo IdeaPad ACPI Laptop Extras support
+
 * Tue Aug 10 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.35.1
