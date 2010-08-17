@@ -1278,7 +1278,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sat Aug 14 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Wed Aug 18 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.35.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Update to 2.6.35.2, dropped merged patches:
       arch-powerpc-fix-build-with-make-3.82.patch
