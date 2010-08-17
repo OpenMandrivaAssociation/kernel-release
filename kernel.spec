@@ -1285,8 +1285,10 @@ rm -rf %{buildroot}
       kernel-sched-Revert-nohz_ratelimit.patch
       pci-disable-MSI-on-Via-K8M800.patch
       md-raid10-avoid-deadlock-on-resync.patch
-    - Updated ramzswap staging module to latest zram, (hg 193, see
+    - Updated ramzswap staging module to latest zram (hg 193, see
       http://code.google.com/p/compcache/issues/detail?id=68)
+    - nfs: fix fsync error with nfs (upstream commit "NFS: fix the
+      return value of nfs_file_fsync()")
 
   o Thomas Backlund <tmb@mandriva.org>
     - add Lenovo IdeaPad ACPI Laptop Extras support
