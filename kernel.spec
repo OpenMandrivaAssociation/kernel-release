@@ -119,7 +119,7 @@
 # disable debug rpms for backports, it's enough already having them on cooker/stable
 %define build_debug 		0
 %else
-%define build_debug 		0
+%define build_debug 		1
 %endif
 
 # Build desktop i586 / 4GB
