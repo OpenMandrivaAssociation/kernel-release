@@ -119,7 +119,7 @@
 # disable debug rpms for backports, it's enough already having them on cooker/stable
 %define build_debug 		0
 %else
-%define build_debug 		1
+%define build_debug 		0
 %endif
 
 # Build desktop i586 / 4GB
@@ -1280,7 +1280,7 @@ rm -rf %{buildroot}
 %changelog
 * Wed Aug 18 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.35.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
-    - Update to 2.6.35.2, dropped merged patches:
+    - Update to 2.6.35.2 (CVE-2010-2240), dropped merged patches:
       arch-powerpc-fix-build-with-make-3.82.patch
       kernel-sched-Revert-nohz_ratelimit.patch
       pci-disable-MSI-on-Via-K8M800.patch
