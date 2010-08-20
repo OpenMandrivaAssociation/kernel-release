@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		2
+%define kstable		3
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1278,6 +1278,13 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Aug 20 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.35.3
+      * drop merged patches:
+        mm-fix-page-table-unmap-for-stack-guard-page-properly.patch
+        mm-fix-up-some-user-visible-effects-of-the-stack-guard-page.patch
+
 * Wed Aug 18 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.35.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Update to 2.6.35.2 (CVE-2010-2240), dropped merged patches:
