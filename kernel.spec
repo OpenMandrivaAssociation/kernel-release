@@ -1278,12 +1278,14 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Aug 20 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Sat Aug 21 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.35.3
       * drop merged patches:
         mm-fix-page-table-unmap-for-stack-guard-page-properly.patch
         mm-fix-up-some-user-visible-effects-of-the-stack-guard-page.patch
+    - fix 2.6.35.2 regression: Kernel panic or instant reboot on udev
+      modules loading (intel-agp, i915) (kbz #16612)
 
 * Wed Aug 18 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.35.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
