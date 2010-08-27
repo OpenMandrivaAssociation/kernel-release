@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		3
+%define kstable		4
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1278,12 +1278,14 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sat Aug 21 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Fri Aug 27 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
-    - update to 2.6.35.3
+    - update to 2.6.35.4 (CVE-2010-2803)
       * drop merged patches:
+        fs-nfs-fix-an-oops-in-the-NFSv4-atomic-open-code.patch
         mm-fix-page-table-unmap-for-stack-guard-page-properly.patch
         mm-fix-up-some-user-visible-effects-of-the-stack-guard-page.patch
+        x86-asm-Clean-up-and-simplify-set_64bit.patch
     - fix 2.6.35.2 regression: Kernel panic or instant reboot on udev
       modules loading (intel-agp, i915) (kbz #16612)
 
