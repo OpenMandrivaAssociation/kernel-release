@@ -1278,7 +1278,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Aug 27 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Fri Aug 27 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.35.4-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.35.4 (CVE-2010-2803)
       * drop merged patches:
