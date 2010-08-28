@@ -1278,7 +1278,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Aug 27 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.35.4-1mnb
+* Sat Aug 28 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.35.4-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.35.4 (CVE-2010-2803)
       * drop merged patches:
@@ -1288,6 +1288,15 @@ rm -rf %{buildroot}
         x86-asm-Clean-up-and-simplify-set_64bit.patch
     - fix 2.6.35.2 regression: Kernel panic or instant reboot on udev
       modules loading (intel-agp, i915) (kbz #16612)
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Merge following upstream fixes:
+      pci: fix type warnings in intr_remapping.c
+      intel-iommu: Fix 32-bit build warning with __cmpxchg()
+      Staging: dt3155v4l: correcting a pointer mismatch bug and cleanups
+      drivers/video/via/via-gpio.c: fix warning
+      x86, kvm: Remove cast obsoleted by set_64bit() prototype cleanup
+      um, x86: Cast to (u64 *) inside set_64bit()
 
 * Wed Aug 18 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.35.2-1mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
