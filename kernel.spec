@@ -1280,7 +1280,7 @@ rm -rf %{buildroot}
 %changelog
 * Tue Sep  7 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
   o Thomas Backlund <tmb@mandriva.org>
-    - raise CONFIG_NR_CPUS to 64 (mdv #60928)
+    - raise CONFIG_NR_CPUS to 64 on desktop(586) and to 128 on server (mdv #60928)
 
 * Sat Aug 28 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> 2.6.35.4-1mnb
   o Thomas Backlund <tmb@mandriva.org>
