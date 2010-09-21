@@ -1278,7 +1278,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Sep  7 2010 Herton Ronaldo Krzesinski <herton@mandriva.com.br> unreleased
+* Tue Sep 21 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35.5-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.35.5 (CVE-2010-3081, CVE-2010-3301)
     - raise CONFIG_NR_CPUS to 64 on desktop(586) and to 128 on server (mdv #60928)
