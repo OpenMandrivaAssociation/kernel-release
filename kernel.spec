@@ -1278,7 +1278,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Sep 27 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Mon Sep 27 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35.6-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.35.6 (CVE-2010-2960)
       * rediff char-agp-intel-new-Q57-id.patch
