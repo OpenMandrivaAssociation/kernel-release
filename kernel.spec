@@ -9,7 +9,7 @@
 #
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	35
+%define sublevel	36
 
 # Package release
 %define mnbrel		1
@@ -17,10 +17,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		6
+%define kpatch		rc6
+%define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kgit		2
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1278,6 +1278,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sun Oct  3 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.36-rc6-git2
+
 * Mon Sep 27 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35.6-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.35.6 (CVE-2010-2960)
