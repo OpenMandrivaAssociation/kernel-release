@@ -1281,6 +1281,21 @@ rm -rf %{buildroot}
 * Sun Oct  3 2010 Thomas Backlund <tmb@mandriva.org> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.36-rc6-git2
+      * drop merged patches:
+        fs-nfs-fix-the-return-value-of-nfs_file_fsync.patch
+        mm-vmscan-raise-the-bar-to-PAGEOUT_IO_SYNC-stalls.patch
+        mm-vmscan-synchronous-lumpy-reclaim-dont-call-congestion_wait.patch
+        pci-fix-type-warnings-in-intr_remapping.c.patch
+        pci-intel-iommu-Fix-32-bit-build-warning-with-__cmpxchg.patch
+        platform-x86-add-lenovo-ideapad.patch
+        platform-lenovo-ideapad-Only-allow-camera-state-to-be-set-to-0-or-1.patch
+        platform-lenovo-ideapad-Stop-using-global-variables.patch
+        staging-dt3155v4l-correcting-a-pointer-mismatch-bug.patch
+        staging-update-ramzswap-to-zram-hg193.patch
+        um-x86-Cast-to-u64-inside-set_64bit.patch
+        video-via-via-gpio.c-fix-warning.patch
+        x86-asm-Clean-up-and-simplify-asm-cmpxchg.h.patch
+        x86-kvm-Remove-cast-obsoleted-by-set_64bit-prototype.patch
 
 * Mon Sep 27 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35.6-1mnb
   o Thomas Backlund <tmb@mandriva.org>
