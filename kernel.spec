@@ -1278,7 +1278,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sun Oct  3 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Sun Oct  3 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-0.rc6.2.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.36-rc6-git2
       * drop merged patches:
@@ -1305,10 +1305,12 @@ rm -rf %{buildroot}
         net-netfilter-psd-mdv.patch
         platform-x86-add-samsung-backlight-driver.patch
         serial-docomo-F2402.patch
-    - add ndiswrapper buildfix for 2.6.36
+    - add heci, mach64 and ndiswrapper buildfixes for 2.6.36
+    - add intel drm fixes from upsteam heading for 2.6.36 final
     - update unionfs to 2.5.6
     - revert squashfs lzo support (conflicts with lzma support)
     - remove tile arch from source/devel rpms
+    - update defconfigs
 
 * Mon Sep 27 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35.6-1mnb
   o Thomas Backlund <tmb@mandriva.org>
