@@ -799,7 +799,7 @@ SaveDevel() {
 	cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
 
 	for i in alpha arm avr32 blackfin cris frv h8300 ia64 m32r m68knommu \
-	         microblaze mips mn10300 parisc s390 score sh xtensa; do
+	         microblaze mips mn10300 parisc s390 score sh tile xtensa; do
 		rm -rf $TempDevelRoot/arch/$i
 	done
 
@@ -1124,7 +1124,7 @@ chmod -R a+rX %{target_source}
 # we remove all the source files that we don't ship
 # first architecture files
 for i in alpha arm arm26 avr32 blackfin cris frv h8300 ia64 m32r m68knommu \
-         microblaze mips parisc s390 score sh sh64 v850 xtensa mn10300; do
+         microblaze mips parisc s390 score sh sh64 tile v850 xtensa mn10300; do
 	rm -rf %{target_source}/arch/$i
 done
 
@@ -1308,6 +1308,7 @@ rm -rf %{buildroot}
     - add ndiswrapper buildfix for 2.6.36
     - update unionfs to 2.5.6
     - revert squashfs lzo support (conflicts with lzma support)
+    - remove tile arch from source/devel rpms
 
 * Mon Sep 27 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35.6-1mnb
   o Thomas Backlund <tmb@mandriva.org>
