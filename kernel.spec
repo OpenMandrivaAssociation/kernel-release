@@ -1296,6 +1296,18 @@ rm -rf %{buildroot}
         video-via-via-gpio.c-fix-warning.patch
         x86-asm-Clean-up-and-simplify-asm-cmpxchg.h.patch
         x86-kvm-Remove-cast-obsoleted-by-set_64bit-prototype.patch
+      * rediff patches:
+        3rd-3rdparty-merge.patch
+        char-agp-intel-new-Q57-id.patch
+        fs-dynamic-nls-default.patch
+        include-kbuild-export-pci_ids.patch
+        net-netfilter-IFWLOG-mdv.patch
+        net-netfilter-psd-mdv.patch
+        platform-x86-add-samsung-backlight-driver.patch
+        serial-docomo-F2402.patch
+    - add ndiswrapper buildfix for 2.6.36
+    - update unionfs to 2.5.6
+    - revert squashfs lzo support (conflicts with lzma support)
 
 * Mon Sep 27 2010 Thomas Backlund <tmb@mandriva.org> 2.6.35.6-1mnb
   o Thomas Backlund <tmb@mandriva.org>
