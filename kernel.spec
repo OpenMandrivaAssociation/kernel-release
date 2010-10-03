@@ -1305,7 +1305,7 @@ rm -rf %{buildroot}
         net-netfilter-psd-mdv.patch
         platform-x86-add-samsung-backlight-driver.patch
         serial-docomo-F2402.patch
-    - add heci, mach64 and ndiswrapper buildfixes for 2.6.36
+    - add acerhk, heci, mach64 and ndiswrapper buildfixes for 2.6.36
     - add intel drm fixes from upsteam heading for 2.6.36 final
     - update unionfs to 2.5.6
     - revert squashfs lzo support (conflicts with lzma support)
