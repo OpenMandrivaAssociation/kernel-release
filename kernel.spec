@@ -257,7 +257,7 @@ http://www.mandriva.com/en/security/kernelupdate			\
 ### Global Requires/Provides
 %define requires1	bootloader-utils >= 1.13-1
 %define requires2	mkinitrd >= 4.2.17-31
-%define requires3	module-init-tools >= 3.0-7
+%define requires3	module-init-tools >= 3.6-12
 %define requires4	sysfsutils >= 1.3.0-1
 %define requires5	kernel-firmware >= 2.6.27-0.rc2.2mdv
 
@@ -1278,6 +1278,13 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon Oct  4 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - enable the new firewire stack (juju) so we can start testing apps
+      against it (old stack is scheduled for removal around 2.6.37-39)
+      (module-init-tools >= 3.6-12 have the new core blacklisted for
+       now to avoid breakage)
+
 * Sun Oct  3 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-0.rc6.2.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.36-rc6-git2
