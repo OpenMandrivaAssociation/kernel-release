@@ -17,10 +17,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc6
+%define kpatch		rc7
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		2
+%define kgit		0
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1284,6 +1284,9 @@ rm -rf %{buildroot}
       against it (old stack is scheduled for removal around 2.6.37-39)
       (module-init-tools >= 3.6-12 have the new core blacklisted for
        now to avoid breakage)
+    - update to 2.6.36-rc7
+      * drop merged patch:
+        gpu-drm-intel-git-fixes.patch
 
 * Sun Oct  3 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-0.rc6.2.1mnb
   o Thomas Backlund <tmb@mandriva.org>
