@@ -1278,7 +1278,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Oct  4 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Thu Oct  7 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-0.rc7.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - enable the new firewire stack (juju) so we can start testing apps
       against it (old stack is scheduled for removal around 2.6.37-39)
@@ -1287,6 +1287,12 @@ rm -rf %{buildroot}
     - update to 2.6.36-rc7
       * drop merged patch:
         gpu-drm-intel-git-fixes.patch
+    - add fixes queued for 2.6.36 final:
+      elevator: fix oops on early call to elevator_change() (upstream git)
+      drm: don't drop handle reference on unload (upstream git)
+      drm/ttm: Fix two race conditions + fix busy codepaths (upstream git)
+      rcu: move check from rcu_dereference_bh to rcu_read_lock_bh_held (upstream git)
+      xfs: properly account for reclaimed inodes (upstream git)
 
 * Sun Oct  3 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-0.rc6.2.1mnb
   o Thomas Backlund <tmb@mandriva.org>
