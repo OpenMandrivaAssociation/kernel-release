@@ -1278,6 +1278,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Oct  8 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - fix defconfig creation when enabling debug
+
 * Thu Oct  7 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-0.rc7.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - enable the new firewire stack (juju) so we can start testing apps
