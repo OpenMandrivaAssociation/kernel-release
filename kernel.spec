@@ -1281,6 +1281,8 @@ rm -rf %{buildroot}
 * Fri Oct  8 2010 Thomas Backlund <tmb@mandriva.org> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - fix defconfig creation when enabling debug
+    - alsa: patch_sigmatel: fix master playback volume mute
+      (patch by Clemens Ladisch, requested by Colin Guthrie)
 
 * Thu Oct  7 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-0.rc7.1mnb
   o Thomas Backlund <tmb@mandriva.org>
