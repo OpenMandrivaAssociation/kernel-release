@@ -20,7 +20,7 @@
 %define kpatch		rc8
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kgit		1
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1278,12 +1278,12 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Oct 15 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Fri Oct 15 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-0.rc8.1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - fix defconfig creation when enabling debug
     - alsa: patch_sigmatel: fix master playback volume mute
       (patch by Clemens Ladisch, requested by Colin Guthrie)
-    - Update to 2.6.36-rc8
+    - Update to 2.6.36-rc8-git1
       * drop merged patches:
         block-elevator-git.patch
         fs-xfs-git.patch
