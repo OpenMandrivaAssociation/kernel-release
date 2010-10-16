@@ -1278,6 +1278,12 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sat Oct 16 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - update patch:
+      ALSA: HDA: Sigmatel: work around incorrect master muting
+      (patch by Clemens Ladisch, requested by Colin Guthrie)
+
 * Fri Oct 15 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-0.rc8.1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - fix defconfig creation when enabling debug
