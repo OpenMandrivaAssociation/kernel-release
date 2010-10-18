@@ -605,9 +605,7 @@ Version: 	%{kversion}
 Release: 	%{rpmrel}
 Summary: 	Various documentation bits found in the %{kname} source
 Group: 		Books/Computer books
-%ifarch %{ix86}
-Conflicts:	arch(x86_64)
-%endif
+Buildarch:	noarch
 
 %description -n %{kname}-doc
 This package contains documentation files from the %{kname} source.
@@ -1283,6 +1281,7 @@ rm -rf %{buildroot}
     - update patch:
       ALSA: HDA: Sigmatel: work around incorrect master muting
       (patch by Clemens Ladisch, requested by Colin Guthrie)
+    - make doc subpackage noarch
 
 * Fri Oct 15 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-0.rc8.1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
