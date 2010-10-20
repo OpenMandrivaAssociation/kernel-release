@@ -17,10 +17,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc8
+%define kpatch		0
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		1
+%define kgit		0
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1276,12 +1276,13 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sat Oct 16 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Wed Oct 20 2010 Thomas Backlund <tmb@mandriva.org> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - update patch:
       ALSA: HDA: Sigmatel: work around incorrect master muting
       (patch by Clemens Ladisch, requested by Colin Guthrie)
     - make doc subpackage noarch
+    - make squashfs lzma support coexist with lzo
 
 * Fri Oct 15 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-0.rc8.1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
