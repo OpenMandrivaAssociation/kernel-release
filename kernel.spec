@@ -1276,13 +1276,14 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Wed Oct 20 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Thu Oct 21 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update patch:
       ALSA: HDA: Sigmatel: work around incorrect master muting
       (patch by Clemens Ladisch, requested by Colin Guthrie)
     - make doc subpackage noarch
     - make squashfs lzma support coexist with lzo
+    - update to 2.6.36 final
 
 * Fri Oct 15 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-0.rc8.1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
