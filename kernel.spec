@@ -12,7 +12,7 @@
 %define sublevel	36
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1276,6 +1276,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu Oct 21 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - microblaze: fix build with make 3.82
+
 * Thu Oct 21 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update patch:
