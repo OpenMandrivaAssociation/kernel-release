@@ -1279,6 +1279,7 @@ rm -rf %{buildroot}
 * Thu Oct 21 2010 Thomas Backlund <tmb@mandriva.org> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - microblaze: fix build with make 3.82
+    - TOMOYO: Print URL information before panic() (mdv #61723)
 
 * Thu Oct 21 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-1mnb
   o Thomas Backlund <tmb@mandriva.org>
