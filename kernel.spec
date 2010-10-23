@@ -1276,10 +1276,12 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Oct 21 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Sat Oct 23 2010 Thomas Backlund <tmb@mandriva.org> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - microblaze: fix build with make 3.82
     - TOMOYO: Print URL information before panic() (mdv #61723)
+    - ALSA: hda - Fix wrong TLV mute bit for STAC/IDT codecs
+      (Patch by Takashi Iwai,  requested by Colin Guthrie)
 
 * Thu Oct 21 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-1mnb
   o Thomas Backlund <tmb@mandriva.org>
