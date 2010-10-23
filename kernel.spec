@@ -1281,7 +1281,8 @@ rm -rf %{buildroot}
     - microblaze: fix build with make 3.82
     - TOMOYO: Print URL information before panic() (mdv #61723)
     - ALSA: hda - Fix wrong TLV mute bit for STAC/IDT codecs
-      (Patch by Takashi Iwai,  requested by Colin Guthrie)
+      (Patch by Takashi Iwai, requested by Colin Guthrie)
+    - ALSA: tlv - Define numbers in sound/tlv.h (Takashi Iwai)
 
 * Thu Oct 21 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-1mnb
   o Thomas Backlund <tmb@mandriva.org>
