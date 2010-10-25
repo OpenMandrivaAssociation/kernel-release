@@ -1283,6 +1283,8 @@ rm -rf %{buildroot}
     - ALSA: hda - Fix wrong TLV mute bit for STAC/IDT codecs
       (Patch by Takashi Iwai, requested by Colin Guthrie)
     - ALSA: tlv - Define numbers in sound/tlv.h (Takashi Iwai)
+    - ALSA: hda - Disable sticky PCM stream assignment for AD codecs
+      (Patch by Takashi Iwai, requested by Colin Guthrie)
     - cfq: improve fsync performance for small files
 
 * Thu Oct 21 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-1mnb
