@@ -1281,12 +1281,12 @@ rm -rf %{buildroot}
     - microblaze: fix build with make 3.82
     - TOMOYO: Print URL information before panic() (mdv #61723)
     - ALSA: hda - Fix wrong TLV mute bit for STAC/IDT codecs
-      (Patch by Takashi Iwai, requested by Colin Guthrie)
+      (Patch by Clemens Ladisch, requested by Colin Guthrie)
     - ALSA: tlv - Define numbers in sound/tlv.h (Takashi Iwai)
     - ALSA: hda - Disable sticky PCM stream assignment for AD codecs
       (Patch by Takashi Iwai, requested by Colin Guthrie)
-    - ALSA: OSS mixer emulation - fix locking (Takashi Iwai)
-    - ALSA: hda - Fix codec muted after rebooting from Windows (Takashi Iwai)
+    - ALSA: OSS mixer emulation - fix locking (Jaroslav Kysela)
+    - ALSA: hda - Fix codec muted after rebooting from Windows (Charles Chin)
     - ALSA: hda - Add workarounds for CT-IBG controllers (Takashi Iwai)
     - ALSA: hda - Add some workarounds for Creative IBG (Takashi Iwai)
     - ALSA: hda - Fix wrong SPDIF NID assignment for CA0110 (Takashi Iwai)
