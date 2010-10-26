@@ -1286,6 +1286,7 @@ rm -rf %{buildroot}
     - ALSA: hda - Disable sticky PCM stream assignment for AD codecs
       (Patch by Takashi Iwai, requested by Colin Guthrie)
     - ALSA: OSS mixer emulation - fix locking (Jaroslav Kysela)
+    - ALSA: hda - Add Vortex86MX PCI ids (Otavio Salvador)
     - ALSA: hda - Fix codec muted after rebooting from Windows (Charles Chin)
     - ALSA: hda - Add workarounds for CT-IBG controllers (Takashi Iwai)
     - ALSA: hda - Add some workarounds for Creative IBG (Takashi Iwai)
