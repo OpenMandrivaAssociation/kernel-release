@@ -1276,7 +1276,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sat Oct 23 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Tue Oct 26 2010 Thomas Backlund <tmb@mandriva.org> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - microblaze: fix build with make 3.82
     - TOMOYO: Print URL information before panic() (mdv #61723)
@@ -1285,6 +1285,11 @@ rm -rf %{buildroot}
     - ALSA: tlv - Define numbers in sound/tlv.h (Takashi Iwai)
     - ALSA: hda - Disable sticky PCM stream assignment for AD codecs
       (Patch by Takashi Iwai, requested by Colin Guthrie)
+    - ALSA: OSS mixer emulation - fix locking (Takashi Iwai)
+    - ALSA: hda - Fix codec muted after rebooting from Windows (Takashi Iwai)
+    - ALSA: hda - Add workarounds for CT-IBG controllers (Takashi Iwai)
+    - ALSA: hda - Add some workarounds for Creative IBG (Takashi Iwai)
+    - ALSA: hda - Fix wrong SPDIF NID assignment for CA0110 (Takashi Iwai)
     - cfq: improve fsync performance for small files
 
 * Thu Oct 21 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-1mnb
