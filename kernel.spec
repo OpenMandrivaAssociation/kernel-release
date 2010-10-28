@@ -1292,6 +1292,8 @@ rm -rf %{buildroot}
     - ALSA: hda - Add some workarounds for Creative IBG (Takashi Iwai)
     - ALSA: hda - Fix wrong SPDIF NID assignment for CA0110 (Takashi Iwai)
     - cfq: improve fsync performance for small files
+    - kbuild: do not remove a.out kvm.h and kvm_para.h on headers_install_all
+      (Kirill A. Shutemov, LKML)
 
 * Thu Oct 21 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-1mnb
   o Thomas Backlund <tmb@mandriva.org>
