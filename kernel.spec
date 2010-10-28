@@ -1294,6 +1294,11 @@ rm -rf %{buildroot}
     - cfq: improve fsync performance for small files
     - kbuild: do not remove a.out kvm.h and kvm_para.h on headers_install_all
       (Kirill A. Shutemov, LKML)
+     - drm/radeon/kms fixes from upstream (Alex Deucher):
+       * make sure blit addr masks are 64 bit
+       * MC vram map needs to be >= pci aperture size
+       * properly compute group_size on 6xx/7xx
+       * fix handling of tex lookup disable in cs checker on r2xx
 
 * Thu Oct 21 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-1mnb
   o Thomas Backlund <tmb@mandriva.org>
