@@ -1299,6 +1299,11 @@ rm -rf %{buildroot}
        * MC vram map needs to be >= pci aperture size
        * properly compute group_size on 6xx/7xx
        * fix handling of tex lookup disable in cs checker on r2xx
+    - firewire (JuJu) fixes from upstream (Clemens Ladisch):
+      * firewire: ohci: fix buffer overflow in AR split packet handling
+      * firewire: ohci: fix race in AR split packet handling
+      * firewire: ohci: avoid reallocation of AR buffers
+      * firewire: ohci: fix race when reading count in AR descriptor
 
 * Thu Oct 21 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-1mnb
   o Thomas Backlund <tmb@mandriva.org>
