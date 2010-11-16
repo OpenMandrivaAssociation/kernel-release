@@ -1397,7 +1397,7 @@ rm -rf %{buildroot}
       modules loading (intel-agp, i915) (kbz #16612)
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
-    - Merge following upstream fixes:
+	- Merge following upstream fixes:
       pci: fix type warnings in intr_remapping.c
       intel-iommu: Fix 32-bit build warning with __cmpxchg()
       Staging: dt3155v4l: correcting a pointer mismatch bug and cleanups
