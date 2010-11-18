@@ -1276,6 +1276,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu Nov 18 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - update unionfs to v 2.5.7
+
 * Fri Oct 29 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-2mnb
   o Thomas Backlund <tmb@mandriva.org>
     - microblaze: fix build with make 3.82
