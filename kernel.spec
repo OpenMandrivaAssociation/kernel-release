@@ -1283,6 +1283,7 @@ rm -rf %{buildroot}
       during build (mdv #61719)
     - update to 2.6.36.1
     - add intel_idle fixes (Len Brown, LKML)
+    - ext4: fix NULL pointer dereference in print_daily_error_info()
 
 * Fri Oct 29 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-2mnb
   o Thomas Backlund <tmb@mandriva.org>
