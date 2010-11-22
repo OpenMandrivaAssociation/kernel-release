@@ -1276,12 +1276,13 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Nov 22 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.1-1mnb
+* Mon Nov 22 2010 Thomas Backlund <tmb@mandriva.org> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - update unionfs to v 2.5.7
     - make kernel-source require diffutils as it uses both diff and cmp
       during build (mdv #61719)
     - update to 2.6.36.1
+    - add intel_idle fixes (Len Brown, LKML)
 
 * Fri Oct 29 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-2mnb
   o Thomas Backlund <tmb@mandriva.org>
