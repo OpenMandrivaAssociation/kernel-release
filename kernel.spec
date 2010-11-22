@@ -529,7 +529,7 @@ processor mode, use the "nosmp" boot parameter.
 %package -n %{kname}-source-%{buildrel}
 Version: 	%{fakever}
 Release: 	%{fakerel}
-Requires: 	glibc-devel, ncurses-devel, make, gcc, perl
+Requires: 	glibc-devel, ncurses-devel, make, gcc, perl, diffutils
 Summary: 	The Linux source code for %{kname}-%{buildrel}
 Group: 		Development/Kernel
 Autoreqprov: 	no
@@ -1279,6 +1279,8 @@ rm -rf %{buildroot}
 * Thu Nov 18 2010 Thomas Backlund <tmb@mandriva.org> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - update unionfs to v 2.5.7
+    - make kernel-source require diffutils as it uses both diff and cmp
+      during build (mdv #61719)
 
 * Fri Oct 29 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36-2mnb
   o Thomas Backlund <tmb@mandriva.org>
