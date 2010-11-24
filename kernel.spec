@@ -1276,6 +1276,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon Nov 24 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Updated ipset to version 4.4
+
 * Mon Nov 22 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update unionfs to v 2.5.7
