@@ -1281,6 +1281,7 @@ rm -rf %{buildroot}
     - Updated ipset to version 4.4
     - ALSA, hda: fix wrong mixer nids given to alc_auto_create_input_ctls
       for ALC660-VD/ALC861-VD hda codecs (MDV #61159)
+    - rtl8187: miscellaneous cleanups and bug fixes.
 
 * Mon Nov 22 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
