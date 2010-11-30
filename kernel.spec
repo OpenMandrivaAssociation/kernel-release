@@ -1283,6 +1283,10 @@ rm -rf %{buildroot}
       for ALC660-VD/ALC861-VD hda codecs (MDV #61159)
     - rtl8187: miscellaneous cleanups and bug fixes.
 
+  o Thomas Backlund <tmb@mandriva.org>
+    - sched, cgroup: Fixup broken cgroup movement (Peter Zijlstra, LKML)
+    - sched: automated per session task groups v4 (Mike Galbraith, LKML)
+
 * Mon Nov 22 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update unionfs to v 2.5.7
