@@ -12,7 +12,7 @@
 %define sublevel	36
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1276,7 +1276,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Nov 24 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Tue Nov 30 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.1-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Updated ipset to version 4.4
     - ALSA, hda: fix wrong mixer nids given to alc_auto_create_input_ctls
@@ -1285,7 +1285,7 @@ rm -rf %{buildroot}
 
   o Thomas Backlund <tmb@mandriva.org>
     - sched, cgroup: Fixup broken cgroup movement (Peter Zijlstra, LKML)
-    - sched: automated per session task groups v4 (Mike Galbraith, LKML)
+    - sched: automated per session task groups 20101130 (Mike Galbraith, LKML)
     - dm-crypt: scale to multiple CPUs v5
 
 * Mon Nov 22 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.1-1mnb
