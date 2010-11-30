@@ -1286,6 +1286,7 @@ rm -rf %{buildroot}
   o Thomas Backlund <tmb@mandriva.org>
     - sched, cgroup: Fixup broken cgroup movement (Peter Zijlstra, LKML)
     - sched: automated per session task groups v4 (Mike Galbraith, LKML)
+    - dm-crypt: scale to multiple CPUs v5
 
 * Mon Nov 22 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.1-1mnb
   o Thomas Backlund <tmb@mandriva.org>
