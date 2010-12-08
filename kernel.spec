@@ -12,13 +12,13 @@
 %define sublevel	36
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		1
+%define kpatch		rc1
+%define kstable		2
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1276,6 +1276,28 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Dec  8 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.36.2-rc1
+      * drop merged patches:
+        microblaze-fix-build-with-make-3.82.patch
+        fs-ext4-fix-NULL-pointer-dereference-in-print_daily_error_info.patch
+        firewire-ohci-fix-buffer-overflow-in-AR-split-packet-handling.patch
+        firewire-ohci-fix-race-in-AR-split-packet-handling.patch
+        gpu-drm-radeon-kms-make-sure-blit-addr-masks-are-64-bit.patch
+        gpu-drm-radeon-kms-fix-2D-tile-height-alignment-in-the-r600-CS-checker.patch
+        gpu-drm-radeon-kms-MC-vram-map-needs-to-be-bigger-than-pci-aperture-size.patch
+        gpu-drm-radeon-kms-properly-compute-group_size-on-6xx-7xx.patch
+        gpu-drm-radeon-kms-fix-handling-of-tex-lookup-disable-in-cs-checker-on-r2xx.patch
+        sound-alsa-hda-Disable-sticky-PCM-stream-assignment-for-AD-codecs.patch
+        sound-alsa-OSS-mixer-emulation-fix-locking.patch
+        sound-alsa-hda-add-Vortex86MX-PCI-ids.patch
+        sound-alsa-hda-Fix-codec-muted-after-rebooting-from-Windows.patch
+        sound-alsa-hda-Add-workarounds-for-CT-IBG-controllers.patch
+        sound-alsa-hda-Add-some-workarounds-for-Creative-IBG.patch
+        sound-alsa-hda-Fix-wrong-SPDIF-NID-assignment-for-CA0110.patch
+        sound-alsa-hda-Fix-ALC660-ALC861-VD-capture-playback-mixers.patch
+
 * Tue Nov 30 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.1-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Updated ipset to version 4.4
