@@ -257,7 +257,18 @@ http://www.mandriva.com/en/security/kernelupdate			\
 ### Global Requires/Provides
 %define requires1	bootloader-utils >= 1.13-1
 %define requires2	mkinitrd >= 4.2.17-31
+# We require module-init-tools >= 3.6-12 to enable both old and new (juju)
+# firewire stacks and blacklist old stack in module-init-tools. But for
+# backports, lets just disable new firewire stack for now, and thus avoid
+# requiring new module-init-tools. When we update to a kernel version which
+# removes old firewire stack, we can remove this check, and revert to require
+# only old module-init-tools version, and remove blacklist from newer
+# module-init-tools versions
+%if %{mdkversion} < 201100
+%define requires3	module-init-tools >= 3.0-7
+%else
 %define requires3	module-init-tools >= 3.6-12
+%endif
 %define requires4	sysfsutils >= 1.3.0-1
 %define requires5	kernel-firmware >= 2.6.27-0.rc2.2mdv
 
@@ -656,6 +667,13 @@ cd %src_dir
 #
 
 # Prepare all the variables for calling create_configs
+
+# Make kernel packages backportable
+%if %{mdkversion} < 201100
+# disable new firewire stack for distros < 2011.0
+sed -i 's/\(CONFIG_FIREWIRE\)=m/# \1 is not set/' \
+       %{patches_dir}/configs/*.config
+%endif
 
 %if %build_debug
 %define debug --debug
@@ -1297,6 +1315,12 @@ rm -rf %{buildroot}
         sound-alsa-hda-Add-some-workarounds-for-Creative-IBG.patch
         sound-alsa-hda-Fix-wrong-SPDIF-NID-assignment-for-CA0110.patch
         sound-alsa-hda-Fix-ALC660-ALC861-VD-capture-playback-mixers.patch
+
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - If building a backport of 2.6.36 for older distros (like 2010.1),
+      don't enable new firewire stack, thus avoiding requirement on
+      newer module-init-tools, as we enable both stacks for now and
+      blacklist the old one in module-init-tools.
 
 * Tue Nov 30 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.1-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
