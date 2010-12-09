@@ -1318,6 +1318,7 @@ rm -rf %{buildroot}
     - firewire-ohci: disable MSI on all VIA firewire controllers
     - firewire-ohci: disable MSI on Agere FW643 rev 06 controller
     - af_unix: limit unix_tot_inflight (fixes unix socket OOM)
+    - af_unix: limit recursion level (fixes unix socket OOM with NMI watchdog)
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - If building a backport of 2.6.36 for older distros (like 2010.1),
