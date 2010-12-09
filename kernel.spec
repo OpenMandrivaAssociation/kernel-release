@@ -1315,6 +1315,7 @@ rm -rf %{buildroot}
         sound-alsa-hda-Add-some-workarounds-for-Creative-IBG.patch
         sound-alsa-hda-Fix-wrong-SPDIF-NID-assignment-for-CA0110.patch
         sound-alsa-hda-Fix-ALC660-ALC861-VD-capture-playback-mixers.patch
+    - firewire: disable MSI on all VIA firewire controllers
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - If building a backport of 2.6.36 for older distros (like 2010.1),
