@@ -17,7 +17,7 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc1
+%define kpatch		0
 %define kstable		2
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
@@ -1294,9 +1294,9 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Wed Dec  8 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Fri Dec 10 2010 Thomas Backlund <tmb@mandriva.org> unreleased
   o Thomas Backlund <tmb@mandriva.org>
-    - update to 2.6.36.2-rc1
+    - update to 2.6.36.2
       * drop merged patches:
         microblaze-fix-build-with-make-3.82.patch
         fs-ext4-fix-NULL-pointer-dereference-in-print_daily_error_info.patch
