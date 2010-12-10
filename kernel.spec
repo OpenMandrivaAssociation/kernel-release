@@ -1317,8 +1317,7 @@ rm -rf %{buildroot}
         sound-alsa-hda-Fix-ALC660-ALC861-VD-capture-playback-mixers.patch
     - firewire-ohci: disable MSI on all VIA firewire controllers
     - firewire-ohci: disable MSI on Agere FW643 rev 06 controller
-    - af_unix: limit unix_tot_inflight (CVE-2010-4249)
-    - af_unix: limit recursion level (CVE-2010-4249)
+    - af_unix: limit unix_tot_inflight and recursion level (CVE-2010-4249)
 
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - If building a backport of 2.6.36 for older distros (like 2010.1),
