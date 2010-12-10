@@ -1296,7 +1296,7 @@ rm -rf %{buildroot}
 %changelog
 * Fri Dec 10 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.2-1mnb
   o Thomas Backlund <tmb@mandriva.org>
-    - update to 2.6.36.2
+    - update to 2.6.36.2 (CVE-2010-3848, CVE-2010-3849, CVE-2010-3850, CVE-2010-4258)
       * drop merged patches:
         microblaze-fix-build-with-make-3.82.patch
         fs-ext4-fix-NULL-pointer-dereference-in-print_daily_error_info.patch
