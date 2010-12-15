@@ -1294,6 +1294,12 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Dec 15 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+    - Add new shuttle-wmi x86 platform driver. Blacklist backlight
+      controls for some shuttle devices in acpi video driver for them
+      to work properly with quirk in shuttle-wmi.
+
 * Fri Dec 10 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.2-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.36.2 (CVE-2010-3848, CVE-2010-3849, CVE-2010-3850, CVE-2010-4258)
