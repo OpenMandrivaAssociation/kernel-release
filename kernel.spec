@@ -1299,6 +1299,7 @@ rm -rf %{buildroot}
     - Add new shuttle-wmi x86 platform driver. Blacklist backlight
       controls for some shuttle devices in acpi video driver for them
       to work properly with quirk in shuttle-wmi.
+    - mac80211: avoid calling ieee80211_work_work unconditionally
 
 * Fri Dec 10 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.2-1mnb
   o Thomas Backlund <tmb@mandriva.org>
