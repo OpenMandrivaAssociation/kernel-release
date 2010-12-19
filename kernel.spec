@@ -1306,6 +1306,9 @@ rm -rf %{buildroot}
       the final code merged upstream in -tip
     - sched: fix autogroup proc interface potential access to freed memory
     - sched: fix skip_clock_update optimization to be more robust
+    - drm/kms: remove spaces from connector names
+    - drm/radeon/kms: fix vram base calculation on rs780/rs880
+    - drm/radeon/kms: don't apply 7xx HDP flush workaround on AGP
 
 * Fri Dec 10 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.2-1mnb
   o Thomas Backlund <tmb@mandriva.org>
