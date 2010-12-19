@@ -1294,12 +1294,16 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Wed Dec 15 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Sun Dec 19 2010 Thomas Backlund <tmb@mandriva.org> unreleased
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Add new shuttle-wmi x86 platform driver. Blacklist backlight
       controls for some shuttle devices in acpi video driver for them
       to work properly with quirk in shuttle-wmi.
     - mac80211: avoid calling ieee80211_work_work unconditionally
+
+  o Thomas Backlund <tmb@mandriva.org>
+    - update "sched: automated per session task groups" patch to
+      the final code merged upstream in -tip
 
 * Fri Dec 10 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.2-1mnb
   o Thomas Backlund <tmb@mandriva.org>
