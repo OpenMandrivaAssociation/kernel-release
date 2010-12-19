@@ -1304,6 +1304,7 @@ rm -rf %{buildroot}
   o Thomas Backlund <tmb@mandriva.org>
     - update "sched: automated per session task groups" patch to
       the final code merged upstream in -tip
+    - sched: fix autogroup proc interface potential access to freed memory
 
 * Fri Dec 10 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.2-1mnb
   o Thomas Backlund <tmb@mandriva.org>
