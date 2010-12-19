@@ -1309,6 +1309,8 @@ rm -rf %{buildroot}
     - drm/kms: remove spaces from connector names
     - drm/radeon/kms: fix vram base calculation on rs780/rs880
     - drm/radeon/kms: don't apply 7xx HDP flush workaround on AGP
+    - md: fix bug with re-adding of partially recovered device
+    - md: protect against NULL reference when waiting to start a raid10
 
 * Fri Dec 10 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.2-1mnb
   o Thomas Backlund <tmb@mandriva.org>
