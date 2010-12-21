@@ -1313,6 +1313,7 @@ rm -rf %{buildroot}
     - drm/i915: Always set the DP transcoder config to 8BPC
     - md: fix bug with re-adding of partially recovered device
     - md: protect against NULL reference when waiting to start a raid10
+    - bonding: Fix slave selection bug
 
 * Fri Dec 10 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.2-1mnb
   o Thomas Backlund <tmb@mandriva.org>
