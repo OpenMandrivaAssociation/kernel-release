@@ -1314,6 +1314,7 @@ rm -rf %{buildroot}
     - md: fix bug with re-adding of partially recovered device
     - md: protect against NULL reference when waiting to start a raid10
     - bonding: Fix slave selection bug
+    - r8169: fix sleeping while holding spinlock
 
 * Fri Dec 10 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.2-1mnb
   o Thomas Backlund <tmb@mandriva.org>
