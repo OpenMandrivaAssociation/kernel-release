@@ -12,7 +12,7 @@
 %define sublevel	36
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1294,7 +1294,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sun Dec 19 2010 Thomas Backlund <tmb@mandriva.org> unreleased
+* Wed Dec 22 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.2-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Add new shuttle-wmi x86 platform driver. Blacklist backlight
       controls for some shuttle devices in acpi video driver for them
