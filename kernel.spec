@@ -1300,6 +1300,9 @@ rm -rf %{buildroot}
       controls for some shuttle devices in acpi video driver for them
       to work properly with quirk in shuttle-wmi.
     - mac80211: avoid calling ieee80211_work_work unconditionally
+    - Add back fix for oops with plymouthd quiting on vesafb after i915
+      with modesetting is loaded, fix should be "upstreamed", on todo
+      (MDV #59260).
 
   o Thomas Backlund <tmb@mandriva.org>
     - update "sched: automated per session task groups" patch to
