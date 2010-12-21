@@ -1310,6 +1310,7 @@ rm -rf %{buildroot}
     - drm/kms: remove spaces from connector names
     - drm/radeon/kms: fix vram base calculation on rs780/rs880
     - drm/radeon/kms: don't apply 7xx HDP flush workaround on AGP
+    - drm/i915: Always set the DP transcoder config to 8BPC
     - md: fix bug with re-adding of partially recovered device
     - md: protect against NULL reference when waiting to start a raid10
 
