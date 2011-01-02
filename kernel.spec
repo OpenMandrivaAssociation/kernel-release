@@ -257,18 +257,7 @@ http://www.mandriva.com/en/security/kernelupdate			\
 ### Global Requires/Provides
 %define requires1	bootloader-utils >= 1.13-1
 %define requires2	mkinitrd >= 4.2.17-31
-# We require module-init-tools >= 3.6-12 to enable both old and new (juju)
-# firewire stacks and blacklist old stack in module-init-tools. But for
-# backports, lets just disable new firewire stack for now, and thus avoid
-# requiring new module-init-tools. When we update to a kernel version which
-# removes old firewire stack, we can remove this check, and revert to require
-# only old module-init-tools version, and remove blacklist from newer
-# module-init-tools versions
-%if %{mdkversion} < 201100
 %define requires3	module-init-tools >= 3.0-7
-%else
-%define requires3	module-init-tools >= 3.6-12
-%endif
 %define requires4	sysfsutils >= 1.3.0-1
 %define requires5	kernel-firmware >= 2.6.27-0.rc2.2mdv
 
@@ -668,13 +657,6 @@ cd %src_dir
 
 # Prepare all the variables for calling create_configs
 
-# Make kernel packages backportable
-%if %{mdkversion} < 201100
-# disable new firewire stack for distros < 2011.0
-sed -i 's/\(CONFIG_FIREWIRE\)=m/# \1 is not set/' \
-       %{patches_dir}/configs/*.config
-%endif
-
 %if %build_debug
 %define debug --debug
 %else
@@ -911,6 +893,7 @@ $DevelRoot/usr
 $DevelRoot/virt
 $DevelRoot/.config
 $DevelRoot/Kbuild
+$DevelRoot/Kconfig
 $DevelRoot/Makefile
 $DevelRoot/Module.symvers
 $DevelRoot/arch/Kconfig
@@ -1276,6 +1259,7 @@ rm -rf %{buildroot}
 %{_kerneldir}/COPYING
 %{_kerneldir}/CREDITS
 %{_kerneldir}/Kbuild
+%{_kerneldir}/Kconfig
 %{_kerneldir}/MAINTAINERS
 %{_kerneldir}/Makefile
 %{_kerneldir}/README
@@ -1332,6 +1316,7 @@ rm -rf %{buildroot}
         acpi-dsdt-initrd-v0.9c-2.6.28.patch
         acpi-dsdt-initrd-v0.9c-fixes.patch
         char-agp-intel-new-Q57-id.patch
+        disable-mrproper-prepare-scripts-configs-in-devel-rpms.patch
         hid-usbhid-IBM-BladeCenterHS20-quirk.patch
         kbuild-compress-kernel-modules-on-installation.patch
         kernel-sched-automated-per-session-task-groups-20101130.patch
@@ -1343,6 +1328,9 @@ rm -rf %{buildroot}
         netfilter/IFWLOG: 2.6.37 buildfix
         usb/storage: unusual_devs 2.6.37 buildfix
       * update defconfigs
+      * update filelists
+      * remove code disabling new firewire stack for backports
+        as its now the only firewire stack in the kernel
 
 * Wed Dec 22 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.2-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
