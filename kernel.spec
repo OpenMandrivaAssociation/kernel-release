@@ -9,18 +9,18 @@
 #
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	36
+%define sublevel	37
 
 # Package release
-%define mnbrel		2
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		2
+%define kpatch		rc8
+%define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kgit		1
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1294,6 +1294,37 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sun Jan  2 2011 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - upgrade to 2.6.37-rc8-git1
+      * drop merged patches:
+        block-cfq-improve-fsync-performance-for-small-files.patch
+        firewire-ohci-avoid-reallocation-of-AR-buffers.patch
+        firewire-ohci-fix-race-when-reading-count-in-AR-descriptor.patch
+        firewire-ohci-fix-regression-with-Agere-FW643-rev-06-disable-MSI.patch
+        firewire-ohci-fix-regression-with-VIA-VT6315-disable-MSI.patch
+        gpu-drm-i915-always-set-the-dp-transcoder-config-to-8bpc.patch
+        gpu-drm-kms-remove-spaces-from-connector-names-v2.patch
+        gpu-drm-radeon-kms-don-t-apply-7xx-hdp-flush-workaround-on-agp.patch
+        gpu-drm-radeon-kms-fix-vram-base-calculation-on-rs780-rs880.patch
+        idle-release-2.6.36.patch
+        kernel-cgroup-fixup-broken-cgroup-movement.patch
+        kernel-rcu-git.patch
+        kernel-sched-Cure-more-NO_HZ-load-average-woes.patch
+        kernel-sched-fix-skip_clock_update-optimization.patch
+        md-fix-bug-with-re-adding-of-partially-recovered-device.patch
+        md-protect-against-NULL-reference-when-waiting-to-start-a-raid10.patch
+        net-af_unix-limit-recursion-level.patch
+        net-af_unix-limit-unix_tot_inflight.patch
+        net-bonding-fix-slave-selection-bug.patch
+        net-r8169-fix-sleeping-while-holding-spinlock.patch
+        net-wireless-rtl8187-consolidate-MSR-writes-in-bss-info-changed.patch
+        security-TOMOYO-Print-URL-information-before-panic.patch
+        sound-alsa-hda-sigmatel-work-around-incorrect-master-muting.patch
+        sound-alsa-hda-sigmatel-Fix-wrong-TLV-mute-bit-for-STAC_IDT-codecs.patch
+        sound-alsa-tlv-Define-numbers-in-sound-tlv.h.patch
+
+
 * Wed Dec 22 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.2-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Add new shuttle-wmi x86 platform driver. Blacklist backlight
