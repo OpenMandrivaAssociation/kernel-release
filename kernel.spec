@@ -790,8 +790,6 @@ SaveDevel() {
 	# Needed for external dvb tree (#41418)
 	cp -fR drivers/media/dvb/dvb-core/*.h $TempDevelRoot/drivers/media/dvb/dvb-core/
 	cp -fR drivers/media/dvb/frontends/lgdt330x.h $TempDevelRoot/drivers/media/dvb/frontends/
-	# http://lists.mandriva.com/cooker/2009-05/msg00534.php
-	cp -fR drivers/ieee1394/*.h $TempDevelRoot/drivers/ieee1394/
 
 	# add acpica header files, needed for fglrx build
 	cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
