@@ -1323,6 +1323,8 @@ rm -rf %{buildroot}
         sound-alsa-hda-sigmatel-work-around-incorrect-master-muting.patch
         sound-alsa-hda-sigmatel-Fix-wrong-TLV-mute-bit-for-STAC_IDT-codecs.patch
         sound-alsa-tlv-Define-numbers-in-sound-tlv.h.patch
+      * drop unneeded patch:
+        fs-dynamic-nls-default.patch (smbfs support is removed)
 
 
 * Wed Dec 22 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.2-2mnb
