@@ -1308,6 +1308,7 @@ rm -rf %{buildroot}
         gpu-drm-radeon-kms-don-t-apply-7xx-hdp-flush-workaround-on-agp.patch
         gpu-drm-radeon-kms-fix-vram-base-calculation-on-rs780-rs880.patch
         idle-release-2.6.36.patch
+        kbuild-really-dont-remove-bounds-asm-offsets-headers.patch
         kernel-cgroup-fixup-broken-cgroup-movement.patch
         kernel-rcu-git.patch
         kernel-sched-Cure-more-NO_HZ-load-average-woes.patch
@@ -1317,6 +1318,7 @@ rm -rf %{buildroot}
         net-af_unix-limit-recursion-level.patch
         net-af_unix-limit-unix_tot_inflight.patch
         net-bonding-fix-slave-selection-bug.patch
+        net-mac80211-avoid-calling-ieee80211_work_work-unconditionally.patch
         net-r8169-fix-sleeping-while-holding-spinlock.patch
         net-wireless-rtl8187-consolidate-MSR-writes-in-bss-info-changed.patch
         security-TOMOYO-Print-URL-information-before-panic.patch
@@ -1325,7 +1327,17 @@ rm -rf %{buildroot}
         sound-alsa-tlv-Define-numbers-in-sound-tlv.h.patch
       * drop unneeded patch:
         fs-dynamic-nls-default.patch (smbfs support is removed)
-
+      * rediff patches:
+        3rd-3rdparty-merge.patch
+        acpi-dsdt-initrd-v0.9c-2.6.28.patch
+        acpi-dsdt-initrd-v0.9c-fixes.patch
+        char-agp-intel-new-Q57-id.patch
+        hid-usbhid-IBM-BladeCenterHS20-quirk.patch
+        kbuild-compress-kernel-modules-on-installation.patch
+        kernel-sched-automated-per-session-task-groups-20101130.patch
+        platform-x86-add-shuttle-wmi-driver.patch
+        sound-bluetooth-SCO-support.patch
+        usb-storage-unusual_devs-add-id.patch
 
 * Wed Dec 22 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.2-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
