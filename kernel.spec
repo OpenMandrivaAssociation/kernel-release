@@ -1338,6 +1338,11 @@ rm -rf %{buildroot}
         platform-x86-add-shuttle-wmi-driver.patch
         sound-bluetooth-SCO-support.patch
         usb-storage-unusual_devs-add-id.patch
+      * add patches:
+        gpu/drm/mach64: 2.6.37 buildfix
+        netfilter/IFWLOG: 2.6.37 buildfix
+        usb/storage: unusual_devs 2.6.37 buildfix
+      * update defconfigs
 
 * Wed Dec 22 2010 Thomas Backlund <tmb@mandriva.org> 2.6.36.2-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
