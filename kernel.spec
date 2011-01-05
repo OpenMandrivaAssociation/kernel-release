@@ -17,10 +17,10 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		rc8
+%define kpatch		0
 %define kstable		0
 # kernel.org -gitX patch (only the number after "git")
-%define kgit		1
+%define kgit		0
 
 # Used when building update candidates
 #define uclevel uc1
@@ -1276,9 +1276,9 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sun Jan  2 2011 Thomas Backlund <tmb@mandriva.org> unreleased
+* Wed Jan  5 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37-1mnb
   o Thomas Backlund <tmb@mandriva.org>
-    - upgrade to 2.6.37-rc8-git1
+    - upgrade to 2.6.37 final
       * drop merged patches:
         block-cfq-improve-fsync-performance-for-small-files.patch
         firewire-ohci-avoid-reallocation-of-AR-buffers.patch
