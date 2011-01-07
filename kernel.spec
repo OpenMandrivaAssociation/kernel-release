@@ -1282,6 +1282,8 @@ rm -rf %{buildroot}
       inside framebuffer code, and fix possible deadlock caused by
       fb_set_suspend. Drop original patch for MDV #59260 as this supersedes
       it. Submitted at https://bugzilla.kernel.org/show_bug.cgi?id=26232
+    - Apply upstream fixes "sched, autogroup: Fix reference leak",
+      "sched: Fix struct autogroup memory leak"
 
 * Wed Jan  5 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37-1mnb
   o Thomas Backlund <tmb@mandriva.org>
