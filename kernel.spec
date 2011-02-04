@@ -199,7 +199,6 @@ NoSource: 0
 Source2: 	disable-mrproper-prepare-scripts-configs-in-devel-rpms.patch
 
 Source4: 	README.kernel-sources
-Source5: 	README.MandrivaLinux
 
 Source100: 	linux-%{patch_ver}.tar.bz2
 
@@ -895,7 +894,6 @@ $DevelRoot/Kconfig
 $DevelRoot/Makefile
 $DevelRoot/Module.symvers
 $DevelRoot/arch/Kconfig
-%doc README.MandrivaLinux
 %doc README.kernel-sources
 EOF
 
@@ -968,7 +966,6 @@ cat > $kernel_files <<EOF
 %dir %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/
 %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/kernel
 %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/modules.*
-%doc README.MandrivaLinux
 %doc README.kernel-sources
 EOF
 
@@ -1098,7 +1095,6 @@ CreateKernel server
 ###
 %install
 install -m 644 %{SOURCE4}  .
-install -m 644 %{SOURCE5}  .
 
 cd %src_dir
 
@@ -1262,7 +1258,6 @@ rm -rf %{buildroot}
 %{_kerneldir}/Makefile
 %{_kerneldir}/README
 %{_kerneldir}/REPORTING-BUGS
-%doc README.MandrivaLinux
 %doc README.kernel-sources
 
 %files -n %{kname}-source-latest
@@ -1284,6 +1279,9 @@ rm -rf %{buildroot}
       it. Submitted at https://bugzilla.kernel.org/show_bug.cgi?id=26232
     - Apply upstream fixes "sched, autogroup: Fix reference leak",
       "sched: Fix struct autogroup memory leak"
+
+  o Thomas Backlund <tmb@mandriva.org>
+    - drop S5 (not needed anymore, since we now ship an unprepared kernel-source)
 
 * Wed Jan  5 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37-1mnb
   o Thomas Backlund <tmb@mandriva.org>
