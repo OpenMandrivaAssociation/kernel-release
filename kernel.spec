@@ -1287,6 +1287,7 @@ rm -rf %{buildroot}
     - drop lzma support (obsoleted by xz support)
     - sched, autogroup: Fix CONFIG_RT_GROUP_SCHED sched_setscheduler()
       failure (reported on Cooker by Andrey Borzenkov)
+    - libata: set queue DMA alignment to sector size for ATAPI too
 
 * Wed Jan  5 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37-1mnb
   o Thomas Backlund <tmb@mandriva.org>
