@@ -1285,6 +1285,8 @@ rm -rf %{buildroot}
     - add xz support for kernel, initrd and squashfs
       (from upstream 2.6.38-rc1)
     - drop lzma support (obsoleted by xz support)
+    - sched, autogroup: Fix CONFIG_RT_GROUP_SCHED sched_setscheduler()
+      failure (reported on Cooker by Andrey Borzenkov)
 
 * Wed Jan  5 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37-1mnb
   o Thomas Backlund <tmb@mandriva.org>
