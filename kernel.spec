@@ -12,7 +12,7 @@
 %define sublevel	37
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1271,7 +1271,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Wed Jan  5 2011 Thomas Backlund <tmb@mandriva.org> unreleased
+* Thu Feb 10 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Fix additional oops that can happen with remove_conflicting_framebuffers
       inside framebuffer code, and fix possible deadlock caused by
