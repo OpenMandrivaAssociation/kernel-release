@@ -793,6 +793,9 @@ SaveDevel() {
 	# add acpica header files, needed for fglrx build
 	cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
 
+	# aufs2 has a special file needed
+	cp -fR fs/aufs/magic.mk $TempDevelRoot/fs/aufs
+
 	for i in alpha arm avr32 blackfin cris frv h8300 ia64 m32r m68knommu \
 	         microblaze mips mn10300 parisc s390 score sh tile xtensa; do
 		rm -rf $TempDevelRoot/arch/$i
@@ -1271,7 +1274,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Sun Feb 13 2011 Thomas Backlund <tmb@mandriva.org> unreleased
+* Sun Feb 13 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37-3mnb
   o Thomas Backlund <tmb@mandriva.org>
     - revert: "sched, autogroup: Fix CONFIG_RT_GROUP_SCHED sched_setscheduler()
       failure" for now as it breaks on boot on both i586 and x86_64
@@ -1279,6 +1282,7 @@ rm -rf %{buildroot}
     - sched: Mark autogroup_init() __init
     - sched: Fix update_curr_rt()
     - sched, cgroup: Use exit hook to avoid use-after-free crash
+    - add aufs2 support
 
 * Thu Feb 10 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
