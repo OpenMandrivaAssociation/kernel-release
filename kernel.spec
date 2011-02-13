@@ -12,7 +12,7 @@
 %define sublevel	37
 
 # Package release
-%define mnbrel		2
+%define mnbrel		3
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1271,6 +1271,15 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sun Feb 13 2011 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - revert: "sched, autogroup: Fix CONFIG_RT_GROUP_SCHED sched_setscheduler()
+      failure" for now as it breaks on boot on both i586 and x86_64
+    - sched: Move sched_autogroup_exit() to free_signal_struct()
+    - sched: Mark autogroup_init() __init
+    - sched: Fix update_curr_rt()
+    - sched, cgroup: Use exit hook to avoid use-after-free crash
+
 * Thu Feb 10 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37-2mnb
   o Herton Ronaldo Krzesinski <herton@mandriva.com.br>
     - Fix additional oops that can happen with remove_conflicting_framebuffers
