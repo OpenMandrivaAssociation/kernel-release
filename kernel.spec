@@ -1274,6 +1274,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu Feb 17 2011 Alexandre Felipe Muller de Souza <alexandrefm@mandriva.com.br> unreleased
+ o Alexandre Felipe Muller de Souza <alexandrefm@mandriva.com.br>
+    - Fix kernel ops caused by Null pointer deference in blk_throtl_exit
+
 * Sun Feb 13 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37-3mnb
   o Thomas Backlund <tmb@mandriva.org>
     - revert: "sched, autogroup: Fix CONFIG_RT_GROUP_SCHED sched_setscheduler()
