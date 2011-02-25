@@ -1289,6 +1289,9 @@ rm -rf %{buildroot}
     - update to 2.6.37.2
       * drop merged patch
         fs-xfs-fix-dquot-shaker-deadlock.patch
+    - i586 server kernel and x86_64 kernels needs to be compressed with gzip
+      so they work with xen (got broken during lzma -> xz update, noted by
+      Guillaume Rousse on kernel-discuss ml)
 
 * Sun Feb 13 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37-3mnb
   o Thomas Backlund <tmb@mandriva.org>
