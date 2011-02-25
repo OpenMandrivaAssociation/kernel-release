@@ -12,13 +12,13 @@
 %define sublevel	37
 
 # Package release
-%define mnbrel		3
+%define mnbrel		1
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		1
+%define kstable		2
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1277,13 +1277,18 @@ rm -rf %{buildroot}
 * Thu Feb 17 2011 Alexandre Felipe Muller de Souza <alexandrefm@mandriva.com.br> unreleased
  o Eugeni Dodonov <eugeni@mandriva.com>
    - update to 2.6.36.1
-   - drop merged patches:
-     kernel-sched-Fix-update_curr_rt.patch
-     kernel-sched-cgroup-Use-exit-hook-to-avoid-use-after-free-crash.patch
-     libata-set-queue-dma-alignment-to-sector-size-for-atapi-too.patch
+     * drop merged patches:
+       kernel-sched-Fix-update_curr_rt.patch
+       kernel-sched-cgroup-Use-exit-hook-to-avoid-use-after-free-crash.patch
+       libata-set-queue-dma-alignment-to-sector-size-for-atapi-too.patch
 
  o Alexandre Felipe Muller de Souza <alexandrefm@mandriva.com.br>
     - Fix kernel ops caused by Null pointer deference in blk_throtl_exit
+
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.37.2
+      * drop merged patch
+        fs-xfs-fix-dquot-shaker-deadlock.patch
 
 * Sun Feb 13 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37-3mnb
   o Thomas Backlund <tmb@mandriva.org>
