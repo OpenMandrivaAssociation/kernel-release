@@ -1274,7 +1274,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Feb 17 2011 Alexandre Felipe Muller de Souza <alexandrefm@mandriva.com.br> unreleased
+* Fri Feb 25 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37.2-1mnb
  o Eugeni Dodonov <eugeni@mandriva.com>
    - update to 2.6.36.1
      * drop merged patches:
