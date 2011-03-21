@@ -9,7 +9,7 @@
 #
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	37
+%define sublevel	38
 
 # Package release
 %define mnbrel		1
@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		2
+%define kstable		0
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1274,6 +1274,9 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon Mar 21 2011 Thomas Backlund <tmb@mandriva.org> unreleased
+- update to 2.6.38
+
 * Fri Feb 25 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37.2-1mnb
  o Eugeni Dodonov <eugeni@mandriva.com>
    - update to 2.6.36.1
