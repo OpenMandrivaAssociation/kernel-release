@@ -1317,6 +1317,7 @@ rm -rf %{buildroot}
 - update plymouth framebuffer oops fix (Ubuntu, suggested by Herton on LKML)
 - add buildfixes for acerhk and ndiswrapper
 - disable broken docomo patches
+- rediff S2 to apply cleanly
 - update defconfigs
 
 * Fri Feb 25 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37.2-1mnb
