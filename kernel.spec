@@ -1303,6 +1303,8 @@ rm -rf %{buildroot}
     net-wireless-zd1201-add-id.patch
     net-wireless-zd1211rw-add-id.patch
     x86-support-XZ-compressed-kernel.patch
+- update unionfs to 2.5.8
+- update aufs2 to 2.6.38-rc
 
 * Fri Feb 25 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37.2-1mnb
  o Eugeni Dodonov <eugeni@mandriva.com>
