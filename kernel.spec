@@ -875,6 +875,7 @@ $DevelRoot/include/rdma
 $DevelRoot/include/rxrpc
 $DevelRoot/include/scsi
 $DevelRoot/include/sound
+$DevelRoot/include/target
 $DevelRoot/include/trace
 $DevelRoot/include/video
 $DevelRoot/include/xen
@@ -1237,6 +1238,7 @@ rm -rf %{buildroot}
 %{_kerneldir}/include/rxrpc
 %{_kerneldir}/include/scsi
 %{_kerneldir}/include/sound
+%{_kerneldir}/include/target
 %{_kerneldir}/include/trace
 %{_kerneldir}/include/video
 %{_kerneldir}/include/xen
@@ -1274,57 +1276,59 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Mar 21 2011 Thomas Backlund <tmb@mandriva.org> unreleased
-- update to 2.6.38
-  * drop merged patches:
-    dm-crypt-scale-to-multiple-CPUs-v5-2.6.36.patch
-    fs-squashfs-add-XZ-compression-configuration-option.patch
-    fs-squashfs-add-XZ-compression-support.patch
-    fs-squashfs-fix-use-of-uninitialised-variable-in-zlib-and-xz-decompressors.patch
-    kbuild-do-not-remove-a.out-kvm.h-and-kvm_para.h-on-headers_install_all.patch
-    kernel-sched-autogroup-Fix-reference-leak.patch
-    kernel-sched-automated-per-session-task-groups-20101130.patch
-    kernel-sched-fix-potential-access-to-freed-memory.patch
-    kernel-sched-Fix-struct-autogroup-memory-leak.patch
-    kernel-sched-Mark-autogroup_init-__init.patch
-    kernel-sched-sched-Move-sched_autogroup_exit-to-free_signal_struct.patch
-    lib-decompressors-add-boot-time-XZ-support.patch
-    lib-decompressors-add-XZ-decompressor-module.patch
-    net-wireless-rtl8187-avoid-redundant-write-to-register-FF72.patch
-    net-wireless-rtl8187-consolidate-anaparam-on-off-write-sequences.patch
-    net-wireless-rtl8187-do-not-do-per-packet-TX-AGC.patch
-    net-wireless-rtl8187-don-t-set-RTL818X_CONFIG3_GNT_SELECT.patch
-    net-wireless-rtl8187-fix-wrong-register-initialization-in-8187B.patch
-    net-wireless-rtl8187-move-pll-reset-at-start-out-of-ANAPARAM-write.patch
-    net-wireless-rtl8187-remove-redundant-initialization-of-ARFR.patch
-    net-wireless-rtl8187-remove-setting-of-beacon-atim-regs-from-init.patch
-    net-wireless-rtl8187-remove-uneeded-setting-of-anaparam-write.patch
-    net-wireless-rtl8187-restore-anaparam-registers-after-reset.patch
-    net-wireless-zd1201-add-id.patch
-    net-wireless-zd1211rw-add-id.patch
-    x86-support-XZ-compressed-kernel.patch
-- rediff patches:
-    3rd-3rdparty-merge.patch
-    acpi-add-proc-event-regs.patch
-    acpi-video-add-blacklist-to-use-vendor-driver.patch
-    char-agp-intel-new-Q57-id.patch
-    platform-x86-add-shuttle-wmi-driver.patch
-    x86-pci-toshiba-equium-a60-assign-busses.patch
-- update unionfs to 2.5.8
-- update aufs2 to 2.6.38-rc
-- replace samsung-backlight driver with the samsung-laptop driver
-  that will be integrated in 2.6.39
-- update plymouth framebuffer oops fix (Ubuntu, suggested by Herton on LKML)
-- add buildfixes for acerhk and ndiswrapper
-- disable broken docomo patches
-- rediff S2 to apply cleanly
-- update defconfigs
-- ahci: AHCI mode SATA patch for Intel Patsburg SATA RAID controller
-- ahci: recognize Marvell 88se9125 PCIe SATA 6.0 Gb/s controller
-- drm: Hold the mode mutex whilst probing for sysfs status
-- drm/i915: Replace vblank PM QoS with "Interrupt-Based AGPBUSY#"
-- drm/radeon/kms: fix typo in atom overscan setup
-- x86, quirk: Fix SB600 revision check
+* Tue Mar 22 2011 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.38
+      * drop merged patches:
+        dm-crypt-scale-to-multiple-CPUs-v5-2.6.36.patch
+        fs-squashfs-add-XZ-compression-configuration-option.patch
+        fs-squashfs-add-XZ-compression-support.patch
+        fs-squashfs-fix-use-of-uninitialised-variable-in-zlib-and-xz-decompressors.patch
+        kbuild-do-not-remove-a.out-kvm.h-and-kvm_para.h-on-headers_install_all.patch
+        kernel-sched-autogroup-Fix-reference-leak.patch
+        kernel-sched-automated-per-session-task-groups-20101130.patch
+        kernel-sched-fix-potential-access-to-freed-memory.patch
+        kernel-sched-Fix-struct-autogroup-memory-leak.patch
+        kernel-sched-Mark-autogroup_init-__init.patch
+        kernel-sched-sched-Move-sched_autogroup_exit-to-free_signal_struct.patch
+        lib-decompressors-add-boot-time-XZ-support.patch
+        lib-decompressors-add-XZ-decompressor-module.patch
+        net-wireless-rtl8187-avoid-redundant-write-to-register-FF72.patch
+        net-wireless-rtl8187-consolidate-anaparam-on-off-write-sequences.patch
+        net-wireless-rtl8187-do-not-do-per-packet-TX-AGC.patch
+        net-wireless-rtl8187-don-t-set-RTL818X_CONFIG3_GNT_SELECT.patch
+        net-wireless-rtl8187-fix-wrong-register-initialization-in-8187B.patch
+        net-wireless-rtl8187-move-pll-reset-at-start-out-of-ANAPARAM-write.patch
+        net-wireless-rtl8187-remove-redundant-initialization-of-ARFR.patch
+        net-wireless-rtl8187-remove-setting-of-beacon-atim-regs-from-init.patch
+        net-wireless-rtl8187-remove-uneeded-setting-of-anaparam-write.patch
+        net-wireless-rtl8187-restore-anaparam-registers-after-reset.patch
+        net-wireless-zd1201-add-id.patch
+        net-wireless-zd1211rw-add-id.patch
+        x86-support-XZ-compressed-kernel.patch
+      * rediff patches:
+        3rd-3rdparty-merge.patch
+        acpi-add-proc-event-regs.patch
+        acpi-video-add-blacklist-to-use-vendor-driver.patch
+        char-agp-intel-new-Q57-id.patch
+        platform-x86-add-shuttle-wmi-driver.patch
+        x86-pci-toshiba-equium-a60-assign-busses.patch
+    - update plymouth framebuffer oops fix (Ubuntu, suggested by Herton on LKML)
+    - replace samsung-backlight driver with the samsung-laptop driver
+      that will be integrated in 2.6.39
+    - update unionfs to 2.5.8
+    - update aufs2 to 2.6.38-rc
+    - add patches:
+      2.6.38 buildfixes for acerhk and ndiswrapper
+      ahci: AHCI mode SATA patch for Intel Patsburg SATA RAID controller
+      ahci: recognize Marvell 88se9125 PCIe SATA 6.0 Gb/s controller
+      drm: Hold the mode mutex whilst probing for sysfs status
+      drm/i915: Replace vblank PM QoS with "Interrupt-Based AGPBUSY#"
+      drm/radeon/kms: fix typo in atom overscan setup
+      x86, quirk: Fix SB600 revision check
+    - disable broken docomo patches
+    - rediff S2 to apply cleanly
+    - update defconfigs
 
 * Fri Feb 25 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37.2-1mnb
  o Eugeni Dodonov <eugeni@mandriva.com>
