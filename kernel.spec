@@ -1315,6 +1315,7 @@ rm -rf %{buildroot}
 - replace samsung-backlight driver with the samsung-laptop driver
   that will be integrated in 2.6.39
 - update plymouth framebuffer oops fix (Ubuntu, suggested by Herton on LKML)
+- add buildfixes for acerhk and ndiswrapper
 
 * Fri Feb 25 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37.2-1mnb
  o Eugeni Dodonov <eugeni@mandriva.com>
