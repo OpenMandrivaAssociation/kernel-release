@@ -1276,6 +1276,33 @@ rm -rf %{buildroot}
 %changelog
 * Mon Mar 21 2011 Thomas Backlund <tmb@mandriva.org> unreleased
 - update to 2.6.38
+  * drop merged patches:
+    dm-crypt-scale-to-multiple-CPUs-v5-2.6.36.patch
+    fs-squashfs-add-XZ-compression-configuration-option.patch
+    fs-squashfs-add-XZ-compression-support.patch
+    fs-squashfs-fix-use-of-uninitialised-variable-in-zlib-and-xz-decompressors.patch
+    kbuild-do-not-remove-a.out-kvm.h-and-kvm_para.h-on-headers_install_all.patch
+    kernel-sched-autogroup-Fix-reference-leak.patch
+    kernel-sched-automated-per-session-task-groups-20101130.patch
+    kernel-sched-fix-potential-access-to-freed-memory.patch
+    kernel-sched-Fix-struct-autogroup-memory-leak.patch
+    kernel-sched-Mark-autogroup_init-__init.patch
+    kernel-sched-sched-Move-sched_autogroup_exit-to-free_signal_struct.patch
+    lib-decompressors-add-boot-time-XZ-support.patch
+    lib-decompressors-add-XZ-decompressor-module.patch
+    net-wireless-rtl8187-avoid-redundant-write-to-register-FF72.patch
+    net-wireless-rtl8187-consolidate-anaparam-on-off-write-sequences.patch
+    net-wireless-rtl8187-do-not-do-per-packet-TX-AGC.patch
+    net-wireless-rtl8187-don-t-set-RTL818X_CONFIG3_GNT_SELECT.patch
+    net-wireless-rtl8187-fix-wrong-register-initialization-in-8187B.patch
+    net-wireless-rtl8187-move-pll-reset-at-start-out-of-ANAPARAM-write.patch
+    net-wireless-rtl8187-remove-redundant-initialization-of-ARFR.patch
+    net-wireless-rtl8187-remove-setting-of-beacon-atim-regs-from-init.patch
+    net-wireless-rtl8187-remove-uneeded-setting-of-anaparam-write.patch
+    net-wireless-rtl8187-restore-anaparam-registers-after-reset.patch
+    net-wireless-zd1201-add-id.patch
+    net-wireless-zd1211rw-add-id.patch
+    x86-support-XZ-compressed-kernel.patch
 
 * Fri Feb 25 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37.2-1mnb
  o Eugeni Dodonov <eugeni@mandriva.com>
