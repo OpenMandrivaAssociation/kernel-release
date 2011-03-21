@@ -1303,6 +1303,13 @@ rm -rf %{buildroot}
     net-wireless-zd1201-add-id.patch
     net-wireless-zd1211rw-add-id.patch
     x86-support-XZ-compressed-kernel.patch
+- rediff patches:
+    3rd-3rdparty-merge.patch
+    acpi-add-proc-event-regs.patch
+    acpi-video-add-blacklist-to-use-vendor-driver.patch
+    char-agp-intel-new-Q57-id.patch
+    platform-x86-add-shuttle-wmi-driver.patch
+    x86-pci-toshiba-equium-a60-assign-busses.patch
 - update unionfs to 2.5.8
 - update aufs2 to 2.6.38-rc
 - replace samsung-backlight driver with the samsung-laptop driver
