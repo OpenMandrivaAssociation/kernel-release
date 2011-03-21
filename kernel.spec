@@ -1316,6 +1316,7 @@ rm -rf %{buildroot}
   that will be integrated in 2.6.39
 - update plymouth framebuffer oops fix (Ubuntu, suggested by Herton on LKML)
 - add buildfixes for acerhk and ndiswrapper
+- disable broken docomo patches
 
 * Fri Feb 25 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37.2-1mnb
  o Eugeni Dodonov <eugeni@mandriva.com>
