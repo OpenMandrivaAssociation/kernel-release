@@ -1319,6 +1319,12 @@ rm -rf %{buildroot}
 - disable broken docomo patches
 - rediff S2 to apply cleanly
 - update defconfigs
+- ahci: AHCI mode SATA patch for Intel Patsburg SATA RAID controller
+- ahci: recognize Marvell 88se9125 PCIe SATA 6.0 Gb/s controller
+- drm: Hold the mode mutex whilst probing for sysfs status
+- drm/i915: Replace vblank PM QoS with "Interrupt-Based AGPBUSY#"
+- drm/radeon/kms: fix typo in atom overscan setup
+- x86, quirk: Fix SB600 revision check
 
 * Fri Feb 25 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37.2-1mnb
  o Eugeni Dodonov <eugeni@mandriva.com>
