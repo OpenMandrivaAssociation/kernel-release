@@ -1305,6 +1305,8 @@ rm -rf %{buildroot}
     x86-support-XZ-compressed-kernel.patch
 - update unionfs to 2.5.8
 - update aufs2 to 2.6.38-rc
+- replace samsung-backlight driver with the samsung-laptop driver
+  that will be integrated in 2.6.39
 
 * Fri Feb 25 2011 Thomas Backlund <tmb@mandriva.org> 2.6.37.2-1mnb
  o Eugeni Dodonov <eugeni@mandriva.com>
