@@ -17,8 +17,8 @@
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
-%define kpatch		0
-%define kstable		0
+%define kpatch		rc1
+%define kstable		1
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1276,9 +1276,9 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue Mar 22 2011 Thomas Backlund <tmb@mandriva.org> unreleased
+* Tue Mar 22 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.1-0.rc1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
-    - update to 2.6.38
+    - update to 2.6.38.1-rc1
       * drop merged patches:
         dm-crypt-scale-to-multiple-CPUs-v5-2.6.36.patch
         fs-squashfs-add-XZ-compression-configuration-option.patch
@@ -1318,14 +1318,7 @@ rm -rf %{buildroot}
       that will be integrated in 2.6.39
     - update unionfs to 2.5.8
     - update aufs2 to 2.6.38-rc
-    - add patches:
-      2.6.38 buildfixes for acerhk and ndiswrapper
-      ahci: AHCI mode SATA patch for Intel Patsburg SATA RAID controller
-      ahci: recognize Marvell 88se9125 PCIe SATA 6.0 Gb/s controller
-      drm: Hold the mode mutex whilst probing for sysfs status
-      drm/i915: Replace vblank PM QoS with "Interrupt-Based AGPBUSY#"
-      drm/radeon/kms: fix typo in atom overscan setup
-      x86, quirk: Fix SB600 revision check
+    - add buildfixes for acerhk and ndiswrapper
     - disable broken docomo patches
     - rediff S2 to apply cleanly
     - update defconfigs
