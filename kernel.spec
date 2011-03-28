@@ -1276,9 +1276,11 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Mar 24 2011 Thomas Backlund <tmb@mandriva.org> unreleased
+* Mon Mar 28 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.2-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.38.2 (CVE-2011-0726)
+    - restore framebuffer oops and deadlock fixes by Herton as
+      they seem to work better than the Ubuntu one (#62864)
 
 * Tue Mar 22 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.1-0.rc1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
