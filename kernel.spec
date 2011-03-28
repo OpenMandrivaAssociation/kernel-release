@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		1
+%define kstable		2
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1278,7 +1278,7 @@ rm -rf %{buildroot}
 %changelog
 * Thu Mar 24 2011 Thomas Backlund <tmb@mandriva.org> unreleased
   o Thomas Backlund <tmb@mandriva.org>
-    - update to 2.6.38.1 final
+    - update to 2.6.38.2 (CVE-2011-0726)
 
 * Tue Mar 22 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.1-0.rc1.1mnb
   o Thomas Backlund <tmb@mandriva.org>
