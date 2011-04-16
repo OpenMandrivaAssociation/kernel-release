@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		2
+%define kstable		3
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1276,6 +1276,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sat Apr 16 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.3-1mnb
+- update to 2.6.38.3
+- rediff HP Compaq DC7900 alsa patch
+
 * Mon Mar 28 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.2-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.38.2 (CVE-2011-0726)
