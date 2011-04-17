@@ -35,7 +35,7 @@
 # Handle manbo release
 %if "%{?manbo_mkrel:has_manbo}" == "has_manbo"
 
-%define rpmtag		%manbo_distsuffix
+%define rpmtag		mnb2
 %if %kpatch
 %if %kgit
 %define rpmrel		%manbo_mkrel 0.%{kpatch}.%{kgit}.%{mnbrel}%{?uclevel:.%{uclevel}}
