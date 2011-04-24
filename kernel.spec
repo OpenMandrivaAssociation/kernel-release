@@ -1279,6 +1279,7 @@ rm -rf %{buildroot}
 * Sun Apr 24 2011 Thomas Backlund <tmb@mandriva.org> unreleased
 - update to 2.6.38.4
 - update aufs to aufs2.1-38 stable branch
+- update ipset to 6.4 (includes ipv6 support) (#62965)
 
 * Sat Apr 16 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.3-1mnb
 - update to 2.6.38.3
