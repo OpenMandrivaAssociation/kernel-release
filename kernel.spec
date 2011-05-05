@@ -1279,6 +1279,7 @@ rm -rf %{buildroot}
 * Sun May  5 2011 Thomas Backlund <tmb@mandriva.org> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - drm/i915: Fix tiling corruption from pipelined fencing
+    - update to 2.6.38.5
 
 * Sun Apr 24 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.4-1mnb
   o Thomas Backlund <tmb@mandriva.org>
