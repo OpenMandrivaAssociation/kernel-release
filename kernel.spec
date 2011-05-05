@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		4
+%define kstable		5
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
