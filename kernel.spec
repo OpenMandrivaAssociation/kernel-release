@@ -1280,6 +1280,9 @@ rm -rf %{buildroot}
   o Thomas Backlund <tmb@mandriva.org>
     - drm/i915: Fix tiling corruption from pipelined fencing
     - update to 2.6.38.5
+    - update unionfs to 2.5.9.1
+      drop fs-unionfs-buildfix.patch (merged)
+      drop fs-unionfs-2.5.3-oops.patch (fixed differently)
 
 * Sun Apr 24 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.4-1mnb
   o Thomas Backlund <tmb@mandriva.org>
