@@ -1039,6 +1039,7 @@ EOF
 ### Create kernel Postun script on the fly
 cat > $kernel_files-postun <<EOF
 /sbin/kernel_remove_initrd %{kversion}-$kernel_flavour-%{buildrpmrel}
+rm -rf /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel} > /dev/null
 EOF
 }
 
@@ -1276,6 +1277,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon May  9 2011 Thomas Backlund <tmb@mandriva.org> unreleased
+  o Thomas Backlund <tmb@mandriva.org>
+    - clean /lib/modules on kernel removal (#42962)
+
 * Thu May  5 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.5-1mnb
   o Thomas Backlund <tmb@mandriva.org>
     - drm/i915: Fix tiling corruption from pipelined fencing
