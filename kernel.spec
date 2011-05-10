@@ -1277,15 +1277,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Tue May  9 2011 Franck Bui <franck.bui@mandriva.com> 2.6.38.5-2mnb
-  o Franck Bui <franck.bui@mandriva.com>
-    - Just bump the package release since broken binutils has been used
-      to generate the previous release. See for details:
-            https://qa.mandriva.com/show_bug.cgi?id=63213
-
-* Mon May  9 2011 Thomas Backlund <tmb@mandriva.org> unreleased
+* Tue May 10 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.6-1mnb2
   o Thomas Backlund <tmb@mandriva.org>
     - clean /lib/modules on kernel removal (#42962)
+    - update to 2.6.38.6
 
 * Thu May  5 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.5-1mnb
   o Thomas Backlund <tmb@mandriva.org>
