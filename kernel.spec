@@ -12,7 +12,7 @@
 %define sublevel	38
 
 # Package release
-%define mnbrel		1
+%define mnbrel		2
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
@@ -1277,6 +1277,12 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Tue May  9 2011 Franck Bui <franck.bui@mandriva.com> 2.6.38.5-2mnb
+  o Franck Bui <franck.bui@mandriva.com>
+    - Just bump the package release since broken binutils has been used
+      to generate the previous release. See for details:
+            https://qa.mandriva.com/show_bug.cgi?id=63213
+
 * Mon May  9 2011 Thomas Backlund <tmb@mandriva.org> unreleased
   o Thomas Backlund <tmb@mandriva.org>
     - clean /lib/modules on kernel removal (#42962)
