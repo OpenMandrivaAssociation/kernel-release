@@ -155,9 +155,9 @@
 %{?_with_nosrc: %global build_nosrc 1}
 
 %if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
-%define kmake %make CC="$CC"
+%define kmake %make CC="$CC" LD=ld.bfd LDFLAGS="--hash-style=both --build-id=none"
 %else
-%define kmake %make
+%define kmake %make LD=ld.bfd LDFLAGS="--hash-style=both --build-id=none"
 %endif
 # there are places where parallel make don't work
 %define smake make
