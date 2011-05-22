@@ -18,7 +18,7 @@
 # kpatch/kgit/kstable wich are either 0 (empty), rc (kpatch), git (kgit) 
 # or stable release (kstable)
 %define kpatch		0
-%define kstable		6
+%define kstable		7
 # kernel.org -gitX patch (only the number after "git")
 %define kgit		0
 
@@ -1277,6 +1277,10 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sun May 22 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.7-1mnb2
+  o Thomas Backlund <tmb@mandriva.org>
+    - update to 2.6.38.7 (CVE-2011-1770, CVE-2011-1776, CVE-2011-1927)
+
 * Tue May 10 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.6-1mnb2
   o Thomas Backlund <tmb@mandriva.org>
     - clean /lib/modules on kernel removal (#42962)
