@@ -1280,6 +1280,7 @@ rm -rf %{buildroot}
 * Sun May 22 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.7-1mnb2
   o Thomas Backlund <tmb@mandriva.org>
     - update to 2.6.38.7 (CVE-2011-1770, CVE-2011-1776, CVE-2011-1927)
+    - rollback unionfs to a known working 2.5.8
 
 * Tue May 10 2011 Thomas Backlund <tmb@mandriva.org> 2.6.38.6-1mnb2
   o Thomas Backlund <tmb@mandriva.org>
