@@ -1,29 +1,3 @@
-# -*- Mode: rpm-spec -*-
-#
-# This Specfile is based on kernel-tmb spec done by
-# Thomas Backlund <tmb@mandriva.org>
-# 
-# The mkflavour() macroization done by Anssi Hannula <anssi@mandriva.org>
-#
-# Mageia, Mandriva, MIB and ROSA kernels use kernel.org versioning
-#
-# MIB header
-
-%if %{mdvver} >= 201300
-%define distsuffix mdv
-Vendor: MIB - Mandriva International Backports
-%endif
-
-%if %{mdvver} <= 201100
-%define distsuffix mib
-Vendor: MIB - Mandriva International Backports
-%endif
-
-Packager: Nicolo' Costanza <abitrules@yahoo.it>
-# end MIB header
-#
-
-#
 %define kernelversion	3
 %define patchlevel	7
 # sublevel is now used for -stable patches
@@ -182,20 +156,11 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 
 # build perf and cpupower tools
-%if %{mdvver} >= 201200
 %define build_perf		1
 %define build_cpupower		1
-%else
-%define build_perf		0
-%define build_cpupower		0
-%endif
 
 # compress modules with xz
-%if %{mdvver} >= 201200
 %define build_modxz		1
-%else
-%define build_modxz		0
-%endif
 
 # ARM builds
 %ifarch %{arm}
@@ -388,32 +353,11 @@ processor mode, use the "nosmp" boot parameter.
 
 ### Global Requires/Provides
 
-%if %{mdvver} >= 201210
-%define requires1	bootloader-utils >= 1.15-8
 %define requires2	dracut >= 017-16
 %define requires3	kmod >= 7-6
 %define requires4	sysfsutils >=  2.1.0-12
 %define requires5	kernel-firmware >=  20120219-1
 %define requires6	microcode
-%endif
-
-%if %{mdvver} == 201200
-%define requires1	bootloader-utils >= 1.15-8
-%define requires2	dracut >= 017-16
-%define requires3	module-init-tools >= 3.16-5
-%define requires4	sysfsutils >=  2.1.0-12
-%define requires5	kernel-firmware >=  20120219-1
-%define requires6	microcode
-%endif
-
-%if %{mdvver} < 201200
-%define requires1	bootloader-utils >= 1.13-1
-%define requires2	mkinitrd >= 4.2.17-31
-%define requires3	module-init-tools >= 3.0-7
-%define requires4	sysfsutils >= 1.3.0-1
-%define requires5	kernel-firmware >= 20101024-2
-%define requires6	microcode
-%endif
 
 %define kprovides 	%{kname} = %{kverrel}, kernel = %{tar_ver}, alsa = 1.0.25
 %define kprovides_server drbd-api = 88
@@ -425,11 +369,7 @@ Autoreqprov: 		no
 # might be useful too:
 # Suggests:	microcode
 
-%if %{mdvver} >= 201210
 BuildRequires:	kmod-devel kmod-compat
-%else
-BuildRequires:	module-init-tools
-%endif
 
 BuildRequires: 	gcc 
 
@@ -476,7 +416,7 @@ Release:	%{fakerel}				\
 Provides:	%kprovides				\
 %{expand:%%{?kprovides_%{1}:Provides: %{kprovides_%{1}}}} \
 Provides:	%{kname}-%{1}				\
-Requires(pre):	%requires1 %requires2 %requires3 %requires4 \
+Requires(pre):	%requires2 %requires3 %requires4 \
 Requires:	%requires2 %requires5 %requires6	\
 Obsoletes:	%kobsoletes				\
 Provides:	should-restart = system			\
@@ -1021,9 +961,7 @@ Summary:	the cpupower tools
 Group:		System/Kernel and hardware
 Requires(post):  rpm-helper >= 0.24.0-3
 Requires(preun): rpm-helper >= 0.24.0-3
-%if %{mdvver} >= 201200
 Obsoletes:	cpufreq cpufrequtils
-%endif
 
 %description -n cpupower
 the cpupower tools.
