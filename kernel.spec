@@ -426,7 +426,7 @@ Autoreqprov: 		no
 # Suggests:	microcode
 
 %if %{mdvver} >= 201210
-BuildRequires:	kmod-devel
+BuildRequires:	kmod-devel kmod-compat
 %else
 BuildRequires:	module-init-tools
 %endif
