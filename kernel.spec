@@ -19,8 +19,6 @@
 # Patch tarball tag
 %define ktag		rosa
 
-# define rpmtag		%{distsuffix}
-%define rpmtag		%{disttag}
 %if %kpatch
 %if %kgit
 %define rpmrel		%mkrel 0.%{kpatch}.%{kgit}.%{mibrel}
@@ -56,12 +54,12 @@
 # Used for not making too long names for rpms or search paths
 %if %kpatch
 %if %kgit
-%define buildrpmrel     0.%{kpatch}.%{kgit}.%{mibrel}%{rpmtag}
+%define buildrpmrel     0.%{kpatch}.%{kgit}.%{mibrel}%{disttag}
 %else
-%define buildrpmrel     0.%{kpatch}.%{mibrel}%{rpmtag}
+%define buildrpmrel     0.%{kpatch}.%{mibrel}%{disttag}
 %endif
 %else
-%define buildrpmrel     %{mibrel}%{rpmtag}
+%define buildrpmrel     %{mibrel}%{disttag}
 %endif
 %define buildrel     	%{kversion}-%{buildrpmrel}
 
@@ -1777,6 +1775,7 @@ rm -rf %{buildroot}
 
 %changelog
 * Fri Feb 08 2013 Per Øyvind Karlsen peroyvind@mandriva.org> 3.7.6-70
+- use %%{disttag} rather than dead %%{distsuffix}
 - disable default --build-id=sha1 implictly set by linker, for places
   otherwise in build which actually do use --build-id, it will be passed
   later and reenable it without problems
