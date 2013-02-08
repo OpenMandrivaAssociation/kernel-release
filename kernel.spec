@@ -20,7 +20,7 @@
 %define ktag		rosa
 
 # define rpmtag		%{distsuffix}
-%define rpmtag		%{distsuffix}
+%define rpmtag		%{disttag}
 %if %kpatch
 %if %kgit
 %define rpmrel		%mkrel 0.%{kpatch}.%{kgit}.%{mibrel}
