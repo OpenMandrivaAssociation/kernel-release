@@ -5,7 +5,7 @@
 
 # Package release
 # Experimental kernel serie with CK patches, BFS, BFQ, TOI, UKSM
-%define mibrel		69
+%define mibrel		70
 
 # kernel Makefile extraversion is substituted by
 # kpatch wich are either 0 (empty), rc (kpatch)
@@ -1045,8 +1045,8 @@ find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
 
 %build
 # Make sure we don't use gold
-export LD=%(echo %__cc |sed -e 's,-gcc,-ld.bfd,')
-export LDFLAGS="--hash-style=sysv"
+export LD="%{_target_platform}-ld.bfd"
+export LDFLAGS="--hash-style=sysv --build-id=none"
 
 # Common target directories
 %define _kerneldir /usr/src/linux-%{kversion}-%{buildrpmrel}
@@ -1776,6 +1776,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Feb 08 2013 Per Øyvind Karlsen peroyvind@mandriva.org> 3.7.6-70
+- disable default --build-id=sha1 implictly set by linker, for places
+  otherwise in build which actually do use --build-id, it will be passed
+  later and reenable it without problems
 
 * Mon Feb 04 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.6-69
 + update to 3.7.6 stable (101 fixes all over)
