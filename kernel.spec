@@ -414,6 +414,9 @@ Release:	%{fakerel}				\
 Provides:	%kprovides				\
 %{expand:%%{?kprovides_%{1}:Provides: %{kprovides_%{1}}}} \
 Provides:	%{kname}-%{1}				\
+%if %{build_nrjQL_desktop}				\
+Provides:	kernel-desktop				\
+%endif									\
 Requires(pre):	%requires2 %requires3 %requires4 \
 Requires:	%requires2 %requires5 %requires6	\
 Obsoletes:	%kobsoletes				\
