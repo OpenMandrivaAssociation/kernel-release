@@ -1136,6 +1136,7 @@ SaveDevel() {
 	for i in $(find . -name 'Makefile*'); do cp -R --parents $i $TempDevelRoot;done
 	for i in $(find . -name 'Kconfig*' -o -name 'Kbuild*'); do cp -R --parents $i $TempDevelRoot;done
 	cp -fR include $TempDevelRoot
+    ln -s ../generated/uapi/linux/version.h $TempDevelRoot/include/linux/version.h
 	cp -fR scripts $TempDevelRoot
 	cp -fR kernel/bounds.c $TempDevelRoot/kernel
 	cp -fR tools/include $TempDevelRoot/tools/
