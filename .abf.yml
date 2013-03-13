@@ -1,11 +1,6 @@
-removed_sources:
-  linux-3.7.tar.xz: 18a30cecd740f118013839333d9774e79b6a7510
 sources:
-  linux-3.7.6-rosa70.tar.xz: 9b4227eed5f3f55bd557fb311e369ba3fc9aef0f
-  linux-3.7.tar.sign: 596241a87bf3e7765d97409c84b60d41dda5467e
   linux-3.8.2-rosa69.tar.xz: 04b6e9c74a2c2cef7265a62394e84159ad18b7fa
   linux-3.8.tar.sign: 7a910ac80b2e3e4997ad655be752d60d710a694e
   linux-3.8.tar.xz: 70f998b787b0ce96e36d5b0d8f40e3988566f9f2
-  patch-3.7.6.bz2: 7f26ffdddf4db90e801ab91146f6b6832cc9886c
-  patch-3.7.6.sign: b57c5bf7374843b5e2e0a63909c5a18e29a911cb
+  patch-3.8.2.bz2: 00c69f4f219030fb7237129ea1d56af06ee48638
   patch-3.8.2.sign: 60b3f4c33591600e12d4bc291b184fa95c855863
