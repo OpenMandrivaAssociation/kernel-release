@@ -1,11 +1,11 @@
 %define kernelversion	3
-%define patchlevel	7
+%define patchlevel	8
 # sublevel is now used for -stable patches
-%define sublevel	6
+%define sublevel	2
 
 # Package release
 # Experimental kernel serie with CK patches, BFS, BFQ, TOI, UKSM
-%define mibrel		70
+%define mibrel		69
 
 # kernel Makefile extraversion is substituted by
 # kpatch wich are either 0 (empty), rc (kpatch)
@@ -93,16 +93,16 @@
 %define build_nrjQL_desktop			1
 
 # Build nrjQL realtime (i686 / 4GB) / x86_64 / sparc64 sets
-%define build_nrjQL_realtime			0
+%define build_nrjQL_realtime			1
 
 # Build nrjQL laptop (i686 / 4GB) / x86_64
-%define build_nrjQL_laptop			0
+%define build_nrjQL_laptop			1
 
 # Build nrjQL netbook (i686 / 4GB) / x86_64
-%define build_nrjQL_netbook			0
+%define build_nrjQL_netbook			1
 
 # Build nrjQL_server (i686 / 64GB)/x86_64 / sparc64 sets
-%define build_nrjQL_server			0
+%define build_nrjQL_server			1
 
 # Build nrjQL_gameserver (i686 / 64GB)/x86_64 / sparc64 sets
 %define build_nrjQL_server_games		0
@@ -351,16 +351,22 @@ processor mode, use the "nosmp" boot parameter.
 
 ### Global Requires/Provides
 
-%define requires2	dracut >= 017-16
-%define requires3	kmod >= 7-6
+%define requires1	microcode
+%define requires2	dracut >= 026
+%define requires3	kmod >= 12
 %define requires4	sysfsutils >=  2.1.0-12
 %define requires5	kernel-firmware >=  20120219-1
-%define requires6	microcode
 
-%define kprovides 	%{kname} = %{kverrel}, kernel = %{tar_ver}, alsa = 1.0.25
+%define kprovides1 	%{kname} = %{kverrel}
+%define kprovides2	kernel = %{tar_ver}
+%define kprovides3	alsa = 1.0.26
 %define kprovides_server drbd-api = 88
 
-%define	kobsoletes	dkms-r8192se <= 0019.1207.2010-2, dkms-lzma <= 4.43-32, dkms-psb <= 4.41.1-7
+%define	kobsoletes1	dkms-r8192se <= 0019.1207.2010-2
+%define kobsoletes2	dkms-lzma <= 4.43-32
+%define kobsoletes3	dkms-psb <= 4.41.1-7
+
+%define kconflicts1	dkms-nvidia96xx <= 96.43.23
 
 Autoreqprov: 		no
 
@@ -411,15 +417,16 @@ BuildRequires:		uboot-mkimage
 %package -n %{kname}-%{1}-%{buildrel}			\
 Version:	%{fakever}				\
 Release:	%{fakerel}				\
-Provides:	%kprovides				\
+Provides:	%kprovides1 %kprovides2 %kprovides3	\
 %{expand:%%{?kprovides_%{1}:Provides: %{kprovides_%{1}}}} \
 Provides:	%{kname}-%{1}				\
 %if %{build_nrjQL_desktop}				\
 Provides:	kernel-desktop				\
 %endif									\
-Requires(pre):	%requires2 %requires3 %requires4 \
-Requires:	%requires2 %requires5 %requires6	\
-Obsoletes:	%kobsoletes				\
+Requires(pre):	%requires1 %requires2 %requires3 %requires4	\
+Requires:	%requires2 %requires5			\
+Obsoletes:	%kobsoletes1 %kobsoletes2 %kobsoletes3	\
+Conflicts:	%kconflicts1				\
 Provides:	should-restart = system			\
 Suggests:	crda					\
 %ifarch %{ix86}						\
@@ -985,6 +992,26 @@ Conflicts:	%{_lib}cpufreq-devel
 This package contains the development files for cpupower.
 %endif
 
+%package headers
+Version:	%kversion
+Release:	%rpmrel
+Summary:	Linux kernel header files mostly used by your C library
+Group:		System/Kernel and hardware
+Epoch:		1
+%rename linux-userspace-headers
+
+%description headers
+C header files from the Linux kernel. The header files define
+structures and constants that are needed for building most
+standard programs, notably the C library.
+
+This package is not suitable for building kernel modules, you
+should use the 'kernel-devel' package instead.
+
+%files headers
+%_includedir/*
+# Don't conflict with cpupower-devel
+%exclude %_includedir/cpufreq.h
 
 #
 # End packages - here begins build stage
@@ -1122,6 +1149,9 @@ BuildKernel() {
 	install -d %{temp_modules}/$KernelVer
 	%smake INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer modules_install
 
+	# headers
+	%make INSTALL_HDR_PATH=%{temp_root}%_includedir KERNELRELEASE=$KernelVer headers_install
+
 	# remove /lib/firmware, we use a separate kernel-firmware
 	rm -rf %{temp_root}/lib/firmware
 }
@@ -1136,7 +1166,7 @@ SaveDevel() {
 	for i in $(find . -name 'Makefile*'); do cp -R --parents $i $TempDevelRoot;done
 	for i in $(find . -name 'Kconfig*' -o -name 'Kbuild*'); do cp -R --parents $i $TempDevelRoot;done
 	cp -fR include $TempDevelRoot
-    ln -s ../generated/uapi/linux/version.h $TempDevelRoot/include/linux/version.h
+	ln -s ../generated/uapi/linux/version.h $TempDevelRoot/include/linux/version.h
 	cp -fR scripts $TempDevelRoot
 	cp -fR kernel/bounds.c $TempDevelRoot/kernel
 	cp -fR tools/include $TempDevelRoot/tools/
