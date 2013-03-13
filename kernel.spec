@@ -1150,7 +1150,7 @@ BuildKernel() {
 	%smake INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer modules_install
 
 	# headers
-	%make INSTALL_HDR_PATH=%{temp_root}%_includedir KERNELRELEASE=$KernelVer headers_install
+	%make INSTALL_HDR_PATH=%{temp_root}%_prefix KERNELRELEASE=$KernelVer headers_install
 
 	# remove /lib/firmware, we use a separate kernel-firmware
 	rm -rf %{temp_root}/lib/firmware
