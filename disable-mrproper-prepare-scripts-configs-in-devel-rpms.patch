@@ -3,9 +3,9 @@
  scripts/kconfig/Makefile |   19 -------------------
  2 files changed, 12 insertions(+), 30 deletions(-)
 
-diff -Nurp linux-3.7-rc8-mrproper/Makefile linux-3.7-rc8-mrproper-fix/Makefile
---- linux-3.7-rc8-mrproper/Makefile	2012-12-06 19:39:21.927270446 +0200
-+++ linux-3.7-rc8-mrproper-fix/Makefile	2012-12-06 19:42:08.991006310 +0200
+diff -Nurp linux-3.8-rc3-mrp/Makefile linux-3.8-rc3-mrp.fix/Makefile
+--- linux-3.8-rc3-mrp/Makefile	2013-01-10 08:46:02.309435198 +0200
++++ linux-3.8-rc3-mrp.fix/Makefile	2013-01-10 08:46:38.470246165 +0200
 @@ -513,8 +513,7 @@ ifeq ($(KBUILD_EXTMOD),)
  # Carefully list dependencies so we do not try to build scripts twice
  # in parallel
@@ -25,7 +25,7 @@ diff -Nurp linux-3.7-rc8-mrproper/Makefile linux-3.7-rc8-mrproper-fix/Makefile
  
  # Generate some files
  # ---------------------------------------------------------------------------
-@@ -1007,13 +1006,15 @@ endif # CONFIG_MODULES
+@@ -1013,13 +1012,15 @@ endif # CONFIG_MODULES
  CLEAN_DIRS  += $(MODVERDIR)
  
  # Directories & files removed with 'make mrproper'
@@ -48,7 +48,7 @@ diff -Nurp linux-3.7-rc8-mrproper/Makefile linux-3.7-rc8-mrproper-fix/Makefile
  
  # clean - Delete most, but leave enough to build external modules
  #
-@@ -1031,7 +1032,7 @@ clean: archclean
+@@ -1040,7 +1041,7 @@ clean: archclean vmlinuxclean
  #
  mrproper: rm-dirs  := $(wildcard $(MRPROPER_DIRS))
  mrproper: rm-files := $(wildcard $(MRPROPER_FILES))
@@ -57,9 +57,9 @@ diff -Nurp linux-3.7-rc8-mrproper/Makefile linux-3.7-rc8-mrproper-fix/Makefile
  
  PHONY += $(mrproper-dirs) mrproper archmrproper
  $(mrproper-dirs):
-diff -Nurp linux-3.7-rc8-mrproper/scripts/kconfig/Makefile linux-3.7-rc8-mrproper-fix/scripts/kconfig/Makefile
---- linux-3.7-rc8-mrproper/scripts/kconfig/Makefile	2012-12-06 19:39:21.927270446 +0200
-+++ linux-3.7-rc8-mrproper-fix/scripts/kconfig/Makefile	2012-12-06 19:44:18.373899598 +0200
+diff -Nurp linux-3.8-rc3-mrp/scripts/kconfig/Makefile linux-3.8-rc3-mrp.fix/scripts/kconfig/Makefile
+--- linux-3.8-rc3-mrp/scripts/kconfig/Makefile	2013-01-10 08:46:02.309435198 +0200
++++ linux-3.8-rc3-mrp.fix/scripts/kconfig/Makefile	2013-01-10 08:46:38.480246389 +0200
 @@ -12,26 +12,18 @@ Kconfig := Kconfig
  endif
  
