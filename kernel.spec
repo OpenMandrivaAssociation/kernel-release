@@ -1,7 +1,7 @@
 %define kernelversion	3
 %define patchlevel	8
 # sublevel is now used for -stable patches
-%define sublevel	3
+%define sublevel	5
 
 # Package release
 # Experimental kernel serie with CK patches, BFS, BFQ, TOI, UKSM
@@ -244,6 +244,15 @@
 %define build_nosrc 	0
 %{?_with_nosrc: %global build_nosrc 1}
 
+%if %cross_compiling
+%if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
+%define kmake %make ARCH=%target_arch CROSS_COMPILE=%(echo %__cc |sed -e 's,-gcc,-,') CC="$CC" LD="$LD" LDFLAGS="$LDFLAGS"
+%else
+%define kmake %make ARCH=%target_arch CROSS_COMPILE=%(echo %__cc |sed -e 's,-gcc,-,') LD="$LD" LDFLAGS="$LDFLAGS"
+%endif
+# there are places where parallel make don't work
+%define smake make ARCH=%target_arch CROSS_COMPILE=%(echo %__cc |sed -e 's,-gcc,-,') LD="$LD" LDFLAGS="$LDFLAGS"
+%else
 %if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
 %define kmake %make CC="$CC" LD="$LD" LDFLAGS="$LDFLAGS"
 %else
@@ -251,6 +260,7 @@
 %endif
 # there are places where parallel make don't work
 %define smake make LD="$LD" LDFLAGS="$LDFLAGS"
+%endif
 
 # Parallelize xargs invocations on smp machines
 %define kxargs xargs %([ -z "$RPM_BUILD_NCPUS" ] \\\
@@ -258,7 +268,7 @@
 	[ "$RPM_BUILD_NCPUS" -gt 1 ] && echo "-P $RPM_BUILD_NCPUS")
 
 # Sparc arch wants sparc64 kernels
-%define target_arch    %(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/')
+%define target_arch    %(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/')
 
 
 #
@@ -270,7 +280,7 @@ Version: 	%{kversion}
 Release: 	%{rpmrel}
 License: 	GPLv2
 Group: 	 	System/Kernel and hardware
-ExclusiveArch: %{ix86} x86_64 %{arm}
+ExclusiveArch: %{ix86} x86_64 %{arm} aarch64
 ExclusiveOS: 	Linux
 URL:            http://www.kernel.org
 
@@ -310,26 +320,26 @@ Source100: 	linux-%{patch_ver}.tar.xz
 
 %if %kpatch
 %if %sublevel
-Patch2:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/stable-review/patch-%{kversion}-%{kpatch}.bz2
+Patch2:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/stable-review/patch-%{kversion}-%{kpatch}.xz
 Source11:	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/stable-review/patch-%{kversion}-%{kpatch}.sign
 %else
-Patch1:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/testing/patch-%{kernelversion}.%{patchlevel}-%{kpatch}.bz2
+Patch1:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/testing/patch-%{kernelversion}.%{patchlevel}-%{kpatch}.xz
 Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/testing/patch-%{kernelversion}.%{patchlevel}-%{kpatch}.sign
 %endif
 %endif
 %if %kgit
-Patch2:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/snapshots/patch-%{kernelversion}.%{patchlevel}-%{kpatch}-git%{kgit}.bz2
+Patch2:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/snapshots/patch-%{kernelversion}.%{patchlevel}-%{kpatch}-git%{kgit}.xz
 Source11: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/snapshots/patch-%{kernelversion}.%{patchlevel}-%{kpatch}-git%{kgit}.sign
 %endif
 %if %sublevel
 %if %kpatch
 %define prev_sublevel %(expr %{sublevel} - 1)
 %if %prev_sublevel
-Patch1:   	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/patch-%{kernelversion}.%{patchlevel}.%{prev_sublevel}.bz2
+Patch1:   	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/patch-%{kernelversion}.%{patchlevel}.%{prev_sublevel}.xz
 Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/patch-%{kernelversion}.%{patchlevel}.%{prev_sublevel}.sign
 %endif
 %else
-Patch1:   	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/patch-%{kversion}.bz2
+Patch1:   	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/patch-%{kversion}.xz
 Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/patch-%{kversion}.sign
 %endif
 %endif
