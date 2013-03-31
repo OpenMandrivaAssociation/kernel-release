@@ -1101,17 +1101,24 @@ export LDFLAGS="--hash-style=sysv --build-id=none"
 PrepareKernel() {
 	name=$1
 	extension=$2
-	x86_dir=arch/x86/configs
-
+%ifarch %{ix86} x86_64
+	config_dir=arch/x86/configs
+%endif
+%ifarch	%arm
+	config_dir=arch/arm/configs
+%endif
+%ifarch aarc64
+	config_dir=arch/arm64/configs
+%endif
 	echo "Make config for kernel $extension"
 
 	%smake -s mrproper
 
 	if [ "%{target_arch}" == "i386" -o "%{target_arch}" == "x86_64" ]; then
 	    if [ -z "$name" ]; then
-		cp ${x86_dir}/%{target_arch}_defconfig-desktop .config
+		cp ${config_dir}/%{target_arch}_defconfig-desktop .config
 	    else
-		cp ${x86_dir}/%{target_arch}_defconfig-$name .config
+		cp ${config_dir}/%{target_arch}_defconfig-$name .config
 	    fi
 	else
 	    if [ -z "$name" ]; then
