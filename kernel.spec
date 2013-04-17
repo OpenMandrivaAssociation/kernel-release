@@ -1,7 +1,7 @@
 %define kernelversion	3
 %define patchlevel	8
 # sublevel is now used for -stable patches
-%define sublevel	7
+%define sublevel	8
 
 # Package release
 # Experimental kernel serie with CK patches, BFS, BFQ, TOI, UKSM
@@ -26,7 +26,7 @@
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		%{mibrel}
+%define rpmrel		1
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -59,7 +59,7 @@
 %define buildrpmrel     0.%{kpatch}.%{mibrel}%{disttag}
 %endif
 %else
-%define buildrpmrel     %{mibrel}%{disttag}
+%define buildrpmrel     %{release}%{disttag}
 %endif
 %define buildrel     	%{kversion}-%{buildrpmrel}
 
