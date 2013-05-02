@@ -1,7 +1,7 @@
 %define kernelversion	3
 %define patchlevel	8
 # sublevel is now used for -stable patches
-%define sublevel	8
+%define sublevel	11
 
 # Package release
 # Experimental kernel serie with CK patches, BFS, BFQ, TOI, UKSM
@@ -1055,7 +1055,7 @@ cd %src_dir
 %{patches_dir}/scripts/apply_patches
 %{patches_dir}/scripts/apply_patches-others
 %{patches_dir}/scripts/apply_patches-extras
-%{patches_dir}/scripts/apply_patchesQL
+%{patches_dir}/scripts/apply_patches-QL
 # PATCH END
 
 
@@ -1072,7 +1072,7 @@ cd %src_dir
 %endif
 
 
-%{patches_dir}/scripts/create_configsQL %debug --user_cpu="%{target_arch}"
+%{patches_dir}/scripts/create_configs-QL %debug --user_cpu="%{target_arch}"
 
 # make sure the kernel has the sublevel we know it has...
 LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile

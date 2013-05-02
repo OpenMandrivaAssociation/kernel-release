@@ -1,10 +1,12 @@
 sources:
+  linux-3.8.11-rosa69.tar.xz: 9b0ccf893b1d2e473d229a6f58361b72983861d9
   linux-3.8.4-rosa69.tar.xz: 7a91966274b50d1b1e398699f7938218ff8ecbf0
   linux-3.8.5-rosa69.tar.xz: 51deed3fec0545326ceb120db7433832fe5830c3
   linux-3.8.7-rosa69.tar.xz: cf508e9c46150f5a3d2bfa83e5c4f8ea75f0f0b8
   linux-3.8.8-rosa69.tar.xz: abd70e2c7db8d8ced7b89b44f6181fc1f10e64bd
   linux-3.8.tar.sign: 7a910ac80b2e3e4997ad655be752d60d710a694e
   linux-3.8.tar.xz: 70f998b787b0ce96e36d5b0d8f40e3988566f9f2
+  patch-3.8.11.sign: d43376fc3a4dc586f54920a4e8f5b147c9c1514e
   patch-3.8.4.xz: 85d46f91e81f16996a76289854f52acb74f5f7e7
   patch-3.8.5.sign: 2e9c56c775c30696f97486d68f3f46e328e4b8f0
   patch-3.8.7.sign: 6841f589965cee5eca6dd4c1a68e46965a12857f
