@@ -1212,8 +1212,7 @@ SaveDevel() {
 	# Needed for lirc_gpio (#39004)
 	cp -fR drivers/media/pci/bt8xx/bttv{,p}.h $TempDevelRoot/drivers/media/pci/bt8xx/
 	cp -fR drivers/media/pci/bt8xx/bt848.h $TempDevelRoot/drivers/media/pci/bt8xx/
-	#cp -fR drivers/media/i2c/btcx-risc.h $TempDevelRoot/drivers/media/i2c/
-
+	cp -fR drivers/media/common/btcx-risc.h $TempDevelRoot/drivers/media/common/
 	# Needed for external dvb tree (#41418)
 	cp -fR drivers/media/dvb-core/*.h $TempDevelRoot/drivers/media/dvb-core/
 	cp -fR drivers/media/dvb-frontends/lgdt330x.h $TempDevelRoot/drivers/media/dvb-frontends/
@@ -1224,8 +1223,8 @@ SaveDevel() {
 	# aufs2 has a special file needed
 	#cp -fR fs/aufs/magic.mk $TempDevelRoot/fs/aufs
 
-	for i in alpha avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu microblaze \
-		 mips mn10300 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa arc metag; do
+	for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
+		 mips mn10300 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
 		rm -rf $TempDevelRoot/arch/$i
 	done
 
@@ -1240,8 +1239,8 @@ SaveDevel() {
 	# Clean the scripts tree, and make sure everything is ok (sanity check)
 	# running prepare+scripts (tree was already "prepared" in build)
 	pushd $TempDevelRoot >/dev/null
-		# %smake -s prepare scripts
-		# %smake -s clean
+		%smake -s prepare scripts
+		%smake -s clean
 	popd >/dev/null
 	rm -f $TempDevelRoot/.config.old
 
@@ -1647,8 +1646,8 @@ chmod -R a+rX %{target_source}
 
 # we remove all the source files that we don't ship
 # first architecture files
-for i in alpha avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu microblaze \
-	 mips openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300 arc metag; do
+for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
+	 mips openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
 	rm -rf %{target_source}/arch/$i
 done
 
