@@ -385,7 +385,7 @@ Autoreqprov: 		no
 
 BuildRequires:	kmod-devel kmod-compat
 
-BuildRequires: 	gcc 
+BuildRequires: 	gcc bc 
 
 # for perf, cpufreq and other tools
 BuildRequires:		elfutils-devel
