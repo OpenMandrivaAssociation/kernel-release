@@ -1,7 +1,7 @@
 %define kernelversion	3
-%define patchlevel	8
+%define patchlevel	9
 # sublevel is now used for -stable patches
-%define sublevel	13
+%define sublevel	5
 
 # Package release
 # Experimental kernel serie with CK patches, BFS, BFQ, TOI, UKSM
@@ -1212,7 +1212,7 @@ SaveDevel() {
 	# Needed for lirc_gpio (#39004)
 	cp -fR drivers/media/pci/bt8xx/bttv{,p}.h $TempDevelRoot/drivers/media/pci/bt8xx/
 	cp -fR drivers/media/pci/bt8xx/bt848.h $TempDevelRoot/drivers/media/pci/bt8xx/
-	cp -fR drivers/media/i2c/btcx-risc.h $TempDevelRoot/drivers/media/i2c/
+	#cp -fR drivers/media/i2c/btcx-risc.h $TempDevelRoot/drivers/media/i2c/
 
 	# Needed for external dvb tree (#41418)
 	cp -fR drivers/media/dvb-core/*.h $TempDevelRoot/drivers/media/dvb-core/
@@ -1225,7 +1225,7 @@ SaveDevel() {
 	#cp -fR fs/aufs/magic.mk $TempDevelRoot/fs/aufs
 
 	for i in alpha avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu microblaze \
-		 mips mn10300 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
+		 mips mn10300 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa arc metag; do
 		rm -rf $TempDevelRoot/arch/$i
 	done
 
@@ -1249,7 +1249,7 @@ SaveDevel() {
 	chmod -R a+rX $TempDevelRoot
 
 	# disable mrproper in -devel rpms
-	patch -p1 --fuzz=0 -d $TempDevelRoot -i %{SOURCE2}
+	patch -p1 --fuzz=0 -b -z .nomrproper~ -d $TempDevelRoot -i %{SOURCE2}
 
 	kernel_devel_files=../kernel_devel_files.$devel_flavour
 
@@ -1648,7 +1648,7 @@ chmod -R a+rX %{target_source}
 # we remove all the source files that we don't ship
 # first architecture files
 for i in alpha avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu microblaze \
-	 mips openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
+	 mips openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300 arc metag; do
 	rm -rf %{target_source}/arch/$i
 done
 

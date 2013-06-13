@@ -1,7 +1,12 @@
+removed_sources:
+  linux-3.8.tar.xz: 70f998b787b0ce96e36d5b0d8f40e3988566f9f2
 sources:
   linux-3.8.12-rosa69.tar.xz: 56bd42241b33eeb642a6c6e237935d4f13530bab
   linux-3.8.13-rosa69.tar.xz: fb1e6df14c5f9ed29b69a883ef00fc211a5e91b4
   linux-3.8.tar.sign: 7a910ac80b2e3e4997ad655be752d60d710a694e
-  linux-3.8.tar.xz: 70f998b787b0ce96e36d5b0d8f40e3988566f9f2
+  linux-3.9.5-rosa69.tar.xz: 87f9cd3e464525d397b56cf564787f04e5e65177
+  linux-3.9.tar.sign: 33754987583b69d64496428261194a28912a0cc3
+  linux-3.9.tar.xz: 61d99c3e144d2b31f41cb593bebcd85ddc550bdb
   patch-3.8.12.xz: ac8de7c5aef405dddcb17170ecb5b968a1744070
   patch-3.8.13.sign: d06ad023c5d3978ea7dc5632f90bdb9d0e7aae20
+  patch-3.9.5.sign: 4b83c6cf7b62001755da3da90fbe01431edacc6c
