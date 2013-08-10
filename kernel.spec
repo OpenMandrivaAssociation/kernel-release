@@ -1,7 +1,7 @@
 %define kernelversion	3
-%define patchlevel	9
+%define patchlevel	10
 # sublevel is now used for -stable patches
-%define sublevel	9
+%define sublevel	5
 
 # Package release
 # Experimental kernel serie with CK patches, BFS, BFQ, TOI, UKSM
@@ -1195,7 +1195,7 @@ SaveDevel() {
 		cp -fR arch/x86/kernel/asm-offsets_{32,64}.c $TempDevelRoot/arch/x86/kernel/
 		cp -fR arch/x86/syscalls/syscall* $TempDevelRoot/arch/x86/syscalls/
 		cp -fR arch/x86/include $TempDevelRoot/arch/x86/
-		cp -fR arch/x86/tools/relocs.c $TempDevelRoot/arch/x86/tools/
+		cp -fR arch/x86/tools $TempDevelRoot/arch/x86/
 	%else
 		cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} $TempDevelRoot/arch/%{target_arch}/kernel/
 		for f in $(find arch/%{target_arch} -name include); do cp -fR --parents $f $TempDevelRoot; done
@@ -1213,6 +1213,7 @@ SaveDevel() {
 	cp -fR drivers/media/pci/bt8xx/bttv{,p}.h $TempDevelRoot/drivers/media/pci/bt8xx/
 	cp -fR drivers/media/pci/bt8xx/bt848.h $TempDevelRoot/drivers/media/pci/bt8xx/
 	cp -fR drivers/media/common/btcx-risc.h $TempDevelRoot/drivers/media/common/
+
 	# Needed for external dvb tree (#41418)
 	cp -fR drivers/media/dvb-core/*.h $TempDevelRoot/drivers/media/dvb-core/
 	cp -fR drivers/media/dvb-frontends/lgdt330x.h $TempDevelRoot/drivers/media/dvb-frontends/
@@ -1221,7 +1222,7 @@ SaveDevel() {
 	cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
 
 	# aufs2 has a special file needed
-	#cp -fR fs/aufs/magic.mk $TempDevelRoot/fs/aufs
+	cp -fR fs/aufs/magic.mk $TempDevelRoot/fs/aufs
 
 	for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
 		 mips mn10300 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
@@ -1280,6 +1281,7 @@ $DevelRoot/include/clocksource
 $DevelRoot/include/config
 $DevelRoot/include/crypto
 $DevelRoot/include/drm
+$DevelRoot/include/dt-bindings
 $DevelRoot/include/generated
 $DevelRoot/include/keys
 $DevelRoot/include/linux
@@ -1750,6 +1752,7 @@ rm -rf %{buildroot}
 %{_kerneldir}/include/clocksource
 %{_kerneldir}/include/crypto
 %{_kerneldir}/include/drm
+%{_kerneldir}/include/dt-bindings
 %{_kerneldir}/include/keys
 %{_kerneldir}/include/linux
 %{_kerneldir}/include/math-emu
