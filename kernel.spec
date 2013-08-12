@@ -1,7 +1,7 @@
 %define kernelversion	3
 %define patchlevel	10
 # sublevel is now used for -stable patches
-%define sublevel	5
+%define sublevel	6
 
 # Package release
 # Experimental kernel serie with CK patches, BFS, BFQ, TOI, UKSM
