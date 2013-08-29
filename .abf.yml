@@ -1,16 +1,5 @@
-removed_sources:
-  linux-3.9.tar.xz: 61d99c3e144d2b31f41cb593bebcd85ddc550bdb
 sources:
-  linux-3.10.5-rosa69.tar.xz: d793686497f040fb8e6a193ce2c9f37271de1408
-  linux-3.10.6-rosa69.tar.xz: f7b587831bfd04c795f7a10d9035562aaa0c2d4f
-  linux-3.10.7-rosa69.tar.xz: ecb9218c0e68e5e69f49b0f0b21eba5815957673
   linux-3.10.9-rosa69.tar.xz: a95d060f8c011f47c8e93a4a4ff0a8d18e411c4f
   linux-3.10.tar.sign: 3d28ba603aca8015c1f5a3eca799fc849a576ac8
   linux-3.10.tar.xz: a649d5c15f68ccbae1c4863e357bdc48da4cc0b4
-  linux-3.9.9-rosa69.tar.xz: 34e1221c9cdd42106bd6ece355a0e8fc384b4fa3
-  linux-3.9.tar.sign: 33754987583b69d64496428261194a28912a0cc3
-  patch-3.10.5.sign: f2922af418abc815db2ccbd13d338a7a7a018dd6
-  patch-3.10.6.sign: 5caac0b146435ec10fb5c5fe2958fc2e8b6c2f93
-  patch-3.10.7.sign: 495a8f9a22db6d7f65a0ad5930143728575185d9
   patch-3.10.9.sign: 80e7c775db9a9c8892315174471057eef98f1893
-  patch-3.9.9.sign: 8f9d18b1201af07ba73e15cb2e327daa91c264ea
