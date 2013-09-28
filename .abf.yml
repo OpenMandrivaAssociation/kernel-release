@@ -1,7 +1,5 @@
 sources:
-  linux-3.10.12-rosa69.tar.xz: e745f53567e3ac43fab1044f73c73ba41af88003
-  linux-3.10.9-rosa69.tar.xz: a95d060f8c011f47c8e93a4a4ff0a8d18e411c4f
+  linux-3.10.13-rosa69.tar.xz: cf2e1c19fc7eea4d1d562ac84717f89eaa919d9c
   linux-3.10.tar.sign: 3d28ba603aca8015c1f5a3eca799fc849a576ac8
   linux-3.10.tar.xz: a649d5c15f68ccbae1c4863e357bdc48da4cc0b4
-  patch-3.10.12.sign: 903e69e82a1a3206a1e02c4c962e2ab6aba23e66
-  patch-3.10.9.sign: 80e7c775db9a9c8892315174471057eef98f1893
+  patch-3.10.13.sign: 97f3047a277b66ec827d14da2512559366229493
