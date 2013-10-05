@@ -1,4 +1,4 @@
 sources:
-  linux-3.10.14-rosa69.tar.xz: 70ea9900b09178b97c30cc305aafb4d045c81c32
+  linux-3.10.15-rosa69.tar.xz: 10c90cc35a0fa81e68155a742890c944e7f78369
   linux-3.10.tar.xz: a649d5c15f68ccbae1c4863e357bdc48da4cc0b4
-  patch-3.10.14.xz: 29cea9ae7397a9fc5a9749de7f8c4117f8096af3
+  patch-3.10.15.xz: 34a59af9229ee402cab042df8bb8df9d3d831fce
