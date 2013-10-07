@@ -75,7 +75,7 @@
 %define debug_package 		%{nil}
 
 # Build defines
-%define build_doc 		1
+%define build_doc 			1
 %define build_source 		1
 %define build_devel 		1
 
@@ -93,7 +93,7 @@
 %define build_nrjQL_desktop			1
 
 # Build nrjQL realtime (i686 / 4GB) / x86_64 / sparc64 sets
-%define build_nrjQL_realtime			1
+%define build_nrjQL_realtime		1
 
 # Build nrjQL laptop (i686 / 4GB) / x86_64
 %define build_nrjQL_laptop			1
@@ -108,7 +108,7 @@
 %define build_nrjQL_server_games		0
 
 # Build nrjQL_gameserver (i686 / 64GB)/x86_64 / sparc64 sets
-%define build_nrjQL_server_computing		0
+%define build_nrjQL_server_computing	0
 
 #
 # MIB experimental low latency optimized flavours with PAE 
@@ -116,7 +116,7 @@
 
 # Build nrjQL desktop pae (i686 / 64GB)
 %ifarch %{ix86}
-%define build_nrjQL_desktop_pae			0
+%define build_nrjQL_desktop_pae			1
 %endif
 
 # Build nrjQL realtime pae (i686 / 64GB)
@@ -126,7 +126,7 @@
 
 # Build nrjQL laptop pae (i686 / 64GB)
 %ifarch %{ix86}
-%define build_nrjQL_laptop_pae			0
+%define build_nrjQL_laptop_pae			1
 %endif
 
 # Build nrjQL netbook pae (i686 / 64GB)
