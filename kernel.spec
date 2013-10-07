@@ -1053,8 +1053,7 @@ cd %src_dir
 %endif
 
 %{patches_dir}/scripts/apply_patches
-%{patches_dir}/scripts/apply_patches-others
-%{patches_dir}/scripts/apply_patches-extras
+%{patches_dir}/scripts/apply_patches-NRJ
 %{patches_dir}/scripts/apply_patches-QL
 # PATCH END
 
