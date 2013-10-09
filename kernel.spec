@@ -1,7 +1,7 @@
 %define kernelversion	3
-%define patchlevel	10
+%define patchlevel	11
 # sublevel is now used for -stable patches
-%define sublevel	15
+%define sublevel	4
 
 # Package release
 # Experimental kernel serie with CK patches, BFS, BFQ, TOI, UKSM
@@ -105,10 +105,10 @@
 %define build_nrjQL_server			1
 
 # Build nrjQL_gameserver (i686 / 64GB)/x86_64 / sparc64 sets
-%define build_nrjQL_server_games		0
+%define build_nrjQL_server_games		1
 
 # Build nrjQL_gameserver (i686 / 64GB)/x86_64 / sparc64 sets
-%define build_nrjQL_server_computing	0
+%define build_nrjQL_server_computing	1
 
 #
 # MIB experimental low latency optimized flavours with PAE 
@@ -121,7 +121,7 @@
 
 # Build nrjQL realtime pae (i686 / 64GB)
 %ifarch %{ix86}
-%define build_nrjQL_realtime_pae		0
+%define build_nrjQL_realtime_pae		1
 %endif
 
 # Build nrjQL laptop pae (i686 / 64GB)
@@ -131,7 +131,7 @@
 
 # Build nrjQL netbook pae (i686 / 64GB)
 %ifarch %{ix86}
-%define build_nrjQL_netbook_pae			0
+%define build_nrjQL_netbook_pae			1
 %endif
 
 #
@@ -140,12 +140,12 @@
 
 # Build nrjQL desktop Intel Core2 (mcore2 / 4GB)
 %ifarch %{ix86}
-%define build_nrjQL_desktop_core2	   	0
+%define build_nrjQL_desktop_core2	   	1
 %endif
 
 # Build nrjQL desktop Intel Core2 pae (mcore2 / 64GB)
 %ifarch %{ix86}
-%define build_nrjQL_desktop_core2_pae  	 	0
+%define build_nrjQL_desktop_core2_pae  	 	1
 %endif
 
 #
@@ -362,26 +362,34 @@ processor mode, use the "nosmp" boot parameter.
 ### Global Requires/Provides
 
 %define requires1	microcode
-%define requires2	dracut >= 026
+%define requires2	dracut >= 034
 %define requires3	kmod >= 12
 %define requires4	sysfsutils >=  2.1.0-12
 %define requires5	kernel-firmware >=  20120219-1
 
 %define kprovides1 	%{kname} = %{kverrel}
 %define kprovides2	kernel = %{tar_ver}
-%define kprovides3	alsa = 1.0.26
+%define kprovides3	alsa = 1.0.27
 %define kprovides_server drbd-api = 88
 
 %define	kobsoletes1	dkms-r8192se <= 0019.1207.2010-2
 %define kobsoletes2	dkms-lzma <= 4.43-32
 %define kobsoletes3	dkms-psb <= 4.41.1-7
 
-%define kconflicts1	dkms-nvidia96xx <= 96.43.23
+# conflict dkms packages that dont support kernel-3.10
+# all driver versions must be carefully checked to add
+%define kconflicts1	dkms-broadcom-wl < 5.100.82.112-12
+%define kconflicts2	dkms-fglrx < 13.200.5-1
+%define kconflicts3	dkms-nvidia-current < 325.15-1
+%define kconflicts4	dkms-nvidia-long-lived < 319.49-1
+%define kconflicts5	dkms-nvidia304 < 304.108-1
+# nvidia173 does not support this kernel
+# nvidia96xx does not support this kernel or x11-server-1.13
 
 Autoreqprov: 		no
 
 # might be useful too:
-# Suggests:	microcode
+Suggests:	microcode
 
 BuildRequires:	kmod-devel kmod-compat
 
@@ -436,7 +444,7 @@ Provides:	kernel-desktop				\
 Requires(pre):	%requires1 %requires2 %requires3 %requires4	\
 Requires:	%requires2 %requires5			\
 Obsoletes:	%kobsoletes1 %kobsoletes2 %kobsoletes3	\
-Conflicts:	%kconflicts1				\
+Conflicts:	%kconflicts1 %kconflicts2 %kconflicts3 %kconflicts4 %kconflicts5	\
 Provides:	should-restart = system			\
 Suggests:	crda					\
 %ifarch %{ix86}						\
