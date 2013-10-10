@@ -1238,6 +1238,9 @@ SaveDevel() {
 
 	%ifnarch %{arm}
 		rm -rf $TempDevelRoot/arch/arm
+		rm -rf $TempDevelRoot/include/kvm/arm*
+	%endif
+	%ifnarch aarch64
 		rm -rf $TempDevelRoot/arch/arm64
 	%endif
 	%ifnarch %{ix86} x86_64
