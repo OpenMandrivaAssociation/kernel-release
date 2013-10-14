@@ -1065,6 +1065,11 @@ cd %src_dir
 %{patches_dir}/scripts/apply_patches-QL
 # PATCH END
 
+# Config tweaking for OpenMandriva
+# done here to limit modifications to upstream
+# We prefer uvesafb over vesafb because it can be modular and
+# because it's more cross-platform
+find %{patches_dir} -name "*.config" |xargs sed -i -e 's,CONFIG_FB_VESA=y,# CONFIG_FB_VESA is not set,g'
 
 #
 # Setup Begin
