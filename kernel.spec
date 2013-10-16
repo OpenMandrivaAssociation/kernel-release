@@ -1,7 +1,7 @@
 %define kernelversion	3
 %define patchlevel	11
 # sublevel is now used for -stable patches
-%define sublevel	4
+%define sublevel	5
 
 # Package release
 # Experimental kernel serie with CK patches, BFS, BFQ, TOI, UKSM
@@ -343,6 +343,10 @@ Patch1:   	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/patch-%{kve
 Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/patch-%{kversion}.sign
 %endif
 %endif
+
+# Extra patches not currently in *-rosa69 tarballs:
+# driver from http://powarman.dyndns.org/hg/v4l-dvb-saa716x
+Source101:	linux-3.11.4-saa716x.patch
 
 #END
 ####################################################################
@@ -1060,6 +1064,10 @@ cd %src_dir
 %patch2 -p1
 %endif
 
+# Push in extra patches...
+cp %{SOURCE101} %{patches_dir}/patches/
+echo `basename %{SOURCE101}` >>%{patches_dir}/patches/series
+
 %{patches_dir}/scripts/apply_patches
 %{patches_dir}/scripts/apply_patches-NRJ
 %{patches_dir}/scripts/apply_patches-QL
@@ -1070,6 +1078,8 @@ cd %src_dir
 # We prefer uvesafb over vesafb because it can be modular and
 # because it's more cross-platform
 find %{patches_dir} -name "*.config" |xargs sed -i -e 's,CONFIG_FB_VESA=y,# CONFIG_FB_VESA is not set,g'
+# Enable SAA716x driver added by SOURCE101
+find %{patches_dir} -name "*.config" |xargs sed -i -e '/CONFIG_VIDEO_SAA7164/iCONFIG_SAA716X_SUPPORT=y\nCONFIG_SAA716X_CORE=m\nCONFIG_DVB_SAA716X_BUDGET=m\nCONFIG_DVB_SAA716X_HYBRID=m\nCONFIG_DVB_SAA716X_FF=m'
 
 #
 # Setup Begin
