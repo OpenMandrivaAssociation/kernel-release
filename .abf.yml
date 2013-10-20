@@ -1,4 +1,7 @@
 sources:
-  "linux-3.11.5-rosa69.tar.xz": 7d50e49780eb89aac00de97dad27bbc9d9f1db6e
-  "linux-3.11.tar.xz": d50478f19d42ae2e5f21e4b0f802d0ea83a8dabe
-  "patch-3.11.5.xz": 0707c9382fd27ea8bc28d919fe86d649e7a9be37
+  linux-3.11.5-rosa69.tar.xz: 7d50e49780eb89aac00de97dad27bbc9d9f1db6e
+  linux-3.11.6-rosa69.tar.xz: dcf2c8526a9ae2f1b4ac9da8c88b65a1ca497e8f
+  linux-3.11.tar.sign: 8ec049ed7bf6f502879c8a9114373355ff21c695
+  linux-3.11.tar.xz: d50478f19d42ae2e5f21e4b0f802d0ea83a8dabe
+  patch-3.11.5.xz: 0707c9382fd27ea8bc28d919fe86d649e7a9be37
+  patch-3.11.6.sign: 3e95da8fca2af57729de094fae021f106f65caba
