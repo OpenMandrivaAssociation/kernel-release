@@ -315,7 +315,7 @@ processor mode, use the "nosmp" boot parameter.
 # all driver versions must be carefully checked to add
 
 %define kconflicts1	dkms-broadcom-wl < 5.100.82.112-12
-%define kconflicts2	dkms-fglrx < 13.25.18-1
+%define kconflicts2	dkms-fglrx < 13.200.5-1
 %define kconflicts3	dkms-nvidia-current < 325.15-1
 %define kconflicts4	dkms-nvidia-long-lived < 319.49-1
 %define kconflicts5	dkms-nvidia304 < 304.108-1
