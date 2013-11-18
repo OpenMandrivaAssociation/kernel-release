@@ -1,4 +1,4 @@
 sources:
-  linux-3.11.6-rosa69.tar.xz: dcf2c8526a9ae2f1b4ac9da8c88b65a1ca497e8f
+  linux-3.11.8-rosa69.tar.xz: eaed291f04dde53dc2b5810cf639a8987addb373
   linux-3.11.tar.xz: d50478f19d42ae2e5f21e4b0f802d0ea83a8dabe
-  patch-3.11.6.xz: 99d9e9ce07d9c4e93b05027a925999234134c059
+  patch-3.11.8.xz: 1535c80202e9b230f962d7ace592522a70892576
