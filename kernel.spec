@@ -280,6 +280,9 @@ Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/patch-%{kve
 %endif
 
 #END
+
+Patch200:	kernel-3.11.8-i915-quirk-acer-aspire-v3-772g.patch
+
 ####################################################################
 
 # Defines for the things that are needed for all the kernels
@@ -1262,7 +1265,6 @@ cd %src_dir
 %patch2 -p1
 %endif
 
-
 #
 # Setup Begin
 #
@@ -1727,6 +1729,7 @@ cd %src_dir
 
 %{patches_dir}/scripts/apply_patches
 %{patches_dir}/scripts/create_configs-old-mdv %debug --user_cpu="%{target_arch}"
+%patch200 -p1 -b .i915~
 
 %ifarch %{ix86}
 %if %{with desktop586}
