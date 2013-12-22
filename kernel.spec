@@ -1,7 +1,7 @@
 %define kernelversion	3
-%define patchlevel	11
+%define patchlevel	12
 # sublevel is now used for -stable patches
-%define sublevel	8
+%define sublevel	5
 
 # Package release
 %define mibrel		69
