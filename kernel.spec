@@ -25,7 +25,7 @@
 %define rpmrel		0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		1
+%define rpmrel		2
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -1279,7 +1279,7 @@ cd %src_dir
 
 
 # make sure the kernel has the sublevel we know it has...
-LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
+LC_ALL=C sed -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 
 # get rid of unwanted files
 find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
@@ -1340,7 +1340,7 @@ PrepareKernel() {
 	fi
 
 	# make sure EXTRAVERSION says what we want it to say
-	LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -$extension/" Makefile
+	LC_ALL=C sed -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -$extension/" Makefile
 
 	%smake oldconfig
 }
@@ -1715,7 +1715,6 @@ CreateKernel() {
 # DO it...
 ###
 
-
 # Create a simulacro of buildroot
 rm -rf %{temp_root}
 install -d %{temp_root}
@@ -1724,12 +1723,17 @@ install -d %{temp_root}
 # make sure we are in the directory
 cd %src_dir
 
+# OMV Apply OpenMandriva specific config changes
+sed -i -e 's,CONFIG_VT=y,# CONFIG_VT is not set,g' %{patches_dir}/configs/*.config
+
 # %{patches_dir}/scripts/apply_patches-vanilla
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
 
 %{patches_dir}/scripts/apply_patches
 %{patches_dir}/scripts/create_configs-old-mdv %debug --user_cpu="%{target_arch}"
-%patch200 -p1 -b .i915~
+
+# OMV Apply OpenMandriva specific patches
+#patch200 -p1 -b .i915~
 
 %ifarch %{ix86}
 %if %{with desktop586}
@@ -1915,7 +1919,7 @@ CreateKernel nrjQL-desktop-core2-pae
 
 
 # set extraversion to match srpm to get nice version reported by the tools
-LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
+LC_ALL=C sed -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 
 
 ############################################################
@@ -2025,7 +2029,7 @@ done
 popd
 
 # need to set extraversion to match srpm again to avoid rebuild
-LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
+LC_ALL=C sed -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %if %{with perf}
 
 # perf tool binary and supporting scripts/binaries
