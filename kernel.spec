@@ -282,6 +282,15 @@ Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/patch-%{kve
 #END
 
 Patch200:	kernel-3.11.8-i915-quirk-acer-aspire-v3-772g.patch
+# Add support for Hauppauge WinTV-HVR-930C-HD DVB-T/DVB-C receiver
+# Current patches are linked on
+# http://www.linuxtv.org/wiki/index.php/Hauppauge_WinTV-HVR-930C-HD
+# http://article.gmane.org/gmane.linux.drivers.video-input-infrastructure/71693/raw
+Patch210:	H930C-part1.patch
+# http://article.gmane.org/gmane.linux.drivers.video-input-infrastructure/71694/raw
+Patch211:	H930C-part2.patch
+# http://article.gmane.org/gmane.linux.drivers.video-input-infrastructure/71695/raw
+Patch212:	H930C-part3.patch
 
 ####################################################################
 
@@ -1735,6 +1744,10 @@ sed -i -e 's,CONFIG_VT=y,# CONFIG_VT is not set,g' %{patches_dir}/configs/*.conf
 
 # OMV Apply OpenMandriva specific patches
 #patch200 -p1 -b .i915~
+
+%patch210 -p1 -b .h930c-1~
+%patch211 -p1 -b .h930c-2~
+%patch212 -p1 -b .h930c-3~
 
 %ifarch %{ix86}
 %if %{with desktop586}
