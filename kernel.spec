@@ -387,6 +387,7 @@ Conflicts:	%kconflicts1 %kconflicts2 %kconflicts3	\
 Conflicts:	%kconflicts4 %kconflicts5		\
 Provides:	should-restart = system			\
 Suggests:	crda					\
+Requires:	kmscon					\
 %ifarch %{ix86}						\
 Conflicts:	arch(x86_64)				\
 %endif							\
