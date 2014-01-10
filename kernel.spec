@@ -1,7 +1,7 @@
 %define kernelversion	3
 %define patchlevel	12
 # sublevel is now used for -stable patches
-%define sublevel	6
+%define sublevel	7
 
 # Package release
 %define mibrel		69
@@ -25,7 +25,7 @@
 %define rpmrel		0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		2
+%define rpmrel		1
 %endif
 
 # fakerel and fakever never change, they are used to fool
