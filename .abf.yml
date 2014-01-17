@@ -1,4 +1,4 @@
 sources:
-  linux-3.12.7-rosa69.tar.xz: acb3492ac20c8479b837134e52fcf087d68dcf73
+  linux-3.12.8-rosa69.tar.xz: 4f4fe20cfb1d78c64d931f99935d6245ce6ccbc0
   linux-3.12.tar.xz: de2ceb8cbcfacb8666bfe926159f72e2a9434587
-  patch-3.12.7.xz: c2db52c8d2e8c588f49c706dd3be2e69605235a0
+  patch-3.12.8.xz: c489cd1f565bf1e961e7d5d5f252a21f36026032
