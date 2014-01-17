@@ -291,6 +291,8 @@ Patch210:	H930C-part1.patch
 Patch211:	H930C-part2.patch
 # http://article.gmane.org/gmane.linux.drivers.video-input-infrastructure/71695/raw
 Patch212:	H930C-part3.patch
+# Fix build with CONFIG_VT disabled
+Patch213:	fix-tuxonice-build-with-CONFIG_VT-disabled.patch
 
 ####################################################################
 
@@ -1733,7 +1735,8 @@ install -d %{temp_root}
 cd %src_dir
 
 # OMV Apply OpenMandriva specific config changes
-sed -i -e 's,CONFIG_VT=y,# CONFIG_VT is not set,g' %{patches_dir}/configs/*.config
+# NOT YET, kmscon should stabilize some more
+#sed -i -e 's,CONFIG_VT=y,# CONFIG_VT is not set,g' %{patches_dir}/configs/*.config
 
 # %{patches_dir}/scripts/apply_patches-vanilla
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
@@ -1865,6 +1868,9 @@ CreateKernel versatile
 
 %{patches_dir}/scripts/apply_patches-QL
 %{patches_dir}/scripts/create_configs-QL %debug --user_cpu="%{target_arch}"
+
+# Fix up QL bits
+%patch213 -p1 -b .toibuildfix~
 
 %if %{with nrjQL_desktop}
 CreateKernel nrjQL-desktop
