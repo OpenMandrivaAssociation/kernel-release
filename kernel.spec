@@ -398,7 +398,6 @@ Conflicts:	%kconflicts1 %kconflicts2 %kconflicts3	\
 Conflicts:	%kconflicts4 %kconflicts5		\
 Provides:	should-restart = system			\
 Suggests:	crda					\
-Requires:	kmscon					\
 %ifarch %{ix86}						\
 Conflicts:	arch(x86_64)				\
 %endif							\
@@ -1735,7 +1734,7 @@ install -d %{temp_root}
 cd %src_dir
 
 # OMV Apply OpenMandriva specific config changes
-# NOT YET, kmscon should stabilize some more
+# NOT YET, systemd-console should stabilize some more
 #sed -i -e 's,CONFIG_VT=y,# CONFIG_VT is not set,g' %{patches_dir}/configs/*.config
 
 # %{patches_dir}/scripts/apply_patches-vanilla
