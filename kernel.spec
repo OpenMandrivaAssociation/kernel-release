@@ -1,7 +1,7 @@
 %define kernelversion	3
 %define patchlevel	12
 # sublevel is now used for -stable patches
-%define sublevel	8
+%define sublevel	9
 
 # Package release
 %define mibrel		69
@@ -1729,13 +1729,17 @@ CreateKernel() {
 rm -rf %{temp_root}
 install -d %{temp_root}
 
-
 # make sure we are in the directory
 cd %src_dir
 
 # OMV Apply OpenMandriva specific config changes
-# NOT YET, systemd-console should stabilize some more
-#sed -i -e 's,CONFIG_VT=y,# CONFIG_VT is not set,g' %{patches_dir}/configs/*.config
+sed -i -e 's,# CONFIG_NAMESPACES is not set,CONFIG_NAMESPACES=y,g' %{patches_dir}/configs/*.config
+
+for i in %{patches_dir}/configs/*.config; do
+	for ns in UTS IPC USER PID NET; do
+		echo "CONFIG_${ns}_NS=y" >>${i}
+	done
+done
 
 # %{patches_dir}/scripts/apply_patches-vanilla
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
