@@ -345,6 +345,12 @@ BuildRequires:	kmod-devel kmod-compat
 
 BuildRequires: 	gcc bc
 
+BuildRequires:  audit-devel libunwind-devel
+
+%ifarch x86_64
+BuildRequires:  numa-devel
+%endif
+
 # for perf, cpufreq and other tools
 BuildRequires:		elfutils-devel
 BuildRequires:		zlib-devel
