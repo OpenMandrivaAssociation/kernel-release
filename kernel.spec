@@ -1739,7 +1739,7 @@ install -d %{temp_root}
 cd %src_dir
 
 # OMV Apply OpenMandriva specific config changes
-sed -i -e 's,# CONFIG_NAMESPACES is not set,CONFIG_NAMESPACES=y,g' %{patches_dir}/configs/*.config
+# sed -i -e 's,# CONFIG_NAMESPACES is not set,CONFIG_NAMESPACES=y,g' %{patches_dir}/configs/*.config
 
 for i in %{patches_dir}/configs/*.config; do
 	for ns in UTS IPC USER PID NET; do
