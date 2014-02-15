@@ -281,18 +281,18 @@ Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/patch-%{kve
 
 #END
 
-Patch200:	kernel-3.11.8-i915-quirk-acer-aspire-v3-772g.patch
+# Patch200:	kernel-3.11.8-i915-quirk-acer-aspire-v3-772g.patch
 # Add support for Hauppauge WinTV-HVR-930C-HD DVB-T/DVB-C receiver
 # Current patches are linked on
 # http://www.linuxtv.org/wiki/index.php/Hauppauge_WinTV-HVR-930C-HD
 # http://article.gmane.org/gmane.linux.drivers.video-input-infrastructure/71693/raw
-Patch210:	H930C-part1.patch
+# Patch210:	H930C-part1.patch
 # http://article.gmane.org/gmane.linux.drivers.video-input-infrastructure/71694/raw
-Patch211:	H930C-part2.patch
+# Patch211:	H930C-part2.patch
 # http://article.gmane.org/gmane.linux.drivers.video-input-infrastructure/71695/raw
-Patch212:	H930C-part3.patch
+# Patch212:	H930C-part3.patch
 # Fix build with CONFIG_VT disabled
-Patch213:	fix-tuxonice-build-with-CONFIG_VT-disabled.patch
+# Patch213:	fix-tuxonice-build-with-CONFIG_VT-disabled.patch
 
 ####################################################################
 
@@ -1754,11 +1754,11 @@ done
 %{patches_dir}/scripts/create_configs-old-mdv %debug --user_cpu="%{target_arch}"
 
 # OMV Apply OpenMandriva specific patches
-#patch200 -p1 -b .i915~
+# patch200 -p1 -b .i915~
 
-%patch210 -p1 -b .h930c-1~
-%patch211 -p1 -b .h930c-2~
-%patch212 -p1 -b .h930c-3~
+# %patch210 -p1 -b .h930c-1~
+# %patch211 -p1 -b .h930c-2~
+# %patch212 -p1 -b .h930c-3~
 
 %ifarch %{ix86}
 %if %{with desktop586}
