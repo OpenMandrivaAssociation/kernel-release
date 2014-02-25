@@ -82,28 +82,28 @@
 
 # Old Mandriva kernel flavours plus new two PAE flavours added by MIB
 
-%bcond_with desktop
-%bcond_with netbook
-%bcond_with server
+%bcond_without desktop
+%bcond_without netbook
+%bcond_without server
 
 %ifarch %{ix86}
 %bcond_with desktop586
-%bcond_with desktop_pae
+%bcond_without desktop_pae
 %bcond_with netbook_pae
 %endif
 
 # MIB low latency optimized flavours called "nrj V.5" plus 32bit PAE versions
 
-%bcond_with nrj_desktop
-%bcond_with nrj_realtime
-%bcond_with nrj_laptop
-%bcond_with nrj_netbook
+%bcond_without nrj_desktop
+%bcond_without nrj_realtime
+%bcond_without nrj_laptop
+%bcond_without nrj_netbook
 
 %ifarch %{ix86}
 %bcond_with nrj_desktop586
-%bcond_with nrj_desktop_pae
-%bcond_with nrj_realtime_pae
-%bcond_with nrj_laptop_pae
+%bcond_without nrj_desktop_pae
+%bcond_without nrj_realtime_pae
+%bcond_without nrj_laptop_pae
 %bcond_with nrj_netbook_pae
 %endif
 
@@ -119,27 +119,27 @@
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI
 
 %bcond_without nrjQL_desktop
-%bcond_with nrjQL_realtime
-%bcond_with nrjQL_laptop
-%bcond_with nrjQL_netbook
-%bcond_with nrjQL_server
-%bcond_with nrjQL_server_games
-%bcond_with nrjQL_server_computing
+%bcond_without nrjQL_realtime
+%bcond_without nrjQL_laptop
+%bcond_without nrjQL_netbook
+%bcond_without nrjQL_server
+%bcond_without nrjQL_server_games
+%bcond_without nrjQL_server_computing
 
-# MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
+# MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE
 
 %ifarch %{ix86}
-%bcond_with nrjQL_desktop_pae
-%bcond_with nrjQL_realtime_pae
-%bcond_with nrjQL_laptop_pae
-%bcond_with nrjQL_netbook_pae
+%bcond_without nrjQL_desktop_pae
+%bcond_without nrjQL_realtime_pae
+%bcond_without nrjQL_laptop_pae
+%bcond_without nrjQL_netbook_pae
 %endif
 
-# MIB experimental "32bit cpu level" optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
+# MIB experimental "32bit cpu level" optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE
 
 %ifarch %{ix86}
 %bcond_with nrjQL_desktop_core2
-%bcond_with nrjQL_desktop_core2_pae
+%bcond_without nrjQL_desktop_core2_pae
 %endif
 
 # END OF FLAVOURS
