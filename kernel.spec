@@ -1741,11 +1741,11 @@ cd %src_dir
 # OMV Apply OpenMandriva specific config changes
 # sed -i -e 's,# CONFIG_NAMESPACES is not set,CONFIG_NAMESPACES=y,g' %{patches_dir}/configs/*.config
 
-for i in %{patches_dir}/configs/*.config; do
-	for ns in UTS IPC USER PID NET; do
-		echo "CONFIG_${ns}_NS=y" >>${i}
-	done
-done
+# for i in %{patches_dir}/configs/*.config; do
+#	for ns in UTS IPC USER PID NET; do
+#		echo "CONFIG_${ns}_NS=y" >>${i}
+#	done
+# done
 
 # %{patches_dir}/scripts/apply_patches-vanilla
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
