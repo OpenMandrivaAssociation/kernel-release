@@ -2161,7 +2161,7 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %doc linux-%{tar_ver}/Documentation/*
 %endif
 
-%if %{build_perf}
+%if %{with perf}
 %files -n perf
 %{_bindir}/perf
 %{_bindir}/trace
