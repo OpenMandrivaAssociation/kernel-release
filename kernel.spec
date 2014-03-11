@@ -1,7 +1,7 @@
 %define kernelversion	3
-%define patchlevel	12
+%define patchlevel	13
 # sublevel is now used for -stable patches
-%define sublevel	13
+%define sublevel	6
 
 # Package release
 %define mibrel		69
@@ -345,7 +345,7 @@ BuildRequires:	kmod-devel kmod-compat
 
 BuildRequires: 	gcc bc
 
-BuildRequires:  audit-devel libunwind-devel
+BuildRequires:  audit-devel libunwind-devel perl-devel
 
 %ifarch x86_64
 BuildRequires:  numa-devel
@@ -2161,10 +2161,12 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %doc linux-%{tar_ver}/Documentation/*
 %endif
 
-%if %{with perf}
+%if %{build_perf}
 %files -n perf
 %{_bindir}/perf
+%{_bindir}/trace
 %dir %{_prefix}/libexec/perf-core
+%{_libdir}/libperf-gtk.so
 %{_prefix}/libexec/perf-core/*
 %{_mandir}/man[1-8]/perf*
 %{_sysconfdir}/bash_completion.d/perf
