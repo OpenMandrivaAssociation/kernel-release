@@ -3,9 +3,9 @@
  scripts/kconfig/Makefile |   19 -------------------
  2 files changed, 12 insertions(+), 31 deletions(-)
 
-diff -Nurp linux-3.10.1-mga1/Makefile linux-3.10.1-mga1.mrp/Makefile
---- linux-3.10.1-mga1/Makefile	2013-07-14 19:13:58.126152807 +0300
-+++ linux-3.10.1-mga1.mrp/Makefile	2013-07-14 19:16:14.385315249 +0300
+diff -Nurp linux-3.12-rc5-mga1/Makefile linux-3.12-rc5-mga1-mrp/Makefile
+--- linux-3.12-rc5-mga1/Makefile	2013-10-13 15:16:07.515274564 +0300
++++ linux-3.12-rc5-mga1-mrp/Makefile	2013-10-13 15:19:42.226094694 +0300
 @@ -513,9 +513,7 @@ ifeq ($(KBUILD_EXTMOD),)
  # Carefully list dependencies so we do not try to build scripts twice
  # in parallel
@@ -17,7 +17,7 @@ diff -Nurp linux-3.10.1-mga1/Makefile linux-3.10.1-mga1.mrp/Makefile
  
  # Objects we will link into vmlinux / subdirs we need to visit
  init-y		:= init/
-@@ -835,7 +833,7 @@ prepare0: archprepare FORCE
+@@ -838,7 +836,7 @@ prepare0: archprepare FORCE
  	$(Q)$(MAKE) $(build)=.
  
  # All the preparing..
@@ -26,7 +26,7 @@ diff -Nurp linux-3.10.1-mga1/Makefile linux-3.10.1-mga1.mrp/Makefile
  
  # Generate some files
  # ---------------------------------------------------------------------------
-@@ -1017,13 +1015,15 @@ endif # CONFIG_MODULES
+@@ -1020,13 +1018,15 @@ endif # CONFIG_MODULES
  CLEAN_DIRS  += $(MODVERDIR)
  
  # Directories & files removed with 'make mrproper'
@@ -49,7 +49,7 @@ diff -Nurp linux-3.10.1-mga1/Makefile linux-3.10.1-mga1.mrp/Makefile
  
  # clean - Delete most, but leave enough to build external modules
  #
-@@ -1044,7 +1044,7 @@ clean: archclean vmlinuxclean
+@@ -1047,7 +1047,7 @@ clean: archclean vmlinuxclean
  #
  mrproper: rm-dirs  := $(wildcard $(MRPROPER_DIRS))
  mrproper: rm-files := $(wildcard $(MRPROPER_FILES))
@@ -58,9 +58,9 @@ diff -Nurp linux-3.10.1-mga1/Makefile linux-3.10.1-mga1.mrp/Makefile
  
  PHONY += $(mrproper-dirs) mrproper archmrproper
  $(mrproper-dirs):
-diff -Nurp linux-3.10.1-mga1/scripts/kconfig/Makefile linux-3.10.1-mga1.mrp/scripts/kconfig/Makefile
---- linux-3.10.1-mga1/scripts/kconfig/Makefile	2013-07-14 19:13:58.126152807 +0300
-+++ linux-3.10.1-mga1.mrp/scripts/kconfig/Makefile	2013-07-14 19:16:14.386315260 +0300
+diff -Nurp linux-3.12-rc5-mga1/scripts/kconfig/Makefile linux-3.12-rc5-mga1-mrp/scripts/kconfig/Makefile
+--- linux-3.12-rc5-mga1/scripts/kconfig/Makefile	2013-10-13 15:16:07.515274564 +0300
++++ linux-3.12-rc5-mga1-mrp/scripts/kconfig/Makefile	2013-10-13 15:19:42.226094694 +0300
 @@ -15,26 +15,18 @@ endif
  unexport CONFIG_
  
