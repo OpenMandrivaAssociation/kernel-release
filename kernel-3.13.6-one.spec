@@ -6,18 +6,8 @@
 # - version rc (19 August 2013) > now it's more modular to allow us easily a lot ot further developments...
 # - version rc (20 August 2013) > the compressed folder has redundant contents so can be used also for NRJ4
 
-# MIB header
-
-%if %{mdvver} <= 201100
-%define distsuffix mib
-%define disttag %{distsuffix}
-Vendor: MIB - Mandriva International Backports
-%endif
-
 Packager: Nicolo' Costanza <abitrules@yahoo.it>
-# end MIB header
 
-#
 %define kernelversion	3
 %define patchlevel	13
 # sublevel is now used for -stable patches
@@ -46,7 +36,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		70
+%define rpmrel		1
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -96,16 +86,16 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define debug_package 		%{nil}
 
 # Build defines
-%define build_doc 			1
+%define build_doc 				1
 %define build_source 			1
 %define build_devel 			1
-%define build_debug	 		0
+%define build_debug	 			0
 
 # Old Mandriva kernel flavours plus new two PAE flavours added by MIB
 
 %define build_desktop			0
 %define build_netbook			0
-%define build_server			0
+%define build_server			1
 
 %ifarch %{ix86}
 %define build_desktop586		0
@@ -115,16 +105,16 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 # MIB low latency optimized flavours called "nrj V.5" plus 32bit PAE versions
 
-%define build_nrj_desktop		0
+%define build_nrj_desktop		1
 %define build_nrj_realtime		0
-%define build_nrj_laptop		0
+%define build_nrj_laptop		1
 %define build_nrj_netbook		0
 
 %ifarch %{ix86}
 %define build_nrj_desktop586		0
-%define build_nrj_desktop_pae		0
+%define build_nrj_desktop_pae		1
 %define build_nrj_realtime_pae		0
-%define build_nrj_laptop_pae		0
+%define build_nrj_laptop_pae		1
 %define build_nrj_netbook_pae		0
 %endif
 
@@ -134,33 +124,33 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define build_nrj_netbook_atom		0
 %define build_nrj_netbook_atom_pae	0
 %define build_nrj_desktop_core2   	0
-%define build_nrj_desktop_core2_pae   	0
+%define build_nrj_desktop_core2_pae 0
 %endif
 
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI
 
 %define build_nrjQL_desktop		1
-%define build_nrjQL_realtime		0
-%define build_nrjQL_laptop		0
-%define build_nrjQL_netbook		0
-%define build_nrjQL_server		0
-%define build_nrjQL_server_games	0
+%define build_nrjQL_realtime	1
+%define build_nrjQL_laptop		1
+%define build_nrjQL_netbook		1
+%define build_nrjQL_server		1
+%define build_nrjQL_server_games		0
 %define build_nrjQL_server_computing	0
 
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
 
 %ifarch %{ix86}
-%define build_nrjQL_desktop_pae		0
-%define build_nrjQL_realtime_pae	0
-%define build_nrjQL_laptop_pae		0
-%define build_nrjQL_netbook_pae		0
+%define build_nrjQL_desktop_pae		1
+%define build_nrjQL_realtime_pae	1
+%define build_nrjQL_laptop_pae		1
+%define build_nrjQL_netbook_pae		1
 %endif
 
 # MIB experimental "32bit cpu level" optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
 
 %ifarch %{ix86}
-%define build_nrjQL_desktop_core2	 0
-%define build_nrjQL_desktop_core2_pae  	 0
+%define build_nrjQL_desktop_core2	 	0
+%define build_nrjQL_desktop_core2_pae  	0
 %endif
 
 # END OF FLAVOURS
@@ -168,10 +158,10 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 # build perf and cpupower tools
 %if %{mdvver} >= 201200
-%define build_perf		1
+%define build_perf			1
 %define build_cpupower		1
 %else
-%define build_perf		0
+%define build_perf			0
 %define build_cpupower		0
 %endif
 
@@ -193,7 +183,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 # no cpupower tools on arm yet
 %define build_cpupower		0
 # arm is currently not using xz
-%define build_modxz		0
+%define build_modxz			0
 %endif
 # End of user definitions
 
@@ -540,7 +530,7 @@ BuildRequires:	module-init-tools
 
 BuildRequires: 	gcc bc binutils
 
-BuildRequires:  audit-devel
+BuildRequires:  audit-devel perl-devel
 
 %if %{mdvver} >= 201210
 BuildRequires:	libunwind-devel
