@@ -2,8 +2,8 @@ Hello to all the OpenMandriva Lx and ROSA Linux OS Users,
 
 linux-userspace-headers contains the headers for the source code of
 Linux kernel. All source code necessary to compile a new kernel is
-included in two packages linux-userspace-headers, and kernel-source.
-You will need to install both linux-userspace-headers (needed for
+included in two packages kernel-headers, and kernel-source.
+You will need to install both kernel-headers (needed for
 general Linux compilation), and kernel-source in order to compile
 a new kernel.
 
@@ -59,19 +59,18 @@ Issue "make install"
 This will copy your new kernel and system.map to boot dir (/boot/) with
 correct names including version, and change respective links.
 
-It finally runs lilo to take into account your new kernel.
+It finally runs grub to take into account your new kernel.
 
 
 
-4. Modify Lilo to allow your booting on old kernel
+4. Modify "grub2" to allow your booting on old kernel
 
 * This step is optional, although recommended *
-See lilo.conf man page.
+See grub2.conf man page.
 Your are encouraged during this step to create a new section in your
-lilo.conf file, in order to enable you to boot on your both kernels, the
+grub.conf file, in order to enable you to boot on your both kernels, the
 old and the new one.
-You need to run lilo then to take your changes into account.
-You may also use linuxconf to do all that with a nice GUI.
+You need to run grub2-mkconfig then to take your changes into account.
 
 
 
@@ -79,12 +78,14 @@ You may also use linuxconf to do all that with a nice GUI.
 
 And pray.
 Anyway if something goes wrong, you just need to reboot and choose your
-old kernel with lilo.
+old kernel with grub2.
 
 Enjoy!
 
 
 ========================================================================
-(c) 1999-2006 Mandriva, Camille B�gnis <camille@mandriva.com>
+(c) 1999-2006 Mandriva, Camille Bégnis <camille@mandriva.com>
 (c) 2006 Thomas Backlund <tmb@mandriva.org> 
 (c) 2011 Thomas Backlund <tmb@mageia.org> 
+(c) 2011 Bernhard Rosenkränzer <bero@lindev.ch> 
+(c) 2011 Nicolò Costanza <abitrules@yahoo.it> 
