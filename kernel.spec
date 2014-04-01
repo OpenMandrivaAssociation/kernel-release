@@ -11,7 +11,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	13
 # sublevel is now used for -stable patches
-%define sublevel	7
+%define sublevel	8
 
 # Package release
 %define mibrel		69
@@ -130,8 +130,8 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI
 
 %define build_nrjQL_desktop		1
-%define build_nrjQL_realtime	0
-%define build_nrjQL_laptop		0
+%define build_nrjQL_realtime	1
+%define build_nrjQL_laptop		1
 %define build_nrjQL_netbook		0
 %define build_nrjQL_server		0
 %define build_nrjQL_server_games		0
@@ -140,9 +140,9 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
 
 %ifarch %{ix86}
-%define build_nrjQL_desktop_pae		0
-%define build_nrjQL_realtime_pae	0
-%define build_nrjQL_laptop_pae		0
+%define build_nrjQL_desktop_pae		1
+%define build_nrjQL_realtime_pae	1
+%define build_nrjQL_laptop_pae		1
 %define build_nrjQL_netbook_pae		0
 %endif
 
@@ -2388,6 +2388,34 @@ rm -rf %{buildroot}
 
 
 %changelog
+
+* Mon Mar 31 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.8-70
++ update to 3.13.8 stable
+- sync patches
+- ---------------------------------------------------------------------
+- Kernel 3.13 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Fri Mar 28 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.7-70
++ update to 3.13.7 stable
+- sync with few nrjQL patches
+- sync all the patches for 3.13.8 (rc1)
+- add REISER4 (file system) support, with two new patches:
+* 0004-reiser4-for-3.13.6.patch
+* 0005-3.13.1-reiser4-different-transaction-models.patch
+- ---------------------------------------------------------------------
+- Kernel 3.13 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
 
 * Mon Mar 10 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.6-70
 + update to 3.13.3 stable
