@@ -11,7 +11,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	13
 # sublevel is now used for -stable patches
-%define sublevel	8
+%define sublevel	9
 
 # Package release
 %define mibrel		69
@@ -1969,6 +1969,8 @@ CreateKernel netbook-pae
 %endif
 
 %{patches_dir}/scripts/apply_patches-NRJ
+%{patches_dir}/scripts/apply_patches-geek
+# %{patches_dir}/scripts/apply_patches-queue
 %{patches_dir}/scripts/create_configs-withBFQ %debug --user_cpu="%{target_arch}"
 
 %ifarch %{ix86}
@@ -2388,6 +2390,41 @@ rm -rf %{buildroot}
 
 
 %changelog
+
+* Fri Apr 04 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.9-70
++ update to 3.13.9 stable
+- add: /patches-queue (for tests) and /patches-geek with HW support:
+- * DVB cards, IR receivers, WiFi devices, Game controllers, Laptops  
+- add: 6 patches to improve NFS behaviour, fixing ops and start time
+- add: the 3 patches for Pegatron device driver (offered by Benatto)
+- add: new kernel driver modules are enabled, just below the list:
+  * CONFIG_DVB_USB_DVBSKY=m
+  * CONFIG_HID_SPINELPLUS=m
+  * CONFIG_LIRC_XBOX=m 
+  * CONFIG_PEGATRON_LAPTOP=m 
+- add: patch to fix a disconnection USB problem with some slow USB HW
+- suggested by Marco Benatto and was requested by Colin Close (itchka)
+  - website: http://marc.info/?l=linux-usb&m=137714769606183&w=2
+  * USB:_Fix_USB_device_disconnects_on_resume.patch
+- on request by Fedya
+  * adding keys requested by Fedya to solve this issue:
+  * https://issues.openmandriva.org/show_bug.cgi?id=165
+- fix: Benatto sent a working solution for UKSM 3.13 build error 3.13.9
+  * 0001-uksm-0.1.2.2-for-v3.13.patch
+  * 0002-uksm_change_compound_head_call.patch
+-  visual improvements: boot and console appereance changes:
+- add: colored printk feature with the default colors for all .configs
+  * we must setup our preferred color palette, different than (=0x07)
+- add: font-8x16-iso-latin-1-v3.patch
+  * this shows the boot with more readable fonts, with a more dense look
+- ---------------------------------------------------------------------
+- Kernel 3.13 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
 
 * Mon Mar 31 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.8-70
 + update to 3.13.8 stable
