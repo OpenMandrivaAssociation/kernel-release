@@ -11,7 +11,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	13
 # sublevel is now used for -stable patches
-%define sublevel	9
+%define sublevel	10
 
 # Package release
 %define mibrel		69
@@ -36,7 +36,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		1
+%define rpmrel		0
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -1970,7 +1970,7 @@ CreateKernel netbook-pae
 
 %{patches_dir}/scripts/apply_patches-NRJ
 %{patches_dir}/scripts/apply_patches-geek
-# %{patches_dir}/scripts/apply_patches-queue
+%{patches_dir}/scripts/apply_patches-latest
 %{patches_dir}/scripts/create_configs-withBFQ %debug --user_cpu="%{target_arch}"
 
 %ifarch %{ix86}
@@ -2390,6 +2390,23 @@ rm -rf %{buildroot}
 
 
 %changelog
+
+* Sun Apr 13 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.10-0
++ update to 3.13.10 - rc1
+- add: /patches-latest with its script (where are the latest things)
+  * criu-no-expert.patch
+  * linux-003-no_dev_console.patch
+  * linux-004_lower_undefined_mode_timeout.patch
+  * linux-006_enable_utf8.patch
+  * linux-991.01-ptrace_fix.patch
+- ---------------------------------------------------------------------
+- Kernel 3.13 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
 
 * Fri Apr 04 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.9-70
 + update to 3.13.9 stable
