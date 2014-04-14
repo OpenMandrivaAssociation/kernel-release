@@ -36,7 +36,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		0
+%define rpmrel		1
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -2390,6 +2390,24 @@ rm -rf %{buildroot}
 
 
 %changelog
+
+* Mon Apr 14 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.10-1
++ update to 3.13.10 - stable
+- on request by Alexander Khryukin: 
+  * adding keys requested by Fedya to solve this issue:
+  * https://issues.openmandriva.org/show_bug.cgi?id=165
+  * http://pastie.org/9079599 > fixed missing features
+  * Cgroup sched: missing
+  * Cgroup cpu account: missing
+  * Cgroup memory controller: missing
+- ---------------------------------------------------------------------
+- Kernel 3.13 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
 
 * Sun Apr 13 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.10-0
 + update to 3.13.10 - rc1
