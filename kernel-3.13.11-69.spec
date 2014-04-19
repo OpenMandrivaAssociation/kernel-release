@@ -2145,8 +2145,14 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %if %{mdvver} < 201300
 %make -C tools/power/cpupower CPUFREQ_BENCH=false
 %else
-%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%optflags"
+CFLAGS="%{optflags}" %make -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%{ldflags}"
 %endif
+%ifarch %{ix86} x86_64
+CFLAGS="%{optflags}" %make -C tools/power/cpupower/debug/%{_arch} centrino-decode powernow-k8-decode LDFLAGS="%{ldflags}"
+CFLAGS="%{optflags}" %make -C tools/power/x86/x86_energy_perf_policy/ LDFLAGS="%{ldflags}"
+CFLAGS="%{optflags}" %make -C tools/power/x86/turbostat LDFLAGS="%{ldflags}"
+%endif
+CFLAGS="%{optflags}" %make -C tools/thermal/tmon LDFLAGS="%{ldflags}" 
 %endif
 ############################################################
 ###  Linker end3 > Check point to build for cooker 2013  ###
@@ -2264,6 +2270,14 @@ chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
 mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
 install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
 install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
+
+%ifarch %{ix86} x86_64
+install -pm755 tools/power/cpupower/debug/%{_arch}/centrino-decode -D %{buildroot}%{_bindir}/centrino-decode
+install -pm755 tools/power/cpupower/debug/%{_arch}/powernow-k8-decode -D %{buildroot}%{_bindir}/powernow-k8-decode
+%makeinstall_std -C tools/power/x86/x86_energy_perf_policy
+%makeinstall_std -C tools/power/x86/turbostat
+%endif
+make -C tools/thermal/tmon INSTALL_ROOT=%{buildroot} install
 %endif
 ############################################################
 ### Linker start4 > Check point to build for cooker 2013 ###
@@ -2372,11 +2386,20 @@ rm -rf %{buildroot}
 %if %{build_cpupower}
 %files -n cpupower -f cpupower.lang
 %{_bindir}/cpupower
+%{_bindir}/tmon
 %{_libdir}/libcpupower.so.0
 %{_libdir}/libcpupower.so.0.0.0
 %{_unitdir}/cpupower.service
 %{_mandir}/man[1-8]/cpupower*
 %config(noreplace) %{_sysconfdir}/sysconfig/cpupower
+%ifarch %{ix86} x86_64
+%{_bindir}/centrino-decode
+%{_bindir}/powernow-k8-decode
+%{_bindir}/turbostat
+%{_bindir}/x86_energy_perf_policy
+%{_mandir}/man8/turbostat.8*
+%{_mandir}/man8/x86_energy_perf_policy.8*
+%endif
 
 %files -n cpupower-devel
 %{_libdir}/libcpupower.so
