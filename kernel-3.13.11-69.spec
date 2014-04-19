@@ -2297,9 +2297,8 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %find_lang cpupower
 mv cpupower.lang ../
 chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
-mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
-install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
-install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
+install -m644 %{SOURCE50} -D %{buildroot}%{_unitdir}/cpupower.service
+install -m644 %{SOURCE51} -D %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 
 %ifarch %{ix86} x86_64
 install -pm755 tools/power/cpupower/debug/%{_arch}/centrino-decode -D %{buildroot}%{_bindir}/centrino-decode
