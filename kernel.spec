@@ -1473,6 +1473,12 @@ cd %src_dir
 %patch2 -p1
 %endif
 
+# %{patches_dir}/scripts/apply_patches-vanilla
+%{patches_dir}/scripts/apply_patches
+%{patches_dir}/scripts/apply_patches-NRJ
+%{patches_dir}/scripts/apply_patches-geek
+%{patches_dir}/scripts/apply_patches-latest
+%{patches_dir}/scripts/apply_patches-QL
 
 #
 # Setup Begin
@@ -1932,10 +1938,8 @@ install -d %{temp_root}
 # make sure we are in the directory
 cd %src_dir
 
-# %{patches_dir}/scripts/apply_patches-vanilla
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
 
-%{patches_dir}/scripts/apply_patches
 %{patches_dir}/scripts/create_configs-old-mdv %debug --user_cpu="%{target_arch}"
 
 %ifarch %{ix86}
@@ -1968,9 +1972,6 @@ CreateKernel netbook-pae
 %endif
 %endif
 
-%{patches_dir}/scripts/apply_patches-NRJ
-%{patches_dir}/scripts/apply_patches-geek
-%{patches_dir}/scripts/apply_patches-latest
 %{patches_dir}/scripts/create_configs-withBFQ %debug --user_cpu="%{target_arch}"
 
 %ifarch %{ix86}
@@ -2055,7 +2056,6 @@ CreateKernel versatile
 %endif
 %endif
 
-%{patches_dir}/scripts/apply_patches-QL
 %{patches_dir}/scripts/create_configs-QL %debug --user_cpu="%{target_arch}"
 
 %if %build_nrjQL_desktop
