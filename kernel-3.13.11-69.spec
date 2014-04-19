@@ -304,6 +304,49 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define build_nosrc 	0
 %{?_with_nosrc: %global build_nosrc 1}
 
+# convenient if we only want to build the tools and no kernels
+%bcond_with				toolsonly
+%if %{with toolsonly}
+%define build_doc 			0
+%define build_source 			0
+%define build_devel 			0
+%define build_debug	 		0
+%define build_desktop			0
+%define build_netbook			0
+%define build_server			0
+%define build_desktop586		0
+%define build_desktop_pae		0
+%define build_netbook_pae		0
+%define build_nrj_desktop		0
+%define build_nrj_realtime		0
+%define build_nrj_laptop		0
+%define build_nrj_netbook		0
+%define build_nrj_desktop586		0
+%define build_nrj_desktop_pae		0
+%define build_nrj_realtime_pae		0
+%define build_nrj_laptop_pae		0
+%define build_nrj_netbook_pae		0
+%define build_nrj_netbook_atom		0
+%define build_nrj_netbook_atom_pae	0
+%define build_nrj_desktop_core2   	0
+%define build_nrj_desktop_core2_pae	0
+%define build_nrjQL_desktop		0
+%define build_nrjQL_realtime		0
+%define build_nrjQL_laptop		0
+%define build_nrjQL_netbook		0
+%define build_nrjQL_server		0
+%define build_nrjQL_server_games	0
+%define build_nrjQL_server_computing	0
+%define build_nrjQL_desktop_pae		0
+%define build_nrjQL_realtime_pae	0
+%define build_nrjQL_laptop_pae		0
+%define build_nrjQL_netbook_pae		0
+%define build_nrjQL_desktop_core2	0
+%define build_nrjQL_desktop_core2_pae  	0
+%endif
+
+# End of user definitions
+
 
 ############################################################
 ### Linker start1 > Check point to build for cooker 2013 ###
@@ -1416,6 +1459,7 @@ Conflicts:	%{_lib}cpufreq-devel
 This package contains the development files for cpupower.
 %endif
 
+%if !%{with toolsonly}
 %package headers
 Version:	%kversion
 Release:	%rpmrel
@@ -1437,6 +1481,7 @@ should use the 'kernel-devel' package instead.
 # Don't conflict with cpupower-devel
 %if %{build_cpupower}
 %exclude %_includedir/cpufreq.h
+%endif
 %endif
 
 #
@@ -1934,7 +1979,7 @@ install -d %{temp_root}
 cd %src_dir
 
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
-
+%if !%{with toolsonly}
 %{patches_dir}/scripts/create_configs-old-mdv %debug --user_cpu="%{target_arch}"
 
 %ifarch %{ix86}
@@ -2120,6 +2165,7 @@ CreateKernel nrjQL-desktop-core2-pae
 
 # set extraversion to match srpm to get nice version reported by the tools
 LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
+%endif # !withtoolsonly
 
 
 ############################################################
@@ -2212,6 +2258,7 @@ rm -rf %{target_source}/.tmp_depmod/
 #endif %build_source
 %endif
 
+%if !%{with toolsonly}
 # compressing modules
 %if %{build_modxz}
 find %{target_modules} -name "*.ko" | %kxargs xz -6e
@@ -2245,6 +2292,8 @@ popd
 
 # need to set extraversion to match srpm again to avoid rebuild
 LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
+%endif # !toolsonly
+
 %if %{build_perf}
 
 # perf tool binary and supporting scripts/binaries
@@ -2274,6 +2323,7 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %ifarch %{ix86} x86_64
 install -pm755 tools/power/cpupower/debug/%{_arch}/centrino-decode -D %{buildroot}%{_bindir}/centrino-decode
 install -pm755 tools/power/cpupower/debug/%{_arch}/powernow-k8-decode -D %{buildroot}%{_bindir}/powernow-k8-decode
+mkdir -p %{buildroot}%{_mandir}/man8
 %makeinstall_std -C tools/power/x86/x86_energy_perf_policy
 %makeinstall_std -C tools/power/x86/turbostat
 %endif
