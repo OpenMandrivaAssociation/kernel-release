@@ -2478,8 +2478,8 @@ rm -rf %{buildroot}
 - sync with few nrjQL patches
 - sync all the patches for 3.13.8 (rc1)
 - add REISER4 (file system) support, with two new patches:
-* 0004-reiser4-for-3.13.6.patch
-* 0005-3.13.1-reiser4-different-transaction-models.patch
+- 0004-reiser4-for-3.13.6.patch
+- 0005-3.13.1-reiser4-different-transaction-models.patch
 - ---------------------------------------------------------------------
 - Kernel 3.13 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
