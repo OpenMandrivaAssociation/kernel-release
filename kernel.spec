@@ -2179,13 +2179,7 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 # build perf
 
 %if %{build_perf}
-%if %{mdvver} < 201300
-%make -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} all
-%make -C tools/perf -s prefix=%{_prefix} man
-%else
-%make -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} LDFLAGS="%optflags" all
-%make -C tools/perf -s prefix=%{_prefix} LDFLAGS="%optflags" man
-%endif
+%make all man -C tools/perf prefix=%{_prefix} V=1 HAVE_CPLUS_DEMANGLE=1 EXTRA_CFLAGS="%{optflags}" LDFLAGS="%{ldflags}"
 %endif
 
 # build cpupower
@@ -2193,17 +2187,13 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %if %{build_cpupower}
 # make sure version-gen.sh is executable.
 chmod +x tools/power/cpupower/utils/version-gen.sh
-%if %{mdvver} < 201300
-%make -C tools/power/cpupower CPUFREQ_BENCH=false
-%else
-CFLAGS="%{optflags}" %make -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%{ldflags}"
-%endif
+CFLAGS="%{optflags}" %make -C tools/power/cpupower V=1 CPUFREQ_BENCH=false LDFLAGS="%{ldflags}"
 %ifarch %{ix86} x86_64
-CFLAGS="%{optflags}" %make -C tools/power/cpupower/debug/%{_arch} centrino-decode powernow-k8-decode LDFLAGS="%{ldflags}"
-CFLAGS="%{optflags}" %make -C tools/power/x86/x86_energy_perf_policy/ LDFLAGS="%{ldflags}"
-CFLAGS="%{optflags}" %make -C tools/power/x86/turbostat LDFLAGS="%{ldflags}"
+CFLAGS="%{optflags}" %make -C tools/power/cpupower/debug/%{_arch} V=1 centrino-decode powernow-k8-decode LDFLAGS="%{ldflags}"
+CFLAGS="%{optflags}" %make -C tools/power/x86/x86_energy_perf_policy/ V=1 LDFLAGS="%{ldflags}"
+CFLAGS="%{optflags}" %make -C tools/power/x86/turbostat V=1 LDFLAGS="%{ldflags}"
 %endif
-CFLAGS="%{optflags}" %make -C tools/thermal/tmon LDFLAGS="%{ldflags}" 
+CFLAGS="%{optflags}" %make -C tools/thermal/tmon V=1 LDFLAGS="%{ldflags}" 
 %endif
 ############################################################
 ###  Linker end3 > Check point to build for cooker 2013  ###
@@ -2300,24 +2290,15 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %endif # !toolsonly
 
 %if %{build_perf}
-
-# perf tool binary and supporting scripts/binaries
-make -C tools/perf -s V=1 DESTDIR=%{buildroot} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
-
-# perf man pages (note: implicit rpm magic compresses them later)
-make -C tools/perf  -s V=1 DESTDIR=%{buildroot} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
+# perf tool binary and supporting scripts/binaries with man pages
+%makeinstall_std install-man -C tools/perf prefix=%{_prefix} V=1 HAVE_CPLUS_DEMANGLE=1 EXTRA_CFLAGS="%{optflags}" LDFLAGS="%{ldflags}"
 %endif
 
 ############################################################
 ### Linker start4 > Check point to build for cooker 2013 ###
 ############################################################
 %if %{build_cpupower}
-%if %{mdvver} < 201300
-make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false install
-%else
-%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false LDFLAGS="%optflags" install
-%endif
-rm -f %{buildroot}%{_libdir}/*.{a,la}
+%makeinstall_std -C tools/power/cpupower libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false
 %find_lang cpupower
 mv cpupower.lang ../
 chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
@@ -2434,7 +2415,7 @@ rm -rf %{buildroot}
 %dir %{_prefix}/libexec/perf-core
 %{_libdir}/libperf-gtk.so
 %{_prefix}/libexec/perf-core/*
-%{_mandir}/man[1-8]/perf*
+%{_mandir}/man1/perf*.1*
 %{_sysconfdir}/bash_completion.d/perf
 %endif
 
@@ -2445,7 +2426,7 @@ rm -rf %{buildroot}
 %{_libdir}/libcpupower.so.0
 %{_libdir}/libcpupower.so.0.0.0
 %{_unitdir}/cpupower.service
-%{_mandir}/man[1-8]/cpupower*
+%{_mandir}/man1/cpupower*.1*
 %config(noreplace) %{_sysconfdir}/sysconfig/cpupower
 %ifarch %{ix86} x86_64
 %{_bindir}/centrino-decode
