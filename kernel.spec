@@ -11,7 +11,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	13
 # sublevel is now used for -stable patches
-%define sublevel	10
+%define sublevel	11
 
 # Package release
 %define mibrel		69
@@ -132,9 +132,9 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define build_nrjQL_desktop		1
 %define build_nrjQL_realtime	1
 %define build_nrjQL_laptop		1
-%define build_nrjQL_netbook		0
-%define build_nrjQL_server		0
-%define build_nrjQL_server_games		0
+%define build_nrjQL_netbook		1
+%define build_nrjQL_server		1
+%define build_nrjQL_server_games		1
 %define build_nrjQL_server_computing	0
 
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
@@ -143,7 +143,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define build_nrjQL_desktop_pae		1
 %define build_nrjQL_realtime_pae	1
 %define build_nrjQL_laptop_pae		1
-%define build_nrjQL_netbook_pae		0
+%define build_nrjQL_netbook_pae		1
 %endif
 
 # MIB experimental "32bit cpu level" optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
@@ -2444,7 +2444,27 @@ rm -rf %{buildroot}
 
 %changelog
 
-* Mon Apr 14 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.10-1
+* Thu Apr 24 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.11-70
++ update to 3.13.11 (EOL) - stable
+- update patches:
+  * tuxonice-for-linux-3.13.11-2014-04-24.patch
+  * uksm-0.1.2.2-for-v3.13.ge.9.patch
+- update BFQ to v7r3
+  * 0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r3-3.13.patch
+  * 0002-block-introduce-the-BFQ-v7r3-I-O-sched-for-3.13.patch
+  * 0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r3-for-.patch
+- suggestion / request received by Per Øyvind Karlsen (POK)
+  * CONFIG_ACPI_CUSTOM_DSDT=y
+- ---------------------------------------------------------------------
+- Kernel 3.13 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Mon Apr 14 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.10-70
 + update to 3.13.10 - stable
 - on request by Alexander Khryukin: 
   * adding keys requested by Fedya to solve this issue:
