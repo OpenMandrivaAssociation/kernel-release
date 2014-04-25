@@ -1,22 +1,19 @@
-# MIB header
+# Experimental Kernels ONE 
+# That's an attempt to merge all MIB kernel flavours (old mdv, nrj, nrjQL) with ONE only SRPM (NRJ V5)
 
-%if %{mdvver} <= 201100
-%define distsuffix mib
-%define disttag %{distsuffix}
-Vendor: MIB - Mandriva International Backports
-%endif
+# - version alpha (15 August 2013) > It can config, prepare and build nrj-desktop & nrjQL-desktop flavours
+# - version beta (17 August 2013) > It can config, prepare, build all 'old mdv' and MIB nrj nrjQL flavours
+# - version rc (19 August 2013) > now it's more modular to allow us easily a lot ot further developments...
+# - version rc (20 August 2013) > the compressed folder has redundant contents so can be used also for NRJ4
 
 Packager: Nicolo' Costanza <abitrules@yahoo.it>
-# end MIB header
 
-#
 %define kernelversion	3
 %define patchlevel	13
 # sublevel is now used for -stable patches
 %define sublevel	11
 
 # Package release
-# Experimental kernel serie with CK patches, BFS, BFQ, TOI, UKSM
 %define mibrel		69
 
 # kernel Makefile extraversion is substituted by
@@ -31,7 +28,6 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 # Patch tarball tag
 %define ktag		rosa
 
-# define rpmtag		%{disttag}
 %define rpmtag		%{disttag}
 %if %kpatch
 %if %kgit
@@ -40,7 +36,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		69
+%define rpmrel		1
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -90,90 +86,82 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define debug_package 		%{nil}
 
 # Build defines
-%define build_doc 		1
-%define build_source 		1
-%define build_devel 		1
+%define build_doc 				1
+%define build_source 			1
+%define build_devel 			1
+%define build_debug	 			0
 
-%define build_debug 		0
+# Old Mandriva kernel flavours plus new two PAE flavours added by MIB
 
-#
-# Old Mandriva kernel flavours plus new two PAE flavours
-#
+%define build_desktop			0
+%define build_netbook			0
+%define build_server			0
 
-#
-# MIB experimental low latency optimized flavours
-#
-
-# Build nrjQL desktop (i686 / 4GB) / x86_64 / sparc64 sets
-%define build_nrjQL_desktop			1
-
-# Build nrjQL realtime (i686 / 4GB) / x86_64 / sparc64 sets
-%define build_nrjQL_realtime			0
-
-# Build nrjQL laptop (i686 / 4GB) / x86_64
-%define build_nrjQL_laptop			0
-
-# Build nrjQL netbook (i686 / 4GB) / x86_64
-%define build_nrjQL_netbook			0
-
-# Build nrjQL_server (i686 / 64GB)/x86_64 / sparc64 sets
-%define build_nrjQL_server			0
-
-# Build nrjQL_gameserver (i686 / 64GB)/x86_64 / sparc64 sets
-%define build_nrjQL_server_games		0
-
-# Build nrjQL_gameserver (i686 / 64GB)/x86_64 / sparc64 sets
-%define build_nrjQL_server_computing		0
-
-#
-# MIB experimental low latency optimized flavours with PAE 
-#
-
-# Build nrjQL desktop pae (i686 / 64GB)
 %ifarch %{ix86}
-%define build_nrjQL_desktop_pae			0
+%define build_desktop586		0
+%define build_desktop_pae		0
+%define build_netbook_pae		0
 %endif
 
-# Build nrjQL realtime pae (i686 / 64GB)
+# MIB low latency optimized flavours called "nrj V.5" plus 32bit PAE versions
+
+%define build_nrj_desktop		0
+%define build_nrj_realtime		0
+%define build_nrj_laptop		0
+%define build_nrj_netbook		0
+
 %ifarch %{ix86}
-%define build_nrjQL_realtime_pae		0
+%define build_nrj_desktop586		0
+%define build_nrj_desktop_pae		0
+%define build_nrj_realtime_pae		0
+%define build_nrj_laptop_pae		0
+%define build_nrj_netbook_pae		0
 %endif
 
-# Build nrjQL laptop pae (i686 / 64GB)
+# MIB experimental low latency "32bit cpu level" optimized, called "nrj V.5" flavours plus PAE versions
+
 %ifarch %{ix86}
-%define build_nrjQL_laptop_pae			0
+%define build_nrj_netbook_atom		0
+%define build_nrj_netbook_atom_pae	0
+%define build_nrj_desktop_core2   	0
+%define build_nrj_desktop_core2_pae 0
 %endif
 
-# Build nrjQL netbook pae (i686 / 64GB)
+# MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI
+
+%define build_nrjQL_desktop		1
+%define build_nrjQL_realtime	1
+%define build_nrjQL_laptop		1
+%define build_nrjQL_netbook		1
+%define build_nrjQL_server		1
+%define build_nrjQL_server_games		1
+%define build_nrjQL_server_computing	0
+
+# MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
+
 %ifarch %{ix86}
-%define build_nrjQL_netbook_pae			0
+%define build_nrjQL_desktop_pae		1
+%define build_nrjQL_realtime_pae	1
+%define build_nrjQL_laptop_pae		1
+%define build_nrjQL_netbook_pae		1
 %endif
 
-#
-# Begin > experimental "cpu level" optimized flavours
-#
+# MIB experimental "32bit cpu level" optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
 
-# Build nrjQL desktop Intel Core2 (mcore2 / 4GB)
 %ifarch %{ix86}
-%define build_nrjQL_desktop_core2	   	0
+%define build_nrjQL_desktop_core2	 	0
+%define build_nrjQL_desktop_core2_pae  	0
 %endif
 
-# Build nrjQL desktop Intel Core2 pae (mcore2 / 64GB)
-%ifarch %{ix86}
-%define build_nrjQL_desktop_core2_pae  	 	0
-%endif
-
-#
-# End for > experimental "cpu level" optimized flavours
 # END OF FLAVOURS
 
 
 # build perf and cpupower tools
 %if %{mdvver} >= 201200
-%define build_perf		1
+%define build_perf			1
 %define build_cpupower		1
 %else
-%define build_perf		0
+%define build_perf			0
 %define build_cpupower		0
 %endif
 
@@ -195,11 +183,36 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 # no cpupower tools on arm yet
 %define build_cpupower		0
 # arm is currently not using xz
-%define build_modxz		0
+%define build_modxz			0
 %endif
 # End of user definitions
 
 # buildtime flags
+%{?_without_desktop586: %global build_desktop586 0}
+%{?_without_desktop: %global build_desktop 0}
+%{?_without_netbook: %global build_netbook 0}
+%{?_without_server: %global build_server 0}
+
+%{?_without_desktop_pae: %global build_desktop_pae 0}
+%{?_without_netbook_pae: %global build_netbook_pae 0}
+
+%{?_without_nrj_desktop586: %global build_nrj_desktop586 0}
+%{?_without_nrj_desktop: %global build_nrj_desktop 0}
+%{?_without_nrj_realtime: %global build_nrj_realtime 0}
+%{?_without_nrj_laptop: %global build_nrj_laptop 0}
+%{?_without_nrj_netbook: %global build_nrj_netbook 0}
+
+%{?_without_nrj_desktop_pae: %global build_nrj_desktop_pae 0}
+%{?_without_nrj_realtime_pae: %global build_nrj_realtime_pae 0}
+%{?_without_nrj_laptop_pae: %global build_nrj_laptop_pae 0}
+%{?_without_nrj_netbook_pae: %global build_nrj_netbook_pae 0}
+
+%{?_without_nrj_netbook_atom: %global build_nrj_netbook_atom 0}
+%{?_without_nrj_netbook_atom_pae: %global build_nrj_netbook_atom_pae 0}
+%{?_without_nrj_desktop_core2: %global build_nrj_desktop_core2 0}
+%{?_without_nrj_desktop_core2_pae: %global build_nrj_desktop_core2_pae 0}
+
+
 %{?_without_nrjQL_desktop: %global build_nrjQL_desktop 0}
 %{?_without_nrjQL_realtime: %global build_nrjQL_realtime 0}
 
@@ -219,6 +232,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %{?_without_nrjQL_desktop_core2: %global build_nrjQL_desktop_core2 0}
 %{?_without_nrjQL_desktop_core2_pae: %global build_nrjQL_desktop_core2_pae 0}
 
+
 %{?_without_doc: %global build_doc 0}
 %{?_without_source: %global build_source 0}
 %{?_without_devel: %global build_devel 0}
@@ -228,24 +242,51 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %{?_without_modxz: %global build_modxz 0}
 
 
+
+%{?_with_desktop586: %global build_desktop586 1}
+%{?_with_desktop: %global build_desktop 1}
+%{?_with_netbook: %global build_netbook 1}
+%{?_with_server: %global build_server 1}
+
+%{?_with_desktop_pae: %global build_desktop_pae 1}
+%{?_with_netbook_pae: %global build_netbook_pae 1}
+
+%{?_with_nrj_desktop586: %global build_nrj_desktop586 1}
+%{?_with_nrj_desktop: %global build_nrj_desktop 1}
+%{?_with_nrj_realtime: %global build_nrj_realtime 1}
+%{?_with_nrj_laptop: %global build_nrj_laptop 1}
+%{?_with_nrj_netbook: %global build_nrj_netbook 1}
+
+%{?_with_nrj_desktop_pae: %global build_nrj_desktop_pae 1}
+%{?_with_nrj_realtime_pae: %global build_nrj_realtime_pae 1}
+%{?_with_nrj_laptop_pae: %global build_nrj_laptop_pae 1}
+%{?_with_nrj_netbook_pae: %global build_nrj_netbook_pae 1}
+
+%{?_with_nrj_netbook_atom: %global build_nrj_netbook_atom 1}
+%{?_with_nrj_netbook_atom_pae: %global build_nrj_netbook_atom_pae 1}
+%{?_with_nrj_desktop_core2: %global build_nrj_desktop_core2 1}
+%{?_with_nrj_desktop_core2_pae: %global build_nrj_desktop_core2_pae 1}
+
+
 %{?_with_nrjQL_desktop: %global build_nrjQL_desktop 1}
 %{?_with_nrjQL_realtime: %global build_nrjQL_realtime 1}
 
 %{?_with_nrjQL_laptop: %global build_nrjQL_laptop 1}
-%{?_with_nrjQL_netbook: %global build_nrjQL_netbook 1}
+%{?_with_nrjQL_laptop: %global build_nrjQL_netbook 1}
 
 %{?_with_nrjQL_server: %global build_nrjQL_server 1}
 %{?_with_nrjQL_gameserver: %global build_nrjQL_server_games 1}
 %{?_with_nrjQL_gameserver: %global build_nrjQL_server_computing 1}
 
 %{?_with_nrjQL_desktop_pae: %global build_nrjQL_desktop_pae 1}
-%{?_with_nrjQL_realtime_pae: %global build_nrjQL_realtime_pae 1}
+%{?_with_nrjQL_desktop_pae: %global build_nrjQL_realtime_pae 1}
 
 %{?_with_nrjQL_laptop_pae: %global build_nrjQL_laptop_pae 1}
 %{?_with_nrjQL_laptop_pae: %global build_nrjQL_netbook_pae 1}
 
 %{?_with_nrjQL_desktop_core2: %global build_nrjQL_desktop_core2 1}
 %{?_with_nrjQL_desktop_core2_pae: %global build_nrjQL_desktop_core2_pae 1}
+
 
 %{?_with_doc: %global build_doc 1}
 %{?_with_source: %global build_source 1}
@@ -267,6 +308,49 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 # For the .nosrc.rpm
 %define build_nosrc 	0
 %{?_with_nosrc: %global build_nosrc 1}
+
+# convenient if we only want to build the tools and no kernels
+%bcond_with				toolsonly
+%if %{with toolsonly}
+%define build_doc 			0
+%define build_source 			0
+%define build_devel 			0
+%define build_debug	 		0
+%define build_desktop			0
+%define build_netbook			0
+%define build_server			0
+%define build_desktop586		0
+%define build_desktop_pae		0
+%define build_netbook_pae		0
+%define build_nrj_desktop		0
+%define build_nrj_realtime		0
+%define build_nrj_laptop		0
+%define build_nrj_netbook		0
+%define build_nrj_desktop586		0
+%define build_nrj_desktop_pae		0
+%define build_nrj_realtime_pae		0
+%define build_nrj_laptop_pae		0
+%define build_nrj_netbook_pae		0
+%define build_nrj_netbook_atom		0
+%define build_nrj_netbook_atom_pae	0
+%define build_nrj_desktop_core2   	0
+%define build_nrj_desktop_core2_pae	0
+%define build_nrjQL_desktop		0
+%define build_nrjQL_realtime		0
+%define build_nrjQL_laptop		0
+%define build_nrjQL_netbook		0
+%define build_nrjQL_server		0
+%define build_nrjQL_server_games	0
+%define build_nrjQL_server_computing	0
+%define build_nrjQL_desktop_pae		0
+%define build_nrjQL_realtime_pae	0
+%define build_nrjQL_laptop_pae		0
+%define build_nrjQL_netbook_pae		0
+%define build_nrjQL_desktop_core2	0
+%define build_nrjQL_desktop_core2_pae  	0
+%endif
+
+# End of user definitions
 
 
 ############################################################
@@ -301,9 +385,9 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define smake make LD="$LD" LDFLAGS="$LDFLAGS"
 %endif
 %endif
-############################################################
-###  Linker end1 > Check point to build for cooker 2013  ###
-############################################################
+###########################################################
+###  Linker end1 > Check point to build for cooker 2013 ###
+###########################################################
 
 
 # Parallelize xargs invocations on smp machines
@@ -482,7 +566,7 @@ Autoreqprov: 		no
 Suggests:	microcode
 
 %if %{mdvver} >= 201210
-BuildRequires:	kmod-devel kmod-compat 
+BuildRequires:	kmod-devel kmod-compat
 %else
 BuildRequires:	module-init-tools
 %endif
@@ -541,12 +625,12 @@ Version:	%{fakever}				\
 Release:	%{fakerel}				\
 Provides:	%kprovides1 %kprovides2 %kprovides3	\
 %{expand:%%{?kprovides_%{1}:Provides: %{kprovides_%{1}}}} \
-Provides:   %{kname}-%{1}               		\
-%if %{build_nrjQL_desktop}              		\
+Provides:   %{kname}-%{1}              			 \
+%if %{build_nrj_desktop}              		\
 Provides:   kernel-desktop              		\
 %endif                                  		\
 Requires(pre):	%requires1 %requires2 %requires3 %requires4 \
-Requires:	%requires2 %requires5 			\
+Requires:	%requires2 %requires5			\
 Obsoletes:	%kobsoletes1 %kobsoletes2 %kobsoletes3	\
 Conflicts:	%kconflicts1 %kconflicts2 %kconflicts3	\
 Conflicts:	%kconflicts4 %kconflicts5		\
@@ -659,6 +743,318 @@ latest %{kname}-%{1}-devel installed...			\
 							\
 %if %build_debug					\
 %files -n %{kname}-%{1}-%{buildrel}-debuginfo -f kernel_debug_files.%{1} \
+%endif
+
+%ifarch %{ix86}
+#
+# kernel-desktop586: i586, smp-alternatives, 4GB
+#
+%if %build_desktop586
+%define summary_desktop586 Linux kernel for desktop use with i586 & 4GB RAM
+%define info_desktop586 This kernel is compiled for desktop use, single or \
+multiple i586 processor(s)/core(s) and less than 4GB RAM, using HZ_1000, \
+voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%mkflavour desktop586
+%endif
+%endif
+
+#
+# kernel-desktop: i686, smp-alternatives, 4 GB / x86_64
+#
+%if %build_desktop
+%ifarch %{ix86}
+%define summary_desktop Linux Kernel for desktop use with i686 & 4GB RAM
+%define info_desktop This kernel is compiled for desktop use, single or \
+multiple i686 processor(s)/core(s) and less than 4GB RAM, using HZ_1000, \
+voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler.
+%else
+%define summary_desktop Linux Kernel for desktop use with %{_arch}
+%define info_desktop This kernel is compiled for desktop use, single or \
+multiple %{_arch} processor(s)/core(s), using HZ_1000, \
+voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%endif
+%mkflavour desktop
+%endif
+
+#
+# kernel-netbook: i686, smp-alternatives, 4 GB / x86_64
+#
+%if %build_netbook
+%ifarch %{ix86}
+%define summary_netbook Linux Kernel for netbook use with i686 & 4GB RAM
+%define info_netbook This kernel is compiled for netbook use, single or \
+multiple i686 processor(s)/core(s) and less than 4GB RAM, using HZ_250, \
+voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler.
+%else
+%define summary_netbook Linux Kernel for netbook use with %{_arch}
+%define info_netbook This kernel is compiled for netbook use, single or \
+multiple %{_arch} processor(s)/core(s), using HZ_250, \
+voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%endif
+%mkflavour netbook
+%endif
+
+#
+# kernel-server: i686, smp-alternatives, 64 GB / x86_64
+#
+%if %build_server
+%ifarch %{ix86}
+%define summary_server Linux Kernel for server use with i686 & 64GB RAM
+%define info_server This kernel is compiled for server use, single or \
+multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using \
+no preempt, HZ_100, CFS cpu scheduler and BFQ i/o scheduler, PERFORMANCE governor.
+%else
+%define summary_server Linux Kernel for server use with %{_arch}
+%define info_server This kernel is compiled for server use, single or \
+multiple %{_arch} processor(s)/core(s), using no preempt, HZ_100, \
+CFS cpu scheduler and BFQ i/o scheduler, PERFORMANCE governor.
+%endif
+%mkflavour server
+%endif
+
+%ifarch %{ix86}
+#
+# kernel-desktop-pae: i686, smp-alternatives, 64GB
+#
+%if %build_desktop_pae
+%define summary_desktop_pae Linux kernel for desktop use with i686 & upto 64GB RAM
+%define info_desktop_pae This kernel is compiled for desktop use, single or \
+multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_1000, \
+voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%mkflavour desktop-pae
+%endif
+%endif
+
+%ifarch %{ix86}
+#
+# kernel-netbook-pae: i686, smp-alternatives, 64 GB
+#
+%if %build_netbook_pae
+%define summary_netbook_pae Linux Kernel for for netbook use with i686 & upto 64GB RAM
+%define info_netbook_pae This kernel is compiled for netbook use, single or \
+multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_250, \
+voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%mkflavour netbook-pae
+%endif
+%endif
+
+%ifarch %{ix86}
+#
+# kernel-nrj-desktop586: nrj, i586, smp-alternatives, 4GB
+#
+%if %build_nrj_desktop586
+%define summary_nrj_desktop586 Linux kernel for desktop use with i586 & 4GB RAM
+%define info_nrj_desktop586 This kernel is compiled for desktop use, single or \
+multiple i586 processor(s)/core(s) and less than 4GB RAM, using HZ_1000, \
+full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%mkflavour nrj-desktop586
+%endif
+%endif
+
+#
+# kernel-nrj-desktop: nrj, i686, smp-alternatives, 4 GB / x86_64
+#
+%if %build_nrj_desktop
+%ifarch %{ix86}
+%define summary_nrj_desktop Linux Kernel for desktop use with i686 & 4GB RAM
+%define info_nrj_desktop This kernel is compiled for desktop use, single or \
+multiple i686 processor(s)/core(s) and less than 4GB RAM, using HZ_1000, \
+full preempt, rcu boost, RIFS cpu scheduler and BFQ I/O scheduler, ONDEMAND governor.
+%else
+%define summary_nrj_desktop Linux Kernel for desktop use with %{_arch}
+%define info_nrj_desktop This kernel is compiled for desktop use, single or \
+multiple %{_arch} processor(s)/core(s), using HZ_1000, \
+full preempt, rcu boost, RIFS cpu scheduler and BFQ I/O scheduler, ONDEMAND governor.
+%endif
+%mkflavour nrj-desktop
+%endif
+
+#
+# kernel-nrj-realtime: nrj, i686, smp-alternatives, 4 GB / x86_64
+#
+%if %build_nrj_realtime
+%ifarch %{ix86}
+%define summary_nrj_realtime Linux Kernel for low latency use with i686 & 4GB RAM
+%define info_nrj_realtime This kernel is compiled for low latency use, single or \
+multiple i686 processor(s)/core(s) and less than 4GB RAM, using HZ_1000, \
+full preempt, rcu boost, CFS cpu scheduler and new BFQ I/O scheduler, PERFORMANCE governor.
+%else
+%define summary_nrj_realtime Linux Kernel for low latency use with %{_arch}
+%define info_nrj_realtime This kernel is compiled for low latency use, single or \
+multiple %{_arch} processor(s)/core(s), using HZ_1000, \
+full preempt, rcu boost, CFS cpu scheduler and new BFQ I/O scheduler, PERFORMANCE governor.
+%endif
+%mkflavour nrj-realtime
+%endif
+
+#
+# kernel-nrj-laptop: nrj, i686, smp-alternatives, 4 GB / x86_64
+#
+%if %build_nrj_laptop
+%ifarch %{ix86}
+%define summary_nrj_laptop Linux Kernel for laptop use with i686 & 4GB RAM
+%define info_nrj_laptop This kernel is compiled for laptop use, single or \
+multiple i686 processor(s)/core(s) and less than 4GB RAM, using HZ_300, \
+full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%else
+%define summary_nrj_laptop Linux Kernel for laptop use with %{_arch}
+%define info_nrj_laptop This kernel is compiled for laptop use, single or \
+multiple %{_arch} processor(s)/core(s), using HZ_300, \
+full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%endif
+%mkflavour nrj-laptop
+%endif
+
+#
+# kernel-nrj-netbook: nrj, i686, smp-alternatives, 4 GB / x86_64
+#
+%if %build_nrj_netbook
+%ifarch %{ix86}
+%define summary_nrj_netbook Linux Kernel for netbook use with i686 & 4GB RAM
+%define info_nrj_netbook This kernel is compiled for netbook use, single or \
+multiple i686 processor(s)/core(s) and less than 4GB RAM, using HZ_250, \
+full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%else
+%define summary_nrj_netbook Linux Kernel for netbook use with %{_arch}
+%define info_nrj_netbook This kernel is compiled for netbook use, single or \
+multiple %{_arch} processor(s)/core(s), using HZ_250, \
+full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%endif
+%mkflavour nrj-netbook
+%endif
+
+#
+%ifarch %{ix86}
+#
+# kernel-nrj-desktop-pae: nrj, i686, smp-alternatives, 64GB
+#
+%if %build_nrj_desktop_pae
+%define summary_nrj_desktop_pae Linux kernel for desktop use with i686 & upto 64GB RAM
+%define info_nrj_desktop_pae This kernel is compiled for desktop use, single or \
+multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_1000, \
+full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%mkflavour nrj-desktop-pae
+%endif
+%endif
+
+#
+%ifarch %{ix86}
+#
+# kernel-nrj-realtime-pae: nrj, i686, smp-alternatives, 64GB
+#
+%if %build_nrj_realtime_pae
+%define summary_nrj_realtime_pae Linux kernel for low latency use with i686 & upto 64GB RAM
+%define info_nrj_realtime_pae This kernel is compiled for low latency use, single or \
+multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_1000, \
+full preempt, rcu boost, CFS cpu scheduler and new BFQ I/O scheduler, PERFORMANCE governor.
+%mkflavour nrj-realtime-pae
+%endif
+%endif
+
+#
+%ifarch %{ix86}
+#
+# kernel-nrj-laptop-pae: nrj, i686, smp-alternatives, 64 GB
+#
+%if %build_nrj_laptop_pae
+%define summary_nrj_laptop_pae Linux Kernel for for laptop use with i686 & upto 64GB RAM
+%define info_nrj_laptop_pae This kernel is compiled for laptop use, single or \
+multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_300, \
+full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%mkflavour nrj-laptop-pae
+%endif
+%endif
+
+#
+%ifarch %{ix86}
+#
+# kernel-nrj-netbook-pae: nrj, i686, smp-alternatives, 64 GB
+#
+%if %build_nrj_netbook_pae
+%define summary_nrj_netbook_pae Linux Kernel for for netbook use with i686 & upto 64GB RAM
+%define info_nrj_netbook_pae This kernel is compiled for netbook use, single or \
+multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_250, \
+full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%mkflavour nrj-netbook-pae
+%endif
+%endif
+
+#
+%ifarch %{ix86}
+#
+# kernel-nrj-netbook-atom: nrj, for Intel Atom cpu, smp-alternatives, 4 GB
+#
+%if %build_nrj_netbook_atom
+%define summary_nrj_netbook_atom Linux Kernel for netbook use with Intel Atom cpu, less than 4GB RAM
+%define info_nrj_netbook_atom This kernel is compiled for netbook use, single or \
+multiple Intel Atom cpu processor(s)/core(s) and less than 4GB RAM, using HZ_250, \
+full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%mkflavour nrj-netbook-atom
+%endif
+%endif
+
+#
+%ifarch %{ix86}
+#
+# kernel-nrj-netbook-atom-pae: nrj, for Intel Atom cpu, smp-alternatives, 64 GB
+#
+%if %build_nrj_netbook_atom_pae
+%define summary_nrj_netbook_atom_pae Linux Kernel for netbook use with Intel Atom cpu & upto 64GB RAM
+%define info_nrj_netbook_atom_pae This kernel is compiled for netbook use, single or \
+multiple Intel Atom cpu processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_250, \
+full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%mkflavour nrj-netbook-atom-pae
+%endif
+%endif
+
+#
+%ifarch %{ix86}
+#
+# kernel-nrj-desktop-core2: nrj, Intel Core 2 and newer, smp-alternatives, 4 GB 
+#
+%if %build_nrj_desktop_core2
+%define summary_nrj_desktop_core2 Linux Kernel for desktop use with i686 & 4GB RAM
+%define info_nrj_desktop_core2 This kernel is compiled for desktop use, single or \
+multiple Intel Core 2 and newer processor(s)/core(s) and less than 4GB RAM, using HZ_1000, \
+full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%mkflavour nrj-desktop-core2
+%endif
+%endif
+
+#
+%ifarch %{ix86}
+#
+# kernel-nrj-desktop-core2-pae: nrj, Intel Core 2 and newer, smp-alternatives, 64 GB
+#
+%if %build_nrj_desktop_core2_pae
+%define summary_nrj_desktop_core2_pae Linux Kernel for desktop use with i686 & upto 64GB RAM
+%define info_nrj_desktop_core2_pae This kernel is compiled for desktop use, single or \
+multiple Intel Core 2 and newer processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_1000, \
+full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%mkflavour nrj-desktop-core2-pae
+%endif
+%endif
+
+#
+# ARM kernels
+#
+%ifarch %{arm}
+%if %build_iop32x
+%define summary_iop32x Linux Kernel for Arm machines based on Xscale IOP32X
+%define info_iop32x This kernel is compiled for iop32x boxes. It will run on n2100 \
+or ss4000e or sanmina boards.
+%mkflavour iop32x
+%endif
+%if %build_kirkwood
+%define summary_kirkwood Linux Kernel for Arm machines based on Kirkwood
+%define info_kirkwood This kernel is compiled for kirkwood boxes. It will run on openrd boards.
+%mkflavour kirkwood
+%endif
+%if %build_versatile
+%define summary_versatile Linux Kernel for Versatile arm machines
+%define info_versatile This kernel is compiled for Versatile boxes. It will run on Qemu for instance.
+%mkflavour versatile
+%endif
 %endif
 
 #
@@ -963,27 +1359,6 @@ processor mode, use the "nosmp" boot parameter.
 %endif
 %endif
 
-#
-# ARM kernels
-#
-%ifarch %{arm}
-%if %build_iop32x
-%define summary_iop32x Linux Kernel for Arm machines based on Xscale IOP32X
-%define info_iop32x This kernel is compiled for iop32x boxes. It will run on n2100 \
-or ss4000e or sanmina boards.
-%mkflavour iop32x
-%endif
-%if %build_kirkwood
-%define summary_kirkwood Linux Kernel for Arm machines based on Kirkwood
-%define info_kirkwood This kernel is compiled for kirkwood boxes. It will run on openrd boards.
-%mkflavour kirkwood
-%endif
-%if %build_versatile
-%define summary_versatile Linux Kernel for Versatile arm machines
-%define info_versatile This kernel is compiled for Versatile boxes. It will run on Qemu for instance.
-%mkflavour versatile
-%endif
-%endif
 
 #
 # kernel-source
@@ -1089,6 +1464,7 @@ Conflicts:	%{_lib}cpufreq-devel
 This package contains the development files for cpupower.
 %endif
 
+%if !%{with toolsonly}
 %package headers
 Version:	%kversion
 Release:	%rpmrel
@@ -1110,6 +1486,7 @@ should use the 'kernel-devel' package instead.
 # Don't conflict with cpupower-devel
 %if %{build_cpupower}
 %exclude %_includedir/cpufreq.h
+%endif
 %endif
 
 #
@@ -1141,13 +1518,12 @@ cd %src_dir
 %patch2 -p1
 %endif
 
+# %{patches_dir}/scripts/apply_patches-vanilla
 %{patches_dir}/scripts/apply_patches
+%{patches_dir}/scripts/apply_patches-NRJ
 %{patches_dir}/scripts/apply_patches-geek
 %{patches_dir}/scripts/apply_patches-latest
-%{patches_dir}/scripts/apply_patches-NRJ
 %{patches_dir}/scripts/apply_patches-QL
-# PATCH END
-
 
 #
 # Setup Begin
@@ -1161,8 +1537,6 @@ cd %src_dir
 %define debug --no-debug
 %endif
 
-
-%{patches_dir}/scripts/create_configs-QL %debug --user_cpu="%{target_arch}"
 
 # make sure the kernel has the sublevel we know it has...
 LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
@@ -1301,14 +1675,6 @@ SaveDevel() {
 	%endif
 	cp -fR .config Module.symvers $TempDevelRoot
 	cp -fR 3rdparty/mkbuild.pl $TempDevelRoot/3rdparty
-
-#3rdparty/vloopback/vloopback.c:179:2: error: #error "need CONFIG_VIDEO_V4L1_COMPAT"
-#3rdparty/vloopback/vloopback.c:203:28: fatal error: linux/videodev.h: No such file or directory
-#compilation terminated.
-#make[2]: *** [3rdparty/vloopback/vloopback.o] Error 1
-#make[1]: *** [3rdparty/vloopback] Error 2
-#make: *** [3rdparty] Error 2
-#make: *** Waiting for unfinished jobs....
 
 	# Needed for truecrypt build (Danny)
 	cp -fR drivers/md/dm.h $TempDevelRoot/drivers/md/
@@ -1617,6 +1983,126 @@ install -d %{temp_root}
 # make sure we are in the directory
 cd %src_dir
 
+# %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
+%if !%{with toolsonly}
+%{patches_dir}/scripts/create_configs-old-mdv %debug --user_cpu="%{target_arch}"
+
+%ifarch %{ix86}
+%if %build_desktop586
+CreateKernel desktop586
+%endif
+%endif
+
+%if %build_desktop
+CreateKernel desktop
+%endif
+
+%if %build_netbook
+CreateKernel netbook
+%endif
+
+%if %build_server
+CreateKernel server
+%endif
+
+%ifarch %{ix86}
+%if %build_desktop_pae
+CreateKernel desktop-pae
+%endif
+%endif
+
+%ifarch %{ix86}
+%if %build_netbook_pae
+CreateKernel netbook-pae
+%endif
+%endif
+
+%{patches_dir}/scripts/create_configs-withBFQ %debug --user_cpu="%{target_arch}"
+
+%ifarch %{ix86}
+%if %build_nrj_desktop586
+CreateKernel nrj-desktop586
+%endif
+%endif
+
+%if %build_nrj_desktop
+CreateKernel nrj-desktop
+%endif
+
+%if %build_nrj_realtime
+CreateKernel nrj-realtime
+%endif
+
+%if %build_nrj_laptop
+CreateKernel nrj-laptop
+%endif
+
+%if %build_nrj_netbook
+CreateKernel nrj-netbook
+%endif
+
+%ifarch %{ix86}
+%if %build_nrj_desktop_pae
+CreateKernel nrj-desktop-pae
+%endif
+%endif
+
+%ifarch %{ix86}
+%if %build_nrj_realtime_pae
+CreateKernel nrj-realtime-pae
+%endif
+%endif
+
+%ifarch %{ix86}
+%if %build_nrj_laptop_pae
+CreateKernel nrj-laptop-pae
+%endif
+%endif
+
+%ifarch %{ix86}
+%if %build_nrj_netbook_pae
+CreateKernel nrj-netbook-pae
+%endif
+%endif
+
+%ifarch %{ix86}
+%if %build_nrj_netbook_atom
+CreateKernel nrj-netbook-atom
+%endif
+%endif
+
+%ifarch %{ix86}
+%if %build_nrj_netbook_atom_pae
+CreateKernel nrj-netbook-atom-pae
+%endif
+%endif
+
+%ifarch %{ix86}
+%if %build_nrj_desktop_core2
+CreateKernel nrj-desktop-core2
+%endif
+%endif
+
+%ifarch %{ix86}
+%if %build_nrj_desktop_core2_pae
+CreateKernel nrj-desktop-core2-pae
+%endif
+%endif
+
+%ifarch %{arm}
+%if %build_iop32x
+CreateKernel iop32x
+%endif
+%if %build_kirkwood
+CreateKernel kirkwood
+%endif
+%if %build_versatile
+CreateKernel versatile
+%endif
+%endif
+
+%{patches_dir}/scripts/create_configs-QL %debug --user_cpu="%{target_arch}"
+
 %if %build_nrjQL_desktop
 CreateKernel nrjQL-desktop
 %endif
@@ -1682,20 +2168,9 @@ CreateKernel nrjQL-desktop-core2-pae
 %endif
 
 
-%ifarch %{arm}
-%if %build_iop32x
-CreateKernel iop32x
-%endif
-%if %build_kirkwood
-CreateKernel kirkwood
-%endif
-%if %build_versatile
-CreateKernel versatile
-%endif
-%endif
-
 # set extraversion to match srpm to get nice version reported by the tools
 LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
+%endif # !withtoolsonly
 
 
 ############################################################
@@ -1704,13 +2179,7 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 # build perf
 
 %if %{build_perf}
-%if %{mdvver} < 201300
-%make -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} all
-%make -C tools/perf -s prefix=%{_prefix} man
-%else
-%make -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} LDFLAGS="%optflags" all
-%make -C tools/perf -s prefix=%{_prefix} LDFLAGS="%optflags" man
-%endif
+%make all man -C tools/perf prefix=%{_prefix} V=1 HAVE_CPLUS_DEMANGLE=1 EXTRA_CFLAGS="%{optflags}" LDFLAGS="%{ldflags}"
 %endif
 
 # build cpupower
@@ -1718,11 +2187,13 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %if %{build_cpupower}
 # make sure version-gen.sh is executable.
 chmod +x tools/power/cpupower/utils/version-gen.sh
-%if %{mdvver} < 201300
-%make -C tools/power/cpupower CPUFREQ_BENCH=false
-%else
-%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%optflags"
+CFLAGS="%{optflags}" %make -C tools/power/cpupower V=1 CPUFREQ_BENCH=false LDFLAGS="%{ldflags}"
+%ifarch %{ix86} x86_64
+CFLAGS="%{optflags}" %make -C tools/power/cpupower/debug/%{_arch} V=1 centrino-decode powernow-k8-decode LDFLAGS="%{ldflags}"
+CFLAGS="%{optflags}" %make -C tools/power/x86/x86_energy_perf_policy/ V=1 LDFLAGS="%{ldflags}"
+CFLAGS="%{optflags}" %make -C tools/power/x86/turbostat V=1 LDFLAGS="%{ldflags}"
 %endif
+CFLAGS="%{optflags}" %make -C tools/thermal/tmon V=1 LDFLAGS="%{ldflags}" 
 %endif
 ############################################################
 ###  Linker end3 > Check point to build for cooker 2013  ###
@@ -1782,6 +2253,7 @@ rm -rf %{target_source}/.tmp_depmod/
 #endif %build_source
 %endif
 
+%if !%{with toolsonly}
 # compressing modules
 %if %{build_modxz}
 find %{target_modules} -name "*.ko" | %kxargs xz -6e
@@ -1815,31 +2287,32 @@ popd
 
 # need to set extraversion to match srpm again to avoid rebuild
 LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
+%endif # !toolsonly
 
 %if %{build_perf}
-# perf tool binary and supporting scripts/binaries
-make -C tools/perf -s V=1 DESTDIR=%{buildroot} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
-
-# perf man pages (note: implicit rpm magic compresses them later)
-make -C tools/perf  -s V=1 DESTDIR=%{buildroot} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
+# perf tool binary and supporting scripts/binaries with man pages
+%makeinstall_std install-man -C tools/perf prefix=%{_prefix} V=1 HAVE_CPLUS_DEMANGLE=1 EXTRA_CFLAGS="%{optflags}" LDFLAGS="%{ldflags}"
 %endif
 
 ############################################################
 ### Linker start4 > Check point to build for cooker 2013 ###
 ############################################################
 %if %{build_cpupower}
-%if %{mdvver} < 201300
-make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false install
-%else
-%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false LDFLAGS="%optflags" install
-%endif
-rm -f %{buildroot}%{_libdir}/*.{a,la}
+%makeinstall_std -C tools/power/cpupower libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false
 %find_lang cpupower
 mv cpupower.lang ../
 chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
-mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
-install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
-install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
+install -m644 %{SOURCE50} -D %{buildroot}%{_unitdir}/cpupower.service
+install -m644 %{SOURCE51} -D %{buildroot}%{_sysconfdir}/sysconfig/cpupower
+
+%ifarch %{ix86} x86_64
+install -pm755 tools/power/cpupower/debug/%{_arch}/centrino-decode -D %{buildroot}%{_bindir}/centrino-decode
+install -pm755 tools/power/cpupower/debug/%{_arch}/powernow-k8-decode -D %{buildroot}%{_bindir}/powernow-k8-decode
+mkdir -p %{buildroot}%{_mandir}/man8
+%makeinstall_std -C tools/power/x86/x86_energy_perf_policy
+%makeinstall_std -C tools/power/x86/turbostat
+%endif
+make -C tools/thermal/tmon INSTALL_ROOT=%{buildroot} install
 %endif
 ############################################################
 ### Linker start4 > Check point to build for cooker 2013 ###
@@ -1941,18 +2414,27 @@ rm -rf %{buildroot}
 %dir %{_prefix}/libexec/perf-core
 %{_libdir}/libperf-gtk.so
 %{_prefix}/libexec/perf-core/*
-%{_mandir}/man[1-8]/perf*
+%{_mandir}/man1/perf*.1*
 %{_sysconfdir}/bash_completion.d/perf
 %endif
 
 %if %{build_cpupower}
 %files -n cpupower -f cpupower.lang
 %{_bindir}/cpupower
+%{_bindir}/tmon
 %{_libdir}/libcpupower.so.0
 %{_libdir}/libcpupower.so.0.0.0
 %{_unitdir}/cpupower.service
-%{_mandir}/man[1-8]/cpupower*
+%{_mandir}/man1/cpupower*.1*
 %config(noreplace) %{_sysconfdir}/sysconfig/cpupower
+%ifarch %{ix86} x86_64
+%{_bindir}/centrino-decode
+%{_bindir}/powernow-k8-decode
+%{_bindir}/turbostat
+%{_bindir}/x86_energy_perf_policy
+%{_mandir}/man8/turbostat.8*
+%{_mandir}/man8/x86_energy_perf_policy.8*
+%endif
 
 %files -n cpupower-devel
 %{_libdir}/libcpupower.so
@@ -1962,7 +2444,7 @@ rm -rf %{buildroot}
 
 %changelog
 
-* Thu Apr 24 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.11-69
+* Thu Apr 24 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.11-70
 + update to 3.13.11 (EOL) - stable
 - update patches:
   * tuxonice-for-linux-3.13.11-2014-04-24.patch
@@ -1982,7 +2464,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Mon Apr 14 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.10-69
+* Mon Apr 14 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.10-70
 + update to 3.13.10 - stable
 - on request by Alexander Khryukin: 
   * adding keys requested by Fedya to solve this issue:
@@ -2017,7 +2499,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Fri Apr 04 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.9-69
+* Fri Apr 04 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.9-70
 + update to 3.13.9 stable
 - add: /patches-queue (for tests) and /patches-geek with HW support:
 - * DVB cards, IR receivers, WiFi devices, Game controllers, Laptops  
@@ -2052,7 +2534,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Mon Mar 31 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.8-69
+* Mon Mar 31 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.8-70
 + update to 3.13.8 stable
 - sync patches
 - ---------------------------------------------------------------------
@@ -2064,13 +2546,13 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Fri Mar 28 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.7-69
+* Fri Mar 28 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.7-70
 + update to 3.13.7 stable
 - sync with few nrjQL patches
 - sync all the patches for 3.13.8 (rc1)
 - add REISER4 (file system) support, with two new patches:
-  * 0004-reiser4-for-3.13.6.patch
-  * 0005-3.13.1-reiser4-different-transaction-models.patch
+- 0004-reiser4-for-3.13.6.patch
+- 0005-3.13.1-reiser4-different-transaction-models.patch
 - ---------------------------------------------------------------------
 - Kernel 3.13 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
@@ -2080,8 +2562,8 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Mon Mar 10 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.6-69
-+ update to 3.13.6 stable
+* Mon Mar 10 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.6-70
++ update to 3.13.3 stable
 + this is first version of "nrj" stable 3.13.x, in its early development
 - stage, so, it's only for testing purposes, please, dont use this srpm,
 - because is still to fix all over!!!
@@ -2098,7 +2580,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Sun Feb 23 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.13-69
+* Sun Feb 23 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.13-70
 + kernel 3.12.13 stable
 - drop 2 patches, already in mainstream:
   * x86-xen-mmu-fix-NUMA-crash.patch
@@ -2113,7 +2595,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Fri Feb 21 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.12-69
+* Fri Feb 21 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.12-70
 + kernel 3.12.12 stable
 - add: libunwind-devel as BR for %mdvver >= 201210 (ROSA 2012.1)
 - change ftp://ftp.kernel.org patch format from .bz2 to .xz
@@ -2128,7 +2610,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Sat Feb 15 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.11-69
+* Sat Feb 15 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.11-70
 + kernel 3.12.11 stable
 - add: H930C-part1.patch, H930C-part2.patch, H930C-part3.patch
 - add: kernel-3.11.8-i915-quirk-acer-aspire-v3-772g.patch
@@ -2144,7 +2626,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Tue Feb 11 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.10-69
+* Tue Feb 11 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.10-70
 + kernel 3.12.10 stable
 - update BFQ (disk I/O scheduler) to v7r1
 - enable the key: CONFIG_DRM_RADEON_UMS=y
@@ -2157,19 +2639,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Tue Feb 04 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.9-69v7
-+ this is only a fix release replacement - not changed release nr.
-- create_configs > enabled NAMESPACES & UIDGID_STRICT_TYPE_CHECKS
-- this release has new BFQv7 enabled, prepared for testing purposes
-- ---------------------------------------------------------------------
-- Kernel 3.12 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
-- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
-- instead (-69) will be used for development and experimental flavours,
-- Yin & Yang (69) release - a very complete but experimental flavours...
-- ---------------------------------------------------------------------
-
-* Tue Feb 04 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.9-69
+* Tue Feb 04 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.9-70
 + this is only a fix release replacement - not changed release nr.
 - create_configs > enabled NAMESPACES & UIDGID_STRICT_TYPE_CHECKS
 - this release has BFQv6r2, not the newest BFQv7, better waiting...
@@ -2181,19 +2651,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Sun Feb 02 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.9-69v7
-+ kernel 3.12.9 stable
-- this is the first testing version with new BFQv7 disk I/O scheduler
-- ---------------------------------------------------------------------
-- Kernel 3.10 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
-- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
-- the rel -69  is used for development and the experimental flavours,
-- the rel -70 is merge of mainline & experimental flavours in ONE srpm
-- Yin & Yang (69) release - a very complete but experimental flavours...
-- ---------------------------------------------------------------------
-
-* Thu Jan 30 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.9-69
+* Thu Jan 30 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.9-70
 + update to 3.12.9 stable
 - small fixes and cleanups:
 - removed all the remaining warning msgs from create_configs:
@@ -2209,7 +2667,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Sun Jan 26 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.8-69
+* Sun Jan 26 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.8-70
 + update to 3.12.8 stable
 - sync & add new patches
 - ---------------------------------------------------------------------
@@ -2220,7 +2678,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Mon Jan 13 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.7-69
+* Mon Jan 13 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.12.7-70
 + update to 3.12.7 stable
 - sync & add new patches
 - drop 3rdparty heci driver (obsoleted by in-kernel mei driver)
@@ -2233,13 +2691,14 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Tue Dec 31 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.12.6-69
+* Tue Dec 31 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.12.6-70
 + update to 3.12.6 stable
 - add fix to properly rebuild the modules for latest VMware products 
 - add patch: reiser4-for-3.12.6.patch
 - add fix to all kernel.spec for a proper "cooker" rebuild 
 - drop a workaround introduced since 3.7.9-1 to fix issues with dkms: 
 - # /linux/version.h symlink to /include/generated/uapi/linux/version.h
+- hoping there will follow many other kernels developed by me...
 - ---------------------------------------------------------------------
 - Kernel 3.12 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
@@ -2248,7 +2707,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Fri Dec 20 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.12.5-69
+* Fri Dec 20 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.12.5-70
 + update to 3.12.5 stable
 + this is first version of "nrj" stable 3.12.x, in its early development
 - stage, so, it's only for testing purposes, please, dont use this srpm,
@@ -2268,7 +2727,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Sun Dec 01 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.10-69
+* Sun Dec 01 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.10-70
 - Virtual package for new nrj kernel for properly install and updates.
 + update to 3.11.10 stable
 - http://lwn.net/Articles/575269/ > This is EOL for 3.11
@@ -2284,12 +2743,14 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Thu Nov 28 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.9-69
+* Thu Nov 28 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.9-70
 + update to 3.11.9 stable
 - revert latest EFI changes
   * CONFIG_EFIVAR_FS set to m
   * CONFIG_EFI_VARS set to y
 - update: /patches-QL/tuxonice-for-linux-3.11.9-2013-11-22.patch
+- Imported a commit from Bero: Add Acer Aspire v3-772g i915 quirk
+  * https://abf.rosalinux.ru/openmandriva/kernel/commit/d6365d6f707d638ca4cb2c1e244da98dfed04776
 - ---------------------------------------------------------------------
 - Kernel 3.11 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
@@ -2299,7 +2760,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - --------------------------------------------------------------------
 
-* Sat Nov 16 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.8-69
+* Sat Nov 16 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.8-70
 + update to 3.11.8 stable 
 - update: /patches-QL/tuxonice-for-linux-3.11.8-2013-11-15.patch
 - Thanks to Eugene Shatokhin we have a modified BFS patch compatible with
@@ -2313,7 +2774,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - --------------------------------------------------------------------
 
-* Sun Nov 10 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.7-69
+* Sun Nov 10 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.7-70
 + update to 3.11.7 stable plus all the patches from the 3.11.8-rc1
 - update: /patches-QL/uksm-0.1.2.2-for-v3.11.ge.7.patch
 - ---------------------------------------------------------------------
@@ -2325,7 +2786,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - --------------------------------------------------------------------
 
-* Thu Nov 07 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.7-69
+* Thu Nov 07 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.7-70
 + update to 3.11.7 stable
 - update: /patches-QL/tuxonice-for-linux-3.11.7-2013-11-07.patch
 - add 'on request' by Eugene Shatokhin, few MEI changes to avoid too many error logs wasting space
@@ -2335,7 +2796,7 @@ rm -rf %{buildroot}
   * with this we should be able to override the wrong EDID of displays with options at kernel boot
   * About EDID override howto, you read here:
   * https://www.osadl.org/monitoring/patches/r2s0/drivers-gpu-drm-allow-to-load-edid-firmware.patch
-- add 'on request' by Alexander Kazancev the full configs for UEFI from: 
+- add 'on request' by Alexander Kazancev the full configs for UEFI from:
   * https://wiki.archlinux.org/index.php/Unified_Extensible_Firmware_Interface#Linux_Kernel_Config_options_for_UEFI
   * add CONFIG_RELOCATABLE=y also for i386.config
   * change CONFIG_EFIVAR_FS from "=m" to "=y"
@@ -2355,7 +2816,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - --------------------------------------------------------------------
 
-* Sat Oct 19 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.6-69
+* Sat Oct 19 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.6-70
 + update to 3.11.6 stable
 - add 'on request' by 'Bero' aka Bernhard Rosenkränzer:
   * add: linux-3.11.4-saa716x.patch > driver for SAA7160 based DVB cards
@@ -2378,12 +2839,11 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - --------------------------------------------------------------------
 
-* Wed Oct 09 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.4-69
+* Wed Oct 09 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.4-70
 + update to 3.11.4 stable
 - update: tuxonice-for-linux-3.11.4-2013-10-06.patch
 - remove: patches-others, patches-extras folders as now are patches-NRJ
 - remove: /scripts/apply_patches-extras, /scripts/apply_patches-others
-- change: kernel.spec now apply_patches-NRJ instead then extras, others
 - ---------------------------------------------------------------------
 - Kernel 3.11 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
@@ -2393,8 +2853,8 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - --------------------------------------------------------------------
 
-* Sun Oct 06 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.1-69
-+ this is first version of nrjQL stable 3.11.1, in its early development
+* Sun Oct 06 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.11.1-70
++ this is first version of "ONE" stable 3.11.1, in its early development
 - stage, so, it's only for testing purposes, please, dont use this srpm,
 - because is still to fix all over!!!
 + update to 3.11.1 stable
@@ -2410,7 +2870,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Sat Oct 05 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.15-69
+* Sat Oct 05 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.15-70
 + update to 3.10.15 stable
 - sync: /patches
 - modified defconfigs for:
@@ -2425,22 +2885,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Tue Oct 01 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.14-69
-+ update to 3.10.14 stable
-- drop: fbcondecor.patch from /patches-others and /patches-NRJ (one)
-- changes in defconfigs:
-- drop config for CONFIG_FB_CON_DECOR
-- recover to CONFIG_FB_TILEBLITTING=y
-- ---------------------------------------------------------------------
-- Kernel 3.10 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
-- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
-- the rel -69  is used for development and the experimental flavours,
-- the rel -70 is merge of mainline & experimental flavours in ONE srpm
-- Yin & Yang (69) release - a very complete but experimental flavours...
-- ---------------------------------------------------------------------
-
-* Fri Sep 27 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.13-69
+* Fri Sep 27 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.13-70
 + update to 3.10.13 stable
 - update patch
 - * /patches-QL/tuxonice-for-linux-3.10.13-2013-09-27.patch
@@ -2453,7 +2898,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Mon Sep 16 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.12-69
+* Mon Sep 16 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.12-70
 + update to 3.10.12 stable
 - add patch
 - * linux-fixuClibc.patch
@@ -2471,7 +2916,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Tue Sep 10 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.11-69
+* Wed Sep 11 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.11-70
 + update to 3.10.11 stable
 - the compressed folder now is the same (mibrel 69) for -1/-69/-70(one) 
 - sync: new /patches:
@@ -2492,8 +2937,11 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Sun Sep 01 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.10-69
-+ update to 3.10.10 stable
+* Sun Sep 01 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.10-70
++ Kernel 3.10.10-stable -rel70 (+1 + 69)
+- -----------------------------------------
+-        Experimental Kernels ONE 
+- -----------------------------------------
 - BFQ: replaced with fixed version (nr.3 patches 3.10.8+-v6r2/ dated 25 August)
 - sync: /patches
 - updates: /patches-others /patches-NRJ /patches-QL /patches-RT
@@ -2503,13 +2951,14 @@ rm -rf %{buildroot}
 - ---------------------------------------------------------------------
 - Kernel 3.10 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
-- instead (-69) will be used for development and experimental flavours,
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Thu Aug 22 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.9-69
-- replacement 3.10.9 release
+* Thu Aug 22 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.9-70
++ Kernel 3.10.9-stable -rel70 (+1 + 69)
+- -----------------------------------------
+-        Experimental Kernels ONE 
+- -----------------------------------------
 - To fix the "hangs on boot issue" signaled: bugs.rosalinux.ru/show_bug.cgi?id=2530
 - add: /patches-NRJ/0004-block-Switch-from-BFQ-v6r2-for-3.10.0-to-BFQ-v6r2-fo.patch
 - sync: /patches
@@ -2518,40 +2967,74 @@ rm -rf %{buildroot}
 - ---------------------------------------------------------------------
 - Kernel 3.10 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
-- instead (-69) will be used for development and experimental flavours,
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Wed Aug 21 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.9-69
-+ update to 3.10.9 stable
+* Wed Aug 21 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.9-70
++ Kernel 3.10.9-stable -rel70 (+1 + 69)
+- -----------------------------------------
+-        Experimental Kernels ONE 
+- -----------------------------------------
+- update to 3.10.9
 - ---------------------------------------------------------------------
 - Kernel 3.10 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
-- instead (-69) will be used for development and experimental flavours,
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Tue Aug 20 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.8-69
-+ update to 3.10.8 stable
-- sync and update few patches
-- the compressed folder has redundant contents to be used for NRJ4/NRJ5:
-- the same folder can be used with kernel.spec for new Kernels ONE model
+* Tue Aug 20 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.8-70
++ Kernel 3.10.8-stable -rel70 (+1 + 69)
+- -----------------------------------------
+-        Experimental Kernels ONE 
+- -----------------------------------------
+- That's an attempt to merge all MIB kernel flavours (old mdv, nrj, nrjQL) with ONE only SRPM (NRJ V5): 
+- changelog for ONE:
+- version rc (20 August 2013) > the compressed folder has redundant contents so can be used also for NRJ4
+- "Build defines" have been shortened to be easy to edit
+- version rc (19 August 2013) > now it's more modular to allow us easily a lot ot further developments...
+- version beta (17 August 2013) > It can config, prepare, build all 'old mdv' and MIB nrj nrjQL flavours
+- version alpha (15 August 2013) > It can config, prepare and build nrj-desktop & nrjQL-desktop flavours
 - ---------------------------------------------------------------------
 - Kernel 3.10 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
-- instead (-69) will be used for development and experimental flavours,
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Thu Aug 15 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.7-69
+* Mon Aug 19 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.8-rc1-70
++ Kernel 3.10.8-rc1 stable -rel70 (+1 + 69)
+- -----------------------------------------
+-        Experimental Kernels ONE 
+- -----------------------------------------
+- That's an attempt to merge all MIB kernel flavours (old mdv, nrj, nrjQL) with ONE only SRPM (NRJ V5): 
+- changelog for ONE:
+- version alpha (15 August 2013) > It can config, prepare and build nrj-desktop & nrjQL-desktop flavours
+- version beta (17 August 2013) > It can config, prepare, build all 'old mdv' and MIB nrj nrjQL flavours
+- version rc (19 August 2013) > now it's more modular to allow us easily a lot ot further developments...
+- ---------------------------------------------------------------------
+- Kernel 3.10 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- Yin & Yang (69) release - a very complete but experimental flavours...
+- ---------------------------------------------------------------------
+
+* Sat Aug 17 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.7-2
++ Kernel 3.10.7 stable -rel2
+- ----------------------------
+-   Experimental Kernels ONE 
+- ----------------------------
+- That's an attempt to merge all MIB kernel flavours (old mdv, nrj, nrjQL) with ONE only SRPM (NRJ V5): 
+- changelog for ONE:
+- version alpha (15 August 2013) > It can config, prepare and build nrj-desktop & nrjQL-desktop flavours
+- version beta (17 August 2013) > It can config, prepare, build all 'old mdv' and MIB nrj nrjQL flavours
+- ---------------------------------------------------------------------
+- Kernel 3.10 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- Yin & Yang (69) release - a very complete but experimental flavours...
+- ---------------------------------------------------------------------
+
+* Thu Aug 15 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.7-1
 + update to 3.10.7 stable
 - sync patches, drop old stable queue, drm-radeon and zram patches
-- fixed the Conflicts: dkms-broadcom-wl < 5.100.82.112-12
-- fixed create_configs (ver 1.8) - removed question when -netbook +pae
-  * modified from: $values{XEN} = "n"; >>> to >>> $to_add{XEN} = "n";
+- fixed Conflicts with new proprietary driver version-release
 - ---------------------------------------------------------------------
 - Kernel 3.10 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
@@ -2560,7 +3043,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Tue Aug 13 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.6-69
+* Tue Aug 13 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.6-1
 + update to 3.10.6 stable
 - sync all /patches
 - update QL patch: tuxonice-for-linux-3.10.6-2013-08-13.patch
@@ -2575,7 +3058,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Wed Aug 07 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.5-69
+* Wed Aug 07 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.5-1
 + update to 3.10.5 stable
 - sync all /patches
 - sync defconfigs
@@ -2593,25 +3076,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Wed Aug 07 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.5-69
-+ update to 3.10.5 stable
-- sync all /patches
-- sync defconfigs
-- enable ndiswrapper
-- update QL patch: tuxonice-for-linux-3.10.5-2013-08-04.patch
-- revert to power save disable to verify if fixes an issue of audio noise:
-- (that issue has been firstly reported by "dago68", then verified by me)
-  * CONFIG_SND_HDA_POWER_SAVE_DEFAULT=0
-  * CONFIG_SND_AC97_POWER_SAVE_DEFAULT=0
-- ---------------------------------------------------------------------
-- Kernel 3.10 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
-- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
-- instead (-69) will be used for development and experimental flavours,
-- Yin & Yang (69) release - a very complete but experimental flavours...
-- ---------------------------------------------------------------------
-
-* Thu Aug 01 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.4-69
+* Thu Aug 01 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.4-1
 + update to 3.10.4 stable
 - revert to old /scripts/create_configs-QL behaviour:
   * now -laptop and -netbook are 300 and 250HZ again
@@ -2625,7 +3090,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Tue Jul 30 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.1-69
+* Tue Jul 30 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.1-1
 + update to 3.10.1 stable
 - all the defconfigs have been prepared for 3.10 series
 - all the patches have been updated for the 3.10 series
@@ -2638,19 +3103,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Fri Jul 26 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.10.1-69
-+ this is first version of nrjQL stable 3.10.1, in its early development
-- stage, so, it's only for testing purposes, please, dont use this srpm,
-- because is still to fix all over!!!
-- ---------------------------------------------------------------------
-- Kernel 3.10 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
-- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
-- instead (-69) will be used for development and experimental flavours,
-- Yin & Yang (69) release - a very complete but experimental flavours...
-- ---------------------------------------------------------------------
-
-* Tue Jul 23 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.11-69
+* Tue Jul 23 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.11-1
 + update to stable 3.9.11 (EOL)
 - update patches:
   * tuxonice-for-linux-3.9.11-2013-07-21.patch
@@ -2663,7 +3116,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Wed Jul 17 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.10-69
+* Wed Jul 17 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.10-1
 + update to 3.9.10 stable
 - update patches:
   * tuxonice-for-linux-3.9.10-2013-07-14.patch
@@ -2677,9 +3130,9 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Fri Jul 05 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.9-69
+* Fri Jul 05 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.9-1
 + update to 3.9.9 stable
-- update patch: tuxonice-for-linux-3.9-8-2013-06-29.patch
+- update update: tuxonice-for-linux-3.9-8-2013-06-29.patch
 - added patch: net-wireless-bcma-add-support-for-BCM43142.patch
 - ---------------------------------------------------------------------
 - Kernel 3.9 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
@@ -2689,7 +3142,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Thu Jun 27 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.8-69
+* Thu Jun 27 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.8-1
 + update to 3.9.8 stable
 - update patch: tuxonice-for-linux-3.9-7-2013-06-23.patch
 - add patch: ath9k_htc > Handle IDLE state transition properly
@@ -2697,12 +3150,10 @@ rm -rf %{buildroot}
 - ---------------------------------------------------------------------
 - Kernel 3.9 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
-- instead (-69) will be used for development and experimental flavours,
-- Yin & Yang (69) release - a very complete but experimental flavours...
+- This kernel contains also some other patches to improve the hw support
 - ---------------------------------------------------------------------
 
-* Thu Jun 20 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.7-69
+* Thu Jun 20 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.7-1
 + update to 3.9.7 stable
 - fixed a shutdown issue reported on nrjQL laptop -netbook and -server 
 - now BFQ is the version updated to v6r2, dated 15 June
@@ -2714,14 +3165,12 @@ rm -rf %{buildroot}
 - ---------------------------------------------------------------------
 - Kernel 3.9 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
-- instead (-69) will be used for development and experimental flavours,
-- Yin & Yang (69) release - a very complete but experimental flavours...
+- This kernel contains also some other patches to improve the hw support
 - ---------------------------------------------------------------------
 
-* Sat Jun 15 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.6-69
+* Fri Jun 14 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.6-1
 + update to 3.9.6 stable
-- update TOI patch >>> tuxonice-for-linux-3.9-6-2013-06-15.patch
+- update TOI patch >>> tuxonice-for-linux-3.9-6-2013-06-14.patch
 - update all defconfigs: insert the new key values in the proper places
 - update kernel.spec about text descriptions for nrj and nrjQL flavours
 - small overall cleanups
@@ -2733,7 +3182,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Wed Jun 12 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.5-69
+* Wed Jun 12 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.5-1
 + update to 3.9.5 stable
 - update TOI patch >>> tuxonice-for-linux-3.9-5-2013-06-08.patch
 - ---------------------------------------------------------------------
@@ -2744,14 +3193,14 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Tue Jun 11 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.1-69
+* Tue Jun 11 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.9.1-1
 + update to 3.9.1 stable
 - all the defconfigs have been prepared for 3.9 series
 - all the patches have been updated for the 3.9 series
 - update kernel specs
 - update kernel scripts
-- on mainline nrj kernels we apply again > create_configs-withBFQ
 - we've received some good suggestions, and all have been accepted
+- on mainline nrj kernels we apply again > create_configs-withBFQ
 - 1> suggestions and requests received by Per Øyvind Karlsen (POK)
   * TOI (tuxonice) was only in laptop/netbook, now in all flavours
   * CONFIG_PM_AUTOSLEEP=y 
@@ -2790,7 +3239,8 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Fri May 17 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.13-69
+* Fri May 17 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.13-1
+- Virtual package for new nrj kernel for properly install and updates.
 + update to 3.8.13 stable (EOL)
 - * 87 files changed, 902 insertions(+), 445 deletions(-)
 - patches updated
@@ -2805,7 +3255,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Thu May 16 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.12-69.2
+* Thu May 16 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.12-2
 + update to 3.8.12 stable - second release
 - BFQ patches update to v6r1 that contain two important fixes.
 - BFQ is disable on mainline kernels (nrj), as v6 caused some rare oops:
@@ -2822,7 +3272,8 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Thu May 09 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.12-69
+* Thu May 09 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.12-1
+- Virtual package for new nrj kernel for properly install and updates.
 + update to 3.8.12 stable 
 - * 129 files changed, 641 insertions(+), 320 deletions(-)
 - patches dropped, now in upstream
@@ -2836,7 +3287,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Tue May 07 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.11-69
+* Tue May 07 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.11-1
 + update to 3.8.11 stable 
 - * 49 files changed, 454 insertions(+), 166 deletions(-)
 - patches dropped, now in upstream
@@ -2851,7 +3302,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Sat Apr 27 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.10-69
+* Sat Apr 27 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.10-1
 + update to 3.8.10 stable 
 - * 58 files changed, 405 insertions(+), 222 deletions(-)
 - * 3 files changed, 27 insertions(+), 1 deletion(-)
@@ -2867,7 +3318,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Wed Apr 17 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.8-69
+* Wed Apr 17 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.8-1
 + update to 3.8.8 stable 
 - *  37 files changed, 335 insertions(+), 344 deletions(-)
 - ---------------------------------------------------------------------
@@ -2878,12 +3329,12 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Mon Apr 15 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.7-69
+* Mon Apr 15 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.7-1
 + update to 3.8.7 stable 
 - * 67 files changed, 507 insertions(+), 341 deletions(-)
 - new patches added, enabled and configured with default values
   * /patches-extras/linux-3.8.6-colored-printk.patch
-  * /patches-extras/zswap-3.8-20130415.patch
+  */patches-extras/zswap-3.8-20130415.patch
   * zswap now is enabled only on x86 arch, not in ARM (using zcache2)
 - patches updated to newer versions 20130414:
   * aufs3, toi 
@@ -2897,7 +3348,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Sun Apr 07 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.6-69
+* Sun Apr 07 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.6-1
 + update to 3.8.6 stable 
 - * (158 files changed, 1341 insertions(+), 658 deletions(-)
 - patch add: reiserfs4 ver.3.8 with its configuration as new module
@@ -2916,7 +3367,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Thu Mar 28 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.5-69
+* Thu Mar 28 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.5-1
 + update to 3.8.5 stable 
 - * (109 files changed, 778 insertions(+), 683 deletions(-)
 - add two new keys to defconfigs:
@@ -2930,7 +3381,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Sun Mar 24 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.4-69
+* Sun Mar 24 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.4-1
 + update to 3.8.4 stable (86 fixes all over)
 + NRJ 4, scripts v 1.6: more info on file > create_configs_changelog
 + Import Bero commit 32d3796b8b from openmandriva cooker kernel.spec
@@ -2947,7 +3398,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Fri Mar 15 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.3-69
+* Fri Mar 15 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.3-1
 + update to 3.8.3 stable (144 fixes all over)
 + Imported "Build kernel-headers in here" from OpenMandriva kernel
 - drop Haswell id fixup: gpu-drm-i915-Fix-Haswell-CRW-PCI-IDs.patch
@@ -2961,7 +3412,7 @@ rm -rf %{buildroot}
 - TOI to 3.8.3 20130315
 - VHBA 3.8 20130314
 + NRJ 4, scripts v 1.5: 
-- nrjQL_server & nrjQL_server_computing: dynticks enabled to save energy 
+- nrjQL_server & nrjQL_server_computing: dynticks enabled to save energy
 - ---------------------------------------------------------------------
 - Kernel 3.8 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
@@ -2970,7 +3421,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Mon Mar 11 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.2-69
+* Mon Mar 11 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.8.2-1
 + update to 3.8.2 stable (80 fixes all over)
 + Patch added from ZEN:
 - Virtual (SCSI) HBA for Virtual CD emulation module
@@ -3000,7 +3451,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Sun Mar 03 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.10-69
+* Sun Mar 03 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.10-1
 + update to 3.7.10 stable (79 fixes all over)
 - With this version, 3.7 has reached the EOL status (End of Life)
 + update to nrj v4 - rel 1.3 (05 mar 2013) 
@@ -3015,7 +3466,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Wed Feb 20 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.9-69
+* Wed Feb 20 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.9-1
 + update to 3.7.9 stable (12 fixes all over)
 - update AUFS3 to 3.7.9 20130218
 - specific for nrjQL addons:
@@ -3030,7 +3481,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Sat Feb 16 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.8-69
+* Sat Feb 16 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.8-1
 + update to 3.7.8 stable (69 fixes all over)
 - update AUFS3 to 3.7 20130215
 - specific for nrjQL addons:
@@ -3046,7 +3497,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Wed Feb 13 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.7-69
+* Wed Feb 13 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.7-1
 + update to 3.7.7 stable (34 fixes all over)
 - update AUFS3 to 3.7 20130212
 - specific for nrjQL addons:
@@ -3061,7 +3512,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Mon Feb 04 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.6-69
+* Mon Feb 04 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.6-1
 + update to 3.7.6 stable (101 fixes all over)
 - add "# CONFIG_NETFILTER_XT_TARGET_NOTRACK is not set" to defconfigs
 - ---------------------------------------------------------------------
@@ -3072,18 +3523,18 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Sat Feb 02 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.5-69
+* Sat Feb 02 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.5-1
 + update to 3.7.5 stable
 - drop two staging patches
 - ---------------------------------------------------------------------
 - Kernel 3.7 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
+- This is -1 (mainline serie), with official kernel sources and addons,
 - instead (-69) will be used for development and experimental flavours
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Sat Feb 02 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.1-69
+* Sat Feb 02 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.1-1
 + update to 3.7.1 stable
 - update kernel.spec to be complaint with new V4 nrj/nrjQL model 
 - update all scripts to be complaint with new V4 nrj/nrjQL model
@@ -3101,142 +3552,247 @@ rm -rf %{buildroot}
 - ---------------------------------------------------------------------
 - Kernel 3.7 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
+- This is -1 (mainline serie), with official kernel sources and addons,
 - instead (-69) will be used for development and experimental flavours
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Mon Jan 14 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.6.11-69
+* Fri Jan 25 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.7.1-0
++ update to 3.7.1 stable
+- update script with nrj module v.3.1
+- update .spec filelists
+- update/sync defconfigs
+- fix zram oops (upstream)
+- add perf bash_completion
+- add 3.7 buildfixes for alx, IFWLOG, mach64, ndiswrapper
+- rediff disable-mrproper patch
+- restore patch preferring ata over ide drivers
+- drop compress modules at install time patch
+  (obsolete as we compress them at rpm build time)
+- ---------------------------------------------------------------------
+- Kernel 3.7 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- This is -1 (mainline serie), with official kernel sources and addons,
+- instead (-69) will be used for development and experimental flavours
+- Yin & Yang (69) release - a very complete but experimental flavours...
+- ---------------------------------------------------------------------
+
+* Mon Jan 14 2013 Nicolo' Costanza <abitrules@yahoo.it> 3.6.11-1
 + update to 3.6.11 stable (56 fixes all over)
 - update BFQ version to v5r1
 - update UKMS version to 0.1.2.2
 - add brcmsmac-Add-support-for-writing-debug-messages-to-the-trace-buffer.patch
 - add i915.CADLinopregion.patch
-- changed power profile for nrjQL-desktop from PERFORMANCE to ONDEMAND
 - ---------------------------------------------------------------------
 - Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
+- This is -1 (mainline serie), with official kernel sources and addons,
 - instead (-69) will be used for development and experimental flavours
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Wed Dec 12 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.10-69
+* Wed Dec 12 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.10-1
 + update to 3.6.10 stable (29 fixes all over)
 - update AUFS3 version to git 20121207
 - update T.O.I version to gif 20121207
 - add speakup-lower-default-software-speech-rate.patch
-- ROSA 2012.1 release version 
+- ROSA 2012.1 release version with nrj-desktop CFQ revert
 - ---------------------------------------------------------------------
 - Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
+- This is -1 (mainline serie), with official kernel sources and addons,
 - instead (-69) will be used for development and experimental flavours
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Fri Nov 30 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.9-rc1-69
-+ update to 3.6.9-rc1-69 (56 fixes all over)
+* Tue Dec 11 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.10-0
++ update to 3.6.10 stable (29 fixes all over)
+- update AUFS3 version to git 20121207
+- update T.O.I version to gif 20121207
+- add speakup-lower-default-software-speech-rate.patch
+- This is a testing version with nrj-desktop BFQ enabled!
 - ---------------------------------------------------------------------
 - Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
+- This is -1 (mainline serie), with official kernel sources and addons,
 - instead (-69) will be used for development and experimental flavours
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Fri Nov 30 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.8-69
-+ update to 3.6.8-69 (96 fixes all over)
-- add 6 patches AUFS3 with the MagOS config keys
-- add 12 patches to ext4 from Fedora 3.6
-- update AUFS3 to git version 20121127
-- update TOI to 20121127 git version
+* Sun Dec 09 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.10-0-rc1-2
++ update to 3.6.10 rc1 (27 fixes all over)
+- update AUFS3 version to git 20121207
+- update T.O.I version to gif 20121207
+- add ZFS filesystem driver
+- add Solaris Porting Layer and ZFS filesystem support mod 
+- add speakup-lower-default-software-speech-rate.patch
+- This is a testing version with nrj-desktop BFQ enabled!
+- ---------------------------------------------------------------------
+- Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- This is -1 (mainline serie), with official kernel sources and addons,
+- instead (-69) will be used for development and experimental flavours
+- Yin & Yang (69) release - a very complete but experimental flavours...
+- ---------------------------------------------------------------------
+
+* Fri Dec 07 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.10-0-rc1.1
++ update to 3.6.10 rc1 (27 fixes all over)
+- update AUFS3 version to git 20121204
+- update T.O.I version to gif 20121203
+- This is a testing version with nrj-desktop BFQ enabled!
+- ---------------------------------------------------------------------
+- Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- This is -1 (mainline serie), with official kernel sources and addons,
+- instead (-69) will be used for development and experimental flavours
+- Yin & Yang (69) release - a very complete but experimental flavours...
+- ---------------------------------------------------------------------
+
+* Wed Dec 05 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.9-0
++ update to 3.6.9 stable (56 fixes all over)
+- This is a testing version with nrj-desktop BFQ enabled!
+- ---------------------------------------------------------------------
+- Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- This is -1 (mainline serie), with official kernel sources and addons,
+- instead (-69) will be used for development and experimental flavours
+- Yin & Yang (69) release - a very complete but experimental flavours...
+- ---------------------------------------------------------------------
+
+* Fri Nov 30 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.9-rc1-1
++ update to 3.6.8-rc1-1 (56 fixes all over)
+- ---------------------------------------------------------------------
+- Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- This is -1 (mainline serie), with official kernel sources and addons,
+- instead (-69) will be used for development and experimental flavours
+- Yin & Yang (69) release - a very complete but experimental flavours...
+- ---------------------------------------------------------------------
+
+* Fri Nov 30 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.8-1
++ update to 3.6.8-1 (96 fixes all over)
+- update AUFS3 to 20121127 git version
 - add 4200_fbcondecor-0.9.6.patch
 - add config key CONFIG_FB_CON_DECOR=y, changed FB_TILEBLITTING=n
 - ---------------------------------------------------------------------
 - Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
+- This is -1 (mainline serie), with official kernel sources and addons,
 - instead (-69) will be used for development and experimental flavours
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Tue Nov 20 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.7-69
-+ update to 3.6.7-69 (89 fixes all over)
+* Tue Nov 27 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.8-0
++ update to 3.6.8-0 (96 fixes all over)
+- add AUFS3 with the MagOS config keys
+- add 12 patches to ext4 from Fedora 3.6
+- ---------------------------------------------------------------------
+- Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- This is -1 (mainline serie), with official kernel sources and addons,
+- instead (-69) will be used for development and experimental flavours
+- Yin & Yang (69) release - a very complete but experimental flavours...
+- ---------------------------------------------------------------------
+
+* Sat Nov 24 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.8-rc1-1
++ update to 3.6.8-rc1 (89 fixes all over)
++ modify: now modules are compressed with xz for ROSA 2012.1,
+- thus recovering more than 7 Mb from any kernel flavour rpm 
++ added two patches to fix gspca problems with some webcams:
+- GS01_gspca-ov534_fix_the_light_frequency_filter.patch
+- GS02_gspca-stv06xx_fix_a_regression_with_the_bridge-sensor_vv6410.patch
+- ---------------------------------------------------------------------
+- Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- This is -1 (mainline serie), with official kernel sources and addons,
+- instead (-69) will be used for development and experimental flavours
+- Yin & Yang (69) release - a very complete but experimental flavours...
+- ---------------------------------------------------------------------
+
+* Tue Nov 20 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.7-1
++ update to 3.6.7-1 (89 fixes all over)
 - updated all patches for kernel 3.6.7: AUFS3, OverlayFS, TOI
-- modified freq. for nrjQL-desktop from HZ=1500 to 2000 to comply VBox
 - re-add cpufreq_ondemand_performance_optimise_default_settings.patch
-- drop nrjQL-desktop-vm - experimentally tuned for virtual machines
-- now nrjQL-desktop has been fine tuned also for VM and is good enough
 - small modifies and fixes to "create_configs" and "kernel.spec" files
 - ---------------------------------------------------------------------
 - Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
+- This is -1 (mainline serie), with official kernel sources and addons,
 - instead (-69) will be used for development and experimental flavours
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Wed Nov 07 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.6-69.2
-+ update to 3.6.6-69.2
-- modified freq. for nrjQL-desktop from 1500 to 2000 to test VBox
-- drop cpufreq_ondemand_performance_optimise_default_settings.patch
-- to test if removing this patch the p4-clockmod can works again...
-- ---------------------------------------------------------------------
-- Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
-- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
-- instead (-69) will be used for development and experimental flavours
-- Yin & Yang (69) release - a very complete but experimental flavours...
-- ---------------------------------------------------------------------
-
-* Mon Nov 05 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.6-69
-+ update to 3.6.6-69
+* Mon Nov 05 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.6-1
++ update to 3.6.6-1
 - drop FX01_fs-ext4-fix-unjournaled-inode-bitmap-modification.patch,
 - because that's already inside patch-3.6.6.bz2
-- modify configuration for -server flavour to DEFAULT_GOV_ONDEMAND=y
-- add nrjQL-desktop-vm - experimentally tuned for virtual machines
+- modify configuration for server flavour to DEFAULT_GOV_ONDEMAND=y
 - ---------------------------------------------------------------------
 - Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
+- This is -1 (mainline serie), with official kernel sources and addons,
 - instead (-69) will be used for development and experimental flavours
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Fri Nov 02 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.5-69
-+ update to 3.6.5-69
-- updated QL patches
-- add FX01_fs-ext4-fix-unjournaled-inode-bitmap-modification.patch
+* Fri Nov 02 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.5-2
++ update to 3.6.5-2
 - drop FX01_fix-serious-progressive-ext4-data-corruption-bug.patch
-- add video4linux vloopback support
-- http://www.lavrsen.dk/foswiki/bin/view/Motion/VideoFourLinuxLoopbackDevice
+- add FX01_fs-ext4-fix-unjournaled-inode-bitmap-modification.patch
 - ---------------------------------------------------------------------
 - Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
+- This is -1 (mainline serie), with official kernel sources and addons,
 - instead (-69) will be used for development and experimental flavours
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Sun Oct 28 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.4-69
-+ update to 3.6.4-69
-+ about the ext4 problem discussed > https://lwn.net/Articles/521022/
+* Wed Oct 31 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.5-1
++ update to 3.6.5-1 (98 fixes all over)
+- some fixes to the description text on all kernel flavours and source
+- ---------------------------------------------------------------------
+- Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- This is -1 (mainline serie), with official kernel sources and addons,
+- instead (-69) will be used for development and experimental flavours
+- Yin & Yang (69) release - a very complete but experimental flavours...
+- ---------------------------------------------------------------------
+
+* Tue Oct 30 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.5-1-0-rc1
++ update to 3.6.5-0-rc1
+- ---------------------------------------------------------------------
+- Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- This is -1 (mainline serie), with official kernel sources and addons,
+- instead (-69) will be used for development and experimental flavours
+- Yin & Yang (69) release - a very complete but experimental flavours...
+- ---------------------------------------------------------------------
+
+* Tue Oct 30 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.4-2
++ update to 3.6.4-2
+- modify default .configs to CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
+- ---------------------------------------------------------------------
+- Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- This is -1 (mainline serie), with official kernel sources and addons,
+- instead (-69) will be used for development and experimental flavours
+- Yin & Yang (69) release - a very complete but experimental flavours...
+- ---------------------------------------------------------------------
+
+* Sun Oct 28 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.4-1
++ update to 3.6.4-1
+- ---------------------------------------------------------------------
+- Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- This is -1 (mainline serie), with official kernel sources and addons,
+- instead (-69) will be used for development and experimental flavours
+- Yin & Yang (69) release - a very complete but experimental flavours...
+- ---------------------------------------------------------------------
+
+* Fri Oct 26 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.4-rc1
++ update to 3.6.4-rc1
++ rc release that should fix this > https://lwn.net/Articles/521022/
 - added FX01-fix-serious-progressive-ext4-data-corruption-bug.patch
-- ---------------------------------------------------------------------
-- Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
-- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- The rel -1 (mainline serie), with official kernel sources and addons,
-- instead (-69) will be used for development and experimental flavours
-- Yin & Yang (69) release - a very complete but experimental flavours...
-- ---------------------------------------------------------------------
-
-* Tue Oct 23 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.3-69
-+ update to 3.6.3 (85 fixes all over)
-- added OverlayFS v. 3.6
-- fixed problems with CK1
-- updated TOI to v. 3.6.3
-- some small scripts cleanups
 - ---------------------------------------------------------------------
 - Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
@@ -3256,34 +3812,6 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Tue Oct 16 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.2-69
-+ update to 3.6.2 (135 fixes all over)
-+ For development serie we have now the following kernel flavours
-- this serie include the following flavours with: CK1, BFS, BFQ, TOI
-- & since now also UKSM > For Data Deduplication Of The Linux Kernel:
-- http://www.phoronix.com/scan.php?page=news_item&px=MTEzMTI
-+ We changed the codename of this experimental from nrjEvo to nrjQL
-- kernel-nrjQL-desktop
-- kernel-nrjQL-realtime
-- kernel-nrjQL-laptop
-- kernel-nrjQL-netbook
-- kernel-nrjQL-server
-- kernel-nrjQL-server-games
-- kernel-nrjQL-server-computing
-- kernel-nrjQL-desktop-pae
-- kernel-nrjQL-realtime-pae
-- kernel-nrjQL-laptop-pae
-- kernel-nrjQL-netbook-pae
-- kernel-nrjQL-desktop-core2,
-- kernel-nrjQL-desktop-core2-pae
-- ---------------------------------------------------------------------
-- Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
-- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- This is -1 (mainline serie), with official kernel sources and addons,
-- instead (-69) will be used for development and experimental flavours
-- Yin & Yang (69) release - a very complete but experimental flavours...
-- ---------------------------------------------------------------------
-
 * Sat Oct 13 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.2-1
 + update to 3.6.2 (135 fixes all over)
 - now CPU_FREQ_GOV_ONDEMAND is the predefined for -laptop and -netbook
@@ -3295,22 +3823,9 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Sat Oct 13 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.5.7-1
-+ update to 3.5.7 (136 fixes all over, this is the EOL version!)
-- "Note, this is the LAST 3.5.y kernel release, it is now end-of-life.
-- Please move to the 3.6 kernel branch at this time."
-- now CPU_FREQ_GOV_ONDEMAND is the predefined for -laptop and -netbook
-- ---------------------------------------------------------------------
-- Kernel 3.5 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
-- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- This is -1 (mainline serie), with official kernel sources and addons,
-- instead (-69) will be used for development and experimental flavours
-- Yin & Yang (69) release - a very complete but experimental flavours...
-- ---------------------------------------------------------------------
-
 * Fri Oct 12 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.1-1
 + update to 3.6.1 
-- first attempt with new kernel 3.6 serie
+- first public attempt with new kernel 3.6 serie
 - ---------------------------------------------------------------------
 - Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
@@ -3319,185 +3834,13 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
 
-* Sun Oct 07 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.5.6-1
-+ update to 3.5.6 (57 fixes all over)
--fixed a version require problem with cpupower install
+* Fri Oct 2 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.6.0-1
++ new kernel 3.6.0
+- first private attempt with new kernel 3.6 serie
 - ---------------------------------------------------------------------
-- Kernel 3.5 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- Kernel 3.6 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
 - This is -1 (mainline serie), with official kernel sources and addons,
 - instead (-69) will be used for development and experimental flavours
 - Yin & Yang (69) release - a very complete but experimental flavours...
 - ---------------------------------------------------------------------
-
-* Fri Oct 05 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.5.5-69
-+ update to 3.5.5 (283 fixes all over)
-- Improved the "nrj" mode and fixed all remaining script build warnings
-- Changed CONFIG_NLS_CODEPAGE_437=m to y, enabling UEFI boot for 2012.1
-- Starting only from RM 2012 and greater:
-- it's enabled the build of "cpupower" config and systemd service files 
-- it's enabled the build of perf tools and the supporting documentation 
-  * userspace utilities are designed to assist with CPU frequency scaling
-  * Some info:
-  * http://lwn.net/Articles/433002/
-  * https://wiki.archlinux.org/index.php/CPU_Frequency_Scaling
-- Obsoled cpufreq / cpufrequtils when cpupower / perf tools replace them
-+ For development serie we have now the following kernel flavours
-- this serie include the following flavours with: CK1, BFS, BFQ, TOI
-- kernel-nrjEvo-desktop
-- kernel-nrjEvo-realtime
-- kernel-nrjEvo-laptop
-- kernel-nrjEvo-netbook
-- kernel-nrjEvo-server
-- kernel-nrjEvo-server-games
-- kernel-nrjEvo-server-computing
-- kernel-nrjEvo-desktop-pae
-- kernel-nrjEvo-realtime-pae
-- kernel-nrjEvo-laptop-pae
-- kernel-nrjEvo-netbook-pae
-- kernel-nrjEvo-desktop-core2,
-- kernel-nrjEvo-desktop-core2-pae
-+ Added a critical patch for ck1 patchset to work with 3.5.5: 
-- unfuck_sched_fix_race_in_task_group_function.patch
-- ---------------------------------------------------------------------
-- Kernel 3.5 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
-- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- This is -1 (mainline serie), with official kernel sources and addons,
-- instead (-69) will be used for development and experimental flavours
-- Yin & Yang (69) release - a very complete but experimental flavours...
-- ---------------------------------------------------------------------
-
-* Fri Oct 05 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.5.5-1
-+ update to 3.5.5 (283 fixes all over)
-- Improved the "nrj" mode and fixed all remaining script build warnings
-- Changed CONFIG_NLS_CODEPAGE_437=m to y, enabling UEFI boot for 2012.1
-- Starting only from RM 2012 and greater:
-- it's enabled the build of "cpupower" config and systemd service files 
-- it's enabled the build of perf tools and the supporting documentation 
-  * userspace utilities are designed to assist with CPU frequency scaling
-  * Some info:
-  * http://lwn.net/Articles/433002/
-  * https://wiki.archlinux.org/index.php/CPU_Frequency_Scaling
-- Obsoled cpufreq / cpufrequtils when cpupower / perf tools replace them
-- Added new kernel flavours, taken from development evolution:
-- kernel-nrj-laptop, kernel-nrj-realtime and their pae versions
-- ---------------------------------------------------------------------
-- Kernel 3.5 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
-- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- This is -1 (mainline serie), with official kernel sources and addons,
-- instead (-69) will be used for development and experimental flavours
-- Yin & Yang (69) release - a very complete but experimental flavours...
-- ---------------------------------------------------------------------
-
-* Sat Sep 22 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.5.4-69.0mib
-- update to 3.5.4
-+ From now we use different release number (69) for development kernel
-- this serie include many experimental features: CK1, BFS, BFQ, TOI
-+ For development serie we have the following kernel flavours
-- this serie include the following flavours with: CK1, BFS, BFQ, TOI
-+ For some test about (NO_HZ=y/n) to compare tickless enable/disable 
-- now we have -69.1 > Tickless enabled flavours & -69.0 No Tickless
-- kernel-nrj-workstation,
-- kernel-nrj-multimedia,
-- kernel-nrj-studio,
-- kernel-nrj-realtime,
-- kernel-nrj-laptop,
-- kernel-nrj-server,
-- kernel-nrj-gameserver,
-- kernel-nrj-workstation-pae,
-- kernel-nrj-multimedia-pae,
-- kernel-nrj-studio-pae,
-- kernel-nrj-laptop-pae,
-- kernel-nrj-workstation-core2,
-- kernel-nrj-workstation-core2-pae
-- ---------------------------------------------------------------------
-+ Yin & Yang (69) release - a very complete kernel flavour serie
-- Kernel 3.5 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
-- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- ---------------------------------------------------------------------
-
-* Mon Sep 17 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.5.4-1
-+ update to 3.5.4
-- fixed a key value for nrj, to avoid a build warning
-- added some patches for
-  * overlayfs support (from ubuntu)
-- updated defconfigs for overlayfs
-- dropped broken unionfs patches
-- disabled broken unionfs from defconfigs
-- ---------------------------------------------------------------------
-- Kernel 3.5 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
-- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- ---------------------------------------------------------------------
-
-* Mon Sep 10 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.5.3-69mib
-- update to 3.5.3
-+ From now we use different release number (69) for development kernel
-- this serie include: CK1, BFS, BFQ, TOI
-- added patches for
-+ Con Kolivas desktop patches with BFS
-  * 3.5-sched-bfs-424.patch
-  * mm-minimal_swappiness.patch
-  * mm-drop_swap_cache_aggressively.patch
-  * mm-kswapd_inherit_prio-1.patch
-  * mm-idleprio_prio-1.patch
-  * mm-decrease_default_dirty_ratio-1.patch
-  * kconfig-expose_vmsplit_option.patch
-  * hz-default_1000.patch
-  * hz-no_default_250.patch
-  * hz-raise_max.patch
-  * preempt-desktop-tune.patch
-  * ck1-version.patch
-  * urw-locks.patch
-  * bfs424-grq_urwlocks.patch
-+ BFQ I/O disk scheduler
-  * 0001-block-cgroups-kconfig-build-bits-for-BFQ-v4-3.5.patch
-  * 0002-block-introduce-the-BFQ-v4-I-O-sched-for-3.5.patch
-+ Tux On Ice
-   * KP01_TuxOnIce-3.3-for-3.5.patch
-+ For development serie we have the following kernel flavours
-- this serie include the following flavours with: CK1, BFS, BFQ, TOI
-- kernel-nrj-workstation,
-- kernel-nrj-multimedia,
-- kernel-nrj-studio,
-- kernel-nrj-realtime,
-- kernel-nrj-laptop,
-- kernel-nrj-server,
-- kernel-nrj-gameserver,
-- kernel-nrj-workstation-pae,
-- kernel-nrj-multimedia-pae,
-- kernel-nrj-studio-pae,
-- kernel-nrj-laptop-pae,
-- kernel-nrj-workstation-core2,
-- kernel-nrj-workstation-core2-pae
-- ---------------------------------------------------------------------
-+ Yin & Yang (69) release - a very complete kernel flavour serie
-- Kernel 3.5 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
-- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- ---------------------------------------------------------------------
-
-* Mon Aug 27 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.5.3-1mib
-- update to 3.5.3
-- ---------------------------------------------------------------------
-- Kernel 3.5 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
-- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
-- ---------------------------------------------------------------------
-
-* Sat Aug 11 2012 Nicolo' Costanza <abitrules@yahoo.it> 3.5.1-1mib
-- First version of kernel 3.5 adapted by MIB for Mandriva & ROSA linux
-- update to 3.5.1
-
-
-------------------
---- a/kernel-3.10.24-69.spec    2013-12-19 16:07:45.150915258 +0400
-+++ b/kernel-3.10.24-69.spec    2013-12-19 16:08:46.673915978 +0400
-@@ -252,3 +252,3 @@
-  %{?_with_nrjQL_laptop: %global build_nrjQL_laptop 1}
--%{?_with_nrjQL_laptop: %global build_nrjQL_netbook 1}
-+%{?_with_nrjQL_netbook: %global build_nrjQL_netbook 1}
-
-@@ -259,3 +259,3 @@
-  %{?_with_nrjQL_desktop_pae: %global build_nrjQL_desktop_pae 1}
--%{?_with_nrjQL_desktop_pae: %global build_nrjQL_realtime_pae 1}
-+%{?_with_nrjQL_realtime_pae: %global build_nrjQL_realtime_pae 1}
-------------------
-
