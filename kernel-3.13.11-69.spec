@@ -1,13 +1,8 @@
-# Experimental Kernels ONE 
-# That's an attempt to merge all MIB kernel flavours (old mdv, nrj, nrjQL) with ONE only SRPM (NRJ V5)
-
-# - version alpha (15 August 2013) > It can config, prepare and build nrj-desktop & nrjQL-desktop flavours
-# - version beta (17 August 2013) > It can config, prepare, build all 'old mdv' and MIB nrj nrjQL flavours
-# - version rc (19 August 2013) > now it's more modular to allow us easily a lot ot further developments...
-# - version rc (20 August 2013) > the compressed folder has redundant contents so can be used also for NRJ4
-
+# MIB header
 Packager: Nicolo' Costanza <abitrules@yahoo.it>
+# end MIB header
 
+#
 %define kernelversion	3
 %define patchlevel	13
 # sublevel is now used for -stable patches
@@ -308,49 +303,6 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 # For the .nosrc.rpm
 %define build_nosrc 	0
 %{?_with_nosrc: %global build_nosrc 1}
-
-# convenient if we only want to build the tools and no kernels
-%bcond_with				toolsonly
-%if %{with toolsonly}
-%define build_doc 			0
-%define build_source 			0
-%define build_devel 			0
-%define build_debug	 		0
-%define build_desktop			0
-%define build_netbook			0
-%define build_server			0
-%define build_desktop586		0
-%define build_desktop_pae		0
-%define build_netbook_pae		0
-%define build_nrj_desktop		0
-%define build_nrj_realtime		0
-%define build_nrj_laptop		0
-%define build_nrj_netbook		0
-%define build_nrj_desktop586		0
-%define build_nrj_desktop_pae		0
-%define build_nrj_realtime_pae		0
-%define build_nrj_laptop_pae		0
-%define build_nrj_netbook_pae		0
-%define build_nrj_netbook_atom		0
-%define build_nrj_netbook_atom_pae	0
-%define build_nrj_desktop_core2   	0
-%define build_nrj_desktop_core2_pae	0
-%define build_nrjQL_desktop		0
-%define build_nrjQL_realtime		0
-%define build_nrjQL_laptop		0
-%define build_nrjQL_netbook		0
-%define build_nrjQL_server		0
-%define build_nrjQL_server_games	0
-%define build_nrjQL_server_computing	0
-%define build_nrjQL_desktop_pae		0
-%define build_nrjQL_realtime_pae	0
-%define build_nrjQL_laptop_pae		0
-%define build_nrjQL_netbook_pae		0
-%define build_nrjQL_desktop_core2	0
-%define build_nrjQL_desktop_core2_pae  	0
-%endif
-
-# End of user definitions
 
 
 ############################################################
@@ -1464,7 +1416,6 @@ Conflicts:	%{_lib}cpufreq-devel
 This package contains the development files for cpupower.
 %endif
 
-%if !%{with toolsonly}
 %package headers
 Version:	%kversion
 Release:	%rpmrel
@@ -1486,7 +1437,6 @@ should use the 'kernel-devel' package instead.
 # Don't conflict with cpupower-devel
 %if %{build_cpupower}
 %exclude %_includedir/cpufreq.h
-%endif
 %endif
 
 #
@@ -1518,12 +1468,6 @@ cd %src_dir
 %patch2 -p1
 %endif
 
-# %{patches_dir}/scripts/apply_patches-vanilla
-%{patches_dir}/scripts/apply_patches
-%{patches_dir}/scripts/apply_patches-NRJ
-%{patches_dir}/scripts/apply_patches-geek
-%{patches_dir}/scripts/apply_patches-latest
-%{patches_dir}/scripts/apply_patches-QL
 
 #
 # Setup Begin
@@ -1983,8 +1927,12 @@ install -d %{temp_root}
 # make sure we are in the directory
 cd %src_dir
 
+# %{patches_dir}/scripts/apply_patches-vanilla
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
-%if !%{with toolsonly}
+
+%{patches_dir}/scripts/apply_patches
+%{patches_dir}/scripts/apply_patches-geek
+%{patches_dir}/scripts/apply_patches-latest
 %{patches_dir}/scripts/create_configs-old-mdv %debug --user_cpu="%{target_arch}"
 
 %ifarch %{ix86}
@@ -2017,6 +1965,7 @@ CreateKernel netbook-pae
 %endif
 %endif
 
+%{patches_dir}/scripts/apply_patches-NRJ
 %{patches_dir}/scripts/create_configs-withBFQ %debug --user_cpu="%{target_arch}"
 
 %ifarch %{ix86}
@@ -2101,6 +2050,7 @@ CreateKernel versatile
 %endif
 %endif
 
+%{patches_dir}/scripts/apply_patches-QL
 %{patches_dir}/scripts/create_configs-QL %debug --user_cpu="%{target_arch}"
 
 %if %build_nrjQL_desktop
@@ -2170,7 +2120,6 @@ CreateKernel nrjQL-desktop-core2-pae
 
 # set extraversion to match srpm to get nice version reported by the tools
 LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
-%endif # !withtoolsonly
 
 
 ############################################################
@@ -2179,7 +2128,13 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 # build perf
 
 %if %{build_perf}
-%make all man -C tools/perf prefix=%{_prefix} V=1 HAVE_CPLUS_DEMANGLE=1 EXTRA_CFLAGS="%{optflags}" LDFLAGS="%{ldflags}"
+%if %{mdvver} < 201300
+%make -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} all
+%make -C tools/perf -s prefix=%{_prefix} man
+%else
+%make -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} LDFLAGS="%optflags" all
+%make -C tools/perf -s prefix=%{_prefix} LDFLAGS="%optflags" man
+%endif
 %endif
 
 # build cpupower
@@ -2187,13 +2142,11 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %if %{build_cpupower}
 # make sure version-gen.sh is executable.
 chmod +x tools/power/cpupower/utils/version-gen.sh
-CFLAGS="%{optflags}" %make -C tools/power/cpupower V=1 CPUFREQ_BENCH=false LDFLAGS="%{ldflags}"
-%ifarch %{ix86} x86_64
-CFLAGS="%{optflags}" %make -C tools/power/cpupower/debug/%{_arch} V=1 centrino-decode powernow-k8-decode LDFLAGS="%{ldflags}"
-CFLAGS="%{optflags}" %make -C tools/power/x86/x86_energy_perf_policy/ V=1 LDFLAGS="%{ldflags}"
-CFLAGS="%{optflags}" %make -C tools/power/x86/turbostat V=1 LDFLAGS="%{ldflags}"
+%if %{mdvver} < 201300
+%make -C tools/power/cpupower CPUFREQ_BENCH=false
+%else
+%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%optflags"
 %endif
-CFLAGS="%{optflags}" %make -C tools/thermal/tmon V=1 LDFLAGS="%{ldflags}" 
 %endif
 ############################################################
 ###  Linker end3 > Check point to build for cooker 2013  ###
@@ -2253,7 +2206,6 @@ rm -rf %{target_source}/.tmp_depmod/
 #endif %build_source
 %endif
 
-%if !%{with toolsonly}
 # compressing modules
 %if %{build_modxz}
 find %{target_modules} -name "*.ko" | %kxargs xz -6e
@@ -2287,32 +2239,31 @@ popd
 
 # need to set extraversion to match srpm again to avoid rebuild
 LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
-%endif # !toolsonly
-
 %if %{build_perf}
-# perf tool binary and supporting scripts/binaries with man pages
-%makeinstall_std install-man -C tools/perf prefix=%{_prefix} V=1 HAVE_CPLUS_DEMANGLE=1 EXTRA_CFLAGS="%{optflags}" LDFLAGS="%{ldflags}"
+
+# perf tool binary and supporting scripts/binaries
+make -C tools/perf -s V=1 DESTDIR=%{buildroot} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
+
+# perf man pages (note: implicit rpm magic compresses them later)
+make -C tools/perf  -s V=1 DESTDIR=%{buildroot} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
 %endif
 
 ############################################################
 ### Linker start4 > Check point to build for cooker 2013 ###
 ############################################################
 %if %{build_cpupower}
-%makeinstall_std -C tools/power/cpupower libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false
+%if %{mdvver} < 201300
+make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false install
+%else
+%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false LDFLAGS="%optflags" install
+%endif
+rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
 mv cpupower.lang ../
 chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
-install -m644 %{SOURCE50} -D %{buildroot}%{_unitdir}/cpupower.service
-install -m644 %{SOURCE51} -D %{buildroot}%{_sysconfdir}/sysconfig/cpupower
-
-%ifarch %{ix86} x86_64
-install -pm755 tools/power/cpupower/debug/%{_arch}/centrino-decode -D %{buildroot}%{_bindir}/centrino-decode
-install -pm755 tools/power/cpupower/debug/%{_arch}/powernow-k8-decode -D %{buildroot}%{_bindir}/powernow-k8-decode
-mkdir -p %{buildroot}%{_mandir}/man8
-%makeinstall_std -C tools/power/x86/x86_energy_perf_policy
-%makeinstall_std -C tools/power/x86/turbostat
-%endif
-make -C tools/thermal/tmon INSTALL_ROOT=%{buildroot} install
+mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
+install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
+install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %endif
 ############################################################
 ### Linker start4 > Check point to build for cooker 2013 ###
@@ -2414,27 +2365,18 @@ rm -rf %{buildroot}
 %dir %{_prefix}/libexec/perf-core
 %{_libdir}/libperf-gtk.so
 %{_prefix}/libexec/perf-core/*
-%{_mandir}/man1/perf*.1*
+%{_mandir}/man[1-8]/perf*
 %{_sysconfdir}/bash_completion.d/perf
 %endif
 
 %if %{build_cpupower}
 %files -n cpupower -f cpupower.lang
 %{_bindir}/cpupower
-%{_bindir}/tmon
 %{_libdir}/libcpupower.so.0
 %{_libdir}/libcpupower.so.0.0.0
 %{_unitdir}/cpupower.service
-%{_mandir}/man1/cpupower*.1*
+%{_mandir}/man[1-8]/cpupower*
 %config(noreplace) %{_sysconfdir}/sysconfig/cpupower
-%ifarch %{ix86} x86_64
-%{_bindir}/centrino-decode
-%{_bindir}/powernow-k8-decode
-%{_bindir}/turbostat
-%{_bindir}/x86_energy_perf_policy
-%{_mandir}/man8/turbostat.8*
-%{_mandir}/man8/x86_energy_perf_policy.8*
-%endif
 
 %files -n cpupower-devel
 %{_libdir}/libcpupower.so
@@ -2551,8 +2493,8 @@ rm -rf %{buildroot}
 - sync with few nrjQL patches
 - sync all the patches for 3.13.8 (rc1)
 - add REISER4 (file system) support, with two new patches:
-- 0004-reiser4-for-3.13.6.patch
-- 0005-3.13.1-reiser4-different-transaction-models.patch
+  * 0004-reiser4-for-3.13.6.patch
+  * 0005-3.13.1-reiser4-different-transaction-models.patch
 - ---------------------------------------------------------------------
 - Kernel 3.13 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
@@ -2563,7 +2505,7 @@ rm -rf %{buildroot}
 - ---------------------------------------------------------------------
 
 * Mon Mar 10 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.6-70
-+ update to 3.13.3 stable
++ update to 3.13.6 stable
 + this is first version of "nrj" stable 3.13.x, in its early development
 - stage, so, it's only for testing purposes, please, dont use this srpm,
 - because is still to fix all over!!!
