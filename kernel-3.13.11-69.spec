@@ -90,7 +90,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 %define build_desktop			0
 %define build_netbook			0
-%define build_server			0
+%define build_server			1
 
 %ifarch %{ix86}
 %define build_desktop586		0
