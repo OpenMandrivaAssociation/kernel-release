@@ -9,7 +9,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define sublevel	11
 
 # Package release
-%define mibrel		69
+%define mibrel		69.2
 
 # kernel Makefile extraversion is substituted by
 # kpatch wich are either 0 (empty), rc (kpatch)
