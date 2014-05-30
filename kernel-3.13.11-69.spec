@@ -1502,7 +1502,7 @@ following platforms:
 %{cross_header_archs}
 
 %files -n cross-%{name}-headers
-%{_prefix}/*-%{_target_vendor}-%{_target_os}*/include/*
+%{_prefix}/*-%{_target_vendor}-%{_target_os}-gnu*/include/*
 %endif
 
 #
@@ -1664,7 +1664,7 @@ BuildKernel() {
 		else
 			gnuext=-gnu
 		fi
-		%make SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_vendor}-%{_target_os}$gnu KERNELRELEASE=$KernelVer headers_install
+		%make SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_vendor}-%{_target_os}$gnuext KERNELRELEASE=$KernelVer headers_install
 	done
 
 	# remove /lib/firmware, we use a separate kernel-firmware
