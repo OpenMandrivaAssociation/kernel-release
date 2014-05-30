@@ -86,6 +86,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define build_devel 			1
 %define build_debug	 			0
 
+%define	cross_header_archs		arm arm64 mips
 # Old Mandriva kernel flavours plus new two PAE flavours added by MIB
 
 %define build_desktop			1
@@ -1482,6 +1483,25 @@ should use the 'kernel-devel' package instead.
 %if %{build_cpupower}
 %exclude %_includedir/cpufreq.h
 %endif
+
+%package -n	cross-%{name}-headers
+Version:	%kversion
+Release:	%rpmrel
+Summary:	Linux kernel header files for cross toolchains
+Group:		System/Kernel and hardware
+Epoch:		1
+
+%description -n	cross-%{name}-headers
+C header files from the Linux kernel. The header files define
+structures and constants that are needed for building most
+standard programs, notably the C library.
+
+This package is only of interest if you're cross-compiling for one of the
+following platforms:
+%{cross_header_archs}
+
+%files -n cross-%{name}-headers
+%{_prefix}/*-%{_target_vendor}-%{_target_os}*/include/*
 %endif
 
 #
@@ -1636,6 +1656,15 @@ BuildKernel() {
 
 	# headers	
 	%make INSTALL_HDR_PATH=%{temp_root}%_prefix KERNELRELEASE=$KernelVer headers_install
+	# kernel headers for cross toolchains
+	for arch in %{cross_header_archs}; do
+		if [ "$arch" == "arm" ]; then
+			gnuext=-gnueabi
+		else
+			gnuext=-gnu
+		fi
+		%make SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_vendor}-%{_target_os}$gnu KERNELRELEASE=$KernelVer headers_install
+	done
 
 	# remove /lib/firmware, we use a separate kernel-firmware
 	rm -rf %{temp_root}/lib/firmware
