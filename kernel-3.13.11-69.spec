@@ -1490,6 +1490,7 @@ Release:	%rpmrel
 Summary:	Linux kernel header files for cross toolchains
 Group:		System/Kernel and hardware
 Epoch:		1
+BuildArch:	noarch
 
 %description -n	cross-%{name}-headers
 C header files from the Linux kernel. The header files define
