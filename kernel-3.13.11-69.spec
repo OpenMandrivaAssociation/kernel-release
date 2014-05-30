@@ -88,28 +88,28 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 # Old Mandriva kernel flavours plus new two PAE flavours added by MIB
 
-%define build_desktop			0
+%define build_desktop			1
 %define build_netbook			0
 %define build_server			1
 
 %ifarch %{ix86}
 %define build_desktop586		0
-%define build_desktop_pae		0
+%define build_desktop_pae		1
 %define build_netbook_pae		0
 %endif
 
 # MIB low latency optimized flavours called "nrj V.5" plus 32bit PAE versions
 
-%define build_nrj_desktop		0
+%define build_nrj_desktop		1
 %define build_nrj_realtime		0
-%define build_nrj_laptop		0
-%define build_nrj_netbook		0
+%define build_nrj_laptop		1
+%define build_nrj_netbook		1
 
 %ifarch %{ix86}
 %define build_nrj_desktop586		0
-%define build_nrj_desktop_pae		0
+%define build_nrj_desktop_pae		1
 %define build_nrj_realtime_pae		0
-%define build_nrj_laptop_pae		0
+%define build_nrj_laptop_pae		1
 %define build_nrj_netbook_pae		0
 %endif
 
@@ -130,7 +130,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define build_nrjQL_netbook		1
 %define build_nrjQL_server		1
 %define build_nrjQL_server_games		1
-%define build_nrjQL_server_computing	0
+%define build_nrjQL_server_computing	1
 
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
 
@@ -2386,7 +2386,28 @@ rm -rf %{buildroot}
 
 %changelog
 
-* Thu Apr 24 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.11-70
+* Sat May 17 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.11-2
++ update to 3.13.11 (EOL) - release 2
+- update BFQ to v7r4: 
+  it fixes some oops that may happen with some new NCQ HDD devices,
+  it leads other small speed improvements:
+  - 0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r4-3.13.patch
+  - 0002-block-introduce-the-BFQ-v7r4-I-O-sched-for-3.13.patch
+  - 0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r4-for-3.13.0.patch
+- two lines commented to know what triggers them show up (by TPG request):
+  from: /arch/x86/boot/compressed/misc.c
+     // debug_putstr("\nDecompressing Linux... ")
+    // debug_putstr("done.\nBooting the kernel.\n")
+- ---------------------------------------------------------------------
+- Kernel 3.13 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Thu Apr 24 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.11-1
 + update to 3.13.11 (EOL) - stable
 - update patches:
   * tuxonice-for-linux-3.13.11-2014-04-24.patch
