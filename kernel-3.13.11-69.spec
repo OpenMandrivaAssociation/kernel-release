@@ -1,20 +1,15 @@
-# Experimental Kernels ONE 
-# That's an attempt to merge all MIB kernel flavours (old mdv, nrj, nrjQL) with ONE only SRPM (NRJ V5)
-
-# - version alpha (15 August 2013) > It can config, prepare and build nrj-desktop & nrjQL-desktop flavours
-# - version beta (17 August 2013) > It can config, prepare, build all 'old mdv' and MIB nrj nrjQL flavours
-# - version rc (19 August 2013) > now it's more modular to allow us easily a lot ot further developments...
-# - version rc (20 August 2013) > the compressed folder has redundant contents so can be used also for NRJ4
-
+# MIB header
 Packager: Nicolo' Costanza <abitrules@yahoo.it>
+# end MIB header
 
+#
 %define kernelversion	3
 %define patchlevel	13
 # sublevel is now used for -stable patches
 %define sublevel	11
 
 # Package release
-%define mibrel		69
+%define mibrel		69.2
 
 # kernel Makefile extraversion is substituted by
 # kpatch wich are either 0 (empty), rc (kpatch)
@@ -91,30 +86,31 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define build_devel 			1
 %define build_debug	 			0
 
+%define	cross_header_archs		arm arm64 mips
 # Old Mandriva kernel flavours plus new two PAE flavours added by MIB
 
-%define build_desktop			0
+%define build_desktop			1
 %define build_netbook			0
-%define build_server			0
+%define build_server			1
 
 %ifarch %{ix86}
 %define build_desktop586		0
-%define build_desktop_pae		0
+%define build_desktop_pae		1
 %define build_netbook_pae		0
 %endif
 
 # MIB low latency optimized flavours called "nrj V.5" plus 32bit PAE versions
 
-%define build_nrj_desktop		0
+%define build_nrj_desktop		1
 %define build_nrj_realtime		0
-%define build_nrj_laptop		0
-%define build_nrj_netbook		0
+%define build_nrj_laptop		1
+%define build_nrj_netbook		1
 
 %ifarch %{ix86}
 %define build_nrj_desktop586		0
-%define build_nrj_desktop_pae		0
+%define build_nrj_desktop_pae		1
 %define build_nrj_realtime_pae		0
-%define build_nrj_laptop_pae		0
+%define build_nrj_laptop_pae		1
 %define build_nrj_netbook_pae		0
 %endif
 
@@ -132,10 +128,10 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define build_nrjQL_desktop		1
 %define build_nrjQL_realtime	1
 %define build_nrjQL_laptop		1
-%define build_nrjQL_netbook		0
-%define build_nrjQL_server		0
-%define build_nrjQL_server_games		0
-%define build_nrjQL_server_computing	0
+%define build_nrjQL_netbook		1
+%define build_nrjQL_server		1
+%define build_nrjQL_server_games		1
+%define build_nrjQL_server_computing	1
 
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
 
@@ -143,7 +139,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define build_nrjQL_desktop_pae		1
 %define build_nrjQL_realtime_pae	1
 %define build_nrjQL_laptop_pae		1
-%define build_nrjQL_netbook_pae		0
+%define build_nrjQL_netbook_pae		1
 %endif
 
 # MIB experimental "32bit cpu level" optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
@@ -308,6 +304,49 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 # For the .nosrc.rpm
 %define build_nosrc 	0
 %{?_with_nosrc: %global build_nosrc 1}
+
+# convenient if we only want to build the tools and no kernels
+%bcond_with				toolsonly
+%if %{with toolsonly}
+%define build_doc 			0
+%define build_source 			0
+%define build_devel 			0
+%define build_debug	 		0
+%define build_desktop			0
+%define build_netbook			0
+%define build_server			0
+%define build_desktop586		0
+%define build_desktop_pae		0
+%define build_netbook_pae		0
+%define build_nrj_desktop		0
+%define build_nrj_realtime		0
+%define build_nrj_laptop		0
+%define build_nrj_netbook		0
+%define build_nrj_desktop586		0
+%define build_nrj_desktop_pae		0
+%define build_nrj_realtime_pae		0
+%define build_nrj_laptop_pae		0
+%define build_nrj_netbook_pae		0
+%define build_nrj_netbook_atom		0
+%define build_nrj_netbook_atom_pae	0
+%define build_nrj_desktop_core2   	0
+%define build_nrj_desktop_core2_pae	0
+%define build_nrjQL_desktop		0
+%define build_nrjQL_realtime		0
+%define build_nrjQL_laptop		0
+%define build_nrjQL_netbook		0
+%define build_nrjQL_server		0
+%define build_nrjQL_server_games	0
+%define build_nrjQL_server_computing	0
+%define build_nrjQL_desktop_pae		0
+%define build_nrjQL_realtime_pae	0
+%define build_nrjQL_laptop_pae		0
+%define build_nrjQL_netbook_pae		0
+%define build_nrjQL_desktop_core2	0
+%define build_nrjQL_desktop_core2_pae  	0
+%endif
+
+# End of user definitions
 
 
 ############################################################
@@ -1421,6 +1460,7 @@ Conflicts:	%{_lib}cpufreq-devel
 This package contains the development files for cpupower.
 %endif
 
+%if !%{with toolsonly}
 %package headers
 Version:	%kversion
 Release:	%rpmrel
@@ -1442,6 +1482,27 @@ should use the 'kernel-devel' package instead.
 # Don't conflict with cpupower-devel
 %if %{build_cpupower}
 %exclude %_includedir/cpufreq.h
+%endif
+
+%package -n	cross-%{name}-headers
+Version:	%kversion
+Release:	%rpmrel
+Summary:	Linux kernel header files for cross toolchains
+Group:		System/Kernel and hardware
+Epoch:		1
+BuildArch:	noarch
+
+%description -n	cross-%{name}-headers
+C header files from the Linux kernel. The header files define
+structures and constants that are needed for building most
+standard programs, notably the C library.
+
+This package is only of interest if you're cross-compiling for one of the
+following platforms:
+%{cross_header_archs}
+
+%files -n cross-%{name}-headers
+%{_prefix}/*-%{_target_vendor}-%{_target_os}-gnu*/include/*
 %endif
 
 #
@@ -1473,6 +1534,12 @@ cd %src_dir
 %patch2 -p1
 %endif
 
+# %{patches_dir}/scripts/apply_patches-vanilla
+%{patches_dir}/scripts/apply_patches
+%{patches_dir}/scripts/apply_patches-NRJ
+%{patches_dir}/scripts/apply_patches-geek
+%{patches_dir}/scripts/apply_patches-latest
+%{patches_dir}/scripts/apply_patches-QL
 
 #
 # Setup Begin
@@ -1590,6 +1657,15 @@ BuildKernel() {
 
 	# headers	
 	%make INSTALL_HDR_PATH=%{temp_root}%_prefix KERNELRELEASE=$KernelVer headers_install
+	# kernel headers for cross toolchains
+	for arch in %{cross_header_archs}; do
+		if [ "$arch" == "arm" ]; then
+			gnuext=-gnueabi
+		else
+			gnuext=-gnu
+		fi
+		%make SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_vendor}-%{_target_os}$gnuext KERNELRELEASE=$KernelVer headers_install
+	done
 
 	# remove /lib/firmware, we use a separate kernel-firmware
 	rm -rf %{temp_root}/lib/firmware
@@ -1932,10 +2008,8 @@ install -d %{temp_root}
 # make sure we are in the directory
 cd %src_dir
 
-# %{patches_dir}/scripts/apply_patches-vanilla
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
-
-%{patches_dir}/scripts/apply_patches
+%if !%{with toolsonly}
 %{patches_dir}/scripts/create_configs-old-mdv %debug --user_cpu="%{target_arch}"
 
 %ifarch %{ix86}
@@ -1968,9 +2042,6 @@ CreateKernel netbook-pae
 %endif
 %endif
 
-%{patches_dir}/scripts/apply_patches-NRJ
-%{patches_dir}/scripts/apply_patches-geek
-%{patches_dir}/scripts/apply_patches-latest
 %{patches_dir}/scripts/create_configs-withBFQ %debug --user_cpu="%{target_arch}"
 
 %ifarch %{ix86}
@@ -2055,7 +2126,6 @@ CreateKernel versatile
 %endif
 %endif
 
-%{patches_dir}/scripts/apply_patches-QL
 %{patches_dir}/scripts/create_configs-QL %debug --user_cpu="%{target_arch}"
 
 %if %build_nrjQL_desktop
@@ -2125,6 +2195,7 @@ CreateKernel nrjQL-desktop-core2-pae
 
 # set extraversion to match srpm to get nice version reported by the tools
 LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
+%endif # !withtoolsonly
 
 
 ############################################################
@@ -2133,13 +2204,7 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 # build perf
 
 %if %{build_perf}
-%if %{mdvver} < 201300
-%make -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} all
-%make -C tools/perf -s prefix=%{_prefix} man
-%else
-%make -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} LDFLAGS="%optflags" all
-%make -C tools/perf -s prefix=%{_prefix} LDFLAGS="%optflags" man
-%endif
+%make all man -C tools/perf prefix=%{_prefix} V=1 HAVE_CPLUS_DEMANGLE=1 EXTRA_CFLAGS="%{optflags}" LDFLAGS="%{ldflags}"
 %endif
 
 # build cpupower
@@ -2147,11 +2212,13 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %if %{build_cpupower}
 # make sure version-gen.sh is executable.
 chmod +x tools/power/cpupower/utils/version-gen.sh
-%if %{mdvver} < 201300
-%make -C tools/power/cpupower CPUFREQ_BENCH=false
-%else
-%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%optflags"
+CFLAGS="%{optflags}" %make -C tools/power/cpupower V=1 CPUFREQ_BENCH=false LDFLAGS="%{ldflags}"
+%ifarch %{ix86} x86_64
+CFLAGS="%{optflags}" %make -C tools/power/cpupower/debug/%{_arch} V=1 centrino-decode powernow-k8-decode LDFLAGS="%{ldflags}"
+CFLAGS="%{optflags}" %make -C tools/power/x86/x86_energy_perf_policy/ V=1 LDFLAGS="%{ldflags}"
+CFLAGS="%{optflags}" %make -C tools/power/x86/turbostat V=1 LDFLAGS="%{ldflags}"
 %endif
+CFLAGS="%{optflags}" %make -C tools/thermal/tmon V=1 LDFLAGS="%{ldflags}" 
 %endif
 ############################################################
 ###  Linker end3 > Check point to build for cooker 2013  ###
@@ -2211,6 +2278,7 @@ rm -rf %{target_source}/.tmp_depmod/
 #endif %build_source
 %endif
 
+%if !%{with toolsonly}
 # compressing modules
 %if %{build_modxz}
 find %{target_modules} -name "*.ko" | %kxargs xz -6e
@@ -2244,31 +2312,32 @@ popd
 
 # need to set extraversion to match srpm again to avoid rebuild
 LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
+%endif # !toolsonly
+
 %if %{build_perf}
-
-# perf tool binary and supporting scripts/binaries
-make -C tools/perf -s V=1 DESTDIR=%{buildroot} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
-
-# perf man pages (note: implicit rpm magic compresses them later)
-make -C tools/perf  -s V=1 DESTDIR=%{buildroot} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
+# perf tool binary and supporting scripts/binaries with man pages
+%makeinstall_std install-man -C tools/perf prefix=%{_prefix} V=1 HAVE_CPLUS_DEMANGLE=1 EXTRA_CFLAGS="%{optflags}" LDFLAGS="%{ldflags}"
 %endif
 
 ############################################################
 ### Linker start4 > Check point to build for cooker 2013 ###
 ############################################################
 %if %{build_cpupower}
-%if %{mdvver} < 201300
-make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false install
-%else
-%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false LDFLAGS="%optflags" install
-%endif
-rm -f %{buildroot}%{_libdir}/*.{a,la}
+%makeinstall_std -C tools/power/cpupower libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false
 %find_lang cpupower
 mv cpupower.lang ../
 chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
-mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
-install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
-install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
+install -m644 %{SOURCE50} -D %{buildroot}%{_unitdir}/cpupower.service
+install -m644 %{SOURCE51} -D %{buildroot}%{_sysconfdir}/sysconfig/cpupower
+
+%ifarch %{ix86} x86_64
+install -pm755 tools/power/cpupower/debug/%{_arch}/centrino-decode -D %{buildroot}%{_bindir}/centrino-decode
+install -pm755 tools/power/cpupower/debug/%{_arch}/powernow-k8-decode -D %{buildroot}%{_bindir}/powernow-k8-decode
+mkdir -p %{buildroot}%{_mandir}/man8
+%makeinstall_std -C tools/power/x86/x86_energy_perf_policy
+%makeinstall_std -C tools/power/x86/turbostat
+%endif
+make -C tools/thermal/tmon INSTALL_ROOT=%{buildroot} install
 %endif
 ############################################################
 ### Linker start4 > Check point to build for cooker 2013 ###
@@ -2370,18 +2439,27 @@ rm -rf %{buildroot}
 %dir %{_prefix}/libexec/perf-core
 %{_libdir}/libperf-gtk.so
 %{_prefix}/libexec/perf-core/*
-%{_mandir}/man[1-8]/perf*
+%{_mandir}/man1/perf*.1*
 %{_sysconfdir}/bash_completion.d/perf
 %endif
 
 %if %{build_cpupower}
 %files -n cpupower -f cpupower.lang
 %{_bindir}/cpupower
+%{_bindir}/tmon
 %{_libdir}/libcpupower.so.0
 %{_libdir}/libcpupower.so.0.0.0
 %{_unitdir}/cpupower.service
-%{_mandir}/man[1-8]/cpupower*
+%{_mandir}/man1/cpupower*.1*
 %config(noreplace) %{_sysconfdir}/sysconfig/cpupower
+%ifarch %{ix86} x86_64
+%{_bindir}/centrino-decode
+%{_bindir}/powernow-k8-decode
+%{_bindir}/turbostat
+%{_bindir}/x86_energy_perf_policy
+%{_mandir}/man8/turbostat.8*
+%{_mandir}/man8/x86_energy_perf_policy.8*
+%endif
 
 %files -n cpupower-devel
 %{_libdir}/libcpupower.so
@@ -2391,7 +2469,48 @@ rm -rf %{buildroot}
 
 %changelog
 
-* Mon Apr 14 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.10-1
+* Sat May 17 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.11-2
++ update to 3.13.11 (EOL) - release 2
+- update BFQ to v7r4: 
+  it fixes some oops that may happen with some new NCQ HDD devices,
+  it leads other small speed improvements:
+  - 0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r4-3.13.patch
+  - 0002-block-introduce-the-BFQ-v7r4-I-O-sched-for-3.13.patch
+  - 0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r4-for-3.13.0.patch
+- two lines commented to know what triggers them show up (by TPG request):
+  from: /arch/x86/boot/compressed/misc.c
+     // debug_putstr("\nDecompressing Linux... ")
+    // debug_putstr("done.\nBooting the kernel.\n")
+- ---------------------------------------------------------------------
+- Kernel 3.13 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Thu Apr 24 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.11-1
++ update to 3.13.11 (EOL) - stable
+- update patches:
+  * tuxonice-for-linux-3.13.11-2014-04-24.patch
+  * uksm-0.1.2.2-for-v3.13.ge.9.patch
+- update BFQ to v7r3
+  * 0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r3-3.13.patch
+  * 0002-block-introduce-the-BFQ-v7r3-I-O-sched-for-3.13.patch
+  * 0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r3-for-.patch
+- suggestion / request received by Per Øyvind Karlsen (POK)
+  * CONFIG_ACPI_CUSTOM_DSDT=y
+- ---------------------------------------------------------------------
+- Kernel 3.13 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Mon Apr 14 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.10-70
 + update to 3.13.10 - stable
 - on request by Alexander Khryukin: 
   * adding keys requested by Fedya to solve this issue:
@@ -2478,8 +2597,8 @@ rm -rf %{buildroot}
 - sync with few nrjQL patches
 - sync all the patches for 3.13.8 (rc1)
 - add REISER4 (file system) support, with two new patches:
-* 0004-reiser4-for-3.13.6.patch
-* 0005-3.13.1-reiser4-different-transaction-models.patch
+  * 0004-reiser4-for-3.13.6.patch
+  * 0005-3.13.1-reiser4-different-transaction-models.patch
 - ---------------------------------------------------------------------
 - Kernel 3.13 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
@@ -2490,7 +2609,7 @@ rm -rf %{buildroot}
 - ---------------------------------------------------------------------
 
 * Mon Mar 10 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.6-70
-+ update to 3.13.3 stable
++ update to 3.13.6 stable
 + this is first version of "nrj" stable 3.13.x, in its early development
 - stage, so, it's only for testing purposes, please, dont use this srpm,
 - because is still to fix all over!!!
