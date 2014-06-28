@@ -4,12 +4,12 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 #
 %define kernelversion	3
-%define patchlevel	13
+%define patchlevel	14
 # sublevel is now used for -stable patches
-%define sublevel	11
+%define sublevel	9
 
 # Package release
-%define mibrel		69.2
+%define mibrel		69
 
 # kernel Makefile extraversion is substituted by
 # kpatch wich are either 0 (empty), rc (kpatch)
@@ -2413,6 +2413,7 @@ rm -rf %{buildroot}
 %{_kerneldir}/security
 %{_kerneldir}/sound
 %{_kerneldir}/tools
+%optional %{_kerneldir}/turbostat
 %{_kerneldir}/usr
 %{_kerneldir}/COPYING
 %{_kerneldir}/CREDITS
@@ -2436,6 +2437,7 @@ rm -rf %{buildroot}
 %files -n perf
 %{_bindir}/perf
 %{_bindir}/trace
+%{_libdir}/traceevent
 %dir %{_prefix}/libexec/perf-core
 %{_libdir}/libperf-gtk.so
 %{_prefix}/libexec/perf-core/*
