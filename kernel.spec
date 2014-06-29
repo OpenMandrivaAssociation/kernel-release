@@ -93,7 +93,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 %ifarch %{ix86}
 %define build_desktop586				0
-%define build_desktop_pae				0
+%define build_desktop_pae				1
 %define build_netbook_pae				0
 %endif
 
@@ -126,8 +126,8 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define build_nrjQL_desktop				1
 %define build_nrjQL_realtime			1
 %define build_nrjQL_laptop				1
-%define build_nrjQL_netbook				0
-%define build_nrjQL_server				0
+%define build_nrjQL_netbook				1
+%define build_nrjQL_server				1
 %define build_nrjQL_server_games		0
 %define build_nrjQL_server_computing	0
 
