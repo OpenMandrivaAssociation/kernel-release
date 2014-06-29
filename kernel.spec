@@ -608,6 +608,8 @@ Autoreqprov: 	no
 BuildRequires: 	bc
 BuildRequires: 	binutils
 BuildRequires: 	gcc
+# For power tools
+BuildRequires:	pkgconfig(ncurses)
 
 %if %{mdvver} >= 201210
 BuildRequires:	kmod-devel kmod-compat
