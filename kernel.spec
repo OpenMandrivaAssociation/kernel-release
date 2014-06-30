@@ -1,15 +1,12 @@
-# MIB header
 Packager: Nicolo' Costanza <abitrules@yahoo.it>
-# end MIB header
-
 #
 %define kernelversion	3
-%define patchlevel	13
+%define patchlevel		14
 # sublevel is now used for -stable patches
-%define sublevel	11
+%define sublevel		9
 
 # Package release
-%define mibrel		69.2
+%define mibrel			69
 
 # kernel Makefile extraversion is substituted by
 # kpatch wich are either 0 (empty), rc (kpatch)
@@ -31,7 +28,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		1
+%define rpmrel			1
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -81,84 +78,102 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define debug_package 		%{nil}
 
 # Build defines
-%define build_doc 				1
-%define build_source 			1
-%define build_devel 			1
-%define build_debug	 			0
+%define build_doc 						1
+%define build_source 					1
+%define build_devel 					1
+%define build_debug	 					0
 
-%define	cross_header_archs		arm arm64 mips
+%define	cross_header_archs	arm arm64 mips
+
 # Old Mandriva kernel flavours plus new two PAE flavours added by MIB
 
-%define build_desktop			1
-%define build_netbook			0
-%define build_server			1
+%define build_desktop					1
+%define build_netbook					0
+%define build_server					1
 
 %ifarch %{ix86}
-%define build_desktop586		0
-%define build_desktop_pae		1
-%define build_netbook_pae		0
+%define build_desktop586				0
+%define build_desktop_pae				1
+%define build_netbook_pae				0
 %endif
 
 # MIB low latency optimized flavours called "nrj V.5" plus 32bit PAE versions
 
-%define build_nrj_desktop		1
-%define build_nrj_realtime		0
-%define build_nrj_laptop		1
-%define build_nrj_netbook		1
+%define build_nrj_desktop				1
+%define build_nrj_realtime				0
+%define build_nrj_laptop				1
+%define build_nrj_netbook				0
 
 %ifarch %{ix86}
-%define build_nrj_desktop586		0
-%define build_nrj_desktop_pae		1
-%define build_nrj_realtime_pae		0
-%define build_nrj_laptop_pae		1
-%define build_nrj_netbook_pae		0
+%define build_nrj_desktop586			0
+%define build_nrj_desktop_pae			1
+%define build_nrj_realtime_pae			0
+%define build_nrj_laptop_pae			1
+%define build_nrj_netbook_pae			0
 %endif
 
 # MIB experimental low latency "32bit cpu level" optimized, called "nrj V.5" flavours plus PAE versions
 
 %ifarch %{ix86}
-%define build_nrj_netbook_atom		0
-%define build_nrj_netbook_atom_pae	0
-%define build_nrj_desktop_core2   	0
-%define build_nrj_desktop_core2_pae 0
+%define build_nrj_netbook_atom			0
+%define build_nrj_netbook_atom_pae		0
+%define build_nrj_desktop_core2   		0
+%define build_nrj_desktop_core2_pae 	0
 %endif
 
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI
 
-%define build_nrjQL_desktop		1
-%define build_nrjQL_realtime	1
-%define build_nrjQL_laptop		1
-%define build_nrjQL_netbook		1
-%define build_nrjQL_server		1
-%define build_nrjQL_server_games		1
-%define build_nrjQL_server_computing	1
+%define build_nrjQL_desktop				1
+%define build_nrjQL_realtime			1
+%define build_nrjQL_laptop				1
+%define build_nrjQL_netbook				1
+%define build_nrjQL_server				1
+%define build_nrjQL_server_games		0
+%define build_nrjQL_server_computing	0
 
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
 
 %ifarch %{ix86}
-%define build_nrjQL_desktop_pae		1
-%define build_nrjQL_realtime_pae	1
-%define build_nrjQL_laptop_pae		1
-%define build_nrjQL_netbook_pae		1
+%define build_nrjQL_desktop_pae			1
+%define build_nrjQL_realtime_pae		1
+%define build_nrjQL_laptop_pae			1
+%define build_nrjQL_netbook_pae			0
 %endif
 
 # MIB experimental "32bit cpu level" optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
 
 %ifarch %{ix86}
-%define build_nrjQL_desktop_core2	 	0
-%define build_nrjQL_desktop_core2_pae  	0
+%define build_nrjQL_desktop_core2		 0
+%define build_nrjQL_desktop_core2_pae  	 0
 %endif
 
 # END OF FLAVOURS
 
 
 # build perf and cpupower tools
-%if %{mdvver} >= 201200
-%define build_perf			1
+%if %{mdvver} == 201500
+%define build_perf		0
 %define build_cpupower		1
-%else
-%define build_perf			0
-%define build_cpupower		0
+%endif
+%if %{mdvver} == 201410
+%define build_perf		0
+%define build_cpupower		1
+%endif
+%if %{mdvver} == 201400
+%define build_perf		0
+%define build_cpupower		1
+%endif
+%if %{mdvver} == 201300
+%define build_perf		0
+%define build_cpupower		1
+%endif
+%if %{mdvver} == 201210
+%define build_perf		0
+%define build_cpupower		1
+%endif
+%if %{mdvver} == 201200
+%define build_perf		0
+%define build_cpupower		1
 %endif
 
 # compress modules with xz
@@ -179,9 +194,10 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 # no cpupower tools on arm yet
 %define build_cpupower		0
 # arm is currently not using xz
-%define build_modxz			0
+%define build_modxz		0
 %endif
 # End of user definitions
+
 
 # buildtime flags
 %{?_without_desktop586: %global build_desktop586 0}
@@ -305,64 +321,11 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define build_nosrc 	0
 %{?_with_nosrc: %global build_nosrc 1}
 
-# convenient if we only want to build the tools and no kernels
-%bcond_with				toolsonly
-%if %{with toolsonly}
-%define build_doc 			0
-%define build_source 			0
-%define build_devel 			0
-%define build_debug	 		0
-%define build_desktop			0
-%define build_netbook			0
-%define build_server			0
-%define build_desktop586		0
-%define build_desktop_pae		0
-%define build_netbook_pae		0
-%define build_nrj_desktop		0
-%define build_nrj_realtime		0
-%define build_nrj_laptop		0
-%define build_nrj_netbook		0
-%define build_nrj_desktop586		0
-%define build_nrj_desktop_pae		0
-%define build_nrj_realtime_pae		0
-%define build_nrj_laptop_pae		0
-%define build_nrj_netbook_pae		0
-%define build_nrj_netbook_atom		0
-%define build_nrj_netbook_atom_pae	0
-%define build_nrj_desktop_core2   	0
-%define build_nrj_desktop_core2_pae	0
-%define build_nrjQL_desktop		0
-%define build_nrjQL_realtime		0
-%define build_nrjQL_laptop		0
-%define build_nrjQL_netbook		0
-%define build_nrjQL_server		0
-%define build_nrjQL_server_games	0
-%define build_nrjQL_server_computing	0
-%define build_nrjQL_desktop_pae		0
-%define build_nrjQL_realtime_pae	0
-%define build_nrjQL_laptop_pae		0
-%define build_nrjQL_netbook_pae		0
-%define build_nrjQL_desktop_core2	0
-%define build_nrjQL_desktop_core2_pae  	0
-%endif
-
-# End of user definitions
-
 
 ############################################################
-### Linker start1 > Check point to build for cooker 2013 ###
+### Linker start1 > Check point to build for omv or rosa ###
 ############################################################
-%if %{mdvver} < 201300
-%if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
-%define kmake %make CC="$CC"
-%else
-%define kmake %make
-%endif
-# there are places where parallel make don't work
-%define smake make
-%endif
-
-%if %{mdvver} >= 201300
+%if %{mdvver} == 201500
 %if %cross_compiling
 %if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
 %define kmake %make ARCH=%target_arch CROSS_COMPILE=%(echo %__cc |sed -e 's,-gcc,-,') CC="$CC" LD="$LD" LDFLAGS="$LDFLAGS"
@@ -381,8 +344,68 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define smake make LD="$LD" LDFLAGS="$LDFLAGS"
 %endif
 %endif
+
+%if %{mdvver} == 201410
+%if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
+%define kmake %make CC="$CC"
+%else
+%define kmake %make
+%endif
+# there are places where parallel make don't work
+%define smake make
+%endif
+
+%if %{mdvver} == 201400
+%if %cross_compiling
+%if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
+%define kmake %make ARCH=%target_arch CROSS_COMPILE=%(echo %__cc |sed -e 's,-gcc,-,') CC="$CC" LD="$LD" LDFLAGS="$LDFLAGS"
+%else
+%define kmake %make ARCH=%target_arch CROSS_COMPILE=%(echo %__cc |sed -e 's,-gcc,-,') LD="$LD" LDFLAGS="$LDFLAGS"
+%endif
+# there are places where parallel make don't work
+%define smake make ARCH=%target_arch CROSS_COMPILE=%(echo %__cc |sed -e 's,-gcc,-,') LD="$LD" LDFLAGS="$LDFLAGS"
+%else
+%if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
+%define kmake %make CC="$CC" LD="$LD" LDFLAGS="$LDFLAGS"
+%else
+%define kmake %make LD="$LD" LDFLAGS="$LDFLAGS"
+%endif
+# there are places where parallel make don't work
+%define smake make LD="$LD" LDFLAGS="$LDFLAGS"
+%endif
+%endif
+
+%if %{mdvver} == 201300
+%if %cross_compiling
+%if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
+%define kmake %make ARCH=%target_arch CROSS_COMPILE=%(echo %__cc |sed -e 's,-gcc,-,') CC="$CC" LD="$LD" LDFLAGS="$LDFLAGS"
+%else
+%define kmake %make ARCH=%target_arch CROSS_COMPILE=%(echo %__cc |sed -e 's,-gcc,-,') LD="$LD" LDFLAGS="$LDFLAGS"
+%endif
+# there are places where parallel make don't work
+%define smake make ARCH=%target_arch CROSS_COMPILE=%(echo %__cc |sed -e 's,-gcc,-,') LD="$LD" LDFLAGS="$LDFLAGS"
+%else
+%if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
+%define kmake %make CC="$CC" LD="$LD" LDFLAGS="$LDFLAGS"
+%else
+%define kmake %make LD="$LD" LDFLAGS="$LDFLAGS"
+%endif
+# there are places where parallel make don't work
+%define smake make LD="$LD" LDFLAGS="$LDFLAGS"
+%endif
+%endif
+
+%if %{mdvver} < 201300
+%if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
+%define kmake %make CC="$CC"
+%else
+%define kmake %make
+%endif
+# there are places where parallel make don't work
+%define smake make
+%endif
 ###########################################################
-###  Linker end1 > Check point to build for cooker 2013 ###
+###  Linker end1 > Check point to build for omv or rosa ###
 ###########################################################
 
 
@@ -485,7 +508,31 @@ processor mode, use the "nosmp" boot parameter.
 
 ### Global Requires/Provides
 
-%if %{mdvver} >= 201300
+%if %{mdvver} == 201500
+%define requires1	microcode
+%define requires2	dracut >= 026
+%define requires3	kmod >= 12
+%define requires4	sysfsutils >=  2.1.0-12
+%define requires5	kernel-firmware >=  20120219-1
+%endif
+
+%if %{mdvver} == 201410
+%define requires1	bootloader-utils >= 1.15-8
+%define requires2	dracut >= 017-16
+%define requires3	kmod >= 7-6
+%define requires4	sysfsutils >=  2.1.0-12
+%define requires5	kernel-firmware >=  20120219-1
+%endif
+
+%if %{mdvver} == 201400
+%define requires1	microcode
+%define requires2	dracut >= 026
+%define requires3	kmod >= 12
+%define requires4	sysfsutils >=  2.1.0-12
+%define requires5	kernel-firmware >=  20120219-1
+%endif
+
+%if %{mdvver} == 201300
 %define requires1	microcode
 %define requires2	dracut >= 026
 %define requires3	kmod >= 12
@@ -529,7 +576,7 @@ processor mode, use the "nosmp" boot parameter.
 # conflict dkms packages that dont support kernel-3.10
 # all driver versions must be carefully checked to add
 
-# config for all distros apart mdvver == 2013.0 or 2012.1
+# config for all distros apart mdvver 2013.0 & 2012.1
 %define kconflicts1	dkms-broadcom-wl < 5.100.82.112-12
 %define kconflicts2	dkms-fglrx < 13.200.5-1
 %define kconflicts3	dkms-nvidia-current < 325.15-2
@@ -556,10 +603,13 @@ processor mode, use the "nosmp" boot parameter.
 # nvidia96xx does not support this kernel or x11-server-1.13
 %endif
 
-Autoreqprov: 		no
+Autoreqprov: 	no
 
-# might be useful too:
-Suggests:	microcode
+BuildRequires: 	bc
+BuildRequires: 	binutils
+BuildRequires: 	gcc
+# For power tools
+BuildRequires:	pkgconfig(ncurses)
 
 %if %{mdvver} >= 201210
 BuildRequires:	kmod-devel kmod-compat
@@ -567,37 +617,46 @@ BuildRequires:	kmod-devel kmod-compat
 BuildRequires:	module-init-tools
 %endif
 
-BuildRequires: 	gcc bc binutils
-
-BuildRequires:  audit-devel perl-devel
-
-%if %{mdvver} >= 201210
-BuildRequires:	libunwind-devel
-%endif
-
 %ifarch x86_64
 BuildRequires:  numa-devel
 %endif
 
-# for perf, cpufreq and other tools
-BuildRequires:		elfutils-devel
-BuildRequires:		zlib-devel
-BuildRequires:		binutils-devel
-BuildRequires:		newt-devel
-BuildRequires:		python-devel
-BuildRequires:		perl(ExtUtils::Embed)
+# BuildRequires:  audit-devel perl-devel (need only for perf???)
+
+# for perf, cpufreq and all other tools
+# for cpupower
+%if %{build_cpupower}
 BuildRequires:		pciutils-devel
+%endif
+# for perf
+%if %{build_perf}
 BuildRequires:		asciidoc
-BuildRequires:		xmlto
-BuildRequires:		gettext
-BuildRequires:		docbook-style-xsl
-BuildRequires:		pkgconfig(gtk+-2.0)
-BuildRequires:		flex
+BuildRequires:		audit-devel
+BuildRequires:		binutils-devel
 BuildRequires:		bison
+# BuildRequires:	docbook-style-xsl
+BuildRequires:		elfutils-devel
+BuildRequires:		flex
+# BuildRequires:	gettext
+# BuildRequires:	gtk2-devel
+%if %{mdvver} >= 201210
+BuildRequires:		libunwind-devel
+%endif
+BuildRequires:		newt-devel
+BuildRequires:		perl-devel
+# BuildRequires:	perl(ExtUtils::Embed)
+BuildRequires:		pkgconfig(gtk+-2.0)
+BuildRequires:		python-devel
+BuildRequires:		xmlto
+BuildRequires:		zlib-devel
+%endif
 
 %ifarch %{arm}
 BuildRequires:		uboot-mkimage
 %endif
+
+# might be useful too:
+Suggests:		microcode
 
 
 %description
@@ -1443,10 +1502,18 @@ Obsoletes:	cpufreq cpufrequtils
 the cpupower tools.
 
 %post -n cpupower
-%_post_service cpupower
+# %systemd_post cpupower
+if [ $1 -ge 0 ]; then
+        /bin/systemctl enable cpupower >/dev/null 2>&1 || :
+        /bin/systemctl start cpupower >/dev/null 2>&1 || :
+fi
 
 %preun -n cpupower
-%_preun_service cpupower
+# %systemd_preun cpupower
+if [ $1 -eq 0 ]; then
+        /bin/systemctl --no-reload disable cpupower > /dev/null 2>&1 || :
+        /bin/systemctl stop cpupower > /dev/null 2>&1 || :
+fi
 
 %package -n cpupower-devel
 Version:	%{kversion}
@@ -1460,7 +1527,6 @@ Conflicts:	%{_lib}cpufreq-devel
 This package contains the development files for cpupower.
 %endif
 
-%if !%{with toolsonly}
 %package headers
 Version:	%kversion
 Release:	%rpmrel
@@ -1484,7 +1550,7 @@ should use the 'kernel-devel' package instead.
 %exclude %_includedir/cpufreq.h
 %endif
 
-%package -n	cross-%{name}-headers
+%package -n	cross-%{name}-headers	
 Version:	%kversion
 Release:	%rpmrel
 Summary:	Linux kernel header files for cross toolchains
@@ -1493,17 +1559,20 @@ Epoch:		1
 BuildArch:	noarch
 
 %description -n	cross-%{name}-headers
-C header files from the Linux kernel. The header files define
+C header files from the Linux kernel. The header files define	
 structures and constants that are needed for building most
 standard programs, notably the C library.
 
-This package is only of interest if you're cross-compiling for one of the
+This package is only of interest if you're cross-compiling for one of the	
 following platforms:
 %{cross_header_archs}
-
+	
 %files -n cross-%{name}-headers
 %{_prefix}/*-%{_target_vendor}-%{_target_os}-gnu*/include/*
-%endif
+
+# %endif (???)
+# from 1486-1505 >https://abf.io/openmandriva/kernel/commit/b967a6b9458236d594dac87de97193f0e172c55c
+# endif should be wrong, that is not an %if before...
 
 #
 # End packages - here begins build stage
@@ -1534,12 +1603,6 @@ cd %src_dir
 %patch2 -p1
 %endif
 
-# %{patches_dir}/scripts/apply_patches-vanilla
-%{patches_dir}/scripts/apply_patches
-%{patches_dir}/scripts/apply_patches-NRJ
-%{patches_dir}/scripts/apply_patches-geek
-%{patches_dir}/scripts/apply_patches-latest
-%{patches_dir}/scripts/apply_patches-QL
 
 #
 # Setup Begin
@@ -1563,17 +1626,32 @@ find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
 
 %build
 
+
 ############################################################
-### Linker start2 > Check point to build for cooker 2013 ###
+### Linker start2 > Check point to build for omv or rosa ###
 ############################################################
-%if %{mdvver} >= 201300
+%if %{mdvver} == 201500
+# Make sure we don't use gold
+export LD="%{_target_platform}-ld.bfd"
+export LDFLAGS="--hash-style=sysv --build-id=none"
+%endif
+
+%if %{mdvver} == 201400
+# Make sure we don't use gold
+export LD="%{_target_platform}-ld.bfd"
+export LDFLAGS="--hash-style=sysv --build-id=none"
+%endif
+
+%if %{mdvver} == 201300
 # Make sure we don't use gold
 export LD="%{_target_platform}-ld.bfd"
 export LDFLAGS="--hash-style=sysv --build-id=none"
 %endif
 ############################################################
-###  Linker end2 > Check point to build for cooker 2013  ###
+###  Linker end2 > Check point to build for omv or rosa ###
 ############################################################
+
+
 
 # Common target directories
 %define _kerneldir /usr/src/linux-%{kversion}-%{buildrpmrel}
@@ -1658,13 +1736,13 @@ BuildKernel() {
 	# headers	
 	%make INSTALL_HDR_PATH=%{temp_root}%_prefix KERNELRELEASE=$KernelVer headers_install
 	# kernel headers for cross toolchains
-	for arch in %{cross_header_archs}; do
+	for arch in %{cross_header_archs}; do	
 		if [ "$arch" == "arm" ]; then
 			gnuext=-gnueabi
 		else
 			gnuext=-gnu
 		fi
-		%make SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_vendor}-%{_target_os}$gnuext KERNELRELEASE=$KernelVer headers_install
+		%make SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_vendor}-%{_target_os}$gnuext KERNELRELEASE=$KernelVer headers_install	
 	done
 
 	# remove /lib/firmware, we use a separate kernel-firmware
@@ -2008,8 +2086,12 @@ install -d %{temp_root}
 # make sure we are in the directory
 cd %src_dir
 
+# %{patches_dir}/scripts/apply_patches-vanilla
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
-%if !%{with toolsonly}
+
+%{patches_dir}/scripts/apply_patches
+%{patches_dir}/scripts/apply_patches-geek
+%{patches_dir}/scripts/apply_patches-latest
 %{patches_dir}/scripts/create_configs-old-mdv %debug --user_cpu="%{target_arch}"
 
 %ifarch %{ix86}
@@ -2042,6 +2124,7 @@ CreateKernel netbook-pae
 %endif
 %endif
 
+%{patches_dir}/scripts/apply_patches-NRJ
 %{patches_dir}/scripts/create_configs-withBFQ %debug --user_cpu="%{target_arch}"
 
 %ifarch %{ix86}
@@ -2126,6 +2209,7 @@ CreateKernel versatile
 %endif
 %endif
 
+%{patches_dir}/scripts/apply_patches-QL
 %{patches_dir}/scripts/create_configs-QL %debug --user_cpu="%{target_arch}"
 
 %if %build_nrjQL_desktop
@@ -2195,33 +2279,61 @@ CreateKernel nrjQL-desktop-core2-pae
 
 # set extraversion to match srpm to get nice version reported by the tools
 LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
-%endif # !withtoolsonly
 
 
 ############################################################
-### Linker start3 > Check point to build for cooker 2013 ###
+### Linker start3 > Check point to build for omv or rosa ###
 ############################################################
-# build perf
-
 %if %{build_perf}
-%make all man -C tools/perf prefix=%{_prefix} V=1 HAVE_CPLUS_DEMANGLE=1 EXTRA_CFLAGS="%{optflags}" LDFLAGS="%{ldflags}"
+
+%if %{mdvver} == 201500
+%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} all
+%smake -C tools/perf -s prefix=%{_prefix} man
+%endif
+%if %{mdvver} == 201410
+%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} all
+%smake -C tools/perf -s prefix=%{_prefix} man
+%endif
+%if %{mdvver} == 201400
+%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} LDFLAGS="%optflags" all
+%smake -C tools/perf -s prefix=%{_prefix} LDFLAGS="%optflags" man
+%endif
+%if %{mdvver} == 201300
+%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} LDFLAGS="%optflags" all
+%smake -C tools/perf -s prefix=%{_prefix} LDFLAGS="%optflags" man
+%endif
+%if %{mdvver} <= 201210
+%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} all
+%smake -C tools/perf -s prefix=%{_prefix} man
 %endif
 
-# build cpupower
+%endif
+
+
 
 %if %{build_cpupower}
 # make sure version-gen.sh is executable.
 chmod +x tools/power/cpupower/utils/version-gen.sh
-CFLAGS="%{optflags}" %make -C tools/power/cpupower V=1 CPUFREQ_BENCH=false LDFLAGS="%{ldflags}"
-%ifarch %{ix86} x86_64
-CFLAGS="%{optflags}" %make -C tools/power/cpupower/debug/%{_arch} V=1 centrino-decode powernow-k8-decode LDFLAGS="%{ldflags}"
-CFLAGS="%{optflags}" %make -C tools/power/x86/x86_energy_perf_policy/ V=1 LDFLAGS="%{ldflags}"
-CFLAGS="%{optflags}" %make -C tools/power/x86/turbostat V=1 LDFLAGS="%{ldflags}"
+
+%if %{mdvver} == 201500
+%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%optflags"
 %endif
-CFLAGS="%{optflags}" %make -C tools/thermal/tmon V=1 LDFLAGS="%{ldflags}" 
+%if %{mdvver} == 201410
+%make -C tools/power/cpupower CPUFREQ_BENCH=false
+%endif
+%if %{mdvver} == 201400
+%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%optflags"
+%endif
+%if %{mdvver} == 201300
+%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%optflags"
+%endif
+%if %{mdvver} < 201300
+%make -C tools/power/cpupower CPUFREQ_BENCH=false
+%endif
+
 %endif
 ############################################################
-###  Linker end3 > Check point to build for cooker 2013  ###
+###  Linker end3 > Check point to build for omv or rosa  ###
 ############################################################
 
 
@@ -2278,7 +2390,6 @@ rm -rf %{target_source}/.tmp_depmod/
 #endif %build_source
 %endif
 
-%if !%{with toolsonly}
 # compressing modules
 %if %{build_modxz}
 find %{target_modules} -name "*.ko" | %kxargs xz -6e
@@ -2312,36 +2423,50 @@ popd
 
 # need to set extraversion to match srpm again to avoid rebuild
 LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
-%endif # !toolsonly
-
 %if %{build_perf}
-# perf tool binary and supporting scripts/binaries with man pages
-%makeinstall_std install-man -C tools/perf prefix=%{_prefix} V=1 HAVE_CPLUS_DEMANGLE=1 EXTRA_CFLAGS="%{optflags}" LDFLAGS="%{ldflags}"
+
+# perf tool binary and supporting scripts/binaries
+make -C tools/perf -s V=1 DESTDIR=%{buildroot} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
+
+# perf man pages (note: implicit rpm magic compresses them later)
+make -C tools/perf  -s V=1 DESTDIR=%{buildroot} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
 %endif
 
+
 ############################################################
-### Linker start4 > Check point to build for cooker 2013 ###
+### Linker start4 > Check point to build for omv or rosa ###
 ############################################################
 %if %{build_cpupower}
-%makeinstall_std -C tools/power/cpupower libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false
+
+%if %{mdvver} == 201500
+%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false LDFLAGS="%optflags" install
+%endif
+%if %{mdvver} == 201410
+make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false install
+%endif
+%if %{mdvver} == 201400
+%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false LDFLAGS="%optflags" install
+%endif
+%if %{mdvver} == 201300
+%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false LDFLAGS="%optflags" install
+%endif
+%if %{mdvver} < 201300
+make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false install
+%endif
+
+rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
 mv cpupower.lang ../
 chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
-install -m644 %{SOURCE50} -D %{buildroot}%{_unitdir}/cpupower.service
-install -m644 %{SOURCE51} -D %{buildroot}%{_sysconfdir}/sysconfig/cpupower
+mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
+install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
+install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 
-%ifarch %{ix86} x86_64
-install -pm755 tools/power/cpupower/debug/%{_arch}/centrino-decode -D %{buildroot}%{_bindir}/centrino-decode
-install -pm755 tools/power/cpupower/debug/%{_arch}/powernow-k8-decode -D %{buildroot}%{_bindir}/powernow-k8-decode
-mkdir -p %{buildroot}%{_mandir}/man8
-%makeinstall_std -C tools/power/x86/x86_energy_perf_policy
-%makeinstall_std -C tools/power/x86/turbostat
-%endif
-make -C tools/thermal/tmon INSTALL_ROOT=%{buildroot} install
 %endif
 ############################################################
-### Linker start4 > Check point to build for cooker 2013 ###
+### Linker start4 > Check point to build for omv or rosa ###
 ############################################################
+
 
 ###
 ### clean
@@ -2438,28 +2563,22 @@ rm -rf %{buildroot}
 %{_bindir}/trace
 %dir %{_prefix}/libexec/perf-core
 %{_libdir}/libperf-gtk.so
+%dir %{_libdir}/traceevent
+%dir %{_libdir}/traceevent/plugins
+%{_libdir}/traceevent/plugins/*
 %{_prefix}/libexec/perf-core/*
-%{_mandir}/man1/perf*.1*
+%{_mandir}/man[1-8]/perf*
 %{_sysconfdir}/bash_completion.d/perf
 %endif
 
 %if %{build_cpupower}
 %files -n cpupower -f cpupower.lang
 %{_bindir}/cpupower
-%{_bindir}/tmon
 %{_libdir}/libcpupower.so.0
 %{_libdir}/libcpupower.so.0.0.0
 %{_unitdir}/cpupower.service
-%{_mandir}/man1/cpupower*.1*
+%{_mandir}/man[1-8]/cpupower*
 %config(noreplace) %{_sysconfdir}/sysconfig/cpupower
-%ifarch %{ix86} x86_64
-%{_bindir}/centrino-decode
-%{_bindir}/powernow-k8-decode
-%{_bindir}/turbostat
-%{_bindir}/x86_energy_perf_policy
-%{_mandir}/man8/turbostat.8*
-%{_mandir}/man8/x86_energy_perf_policy.8*
-%endif
 
 %files -n cpupower-devel
 %{_libdir}/libcpupower.so
@@ -2469,8 +2588,57 @@ rm -rf %{buildroot}
 
 %changelog
 
-* Sat May 17 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.11-2
-+ update to 3.13.11 (EOL) - release 2
+* Fri Jun 27 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.14.9-70
++ update to 3.14.9 - stable
+- patch: tux on ice 3.14.9
+- ---------------------------------------------------------------------
+- Kernel 3.14 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Tue Jun 24 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.14.8-70
++ update to 3.14.8 - stable
+- few fixes to BR
+- ---------------------------------------------------------------------
+- Kernel 3.14 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Sat Jun 21 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.14.6-70
++ update to 3.14.6 (LTS???) - stable
++ this is first version of "nrj/nrjQL" stable 3.14.x, in its early development
+- stage, so, it's only for testing purposes, please, dont use this srpm,
+- for your daily PC working, because is still to fix all over!!!
+- all the defconfigs have been prepared for the 3.14 series
+- all the patches have been added/update for the 3.14 series
+- all the create_configs scripts have been updated to v.2.1
+- all the kernel specs have been updated to the 3.14 series
+- modified kernel.spec to support from %mdvver 201200 to 201500
+- tpg: fbsplash/fbcondecor feature: /patches-latest/fbcondecor-3.14.patch
+- add config key: CONFIG_FB_CON_DECOR=y, changed: FB_TILEBLITTING=n
+- pok: /patches-latest/linux-3.15-rc3-ahci-alpm-with-devslp-accounting.patch
+- pok: build a cross-kernel-header package for arm, arm64 & mips toolchains
+- arm: from CONFIG_SQUASHFS_DECOMP_MULTI=y to CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU=y
+- to be fixed: %if %{build_perf} with /traceevent and /traceevent/plugins
+- ---------------------------------------------------------------------
+- Kernel 3.14 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Sat May 17 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.11-70.2
++ update to 3.13.11 (EOL) - stable
 - update BFQ to v7r4: 
   it fixes some oops that may happen with some new NCQ HDD devices,
   it leads other small speed improvements:
@@ -2490,7 +2658,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Thu Apr 24 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.11-1
+* Thu Apr 24 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.13.11-70
 + update to 3.13.11 (EOL) - stable
 - update patches:
   * tuxonice-for-linux-3.13.11-2014-04-24.patch
