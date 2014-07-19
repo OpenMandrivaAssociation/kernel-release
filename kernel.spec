@@ -1,12 +1,13 @@
 Packager: Nicolo' Costanza <abitrules@yahoo.it>
+
 #
 %define kernelversion	3
-%define patchlevel		14
+%define patchlevel	14
 # sublevel is now used for -stable patches
-%define sublevel		9
+%define sublevel	13
 
 # Package release
-%define mibrel			69
+%define mibrel		69
 
 # kernel Makefile extraversion is substituted by
 # kpatch wich are either 0 (empty), rc (kpatch)
@@ -28,7 +29,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel			1
+%define rpmrel		1
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -78,72 +79,73 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define debug_package 		%{nil}
 
 # Build defines
-%define build_doc 						1
-%define build_source 					1
-%define build_devel 					1
-%define build_debug	 					0
+%define build_doc 			1
+%define build_source 			1
+%define build_devel 			1
+%define build_debug	 		0
 
 %define	cross_header_archs	arm arm64 mips
 
 # Old Mandriva kernel flavours plus new two PAE flavours added by MIB
 
-%define build_desktop					1
-%define build_netbook					0
-%define build_server					1
+%define build_desktop			1
+%define build_netbook			0
+%define build_server			1
 
 %ifarch %{ix86}
-%define build_desktop586				0
-%define build_desktop_pae				1
-%define build_netbook_pae				0
+%define build_desktop586		0
+%define build_desktop_pae		1
+%define build_netbook_pae		0
 %endif
 
 # MIB low latency optimized flavours called "nrj V.5" plus 32bit PAE versions
 
-%define build_nrj_desktop				1
-%define build_nrj_realtime				0
-%define build_nrj_laptop				1
-%define build_nrj_netbook				0
+%define build_nrj_desktop		1
+%define build_nrj_realtime		0
+%define build_nrj_server		0
+%define build_nrj_laptop		1
+%define build_nrj_netbook		0
 
 %ifarch %{ix86}
-%define build_nrj_desktop586			0
-%define build_nrj_desktop_pae			1
-%define build_nrj_realtime_pae			0
-%define build_nrj_laptop_pae			1
-%define build_nrj_netbook_pae			0
+%define build_nrj_desktop586		0
+%define build_nrj_desktop_pae		1
+%define build_nrj_realtime_pae		0
+%define build_nrj_laptop_pae		1
+%define build_nrj_netbook_pae		0
 %endif
 
 # MIB experimental low latency "32bit cpu level" optimized, called "nrj V.5" flavours plus PAE versions
 
 %ifarch %{ix86}
-%define build_nrj_netbook_atom			0
-%define build_nrj_netbook_atom_pae		0
-%define build_nrj_desktop_core2   		0
-%define build_nrj_desktop_core2_pae 	0
+%define build_nrj_netbook_atom		0
+%define build_nrj_netbook_atom_pae	0
+%define build_nrj_desktop_core2   	0
+%define build_nrj_desktop_core2_pae   	0
 %endif
 
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI
 
-%define build_nrjQL_desktop				1
-%define build_nrjQL_realtime			1
-%define build_nrjQL_laptop				1
-%define build_nrjQL_netbook				1
-%define build_nrjQL_server				1
-%define build_nrjQL_server_games		0
+%define build_nrjQL_desktop		1
+%define build_nrjQL_realtime		1
+%define build_nrjQL_laptop		1
+%define build_nrjQL_netbook		1
+%define build_nrjQL_server		1
+%define build_nrjQL_server_games	0
 %define build_nrjQL_server_computing	0
 
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
 
 %ifarch %{ix86}
-%define build_nrjQL_desktop_pae			1
-%define build_nrjQL_realtime_pae		1
-%define build_nrjQL_laptop_pae			1
-%define build_nrjQL_netbook_pae			0
+%define build_nrjQL_desktop_pae		1
+%define build_nrjQL_realtime_pae	1
+%define build_nrjQL_laptop_pae		1
+%define build_nrjQL_netbook_pae		0
 %endif
 
 # MIB experimental "32bit cpu level" optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
 
 %ifarch %{ix86}
-%define build_nrjQL_desktop_core2		 0
+%define build_nrjQL_desktop_core2	 0
 %define build_nrjQL_desktop_core2_pae  	 0
 %endif
 
@@ -211,6 +213,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %{?_without_nrj_desktop586: %global build_nrj_desktop586 0}
 %{?_without_nrj_desktop: %global build_nrj_desktop 0}
 %{?_without_nrj_realtime: %global build_nrj_realtime 0}
+%{?_without_nrj_server: %global build_nrj_server 0}
 %{?_without_nrj_laptop: %global build_nrj_laptop 0}
 %{?_without_nrj_netbook: %global build_nrj_netbook 0}
 
@@ -266,6 +269,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %{?_with_nrj_desktop586: %global build_nrj_desktop586 1}
 %{?_with_nrj_desktop: %global build_nrj_desktop 1}
 %{?_with_nrj_realtime: %global build_nrj_realtime 1}
+%{?_with_nrj_server: %global build_nrj_server 1}
 %{?_with_nrj_laptop: %global build_nrj_laptop 1}
 %{?_with_nrj_netbook: %global build_nrj_netbook 1}
 
@@ -573,7 +577,7 @@ processor mode, use the "nosmp" boot parameter.
 %define	kobsoletes2	dkms-lzma <= 4.43-32
 %define	kobsoletes3	dkms-psb <= 4.41.1-7
 
-# conflict dkms packages that dont support kernel-3.10
+# conflict dkms packages that dont support kernel-3.14
 # all driver versions must be carefully checked to add
 
 # config for all distros apart mdvver 2013.0 & 2012.1
@@ -940,6 +944,24 @@ multiple %{_arch} processor(s)/core(s), using HZ_1000, \
 full preempt, rcu boost, CFS cpu scheduler and new BFQ I/O scheduler, PERFORMANCE governor.
 %endif
 %mkflavour nrj-realtime
+%endif
+
+#
+# kernel-nrj-server: i686, smp-alternatives, 64 GB / x86_64
+#
+%if %build_nrj_server
+%ifarch %{ix86}
+%define summary_nrj_server Linux Kernel for server use with i686 & 64GB RAM
+%define info_nrj_server This kernel is compiled for server use, single or \
+multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using \
+no preempt, HZ_100, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%else
+%define summary_nrj_server Linux Kernel for server use with %{_arch}
+%define info_nrj_server This kernel is compiled for server use, single or \
+multiple %{_arch} processor(s)/core(s), using no preempt, HZ_100, \
+CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
+%endif
+%mkflavour nrj-server
 %endif
 
 #
@@ -2141,6 +2163,10 @@ CreateKernel nrj-desktop
 CreateKernel nrj-realtime
 %endif
 
+%if %build_nrj_server
+CreateKernel nrj-server
+%endif
+
 %if %build_nrj_laptop
 CreateKernel nrj-laptop
 %endif
@@ -2587,6 +2613,39 @@ rm -rf %{buildroot}
 
 
 %changelog
+
+* Fri Jul 18 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.14.13-70
++ update to 3.14.13 - stable
+- update UKSM (nrjQL memory management) from 0.1.2.2 to 0.1.2.3
+- x86 configs change: CONFIG_X86_VERBOSE_BOOTUP from "=y" to "=n" 
+- to suppress annoying flashing messages while decompressig intrd:
+- "Decompressing Linux . . . Parsing ELF . . . done
+- Booting the kernel"
+- fix from Eugene.S.: add perf-python-ext-link-with-dl.patch
+- this patch is needed to fix the proper build of the perf tool
+- ---------------------------------------------------------------------
+- Kernel 3.14 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Tue Jul 01 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.14.10-70
++ update to 3.14.10 - stable
+- patch: tux on ice 3.14.10
+- kernel.spec: add a new flavour to complete nrj set: nrj-server
+- scripts/create_configs: add a new kernel flavour: nrj-server
+- bero: added BuildRequires: pkgconfig(ncurses) 
+- ---------------------------------------------------------------------
+- Kernel 3.14 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
 
 * Fri Jun 27 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.14.9-70
 + update to 3.14.9 - stable

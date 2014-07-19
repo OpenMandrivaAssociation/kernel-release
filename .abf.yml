@@ -1,4 +1,6 @@
 sources:
-  "linux-3.14.9-rosa69.tar.xz": be6cc72ddf8781e8d626802453495b37ec06d8dd
-  "linux-3.14.tar.xz": fc777520e5976caf0d5513502b8156f73748e379
-  "patch-3.14.9.xz": 5cbccc9c2f30704c0b15bf81c532c2ebb4cf15e5
+  linux-3.14.13-rosa69.tar.xz: 3a4716edea76c5e8b71ac7efa7dc61fa4f26d067
+  linux-3.14.tar.sign: a71b71b19388443eac7e10562cfba61376f2ba76
+  linux-3.14.tar.xz: fc777520e5976caf0d5513502b8156f73748e379
+  patch-3.14.13.sign: c5c49fa5d9e4aca2299cb66f0aa4cd20fee37f38
+  patch-3.14.13.xz: fba9217a0c12c93d673d53e8045f8718cb57fa83
