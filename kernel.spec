@@ -154,27 +154,27 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 # build perf and cpupower tools
 %if %{mdvver} == 201500
-%define build_perf		0
+%define build_perf		1
 %define build_cpupower		1
 %endif
 %if %{mdvver} == 201410
-%define build_perf		0
+%define build_perf		1
 %define build_cpupower		1
 %endif
 %if %{mdvver} == 201400
-%define build_perf		0
+%define build_perf		1
 %define build_cpupower		1
 %endif
 %if %{mdvver} == 201300
-%define build_perf		0
+%define build_perf		1
 %define build_cpupower		1
 %endif
 %if %{mdvver} == 201210
-%define build_perf		0
+%define build_perf		1
 %define build_cpupower		1
 %endif
 %if %{mdvver} == 201200
-%define build_perf		0
+%define build_perf		1
 %define build_cpupower		1
 %endif
 
@@ -2613,6 +2613,25 @@ rm -rf %{buildroot}
 
 
 %changelog
+
+* Sun Jul 20 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.6-70
++ update to 3.15.6 - stable
++ it's first version of "nrj/nrjQL" stable 3.15.x, in early development
+- stage, so, it's only for testing purposes, please, dont use this srpm,
+- for your daily PC working, because is still to fix all over!!!
+- all the defconfigs have been prepared for the 3.15 series
+- all the patches have been added/update for the 3.15 series
+- all the create_configs scripts have been updated to v.2.2
+- all the kernel specs have been updated to the 3.15 series
+- all custom openmandriva/rosa features have been backported from 3.14.13
+- ---------------------------------------------------------------------
+- Kernel 3.15 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
 
 * Fri Jul 18 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.14.13-70
 + update to 3.14.13 - stable
