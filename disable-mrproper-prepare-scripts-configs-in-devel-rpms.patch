@@ -1,12 +1,12 @@
 
- Makefile                 |   24 ++++++++++++------------
+ Makefile                 |   17 +++++------------
  scripts/kconfig/Makefile |   19 -------------------
- 2 files changed, 12 insertions(+), 31 deletions(-)
+ 2 files changed, 5 insertions(+), 31 deletions(-)
 
-diff -Nurp linux-3.14.2-1.mga4/Makefile linux-3.14.2-1.mga4.mrproper/Makefile
---- linux-3.14.2-1.mga4/Makefile	2014-04-26 18:57:12.134824274 +0300
-+++ linux-3.14.2-1.mga4.mrproper/Makefile	2014-04-26 18:58:36.410828557 +0300
-@@ -522,9 +522,7 @@ ifeq ($(KBUILD_EXTMOD),)
+diff -Nurp linux-3.15-mga1/Makefile linux-3.15-mga1-mrp/Makefile
+--- linux-3.15-mga1/Makefile	2014-06-04 22:19:16.719964314 +0300
++++ linux-3.15-mga1-mrp/Makefile	2014-06-04 22:35:32.181925471 +0300
+@@ -537,9 +537,7 @@ ifeq ($(KBUILD_EXTMOD),)
  # Carefully list dependencies so we do not try to build scripts twice
  # in parallel
  PHONY += scripts
@@ -17,7 +17,7 @@ diff -Nurp linux-3.14.2-1.mga4/Makefile linux-3.14.2-1.mga4.mrproper/Makefile
  
  # Objects we will link into vmlinux / subdirs we need to visit
  init-y		:= init/
-@@ -884,7 +882,7 @@ prepare0: archprepare FORCE
+@@ -921,7 +919,7 @@ prepare0: archprepare FORCE
  	$(Q)$(MAKE) $(build)=.
  
  # All the preparing..
@@ -26,30 +26,23 @@ diff -Nurp linux-3.14.2-1.mga4/Makefile linux-3.14.2-1.mga4.mrproper/Makefile
  
  # Generate some files
  # ---------------------------------------------------------------------------
-@@ -1066,13 +1064,15 @@ endif # CONFIG_MODULES
+@@ -1103,13 +1101,8 @@ endif # CONFIG_MODULES
  CLEAN_DIRS  += $(MODVERDIR)
  
  # Directories & files removed with 'make mrproper'
 -MRPROPER_DIRS  += include/config usr/include include/generated          \
--                  arch/*/include/generated
+-                  arch/*/include/generated .tmp_objdiff
 -MRPROPER_FILES += .config .config.old .version .old_version $(version_h) \
 -		  Module.symvers tags TAGS cscope* GPATH GTAGS GRTAGS GSYMS \
 -		  signing_key.priv signing_key.x509 x509.genkey		\
 -		  extra_certificates signing_key.x509.keyid		\
--		  signing_key.x509.signer
-+#MRPROPER_DIRS  += include/config usr/include include/generated          \
-+#                  arch/*/include/generated
-+#MRPROPER_FILES += .config .config.old .version .old_version $(version_h) \
-+#		  Module.symvers tags TAGS cscope* GPATH GTAGS GRTAGS GSYMS \
-+#		  signing_key.priv signing_key.x509 x509.genkey		\
-+#		  extra_certificates signing_key.x509.keyid		\
-+#		  signing_key.x509.signer
+-		  signing_key.x509.signer include/linux/version.h
 +MRPROPER_DIRS  += ""
 +MRPROPER_FILES += ""
  
  # clean - Delete most, but leave enough to build external modules
  #
-@@ -1093,7 +1093,7 @@ clean: archclean vmlinuxclean
+@@ -1130,7 +1123,7 @@ clean: archclean vmlinuxclean
  #
  mrproper: rm-dirs  := $(wildcard $(MRPROPER_DIRS))
  mrproper: rm-files := $(wildcard $(MRPROPER_FILES))
@@ -58,9 +51,9 @@ diff -Nurp linux-3.14.2-1.mga4/Makefile linux-3.14.2-1.mga4.mrproper/Makefile
  
  PHONY += $(mrproper-dirs) mrproper archmrproper
  $(mrproper-dirs):
-diff -Nurp linux-3.14.2-1.mga4/scripts/kconfig/Makefile linux-3.14.2-1.mga4.mrproper/scripts/kconfig/Makefile
---- linux-3.14.2-1.mga4/scripts/kconfig/Makefile	2014-04-26 18:57:12.134824274 +0300
-+++ linux-3.14.2-1.mga4.mrproper/scripts/kconfig/Makefile	2014-04-26 18:58:36.411828571 +0300
+diff -Nurp linux-3.15-mga1/scripts/kconfig/Makefile linux-3.15-mga1-mrp/scripts/kconfig/Makefile
+--- linux-3.15-mga1/scripts/kconfig/Makefile	2014-06-04 22:19:16.719964314 +0300
++++ linux-3.15-mga1-mrp/scripts/kconfig/Makefile	2014-06-04 22:19:39.468079914 +0300
 @@ -15,26 +15,18 @@ endif
  unexport CONFIG_
  
