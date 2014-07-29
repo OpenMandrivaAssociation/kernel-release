@@ -4,7 +4,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	15
 # sublevel is now used for -stable patches
-%define sublevel	6
+%define sublevel	7
 
 # Package release
 %define mibrel		69
@@ -2613,6 +2613,20 @@ rm -rf %{buildroot}
 
 
 %changelog
+
+* Tue Jul 29 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.7-70
++ update to 3.15.7 - stable
+- update BFS (task scheduler) from 448 to 449 
+- add 4 patches: for Pegatron laptops support 
+- add patch: x86-x86_32-entry-store-badsys-error-code-in-eax.patch
+- ---------------------------------------------------------------------
+- Kernel 3.15 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
 
 * Sun Jul 20 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.6-70
 + update to 3.15.6 - stable
