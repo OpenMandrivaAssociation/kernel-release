@@ -4,7 +4,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	15
 # sublevel is now used for -stable patches
-%define sublevel	7
+%define sublevel	8
 
 # Package release
 %define mibrel		69
@@ -2614,7 +2614,21 @@ rm -rf %{buildroot}
 
 %changelog
 
-* Tue Jul 29 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.7-70
+* Fri Aug 01 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.8-1
++ update to 3.15.8 - stable
+- drop patch: x86-x86_32-entry-store-badsys-error-code-in-eax.patch
+- update BFS (task scheduler) from release 3.5.6 to 3.5.7 
+- audio powersave: reduced idle time from 60 to 15 seconds
+- ---------------------------------------------------------------------
+- Kernel 3.15 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Tue Jul 29 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.7-1
 + update to 3.15.7 - stable
 - update BFS (task scheduler) from 448 to 449 
 - add 4 patches: for Pegatron laptops support 
@@ -2628,7 +2642,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Sun Jul 20 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.6-70
+* Sun Jul 20 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.6-1
 + update to 3.15.6 - stable
 + it's first version of "nrj/nrjQL" stable 3.15.x, in early development
 - stage, so, it's only for testing purposes, please, dont use this srpm,
