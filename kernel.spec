@@ -1,4 +1,7 @@
 Packager: Nicolo' Costanza <abitrules@yahoo.it>
+%ifarch %ix86
+%define __noautoprov 'kmod\\(.*\\)'
+%endif
 
 #
 %define kernelversion	3
