@@ -1,6 +1,7 @@
 Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %ifarch %ix86
-%define __noautoprov 'kmod\\(.*\\)'
+# (tpg) disable for a while
+#define __noautoprov 'kmod\\(.*\\)'
 %endif
 
 #
@@ -32,7 +33,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		1
+%define rpmrel		2
 %endif
 
 # fakerel and fakever never change, they are used to fool
