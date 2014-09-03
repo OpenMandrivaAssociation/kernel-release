@@ -104,17 +104,17 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 # MIB low latency optimized flavours called "nrj V.5" plus 32bit PAE versions
 
-%define build_nrj_desktop		1
+%define build_nrj_desktop		0
 %define build_nrj_realtime		0
 %define build_nrj_server		0
-%define build_nrj_laptop		1
+%define build_nrj_laptop		0
 %define build_nrj_netbook		0
 
 %ifarch %{ix86}
 %define build_nrj_desktop586		0
-%define build_nrj_desktop_pae		1
+%define build_nrj_desktop_pae		0
 %define build_nrj_realtime_pae		0
-%define build_nrj_laptop_pae		1
+%define build_nrj_laptop_pae		0
 %define build_nrj_netbook_pae		0
 %endif
 
@@ -131,7 +131,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 %define build_nrjQL_desktop		1
 %define build_nrjQL_realtime		0
-%define build_nrjQL_laptop		1
+%define build_nrjQL_laptop		0
 %define build_nrjQL_netbook		0
 %define build_nrjQL_server		0
 %define build_nrjQL_server_games	0
@@ -142,7 +142,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %ifarch %{ix86}
 %define build_nrjQL_desktop_pae		1
 %define build_nrjQL_realtime_pae	0
-%define build_nrjQL_laptop_pae		1
+%define build_nrjQL_laptop_pae		0
 %define build_nrjQL_netbook_pae		0
 %endif
 
