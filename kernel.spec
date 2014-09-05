@@ -125,7 +125,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI
 
-%ifnarch %armx
+%ifarch %{ix86} x86_64
 %define build_nrjQL_desktop		1
 %define build_nrjQL_realtime		0
 %define build_nrjQL_laptop		1
