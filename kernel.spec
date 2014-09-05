@@ -191,10 +191,14 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define build_netbook		0
 %define build_server		0
 %define build_iop32x		0
+# disable all nrj flavours
+%define build_nrjQL_laptop	0
+%define build_nrjQL_desktop	0
 %define build_kirkwood		1
 %define build_versatile		1
 # no cpupower tools on arm yet
 %define build_cpupower		0
+%define build_perf		0
 # arm is currently not using xz
 %define build_modxz		0
 %endif
@@ -1902,6 +1906,9 @@ $DevelRoot/include/trace
 $DevelRoot/include/uapi
 $DevelRoot/include/video
 $DevelRoot/include/xen
+%ifarch %arm
+$DevelRoot/include/kvm
+%endif
 $DevelRoot/init
 $DevelRoot/ipc
 $DevelRoot/kernel
@@ -2555,6 +2562,9 @@ rm -rf %{buildroot}
 %{_kerneldir}/include/uapi
 %{_kerneldir}/include/video
 %{_kerneldir}/include/xen
+%ifarch %{arm}
+%{_kerneldir}/include/kvm
+%endif
 %{_kerneldir}/init
 %{_kerneldir}/ipc
 %{_kerneldir}/kernel
