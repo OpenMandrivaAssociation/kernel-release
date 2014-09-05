@@ -125,6 +125,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI
 
+%ifnarch %armx
 %define build_nrjQL_desktop		1
 %define build_nrjQL_realtime		0
 %define build_nrjQL_laptop		1
@@ -132,6 +133,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define build_nrjQL_server		0
 %define build_nrjQL_server_games	0
 %define build_nrjQL_server_computing	0
+%endif
 
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
 
