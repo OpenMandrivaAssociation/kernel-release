@@ -1,4 +1,4 @@
 sources:
-  "linux-3.15.8-rosa69.tar.xz": 5cf1ebf138fdfc14db3afb8b9e821b5ecc79c87a
+  "linux-3.15.10-abf1.tar.xz": 79277f4e085f9c44fab71e20b8667b35ba8e682b
   "linux-3.15.tar.xz": f21a27b36ad7169596b0b809707f1442e6d2bb89
-  "patch-3.15.8.xz": 347c77b1e3d827f6c071004ea98af0383606a782
+  "patch-3.15.10.xz": 99d6a0c3d4b33d3cd64ea7ac6fd705c79031ecfc
