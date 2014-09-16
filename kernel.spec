@@ -4,10 +4,10 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	15
 # sublevel is now used for -stable patches
-%define sublevel	8
+%define sublevel	10
 
 # Package release
-%define mibrel		69
+%define mibrel		1
 
 # kernel Makefile extraversion is substituted by
 # kpatch wich are either 0 (empty), rc (kpatch)
@@ -19,7 +19,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kname 		kernel
 
 # Patch tarball tag
-%define ktag		rosa
+%define ktag		abf
 
 %define rpmtag		%{disttag}
 %if %kpatch
@@ -88,13 +88,13 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 # Old Mandriva kernel flavours plus new two PAE flavours added by MIB
 
-%define build_desktop			1
+%define build_desktop			0
 %define build_netbook			0
-%define build_server			1
+%define build_server			0
 
 %ifarch %{ix86}
 %define build_desktop586		0
-%define build_desktop_pae		1
+%define build_desktop_pae		0
 %define build_netbook_pae		0
 %endif
 
