@@ -2120,6 +2120,9 @@ install -d %{temp_root}
 # make sure we are in the directory
 cd %src_dir
 
+# uncommetting next row: this improves HT with newer cpus, it may have regressions with old ones
+# sed -i -e 's,CONFIG_SMT_NICE=y,# CONFIG_SMT_NICE is not set,g' %{patches_dir}/configs/*.config
+
 # %{patches_dir}/scripts/apply_patches-vanilla
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
 
