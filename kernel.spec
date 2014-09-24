@@ -29,7 +29,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		2
+%define rpmrel		3
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -2125,6 +2125,8 @@ cd %src_dir
 
 # requested change by Colin Close: to test if that may fix the UEFI issues
 sed -i -e 's,CONFIG_EFIVAR_FS=m,CONFIG_EFIVAR_FS=y,g' %{patches_dir}/configs/*.config
+# https://wiki.archlinux.org/index.php/Unified_Extensible_Firmware_Interface
+sed -i -e 's,CONFIG_EFI_VARS=y,CONFIG_EFI_VARS=n,g' %{patches_dir}/configs/*.config
 
 # %{patches_dir}/scripts/apply_patches-vanilla
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
