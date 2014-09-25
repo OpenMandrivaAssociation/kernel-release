@@ -33,7 +33,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		1
+%define rpmrel		2
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -2114,6 +2114,22 @@ cd %src_dir
 
 # uncommetting next row: this improves HT with newer cpus, it may have regressions with old ones
 # sed -i -e 's,CONFIG_SMT_NICE=y,# CONFIG_SMT_NICE is not set,g' %{patches_dir}/configs/*.config
+
+# requested change by Colin Close: to test if that may fix the UEFI issues
+sed -i -e 's,CONFIG_EFIVAR_FS=m,CONFIG_EFIVAR_FS=y,g' %{patches_dir}/configs/*.config
+
+# add some more optimizations
+sed -i -e 's,CONFIG_LOCKDEP_SUPPORT=y,CONFIG_LOCKDEP_SUPPORT=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SLUB_DEBUG=y,CONFIG_SLUB_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_HAVE_DEBUG_KMEMLEAK=y,CONFIG_HAVE_DEBUG_KMEMLEAK=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SCHED_DEBUG=y,CONFIG_SCHED_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SCHEDSTATS=y,CONFIG_SCHEDSTATS=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SND_DEBUG=y,CONFIG_SND_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SND_PCM_XRUN_DEBUG=y,CONFIG_SND_PCM_XRUN_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_FSCACHE_DEBUG=y,CONFIG_FSCACHE_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_CACHEFILES_DEBUG=y,CONFIG_CACHEFILES_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_DYNAMIC_DEBUG=y,CONFIG_DYNAMIC_DEBUG=n,g' %{patches_dir}/configs/*.config
+
 
 # %{patches_dir}/scripts/apply_patches-vanilla
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
