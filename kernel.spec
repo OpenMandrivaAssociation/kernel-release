@@ -2117,6 +2117,8 @@ cd %src_dir
 
 # requested change by Colin Close: to test if that may fix the UEFI issues
 sed -i -e 's,CONFIG_EFIVAR_FS=m,CONFIG_EFIVAR_FS=y,g' %{patches_dir}/configs/*.config
+# https://wiki.archlinux.org/index.php/Unified_Extensible_Firmware_Interface
+sed -i -e 's,CONFIG_EFI_VARS=y,CONFIG_EFI_VARS=n,g' %{patches_dir}/configs/*.config
 
 # add some more optimizations
 sed -i -e 's,CONFIG_LOCKDEP_SUPPORT=y,CONFIG_LOCKDEP_SUPPORT=n,g' %{patches_dir}/configs/*.config
