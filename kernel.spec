@@ -94,7 +94,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 %define build_desktop			0
 %define build_netbook			0
-%define build_server			0
+%define build_server			1
 
 %ifarch %{ix86}
 %define build_desktop586		0
@@ -106,7 +106,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 %define build_nrj_desktop		1
 %define build_nrj_realtime		0
-%define build_nrj_server		0
+%define build_nrj_server		1
 %define build_nrj_laptop		1
 %define build_nrj_netbook		0
 
@@ -130,10 +130,10 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI
 
 %define build_nrjQL_desktop		1
-%define build_nrjQL_realtime		0
+%define build_nrjQL_realtime		1
 %define build_nrjQL_laptop		1
-%define build_nrjQL_netbook		0
-%define build_nrjQL_server		0
+%define build_nrjQL_netbook		1
+%define build_nrjQL_server		1
 %define build_nrjQL_server_games	0
 %define build_nrjQL_server_computing	0
 
@@ -141,9 +141,9 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 %ifarch %{ix86}
 %define build_nrjQL_desktop_pae		1
-%define build_nrjQL_realtime_pae	0
+%define build_nrjQL_realtime_pae	1
 %define build_nrjQL_laptop_pae		1
-%define build_nrjQL_netbook_pae		0
+%define build_nrjQL_netbook_pae		1
 %endif
 
 # MIB experimental "32bit cpu level" optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
