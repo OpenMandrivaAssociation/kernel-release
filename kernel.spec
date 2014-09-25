@@ -2639,6 +2639,81 @@ rm -rf %{buildroot}
 
 %changelog
 
+* Fri Sep 26 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.10-2
++ update to 3.15.10 (EOL) - stable (replacement release)
+- fix two EFI keys
+- less debug keys
+- ---------------------------------------------------------------------
+- Kernel 3.15 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Sat Aug 30 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.10-1
++ update to 3.15.10 (EOL) - stable (replacement release)
+- update ReiserFS4:
+- /patches-NRJ/0004-reiser4-for-3.15.2.patch
+- update BFS scheduler to 455, plus fixes, plus HT/SMT Nice 6 and configs:
+- /patches-QL/0001_3.15-sched-bfs-455-2.patch
+- /patches-QL/0002_ck-3.16-revert-KVM-workaround-due-to-proper-cond_res.patch
+- /patches-QL/0003_bfs449-smtnice-6.patch
+- ---------------------------------------------------------------------
+- Kernel 3.15 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Sat Aug 16 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.10-0
++ update to 3.15.10 (EOL) - stable
+- add drm/radeon: Adding UVD handle basis fps estimation v2
+- http://lists.freedesktop.org/archives/dri-devel/2014-August/065766.html
+- add ReiserFS4 for kernel 3.15
+- /patches-NRJ/0004-reiser4-for-3.15.1.patch
+- /patches-NRJ/0005-3.15.1-reiser4-basic-discard-support.patch
+- SMT Nice 6 > http://ck-hack.blogspot.it/2014/08/smt-nice-3.html
+- SMT/Hyperthreading, nice and scheduling policies: an experimental
+- advanced branch with more responsiveness and realtime behaviour, 
+- although the overall throughput may be slightly decreased.
+- It's effective only when we have cpu equipped with HT(HypeThread)
+- It improves the performance of foreground applications at the expense of backgound ones,
+- your desktop/gui/applications will remain fast even if you run folding@home, mprime, seti@home etc.,
+- but those background tasks will slow down more.
+- ---------------------------------------------------------------------
+- Kernel 3.15 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Fri Aug 08 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.9-1
++ update to 3.15.9 - stable
+- import ASPM fix patch from kernel 3.17 queue to improve powersave
+- to read: http://www.phoronix.com/scan.php?page=news_item&px=MTc0NzE
+- audio powersave: reduced idle time from 15 to 10 seconds
+- configs for kernel realtime have audio powersave disable
+- update TOI (power manager) from release 3.5.7 to 3.5.8  
+- fix the broken support for running 16-bit code (X86_16BIT):
+- to read: http://cateee.net/lkddb/web-lkddb/X86_16BIT.html
+. new keys added to configs for X86_16BIT:
++ CONFIG_X86_16BIT=y
++ CONFIG_X86_ESPFIX32=y
+- ---------------------------------------------------------------------
+- Kernel 3.15 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
 * Fri Aug 01 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.8-1
 + update to 3.15.8 - stable
 - drop patch: x86-x86_32-entry-store-badsys-error-code-in-eax.patch
