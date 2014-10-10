@@ -1768,12 +1768,7 @@ BuildKernel() {
 	%make INSTALL_HDR_PATH=%{temp_root}%_prefix KERNELRELEASE=$KernelVer headers_install
 	# kernel headers for cross toolchains
 	for arch in %{cross_header_archs}; do	
-		if [ "$arch" == "arm" ]; then
-			gnuext=-gnueabi
-		else
-			gnuext=-gnu
-		fi
-		%make SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_vendor}-%{_target_os}$gnuext KERNELRELEASE=$KernelVer headers_install	
+		%make SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
 	done
 
 	# remove /lib/firmware, we use a separate kernel-firmware
