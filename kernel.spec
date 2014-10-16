@@ -1596,7 +1596,7 @@ following platforms:
 %{cross_header_archs}
 	
 %files -n cross-%{name}-headers
-%{_prefix}/*-%{_target_vendor}-%{_target_os}-gnu*/include/*
+%{_prefix}/*-%{_target_os}/include/*
 
 # %endif (???)
 # from 1486-1505 >https://abf.io/openmandriva/kernel/commit/b967a6b9458236d594dac87de97193f0e172c55c
