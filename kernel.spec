@@ -1824,7 +1824,7 @@ SaveDevel() {
 	cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
 
 	# aufs2 has a special file needed
-	cp -fR fs/aufs/magic.mk $TempDevelRoot/fs/aufs
+	#cp -fR fs/aufs/magic.mk $TempDevelRoot/fs/aufs
 
 	for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
 		 mips mn10300 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
@@ -2340,7 +2340,7 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %if %{build_perf}
 
 %if %{mdvver} == 201500
-%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 PYTHON=python2 WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
+%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%__cc PYTHON=python2 WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
 %smake -C tools/perf -s prefix=%{_prefix} man
 %endif
 %if %{mdvver} == 201410
