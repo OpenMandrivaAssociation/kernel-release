@@ -1742,7 +1742,7 @@ BuildKernel() {
 
 	# kirkwood boxes have u-boot
 	if [ "$KernelVer" = "%{kversion}-kirkwood-%{buildrpmrel}" ]; then
-		%kmake uImage
+		%kmake uImage LOADADDR="0x00008000"
 	fi
 
 	# Start installing stuff
