@@ -1834,6 +1834,7 @@ SaveDevel() {
 	%ifnarch %{arm}
 		rm -rf $TempDevelRoot/arch/arm*
 		rm -rf $TempDevelRoot/include/kvm/arm*
+        rm -rf $TempDevelRoot/include/soc
 	%endif
 	%ifnarch %{ix86} x86_64
 		rm -rf $TempDevelRoot/arch/x86
@@ -1897,15 +1898,15 @@ $DevelRoot/include/ras
 $DevelRoot/include/rdma
 $DevelRoot/include/rxrpc
 $DevelRoot/include/scsi
+%ifarch %{arm}
+$DevelRoot/include/soc
+%endif
 $DevelRoot/include/sound
 $DevelRoot/include/target
 $DevelRoot/include/trace
 $DevelRoot/include/uapi
 $DevelRoot/include/video
 $DevelRoot/include/xen
-%ifarch %arm
-$DevelRoot/include/kvm
-%endif
 $DevelRoot/init
 $DevelRoot/ipc
 $DevelRoot/kernel
@@ -2573,15 +2574,13 @@ rm -rf %{buildroot}
 %{_kerneldir}/include/rdma
 %{_kerneldir}/include/rxrpc
 %{_kerneldir}/include/scsi
+%{_kerneldir}/include/soc
 %{_kerneldir}/include/sound
 %{_kerneldir}/include/target
 %{_kerneldir}/include/trace
 %{_kerneldir}/include/uapi
 %{_kerneldir}/include/video
 %{_kerneldir}/include/xen
-%ifarch %{arm}
-%{_kerneldir}/include/kvm
-%endif
 %{_kerneldir}/init
 %{_kerneldir}/ipc
 %{_kerneldir}/kernel
