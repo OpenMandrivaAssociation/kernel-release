@@ -186,7 +186,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %endif
 
 # ARM builds
-%ifarch %{arm}
+%ifarch %{armx}
 %define build_desktop		0
 %define build_netbook		0
 %define build_server		0
@@ -437,7 +437,7 @@ Version: 	%{kversion}
 Release: 	%{rpmrel}
 License: 	GPLv2
 Group: 	 	System/Kernel and hardware
-ExclusiveArch: %{ix86} x86_64 %{arm} aarch64
+ExclusiveArch: %{ix86} x86_64 %{armx}
 ExclusiveOS: 	Linux
 URL:            http://www.kernel.org
 
@@ -1705,7 +1705,7 @@ PrepareKernel() {
 %ifarch	%arm
 	config_dir=arch/arm/configs
 %endif
-%ifarch aarc64
+%ifarch aarch64
 	config_dir=arch/arm64/configs
 %endif
 	echo "Make config for kernel $extension"
