@@ -2341,7 +2341,7 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 
 %if %{mdvver} == 201500
 %smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%__cc PYTHON=python2 WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
-%smake -C tools/perf -s prefix=%{_prefix} man
+%smake -C tools/perf -s prefix=%{_prefix} PYTHON=python2 man
 %endif
 %if %{mdvver} == 201410
 %smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} all
