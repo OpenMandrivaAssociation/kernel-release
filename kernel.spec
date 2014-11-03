@@ -194,6 +194,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 # disable all nrj flavours
 %define build_nrjQL_laptop	0
 %define build_nrjQL_desktop	0
+%define build_nrjQL_server	0
 %define build_nrj_desktop	0
 %define build_nrj_laptop	0
 %define build_kirkwood		1
