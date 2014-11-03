@@ -2,9 +2,9 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 #
 %define kernelversion	3
-%define patchlevel	15
+%define patchlevel	17
 # sublevel is now used for -stable patches
-%define sublevel	10
+%define sublevel	2
 
 # Package release
 %define mibrel		1
@@ -19,7 +19,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kname 		kernel
 
 # Patch tarball tag
-%define ktag		abf
+%define ktag		nicco
 
 %define rpmtag		%{disttag}
 %if %kpatch
@@ -2122,6 +2122,18 @@ cd %src_dir
 sed -i -e 's,CONFIG_EFIVAR_FS=m,CONFIG_EFIVAR_FS=y,g' %{patches_dir}/configs/*.config
 # https://wiki.archlinux.org/index.php/Unified_Extensible_Firmware_Interface
 sed -i -e 's,CONFIG_EFI_VARS=y,CONFIG_EFI_VARS=n,g' %{patches_dir}/configs/*.config
+
+# add some more optimizations requested by TPG
+sed -i -e 's,CONFIG_LOCKDEP_SUPPORT=y,CONFIG_LOCKDEP_SUPPORT=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SLUB_DEBUG=y,CONFIG_SLUB_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_HAVE_DEBUG_KMEMLEAK=y,CONFIG_HAVE_DEBUG_KMEMLEAK=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SCHED_DEBUG=y,CONFIG_SCHED_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SCHEDSTATS=y,CONFIG_SCHEDSTATS=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SND_DEBUG=y,CONFIG_SND_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SND_PCM_XRUN_DEBUG=y,CONFIG_SND_PCM_XRUN_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_FSCACHE_DEBUG=y,CONFIG_FSCACHE_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_CACHEFILES_DEBUG=y,CONFIG_CACHEFILES_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_DYNAMIC_DEBUG=y,CONFIG_DYNAMIC_DEBUG=n,g' %{patches_dir}/configs/*.config
 
 # %{patches_dir}/scripts/apply_patches-vanilla
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
