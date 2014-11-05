@@ -1901,6 +1901,7 @@ $DevelRoot/include/rxrpc
 $DevelRoot/include/scsi
 %ifarch %{arm}
 $DevelRoot/include/soc
+$DevelRoot/include/kvm
 %endif
 $DevelRoot/include/sound
 $DevelRoot/include/target
