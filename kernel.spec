@@ -1902,6 +1902,7 @@ $DevelRoot/include/scsi
 %ifarch %{arm}
 $DevelRoot/include/soc
 $DevelRoot/include/kvm
+$DevelRoot/include/kvm/*.h
 %endif
 $DevelRoot/include/sound
 $DevelRoot/include/target
