@@ -1865,7 +1865,7 @@ cat > $kernel_devel_files <<EOF
 %dir $DevelRoot/include
 $DevelRoot/3rdparty
 $DevelRoot/Documentation
-%ifarch %{arm}
+%ifarch %{armx}
 $DevelRoot/arch/arm
 $DevelRoot/arch/arm64
 %endif
