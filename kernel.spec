@@ -1825,7 +1825,7 @@ SaveDevel() {
 	cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
 
 	# aufs2 has a special file needed
-	#cp -fR fs/aufs/magic.mk $TempDevelRoot/fs/aufs
+	cp -fR fs/aufs/magic.mk $TempDevelRoot/fs/aufs
 
 	for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
 		 mips mn10300 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
