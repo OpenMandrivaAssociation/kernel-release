@@ -4,7 +4,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	17
 # sublevel is now used for -stable patches
-%define sublevel	7
+%define sublevel	8
 
 # Package release
 %define mibrel		1
@@ -2647,6 +2647,17 @@ rm -rf %{buildroot}
 
 
 %changelog
+
+* Mon Jan 12 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.17.8-ONE
++ update to 3.17.8 - stable
+- ---------------------------------------------------------------------
+- Kernel 3.17 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-QL) will be used for development and experimental flavours,
+- instead (-ONE) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
 
 * Sun Dec 28 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.17.7-ONE
 -+ update to 3.17.7 - stable
