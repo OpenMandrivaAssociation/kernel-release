@@ -1664,8 +1664,8 @@ find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
 export LD="%{_target_platform}-ld.bfd"
 export LDFLAGS="--hash-style=sysv --build-id=none"
 # (tpg) 
-export CC=gcc
-export CXX=g++
+#export CC=gcc
+#export CXX=g++
 %endif
 
 %if %{mdvver} == 201400
