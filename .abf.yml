@@ -1,5 +1,4 @@
 sources:
-  "linux-3.17.8-nicco1.tar.xz": fe552169a110a93d0041bd3ff34fd0676184868a
-  "linux-3.17.tar.xz": ad22d0b0979336fa0448268f0febd45be0279288
-  "patch-3.17.8.xz": ebcee149e792a8edaf115025322ddb3ca48b0062
-
+  "linux-3.18.1-nicco1.tar.xz": 544d686cc2c51b4df80a0cbea2c07bc78b39a0fd
+  "linux-3.18.tar.xz": 4557ef53c89fe70a9da230ae1e6542856d8b0a94
+  "patch-3.18.1.xz": 85436cd73903042d21c1dffcd6c682772ba2d3ed
