@@ -657,7 +657,7 @@ BuildRequires:		newt-devel
 BuildRequires:		perl-devel
 # BuildRequires:	perl(ExtUtils::Embed)
 BuildRequires:		pkgconfig(gtk+-2.0)
-BuildRequires:		python-devel
+BuildRequires:		pkgconfig(python2)
 BuildRequires:		xmlto
 BuildRequires:		zlib-devel
 %endif
