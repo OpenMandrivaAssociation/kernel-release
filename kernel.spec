@@ -1663,9 +1663,9 @@ find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
 # Make sure we don't use gold
 export LD="%{_target_platform}-ld.bfd"
 export LDFLAGS="--hash-style=sysv --build-id=none"
-# (tpg) 
-export CC=%{cc}
-export CXX=%{cxx}
+# (tpg)
+export CC=%{__cc}
+export CXX=%{__cxx}
 %endif
 
 %if %{mdvver} == 201400
@@ -1738,7 +1738,7 @@ BuildKernel() {
 
 	echo "Building kernel $KernelVer"
 
-	%kmake -s all
+	%kmake -s all V=1
 
 	# kirkwood boxes have u-boot
 	if [ "$KernelVer" = "%{kversion}-kirkwood-%{buildrpmrel}" ]; then
@@ -2485,10 +2485,10 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %if %{build_perf}
 
 # perf tool binary and supporting scripts/binaries
-make -C tools/perf -s V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=python2 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
+make -C tools/perf -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=python2 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
 
 # perf man pages (note: implicit rpm magic compresses them later)
-make -C tools/perf  -s V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=python2 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
+make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=python2 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
 %endif
 
 
@@ -2498,7 +2498,7 @@ make -C tools/perf  -s V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=python2 HAVE_CPL
 %if %{build_cpupower}
 
 %if %{mdvver} == 201500
-%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false LDFLAGS="%optflags" install
+%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%optflags" install
 %endif
 %if %{mdvver} == 201410
 make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false install
