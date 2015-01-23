@@ -337,6 +337,9 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 ### Linker start1 > Check point to build for omv or rosa ###
 ############################################################
 %if %{mdvver} == 201500
+# (tpg)
+export CC=%{__cc}
+export CXX=%{__cxx}
 %if %cross_compiling
 %if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
 %define kmake %make ARCH=%target_arch CROSS_COMPILE=%(echo %__cc |sed -e 's,-gcc,-,') CC="$CC" LD="$LD" LDFLAGS="$LDFLAGS"
@@ -2346,8 +2349,8 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %if %{build_perf}
 
 %if %{mdvver} == 201500
-%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%__cc PYTHON=python2 WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
-%smake -C tools/perf -s prefix=%{_prefix} PYTHON=python2 man
+%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%__cc PYTHON=%{__python2} WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
+%smake -C tools/perf -s CC=%__cc prefix=%{_prefix} PYTHON=%{__python2} man
 %endif
 %if %{mdvver} == 201410
 %smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} all
@@ -2485,10 +2488,10 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %if %{build_perf}
 
 # perf tool binary and supporting scripts/binaries
-make -C tools/perf -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=python2 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
+make -C tools/perf -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__python2} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
 
 # perf man pages (note: implicit rpm magic compresses them later)
-make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=python2 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
+make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__python2} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
 %endif
 
 
@@ -3051,7 +3054,7 @@ rm -rf %{buildroot}
   * 0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r3-3.13.patch
   * 0002-block-introduce-the-BFQ-v7r3-I-O-sched-for-3.13.patch
   * 0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r3-for-.patch
-- suggestion / request received by Per Øyvind Karlsen (POK)
+- suggestion / request received by Per Oyvind Karlsen (POK)
   * CONFIG_ACPI_CUSTOM_DSDT=y
 - ---------------------------------------------------------------------
 - Kernel 3.13 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
@@ -3561,7 +3564,7 @@ rm -rf %{buildroot}
 - add: /patches-NRJ/0004-block-Switch-from-BFQ-v6r2-for-3.10.0-to-BFQ-v6r2-fo.patch
 - sync: /patches
 - update: /patches-QL/tuxonice-for-linux-3.10.9-2013-08-21.patch
-- fix conflicts as suggested by Tomasz ﻿Paweł﻿ Gajc: dkms-nvidia-current < 325.15-1
+- fix conflicts as suggested by Tomasz ?Paweł? Gajc: dkms-nvidia-current < 325.15-1
 - ---------------------------------------------------------------------
 - Kernel 3.10 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
@@ -3799,7 +3802,7 @@ rm -rf %{buildroot}
 - update kernel scripts
 - we've received some good suggestions, and all have been accepted
 - on mainline nrj kernels we apply again > create_configs-withBFQ
-- 1> suggestions and requests received by Per Øyvind Karlsen (POK)
+- 1> suggestions and requests received by Per Oyvind Karlsen (POK)
   * TOI (tuxonice) was only in laptop/netbook, now in all flavours
   * CONFIG_PM_AUTOSLEEP=y 
   * CONFIG_SFI =m
