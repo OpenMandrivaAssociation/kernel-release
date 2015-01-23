@@ -4,7 +4,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	18
 # sublevel is now used for -stable patches
-%define sublevel	1
+%define sublevel	2
 
 # Package release
 %define mibrel		1
@@ -2645,8 +2645,24 @@ rm -rf %{buildroot}
 %{_includedir}/cpufreq.h
 %endif
 
-
 %changelog
+
+* Fri Jan 23 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.2-ONE
++ update to 3.18.2 - stable 
+- add a patch to fix performance issue:
+- x86-vdso-Use-asm-volatile-in-__getcpu.patch
+- add a patch for iwlwifi:
+- net-wireless-iwlwifi-mvm-fix-Rx-with-both-chains.patch
+- ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Wed Jan 21 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.1-ONE
 + update to 3.18.1 - stable
 + it's first version of "nrj/nrjQL" stable 3.18.x, in early development
 - stage, so, it's only for testing purposes, please, dont use this srpm,
