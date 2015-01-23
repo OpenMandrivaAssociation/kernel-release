@@ -337,9 +337,6 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 ### Linker start1 > Check point to build for omv or rosa ###
 ############################################################
 %if %{mdvver} == 201500
-# (tpg)
-export CC=%{__cc}
-export CXX=%{__cxx}
 %if %cross_compiling
 %if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
 %define kmake %make ARCH=%target_arch CROSS_COMPILE=%(echo %__cc |sed -e 's,-gcc,-,') CC="$CC" LD="$LD" LDFLAGS="$LDFLAGS"
@@ -352,10 +349,10 @@ export CXX=%{__cxx}
 %if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
 %define kmake %make CC="$CC" LD="$LD" LDFLAGS="$LDFLAGS"
 %else
-%define kmake %make LD="$LD" LDFLAGS="$LDFLAGS"
+%define kmake %make CC=%{_cc} CXX=%{__cxx} LD="$LD" LDFLAGS="$LDFLAGS"
 %endif
 # there are places where parallel make don't work
-%define smake make LD="$LD" LDFLAGS="$LDFLAGS"
+%define smake make CC=%{_cc} CXX=%{__cxx} LD="$LD" LDFLAGS="$LDFLAGS"
 %endif
 %endif
 
