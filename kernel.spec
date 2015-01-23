@@ -349,10 +349,10 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
 %define kmake %make CC="$CC" LD="$LD" LDFLAGS="$LDFLAGS"
 %else
-%define kmake %make CC=%{_cc} CXX=%{__cxx} LD="$LD" LDFLAGS="$LDFLAGS"
+%define kmake %make CC=%{_-cc} CXX=%{__cxx} LD="$LD" LDFLAGS="$LDFLAGS"
 %endif
 # there are places where parallel make don't work
-%define smake make CC=%{_cc} CXX=%{__cxx} LD="$LD" LDFLAGS="$LDFLAGS"
+%define smake make CC=%{__cc} CXX=%{__cxx} LD="$LD" LDFLAGS="$LDFLAGS"
 %endif
 %endif
 
