@@ -349,10 +349,10 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
 %define kmake %make CC="$CC" LD="$LD" LDFLAGS="$LDFLAGS"
 %else
-%define kmake %make CC=%{__cc} CXX=%{__cxx} LD="$LD" LDFLAGS="$LDFLAGS"
+%define kmake %make LD="$LD" LDFLAGS="$LDFLAGS"
 %endif
 # there are places where parallel make don't work
-%define smake make CC=%{__cc} CXX=%{__cxx} LD="$LD" LDFLAGS="$LDFLAGS"
+%define smake make LD="$LD" LDFLAGS="$LDFLAGS"
 %endif
 %endif
 
@@ -618,7 +618,7 @@ Autoreqprov: 	no
 
 BuildRequires: 	bc
 BuildRequires: 	binutils
-#BuildRequires: 	gcc
+BuildRequires: 	gcc
 # For power tools
 BuildRequires:	pkgconfig(ncurses)
 
@@ -1663,9 +1663,9 @@ find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
 # Make sure we don't use gold
 export LD="%{_target_platform}-ld.bfd"
 export LDFLAGS="--hash-style=sysv --build-id=none"
-# (tpg)
-export CC=%{__cc}
-export CXX=%{__cxx}
+# (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
+export CC=gcc
+export CXX=g++
 %endif
 
 %if %{mdvver} == 201400
@@ -1738,7 +1738,7 @@ BuildKernel() {
 
 	echo "Building kernel $KernelVer"
 
-	%kmake -s all V=1
+	%kmake -s all
 
 	# kirkwood boxes have u-boot
 	if [ "$KernelVer" = "%{kversion}-kirkwood-%{buildrpmrel}" ]; then
