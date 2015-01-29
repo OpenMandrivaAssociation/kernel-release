@@ -29,7 +29,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		1
+%define rpmrel		2
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -1666,6 +1666,7 @@ export LDFLAGS="--hash-style=sysv --build-id=none"
 # (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
 export CC=gcc
 export CXX=g++
+export CFLAGS="$CFLAGS -fwhole-program -flto"
 %endif
 
 %if %{mdvver} == 201400
