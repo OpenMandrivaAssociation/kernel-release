@@ -1,5 +1,8 @@
 Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
+# utils/cpuidle-info.c:193: error: undefined reference to 'cpufreq_cpu_exists'
+%define _disable_ld_no_undefined 1
+
 #
 %define kernelversion	3
 %define patchlevel	18
