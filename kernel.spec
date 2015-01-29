@@ -2140,6 +2140,7 @@ sed -i -e 's,CONFIG_SND_PCM_XRUN_DEBUG=y,CONFIG_SND_PCM_XRUN_DEBUG=n,g' %{patche
 sed -i -e 's,CONFIG_FSCACHE_DEBUG=y,CONFIG_FSCACHE_DEBUG=n,g' %{patches_dir}/configs/*.config
 sed -i -e 's,CONFIG_CACHEFILES_DEBUG=y,CONFIG_CACHEFILES_DEBUG=n,g' %{patches_dir}/configs/*.config
 sed -i -e 's,CONFIG_DYNAMIC_DEBUG=y,CONFIG_DYNAMIC_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,# CONFIG_CC_OPTIMIZE_FOR_SIZE is not set,CONFIG_CC_OPTIMIZE_FOR_SIZE=y,g' %{patches_dir}/configs/*.config
 
 # %{patches_dir}/scripts/apply_patches-vanilla
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
