@@ -7,7 +7,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	18
 # sublevel is now used for -stable patches
-%define sublevel	3
+%define sublevel	5
 
 # Package release
 %define mibrel		1
@@ -32,7 +32,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		2
+%define rpmrel		1
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -1666,10 +1666,6 @@ find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
 # Make sure we don't use gold
 export LD="%{_target_platform}-ld.bfd"
 export LDFLAGS="--hash-style=sysv --build-id=none"
-# (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
-export CC=gcc
-export CXX=g++
-export CFLAGS="$CFLAGS -fwhole-program -flto"
 %endif
 
 %if %{mdvver} == 201400
@@ -1741,8 +1737,12 @@ BuildKernel() {
 	KernelVer=$1
 
 	echo "Building kernel $KernelVer"
-
-	%kmake -s all
+	%if %{mdvver} == 201500
+	    # (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
+	    %kmake -s all CC=gcc CXX=g++ CFLAGS="$CFLAGS -fwhole-program -flto"
+	%else
+	    %kmake -s all
+	%fi
 
 	# kirkwood boxes have u-boot
 	if [ "$KernelVer" = "%{kversion}-kirkwood-%{buildrpmrel}" ]; then
