@@ -1742,7 +1742,7 @@ BuildKernel() {
 	    %kmake -s all CC=gcc CXX=g++ CFLAGS="$CFLAGS -fwhole-program -flto"
 	%else
 	    %kmake -s all
-	%fi
+	%endif
 
 	# kirkwood boxes have u-boot
 	if [ "$KernelVer" = "%{kversion}-kirkwood-%{buildrpmrel}" ]; then
