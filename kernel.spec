@@ -6,9 +6,9 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 #
 %define kernelversion	3
-%define patchlevel	15
+%define patchlevel	18
 # sublevel is now used for -stable patches
-%define sublevel	10
+%define sublevel	15
 
 # Package release
 %define mibrel		1
@@ -33,7 +33,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		2
+%define rpmrel		1
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -94,7 +94,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 %define build_desktop			0
 %define build_netbook			0
-%define build_server			1
+%define build_server			0
 
 %ifarch %{ix86}
 %define build_desktop586		0
@@ -2120,9 +2120,12 @@ sed -i -e 's,CONFIG_EFIVAR_FS=m,CONFIG_EFIVAR_FS=y,g' %{patches_dir}/configs/*.c
 # https://wiki.archlinux.org/index.php/Unified_Extensible_Firmware_Interface
 sed -i -e 's,CONFIG_EFI_VARS=y,CONFIG_EFI_VARS=n,g' %{patches_dir}/configs/*.config
 
-# add some more optimizations
+# add some more optimizations requested by TPG
 sed -i -e 's,CONFIG_LOCKDEP_SUPPORT=y,CONFIG_LOCKDEP_SUPPORT=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_DEBUG_KERNEL=y,CONFIG_DEBUG_KERNEL=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SLAB_DEBUG=y,CONFIG_SLAB_DEBUG=n,g' %{patches_dir}/configs/*.config
 sed -i -e 's,CONFIG_SLUB_DEBUG=y,CONFIG_SLUB_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SLUB_DEBUG_ON=y,CONFIG_SLUB_DEBUG_ON=n,g' %{patches_dir}/configs/*.config
 sed -i -e 's,CONFIG_HAVE_DEBUG_KMEMLEAK=y,CONFIG_HAVE_DEBUG_KMEMLEAK=n,g' %{patches_dir}/configs/*.config
 sed -i -e 's,CONFIG_SCHED_DEBUG=y,CONFIG_SCHED_DEBUG=n,g' %{patches_dir}/configs/*.config
 sed -i -e 's,CONFIG_SCHEDSTATS=y,CONFIG_SCHEDSTATS=n,g' %{patches_dir}/configs/*.config
@@ -2131,6 +2134,7 @@ sed -i -e 's,CONFIG_SND_PCM_XRUN_DEBUG=y,CONFIG_SND_PCM_XRUN_DEBUG=n,g' %{patche
 sed -i -e 's,CONFIG_FSCACHE_DEBUG=y,CONFIG_FSCACHE_DEBUG=n,g' %{patches_dir}/configs/*.config
 sed -i -e 's,CONFIG_CACHEFILES_DEBUG=y,CONFIG_CACHEFILES_DEBUG=n,g' %{patches_dir}/configs/*.config
 sed -i -e 's,CONFIG_DYNAMIC_DEBUG=y,CONFIG_DYNAMIC_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,# CONFIG_CC_OPTIMIZE_FOR_SIZE is not set,CONFIG_CC_OPTIMIZE_FOR_SIZE=y,g' %{patches_dir}/configs/*.config
 
 
 # %{patches_dir}/scripts/apply_patches-vanilla
