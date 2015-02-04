@@ -23,7 +23,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kname 		kernel
 
 # Patch tarball tag
-%define ktag		abf
+%define ktag		nicco
 
 %define rpmtag		%{disttag}
 %if %kpatch
