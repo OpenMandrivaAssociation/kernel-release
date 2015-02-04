@@ -1,4 +1,4 @@
 sources:
-  "linux-3.15.10-abf1.tar.xz": 79277f4e085f9c44fab71e20b8667b35ba8e682b
-  "linux-3.15.tar.xz": f21a27b36ad7169596b0b809707f1442e6d2bb89
-  "patch-3.15.10.xz": 99d6a0c3d4b33d3cd64ea7ac6fd705c79031ecfc
+  "linux-3.18.5-nicco1.tar.xz": 2e88d8bc1de72e11e9d3796ddb18b59ba72b8752
+  "linux-3.18.tar.xz": 4557ef53c89fe70a9da230ae1e6542856d8b0a94
+  "patch-3.18.5.xz": f13c27974ca7d40b9ba59efd0193d915d595813c
