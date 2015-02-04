@@ -129,20 +129,20 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI
 
 %define build_nrjQL_desktop		1
-%define build_nrjQL_realtime		0
-%define build_nrjQL_laptop		0
-%define build_nrjQL_netbook		0
-%define build_nrjQL_server		0
+%define build_nrjQL_realtime		1
+%define build_nrjQL_laptop		1
+%define build_nrjQL_netbook		1
+%define build_nrjQL_server		1
 %define build_nrjQL_server_games	0
 %define build_nrjQL_server_computing	0
 
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
 
 %ifarch %{ix86}
-%define build_nrjQL_desktop_pae		0
-%define build_nrjQL_realtime_pae	0
-%define build_nrjQL_laptop_pae		0
-%define build_nrjQL_netbook_pae		0
+%define build_nrjQL_desktop_pae		1
+%define build_nrjQL_realtime_pae	1
+%define build_nrjQL_laptop_pae		1
+%define build_nrjQL_netbook_pae		1
 %endif
 
 # MIB experimental "32bit cpu level" optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
@@ -1533,20 +1533,6 @@ Obsoletes:	cpufreq cpufrequtils
 %description -n cpupower
 the cpupower tools.
 
-%post -n cpupower
-# %systemd_post cpupower
-if [ $1 -ge 0 ]; then
-        /bin/systemctl enable cpupower >/dev/null 2>&1 || :
-        /bin/systemctl start cpupower >/dev/null 2>&1 || :
-fi
-
-%preun -n cpupower
-# %systemd_preun cpupower
-if [ $1 -eq 0 ]; then
-        /bin/systemctl --no-reload disable cpupower > /dev/null 2>&1 || :
-        /bin/systemctl stop cpupower > /dev/null 2>&1 || :
-fi
-
 %package -n cpupower-devel
 Version:	%{kversion}
 Release:	%{rpmrel}
@@ -1664,7 +1650,7 @@ find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
 ############################################################
 %if %{mdvver} == 201500
 # Make sure we don't use gold
-export LD="%{_target_platform}-ld.gold"
+export LD="%{_target_platform}-ld.bfd"
 export LDFLAGS="--hash-style=sysv --build-id=none"
 %endif
 
