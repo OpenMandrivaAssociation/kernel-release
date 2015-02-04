@@ -32,7 +32,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		1
+%define rpmrel		2
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -1664,7 +1664,7 @@ find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
 ############################################################
 %if %{mdvver} == 201500
 # Make sure we don't use gold
-export LD="%{_target_platform}-ld.bfd"
+export LD="%{_target_platform}-ld.gold"
 export LDFLAGS="--hash-style=sysv --build-id=none"
 %endif
 
@@ -1767,7 +1767,7 @@ BuildKernel() {
 
 	# modules
 	install -d %{temp_modules}/$KernelVer
-	%smake INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer modules_install
+	%smake INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer INSTALL_MOD_STRIP=1 modules_install
 
 	# headers	
 	%make INSTALL_HDR_PATH=%{temp_root}%_prefix KERNELRELEASE=$KernelVer headers_install
