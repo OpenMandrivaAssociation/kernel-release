@@ -8,7 +8,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	18
 # sublevel is now used for -stable patches
-%define sublevel	15
+%define sublevel	5
 
 # Package release
 %define mibrel		1
