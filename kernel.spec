@@ -1652,6 +1652,7 @@ find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
 # Make sure we don't use gold
 export LD="%{_target_platform}-ld.bfd"
 export LDFLAGS="--hash-style=sysv --build-id=none"
+export PYTHON=%{__python2}
 %endif
 
 %if %{mdvver} == 201400
@@ -2637,6 +2638,34 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+
+* Mon Feb 02 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.5-ONE
++ update to 3.18.5 - stable 
+- drop some patches patches that now are already in mainstream 
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Sat Jan 31 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.4-ONE
++ update to 3.18.4 - stable 
+- add a new key > Fibre Channel over Ethernet (FCoE) (I40E_FCOE) [N/y/?] (NEW)
+- currently its first setup value as disabled > # CONFIG_I40E_FCOE is not set
+- drop some patches patches that now are already in mainstream 
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
 
 * Tue Jan 27 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.3-ONE
 + update to 3.18.3 - stable 
