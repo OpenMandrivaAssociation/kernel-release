@@ -1658,7 +1658,6 @@ find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
 # Make sure we don't use gold
 export LD="%{_target_platform}-ld.bfd"
 export LDFLAGS="--hash-style=sysv --build-id=none"
-export PYTHON=%{__python2}
 %endif
 
 %if %{mdvver} == 201400
@@ -2339,8 +2338,8 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %if %{build_perf}
 
 %if %{mdvver} == 201500
-%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%__cc PYTHON=%{__python2} WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
-%smake -C tools/perf -s CC=%__cc prefix=%{_prefix} PYTHON=%{__python2} man
+%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%__cc  WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
+%smake -C tools/perf -s CC=%__cc prefix=%{_prefix} man
 %endif
 %if %{mdvver} == 201410
 %smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} all
@@ -2478,10 +2477,10 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %if %{build_perf}
 
 # perf tool binary and supporting scripts/binaries
-make -C tools/perf -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__python2} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
+make -C tools/perf -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
 
 # perf man pages (note: implicit rpm magic compresses them later)
-make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__python2} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
+make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
 %endif
 
 
