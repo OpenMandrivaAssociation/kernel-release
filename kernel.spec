@@ -1,8 +1,7 @@
 Packager: Nicolo' Costanza <abitrules@yahoo.it>
-%ifarch %ix86
-# (tpg) disable for a while
-#define __noautoprov 'kmod\\(.*\\)'
-%endif
+
+# utils/cpuidle-info.c:193: error: undefined reference to 'cpufreq_cpu_exists'
+%define _disable_ld_no_undefined 1
 
 #
 %define kernelversion	3
@@ -104,17 +103,17 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 # MIB low latency optimized flavours called "nrj V.5" plus 32bit PAE versions
 
-%define build_nrj_desktop		1
+%define build_nrj_desktop		0
 %define build_nrj_realtime		0
-%define build_nrj_server		1
-%define build_nrj_laptop		1
+%define build_nrj_server		0
+%define build_nrj_laptop		0
 %define build_nrj_netbook		0
 
 %ifarch %{ix86}
 %define build_nrj_desktop586		0
-%define build_nrj_desktop_pae		1
+%define build_nrj_desktop_pae		0
 %define build_nrj_realtime_pae		0
-%define build_nrj_laptop_pae		1
+%define build_nrj_laptop_pae		0
 %define build_nrj_netbook_pae		0
 %endif
 
@@ -190,15 +189,22 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %endif
 
 # ARM builds
-%ifarch %{arm}
+%ifarch %{armx}
 %define build_desktop		0
 %define build_netbook		0
 %define build_server		0
 %define build_iop32x		0
+# disable all nrj flavours
+%define build_nrjQL_laptop	0
+%define build_nrjQL_desktop	0
+%define build_nrjQL_server	0
+%define build_nrj_desktop	0
+%define build_nrj_laptop	0
 %define build_kirkwood		1
 %define build_versatile		1
 # no cpupower tools on arm yet
 %define build_cpupower		0
+%define build_perf		0
 # arm is currently not using xz
 %define build_modxz		0
 %endif
@@ -435,7 +441,7 @@ Version: 	%{kversion}
 Release: 	%{rpmrel}
 License: 	GPLv2
 Group: 	 	System/Kernel and hardware
-ExclusiveArch: %{ix86} x86_64 %{arm} aarch64
+ExclusiveArch: %{ix86} x86_64 %{armx}
 ExclusiveOS: 	Linux
 URL:            http://www.kernel.org
 
@@ -654,7 +660,7 @@ BuildRequires:		newt-devel
 BuildRequires:		perl-devel
 # BuildRequires:	perl(ExtUtils::Embed)
 BuildRequires:		pkgconfig(gtk+-2.0)
-BuildRequires:		python-devel
+BuildRequires:		pkgconfig(python2)
 BuildRequires:		xmlto
 BuildRequires:		zlib-devel
 %endif
@@ -1528,18 +1534,10 @@ Obsoletes:	cpufreq cpufrequtils
 the cpupower tools.
 
 %post -n cpupower
-# %systemd_post cpupower
-if [ $1 -ge 0 ]; then
-        /bin/systemctl enable cpupower >/dev/null 2>&1 || :
-        /bin/systemctl start cpupower >/dev/null 2>&1 || :
-fi
+%systemd_post cpupower
 
 %preun -n cpupower
-# %systemd_preun cpupower
-if [ $1 -eq 0 ]; then
-        /bin/systemctl --no-reload disable cpupower > /dev/null 2>&1 || :
-        /bin/systemctl stop cpupower > /dev/null 2>&1 || :
-fi
+%systemd_preun cpupower
 
 %package -n cpupower-devel
 Version:	%{kversion}
@@ -1594,7 +1592,7 @@ following platforms:
 %{cross_header_archs}
 	
 %files -n cross-%{name}-headers
-%{_prefix}/*-%{_target_vendor}-%{_target_os}-gnu*/include/*
+%{_prefix}/*-%{_target_os}/include/*
 
 # %endif (???)
 # from 1486-1505 >https://abf.io/openmandriva/kernel/commit/b967a6b9458236d594dac87de97193f0e172c55c
@@ -1660,6 +1658,7 @@ find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
 # Make sure we don't use gold
 export LD="%{_target_platform}-ld.bfd"
 export LDFLAGS="--hash-style=sysv --build-id=none"
+export PYTHON=%{__python2}
 %endif
 
 %if %{mdvver} == 201400
@@ -1700,7 +1699,7 @@ PrepareKernel() {
 %ifarch	%arm
 	config_dir=arch/arm/configs
 %endif
-%ifarch aarc64
+%ifarch aarch64
 	config_dir=arch/arm64/configs
 %endif
 	echo "Make config for kernel $extension"
@@ -1731,12 +1730,11 @@ BuildKernel() {
 	KernelVer=$1
 
 	echo "Building kernel $KernelVer"
-
 	%kmake -s all
 
 	# kirkwood boxes have u-boot
 	if [ "$KernelVer" = "%{kversion}-kirkwood-%{buildrpmrel}" ]; then
-		%kmake uImage
+		%kmake uImage LOADADDR="0x00008000"
 	fi
 
 	# Start installing stuff
@@ -1759,16 +1757,11 @@ BuildKernel() {
 	install -d %{temp_modules}/$KernelVer
 	%smake INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer modules_install
 
-	# headers	
+	# headers
 	%make INSTALL_HDR_PATH=%{temp_root}%_prefix KERNELRELEASE=$KernelVer headers_install
 	# kernel headers for cross toolchains
 	for arch in %{cross_header_archs}; do	
-		if [ "$arch" == "arm" ]; then
-			gnuext=-gnueabi
-		else
-			gnuext=-gnu
-		fi
-		%make SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_vendor}-%{_target_os}$gnuext KERNELRELEASE=$KernelVer headers_install	
+		%make SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
 	done
 
 	# remove /lib/firmware, we use a separate kernel-firmware
@@ -1834,6 +1827,7 @@ SaveDevel() {
 	%ifnarch %{arm}
 		rm -rf $TempDevelRoot/arch/arm*
 		rm -rf $TempDevelRoot/include/kvm/arm*
+        rm -rf $TempDevelRoot/include/soc
 	%endif
 	%ifnarch %{ix86} x86_64
 		rm -rf $TempDevelRoot/arch/x86
@@ -1863,7 +1857,7 @@ cat > $kernel_devel_files <<EOF
 %dir $DevelRoot/include
 $DevelRoot/3rdparty
 $DevelRoot/Documentation
-%ifarch %{arm}
+%ifarch %{armx}
 $DevelRoot/arch/arm
 $DevelRoot/arch/arm64
 %endif
@@ -1897,6 +1891,10 @@ $DevelRoot/include/ras
 $DevelRoot/include/rdma
 $DevelRoot/include/rxrpc
 $DevelRoot/include/scsi
+%ifarch %{arm}
+$DevelRoot/include/soc
+$DevelRoot/include/kvm
+%endif
 $DevelRoot/include/sound
 $DevelRoot/include/target
 $DevelRoot/include/trace
@@ -2136,7 +2134,6 @@ sed -i -e 's,CONFIG_CACHEFILES_DEBUG=y,CONFIG_CACHEFILES_DEBUG=n,g' %{patches_di
 sed -i -e 's,CONFIG_DYNAMIC_DEBUG=y,CONFIG_DYNAMIC_DEBUG=n,g' %{patches_dir}/configs/*.config
 sed -i -e 's,# CONFIG_CC_OPTIMIZE_FOR_SIZE is not set,CONFIG_CC_OPTIMIZE_FOR_SIZE=y,g' %{patches_dir}/configs/*.config
 
-
 # %{patches_dir}/scripts/apply_patches-vanilla
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
 
@@ -2342,8 +2339,8 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %if %{build_perf}
 
 %if %{mdvver} == 201500
-%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} all
-%smake -C tools/perf -s prefix=%{_prefix} man
+%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%__cc PYTHON=%{__python2} WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
+%smake -C tools/perf -s CC=%__cc prefix=%{_prefix} PYTHON=%{__python2} man
 %endif
 %if %{mdvver} == 201410
 %smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} all
@@ -2481,10 +2478,10 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %if %{build_perf}
 
 # perf tool binary and supporting scripts/binaries
-make -C tools/perf -s V=1 DESTDIR=%{buildroot} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
+make -C tools/perf -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__python2} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
 
 # perf man pages (note: implicit rpm magic compresses them later)
-make -C tools/perf  -s V=1 DESTDIR=%{buildroot} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
+make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__python2} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
 %endif
 
 
@@ -2494,7 +2491,7 @@ make -C tools/perf  -s V=1 DESTDIR=%{buildroot} HAVE_CPLUS_DEMANGLE=1 prefix=%{_
 %if %{build_cpupower}
 
 %if %{mdvver} == 201500
-%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false LDFLAGS="%optflags" install
+%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%optflags" install
 %endif
 %if %{mdvver} == 201410
 make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false install
@@ -2575,6 +2572,7 @@ rm -rf %{buildroot}
 %{_kerneldir}/include/rdma
 %{_kerneldir}/include/rxrpc
 %{_kerneldir}/include/scsi
+%{_kerneldir}/include/soc
 %{_kerneldir}/include/sound
 %{_kerneldir}/include/target
 %{_kerneldir}/include/trace
@@ -2640,15 +2638,14 @@ rm -rf %{buildroot}
 %{_includedir}/cpufreq.h
 %endif
 
-
 %changelog
 
-* Fri Sep 26 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.10-2
-+ update to 3.15.10 (EOL) - stable (replacement release)
-- fix two EFI keys
-- less debug keys
+* Mon Feb 02 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.5-ONE
++ update to 3.18.5 - stable 
+- drop some patches patches that now are already in mainstream 
+- small fixes and cleanups
 - ---------------------------------------------------------------------
-- Kernel 3.15 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
 - The rel (-1) (mainline serie), with official kernel sources and addons,
 - the rel (-69) will be used for development and experimental flavours,
@@ -2656,7 +2653,217 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Sat Aug 30 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.10-1
+* Sat Jan 31 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.4-ONE
++ update to 3.18.4 - stable 
+- add a new key > Fibre Channel over Ethernet (FCoE) (I40E_FCOE) [N/y/?] (NEW)
+- currently its first setup value as disabled > # CONFIG_I40E_FCOE is not set
+- drop some patches patches that now are already in mainstream 
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Tue Jan 27 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.3-ONE
++ update to 3.18.3 - stable 
+- drop # block fixes patches that now are already in mainstream 
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Fri Jan 23 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.2-ONE
++ update to 3.18.2 - stable 
+- add a patch to fix performance issue:
+- x86-vdso-Use-asm-volatile-in-__getcpu.patch
+- add a patch for iwlwifi:
+- net-wireless-iwlwifi-mvm-fix-Rx-with-both-chains.patch
+- ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Wed Jan 21 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.1-ONE
++ update to 3.18.1 - stable
++ it's first version of "nrj/nrjQL" stable 3.18.x, in early development
+- stage, so, it's only for testing purposes, please, dont use this srpm,
+- for your daily PC working, because is still to fix all over!!!
+- all the defconfigs have been prepared for the 3.18 series
+- all the patches have been added/update for the 3.18 series
+- all the kernel specs have been updated to the 3.18 series
+- all custom openmandriva/rosa features have been backported from previous
+- ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Mon Jan 12 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.17.8-ONE
++ update to 3.17.8 - stable
+- ---------------------------------------------------------------------
+- Kernel 3.17 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-QL) will be used for development and experimental flavours,
+- instead (-ONE) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Sun Dec 28 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.17.7-ONE
+-+ update to 3.17.7 - stable
+- update BFQ patches from v7r6 to v7r7 to prevent an occasional memory leak
+- add AUFS support (there is a new key, currently disabled):
+- File-based Hierarchical Storage Management (AUFS_FHSM): set as "disabled"
+- add OverlayFS code being merged in upstream 3.18
+- a request from POK: CONFIG_SATA_SIL changed from =m to =y
+- netlink: Re-add locking to netlink_lookup() and seq walker
+  (fixes latency regression)
+- input: i8042 - touchpad quirks for Fujitsu Lifebook A(H)544
+- ext4: fix oops when loading block bitmap failed
+- saa7146: Create a device name before it's used
+- drm/i915: Do not store the error pointer for a failed userptr registration
+- drm/i915: Do not leak pages when freeing userptr objects
+- drm/radeon/dpm: disable ulv support on SI
+- drm/radeon: dpm fixes for asrock systems
+- lib/scatterlist: fix memory leak with scsi-mq
+- revert 'block: all blk-mq requests are tagged'
+- scsi: set REQ_QUEUE for the blk-mq case
+- revert 'ACPI / EC: Add support to disallow QR_EC to be issued before
+  completing previous QR_EC'
+- ACPI / EC: Fix regression due to conflicting firmware behavior between
+  Samsung and Acer
+- rcu: Provide counterpart to rcu_dereference() for non-RCU situations
+- add ahci, alsa, i2c support for Intel Sunrise Point PCH / Skylake
+- ---------------------------------------------------------------------
+- Kernel 3.17 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-QL) will be used for development and experimental flavours,
+- instead (-ONE) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Sun Dec 14 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.17.6-ONE
++ update to 3.17.6 - stable
+- ---------------------------------------------------------------------
+- Kernel 3.17 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-QL) will be used for development and experimental flavours,
+- instead (-ONE) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Sat Dec 06 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.17.5-ONE
++ update to 3.17.5 - stable
+- ---------------------------------------------------------------------
+- Kernel 3.17 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-QL) will be used for development and experimental flavours,
+- instead (-ONE) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Fri Nov 28 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.17.4-ONE
++ update to 3.17.4 - stable
+- drop unofficial ck1/bfs 456
+- added official ck2/bfs 458
+- ---------------------------------------------------------------------
+- Kernel 3.17 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-QL) will be used for development and experimental flavours,
+- instead (-ONE) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Thu Nov 20 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.17.3-ONE
++ update to 3.17.3 - stable
+- added UKSM 0.1.2.3 ge.2 for kernel 3.17
+- added Reiser4 file system for kernel 3.17
+- added ix86 & x86_64 build fixes for cooker (201500)
+- ---------------------------------------------------------------------
+- Kernel 3.17 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-QL) will be used for development and experimental flavours,
+- instead (-ONE) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Sat Nov 01 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.17.2-ONE
+- Virtual package for new nrj kernel for properly install and updates.
++ update to 3.17.2 - stable
+- all the create_configs scripts have been updated to v.2.4
+- all netbook flavours have NAMESPACES enabled, as this speedup things
+- drop few patches
+- ---------------------------------------------------------------------
+- Kernel 3.17 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-QL) will be used for development and experimental flavours,
+- instead (-ONE) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Sun Oct 26 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.17.1-one
++ update to 3.17.1 - stable
++ it's first version of "nrj/nrjQL" stable 3.17.x, in early development
+- stage, so, it's only for testing purposes, please, dont use this srpm,
+- for your daily PC working, because is still to fix all over!!!
+- all the defconfigs have been prepared for the 3.17 series
+- all the patches have been added/update for the 3.17 series
+- all the create_configs scripts have been updated to v.2.3
+- all the kernel specs have been updated to the 3.17 series
+- all custom openmandriva/rosa features have been backported from previous
+- ---------------------------------------------------------------------
+- Kernel 3.17 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Thu Oct 23 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.10-3
++ update to 3.15.10 - stable - release 3
+- update BFQ (disk I/O scheduler) to V7R6
+- disable audio power save: it starts audio clicks with some devices
+- CONFIG_SND_AC97_POWER_SAVE_DEFAULT=0
+- CONFIG_SND_HDA_POWER_SAVE_DEFAULT=0
+- drop : drm-radeon_Adding_UVD_handle_basis_fps_estimation_v2.patch
+- import two commits from POK (from 3.15-10 master):
+- drop vendor & gnu ext from cross kernel header dir
+- https://abf.rosalinux.ru/openmandriva/kernel/commit/177cdf97166271b6e8d55d5aaa099dd1418c3dbe
+- update %files for change of cross kernel headers location
+- https://abf.rosalinux.ru/openmandriva/kernel/commit/e83854a228d367198d5fde8fee81e3b6df0ce96c
+- ---------------------------------------------------------------------
+- Kernel 3.14 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Sat Aug 30 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.10-2
 + update to 3.15.10 (EOL) - stable (replacement release)
 - update ReiserFS4:
 - /patches-NRJ/0004-reiser4-for-3.15.2.patch
@@ -2673,7 +2880,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Sat Aug 16 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.10-0
+* Sat Aug 16 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.10-99
 + update to 3.15.10 (EOL) - stable
 - add drm/radeon: Adding UVD handle basis fps estimation v2
 - http://lists.freedesktop.org/archives/dri-devel/2014-August/065766.html
@@ -2697,7 +2904,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Fri Aug 08 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.9-1
+* Fri Aug 08 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.9-70
 + update to 3.15.9 - stable
 - import ASPM fix patch from kernel 3.17 queue to improve powersave
 - to read: http://www.phoronix.com/scan.php?page=news_item&px=MTc0NzE
@@ -2718,10 +2925,10 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Fri Aug 01 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.8-1
+* Fri Aug 01 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.8-70
 + update to 3.15.8 - stable
 - drop patch: x86-x86_32-entry-store-badsys-error-code-in-eax.patch
-- update BFS (task scheduler) from release 3.5.6 to 3.5.7 
+- update TOI (power manager) from release 3.5.6 to 3.5.7 
 - audio powersave: reduced idle time from 60 to 15 seconds
 - ---------------------------------------------------------------------
 - Kernel 3.15 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
@@ -2732,11 +2939,12 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Tue Jul 29 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.7-1
+* Tue Jul 29 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.7-70
 + update to 3.15.7 - stable
-- update BFS (task scheduler) from 448 to 449 
-- add 4 patches: for Pegatron laptops support 
-- add patch: x86-x86_32-entry-store-badsys-error-code-in-eax.patch
+- add patch: x86-x86_32-entry-store-badsys-error-code-in-eax
+- drop patch: revert-Bluetooth-Add-a-new-PID_VID-0cf3_e005-for-AR3012
+- fix create_configs-QL script for a new TOI request (TOI_INCREMENTAL=n)
+- update BFS (task scheduler) from release 448 to 449 
 - ---------------------------------------------------------------------
 - Kernel 3.15 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
@@ -2746,7 +2954,7 @@ rm -rf %{buildroot}
 - Yin & Yang (69) release - it's a very complete kernel flavour sets
 - ---------------------------------------------------------------------
 
-* Sun Jul 20 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.6-1
+* Sun Jul 20 2014 Nicolo' Costanza <abitrules@yahoo.it> 3.15.6-70
 + update to 3.15.6 - stable
 + it's first version of "nrj/nrjQL" stable 3.15.x, in early development
 - stage, so, it's only for testing purposes, please, dont use this srpm,
@@ -2877,7 +3085,7 @@ rm -rf %{buildroot}
   * 0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r3-3.13.patch
   * 0002-block-introduce-the-BFQ-v7r3-I-O-sched-for-3.13.patch
   * 0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r3-for-.patch
-- suggestion / request received by Per Øyvind Karlsen (POK)
+- suggestion / request received by Per Oyvind Karlsen (POK)
   * CONFIG_ACPI_CUSTOM_DSDT=y
 - ---------------------------------------------------------------------
 - Kernel 3.13 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
@@ -3387,7 +3595,7 @@ rm -rf %{buildroot}
 - add: /patches-NRJ/0004-block-Switch-from-BFQ-v6r2-for-3.10.0-to-BFQ-v6r2-fo.patch
 - sync: /patches
 - update: /patches-QL/tuxonice-for-linux-3.10.9-2013-08-21.patch
-- fix conflicts as suggested by Tomasz ﻿Paweł﻿ Gajc: dkms-nvidia-current < 325.15-1
+- fix conflicts as suggested by Tomasz ?Paweł? Gajc: dkms-nvidia-current < 325.15-1
 - ---------------------------------------------------------------------
 - Kernel 3.10 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
 - MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
@@ -3625,7 +3833,7 @@ rm -rf %{buildroot}
 - update kernel scripts
 - we've received some good suggestions, and all have been accepted
 - on mainline nrj kernels we apply again > create_configs-withBFQ
-- 1> suggestions and requests received by Per Øyvind Karlsen (POK)
+- 1> suggestions and requests received by Per Oyvind Karlsen (POK)
   * TOI (tuxonice) was only in laptop/netbook, now in all flavours
   * CONFIG_PM_AUTOSLEEP=y 
   * CONFIG_SFI =m
