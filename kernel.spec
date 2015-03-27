@@ -7,7 +7,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	18
 # sublevel is now used for -stable patches
-%define sublevel	5
+%define sublevel	10
 
 # Package release
 %define mibrel		1
@@ -32,7 +32,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		2
+%define rpmrel		1
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -129,10 +129,10 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI
 
 %define build_nrjQL_desktop		1
-%define build_nrjQL_realtime		1
-%define build_nrjQL_laptop		1
-%define build_nrjQL_netbook		1
-%define build_nrjQL_server		1
+%define build_nrjQL_realtime	0
+%define build_nrjQL_laptop		0
+%define build_nrjQL_netbook		0
+%define build_nrjQL_server		0
 %define build_nrjQL_server_games	0
 %define build_nrjQL_server_computing	0
 
@@ -140,9 +140,9 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 %ifarch %{ix86}
 %define build_nrjQL_desktop_pae		1
-%define build_nrjQL_realtime_pae	1
-%define build_nrjQL_laptop_pae		1
-%define build_nrjQL_netbook_pae		1
+%define build_nrjQL_realtime_pae	0
+%define build_nrjQL_laptop_pae		0
+%define build_nrjQL_netbook_pae		0
 %endif
 
 # MIB experimental "32bit cpu level" optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
@@ -642,6 +642,12 @@ BuildRequires:  numa-devel
 %if %{build_cpupower}
 BuildRequires:		pciutils-devel
 %endif
+
+# for docs
+%if %{build_doc}
+BuildRequires:          xmlto
+%endif
+
 # for perf
 %if %{build_perf}
 BuildRequires:		asciidoc
@@ -661,7 +667,6 @@ BuildRequires:		perl-devel
 # BuildRequires:	perl(ExtUtils::Embed)
 BuildRequires:		pkgconfig(gtk+-2.0)
 BuildRequires:		pkgconfig(python2)
-BuildRequires:		xmlto
 BuildRequires:		zlib-devel
 %endif
 
