@@ -7,7 +7,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	18
 # sublevel is now used for -stable patches
-%define sublevel	5
+%define sublevel	10
 
 # Package release
 %define mibrel		1
@@ -642,6 +642,12 @@ BuildRequires:  numa-devel
 %if %{build_cpupower}
 BuildRequires:		pciutils-devel
 %endif
+
+# for docs
+%if %{build_doc}
+BuildRequires:          xmlto
+%endif
+
 # for perf
 %if %{build_perf}
 BuildRequires:		asciidoc
@@ -661,7 +667,6 @@ BuildRequires:		perl-devel
 # BuildRequires:	perl(ExtUtils::Embed)
 BuildRequires:		pkgconfig(gtk+-2.0)
 BuildRequires:		pkgconfig(python2)
-BuildRequires:		xmlto
 BuildRequires:		zlib-devel
 %endif
 
@@ -2638,6 +2643,85 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+
+* Fri Mar 27 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.10-1
++ update to 3.18.10 - this is the current LTS kernel version ;-) 
+- add patch: fifo-nv04-remove-the-loop-from-the-interrupt-handler
+- drop a patch that now is already in mainstream:
+  0001-drm-radeon-dp-Set-EDP_CONFIGURATION_SET-for-bridge-c.patch
+- fix few kernel keys hoping that now lxc-checkconfig may be happy
+- fix BR: xmlto is now required only for docs build with a condition,
+  to avoid a ton of requested rpms installation when docs is disable
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Fri Mar 20 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.9-1
++ update to 3.18.9 - this is the first 3.18 LTS  version ;-) 
+- disable Multiblock Queue I/O, revert to old disk I/O schedulers,
+­- for that I've changed to > # CONFIG_SCSI_MQ_DEFAULT is not set
+- add two pending patches for the bfs 460 scheduler:
+- /patches-QL/bfs460-locked-pluggedio.patch
+- /patches-QL/bfs460-smt-should-sched-not-is.patch
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Wed Mar 04 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.8-1
++ update to 3.18.8 - stable 
+- drop TOI: there are still issues with hybernation/resume in some HW,
+- the four patches for TOI support have been moved to /archives
+- add 0001-drm-radeon-dp-Set-EDP_CONFIGURATION_SET-for-bridge-c.patch
+- a try to fix : https://issues.openmandriva.org/show_bug.cgi?id=1137
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Fri Feb 27 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.7-1
++ update to 3.18.7 - stable 
+- add support for the reiser4 fs with: reiser4-for-3.18.6.patch
+- add TOI for 3.18 plus 3 fix patches: TOI is back!
+- drop some patches patches that now are already in mainstream 
+- fix a kconflicts for nvidia-long-lived when mdvver >= 201300
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Wed Feb 25 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.6-1
++ update to 3.18.6 - stable 
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
 
 * Mon Feb 02 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.5-ONE
 + update to 3.18.5 - stable 
