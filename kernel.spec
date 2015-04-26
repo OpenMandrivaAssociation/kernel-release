@@ -1781,6 +1781,7 @@ SaveDevel() {
 	mkdir -p $TempDevelRoot
 	for i in $(find . -name 'Makefile*'); do cp -R --parents $i $TempDevelRoot;done
 	for i in $(find . -name 'Kconfig*' -o -name 'Kbuild*'); do cp -R --parents $i $TempDevelRoot;done
+    cp -fR Documentation/DocBook/media/*.b64 $TempDevelRoot/Documentation/DocBook/media/
 	cp -fR include $TempDevelRoot
 	# ln -s ../generated/uapi/linux/version.h $TempDevelRoot/include/linux/version.h
 	cp -fR scripts $TempDevelRoot
@@ -1792,6 +1793,7 @@ SaveDevel() {
 	%ifarch %{ix86} x86_64
 		cp -fR arch/x86/kernel/asm-offsets.{c,s} $TempDevelRoot/arch/x86/kernel/
 		cp -fR arch/x86/kernel/asm-offsets_{32,64}.c $TempDevelRoot/arch/x86/kernel/
+        cp -fR arch/x86/purgatory/* $TempDevelRoot/arch/x86/purgatory/
 		cp -fR arch/x86/syscalls/syscall* $TempDevelRoot/arch/x86/syscalls/
 		cp -fR arch/x86/include $TempDevelRoot/arch/x86/
 		cp -fR arch/x86/tools $TempDevelRoot/arch/x86/
@@ -2025,6 +2027,11 @@ if [ -L initrd-$kernel_flavour.img ]; then
 	rm -f initrd-$kernel_flavour.img
 fi
 ln -sf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img initrd-$kernel_flavour.img
+if [ -e initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ]; then
+    ln -sf vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} vmlinuz
+    ln -sf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img initrd.img
+fi
+
 popd > /dev/null
 %endif
 %if %build_devel
@@ -2617,12 +2624,15 @@ rm -rf %{buildroot}
 %if %{build_perf}
 %files -n perf
 %{_bindir}/perf
+%ifarch x86_64
+%{_bindir}/perf-read-vdso32
+%endif
 %{_bindir}/trace
+%{_prefix}/lib/libperf-gtk.so
+%dir %{_prefix}/lib/traceevent
+%dir %{_prefix}/lib/traceevent/plugins
+%{_prefix}/lib/traceevent/plugins/plugin_*
 %dir %{_prefix}/libexec/perf-core
-%{_libdir}/libperf-gtk.so
-%dir %{_libdir}/traceevent
-%dir %{_libdir}/traceevent/plugins
-%{_libdir}/traceevent/plugins/*
 %{_prefix}/libexec/perf-core/*
 %{_mandir}/man[1-8]/perf*
 %{_sysconfdir}/bash_completion.d/perf
