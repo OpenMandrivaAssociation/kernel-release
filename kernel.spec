@@ -7,7 +7,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	19
 # sublevel is now used for -stable patches
-%define sublevel	5
+%define sublevel	7
 
 # Package release
 %define mibrel		1
@@ -2273,6 +2273,11 @@ CreateKernel versatile
 %endif
 
 %{patches_dir}/scripts/apply_patches-QL
+
+%ifarch x86_64 %{arm}
+%{patches_dir}/scripts/apply_patches-QL-x64
+%endif
+
 %{patches_dir}/scripts/create_configs-QL %debug --user_cpu="%{target_arch}"
 
 %if %build_nrjQL_desktop
@@ -2628,10 +2633,10 @@ rm -rf %{buildroot}
 %{_bindir}/perf-read-vdso32
 %endif
 %{_bindir}/trace
-%{_prefix}/lib/libperf-gtk.so
-%dir %{_prefix}/lib/traceevent
-%dir %{_prefix}/lib/traceevent/plugins
-%{_prefix}/lib/traceevent/plugins/plugin_*
+%{_libdir}/libperf-gtk.so
+%dir %{_libdir}/traceevent
+%dir %{_libdir}/traceevent/plugins
+%{_libdir}/traceevent/plugins/plugin_*
 %dir %{_prefix}/libexec/perf-core
 %{_prefix}/libexec/perf-core/*
 %{_mandir}/man[1-8]/perf*
@@ -2653,6 +2658,35 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+
+* Mon May 11 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.19.7-ONE
++ update to 3.19.7 - stable
+- fix the proper path folder for all x86_64 _perf files
+- nrjQL TOI is patched and enabled for x86_64 and arm only, not for i586
+- drop few patch
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 3.19 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Wed May 06 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.19.6-ONE
+- add TOI for kernels 3.19
++ update to 3.19.6 - stable
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 3.19 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
 * Sun Apr 26 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.19.5-ONE
 + update to 3.19.5 - stable
 - drop few patches
