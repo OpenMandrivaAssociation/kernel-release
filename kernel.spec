@@ -2577,6 +2577,9 @@ rm -rf %{buildroot}
 %{_kerneldir}/include/drm
 %{_kerneldir}/include/dt-bindings
 %{_kerneldir}/include/keys
+%ifarch %{arm}
+%{_kerneldir}/include/kvm
+%endif
 %{_kerneldir}/include/linux
 %{_kerneldir}/include/math-emu
 %{_kerneldir}/include/media
