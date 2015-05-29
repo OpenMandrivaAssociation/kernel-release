@@ -7,7 +7,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	18
 # sublevel is now used for -stable patches
-%define sublevel	12
+%define sublevel	14
 
 # Package release
 %define mibrel		1
@@ -2643,6 +2643,45 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+
+* Wed May 27 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.14-ONE
++ update to 3.18.14 - this is the current LTS kernel version ;-) 
+- update TOI to the most current version plus the i586 fix patch
+- fix armv7hl build
+- ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Sat Apr 25 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.12-ONE
++ update to 3.18.12 - this is the current LTS kernel version ;-) 
+- change a config key from CONFIG_SATA_SIL=m to CONFIG_SATA_SIL=y
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Thu Apr 09 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.11-ONE
++ update to 3.18.11 - this is the current LTS kernel version ;-) 
+- readd TOI (we need to test a lot with different hardware and configs)
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
 
 * Fri Mar 27 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.10-1
 + update to 3.18.10 - this is the current LTS kernel version ;-) 
