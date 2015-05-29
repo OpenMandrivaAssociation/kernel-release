@@ -1,4 +1,4 @@
 sources:
-  "linux-3.18.12-nicco1.tar.xz": f4bbfebce2a803ef679c05f61b5fecae245c6ec5
+  "linux-3.18.14-nicco1.tar.xz": e99ff7878b78585b760cefb16d5e047ca48c1cd0
   "linux-3.18.tar.xz": 4557ef53c89fe70a9da230ae1e6542856d8b0a94
-  "patch-3.18.12.xz": 5235f100f9bd83028f01409ceb1ba44c5d50df09
+  "patch-3.18.14.xz": 29a81189c9e1ea66eef4ed4916261063e7ba2e0e
