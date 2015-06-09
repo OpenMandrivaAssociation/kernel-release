@@ -32,7 +32,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		1
+%define rpmrel		2
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -103,17 +103,17 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 # MIB low latency optimized flavours called "nrj V.5" plus 32bit PAE versions
 
-%define build_nrj_desktop		0
+%define build_nrj_desktop		1
 %define build_nrj_realtime		0
 %define build_nrj_server		0
-%define build_nrj_laptop		0
+%define build_nrj_laptop		1
 %define build_nrj_netbook		0
 
 %ifarch %{ix86}
 %define build_nrj_desktop586		0
-%define build_nrj_desktop_pae		0
+%define build_nrj_desktop_pae		1
 %define build_nrj_realtime_pae		0
-%define build_nrj_laptop_pae		0
+%define build_nrj_laptop_pae		1
 %define build_nrj_netbook_pae		0
 %endif
 
