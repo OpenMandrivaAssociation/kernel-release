@@ -7,7 +7,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	3
 %define patchlevel	18
 # sublevel is now used for -stable patches
-%define sublevel	14
+%define sublevel	16
 
 # Package release
 %define mibrel		1
@@ -32,7 +32,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		2
+%define rpmrel		1
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -2643,6 +2643,35 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+
+* Wed Jun 17 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.16-1ONE
++ update to 3.18.16 release 1 - the current LTS kernel version ;-) 
+ - ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Fri Jun 12 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.14-3ONE
++ update to 3.18.14 release 3 - the current LTS kernel version ;-) 
+- update BFQ to v7R8
+- update TOI (changes from Giuseppe Ghibò)
+- remove FBCONDECOR patch and from configs
+- add apply_patches-QL2 script, and  
+- add patches-QL2 folder, the last box for QL patches to be enable/disable
+- it may be used to test some still unstable or yet untested QL patches,
+- these can be on, or off with: # %{patches_dir}/scripts/apply_patches-QL2
+ - ---------------------------------------------------------------------
+- Kernel 3.18 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-69) will be used for development and experimental flavours,
+- instead (-70) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
 
 * Wed May 27 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.18.14-ONE
 + update to 3.18.14 - this is the current LTS kernel version ;-) 
