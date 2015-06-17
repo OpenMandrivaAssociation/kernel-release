@@ -2266,6 +2266,8 @@ CreateKernel versatile
 %endif
 
 %{patches_dir}/scripts/apply_patches-QL
+# comment the next row to to disable the latest QL2 feature patches (#TOI)
+%{patches_dir}/scripts/apply_patches-QL2
 %{patches_dir}/scripts/create_configs-QL %debug --user_cpu="%{target_arch}"
 
 %if %build_nrjQL_desktop
