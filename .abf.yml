@@ -1,4 +1,4 @@
 sources:
-  "linux-3.19.7-nicco1.tar.xz": 5a1720d6e842d0edcddb4d4dba48f20d1373c27a
+  "linux-3.19.8-nicco1.tar.xz": dafdd2f542a9eb36ec0ae5738854e7edc2141e65
   "linux-3.19.tar.xz": b880c818c09f8c492eabc0f9c4178134b3496c56
-  "patch-3.19.7.xz": 3bbf4a6edbe43edaa6909068d78ce26c6f0e6745
+  "patch-3.19.8.xz": 46dd30b8b645e39cd530adcc9e49abe06e86e826
