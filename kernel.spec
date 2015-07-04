@@ -2663,6 +2663,41 @@ rm -rf %{buildroot}
 
 %changelog
 
+* Fri Jul 03 2015 Nicolo' Costanza <abitrules@yahoo.it> 4.1.1-1ONE
++ update to 4.1.1 - mainline
+- add ck/bfs-0462 cpu scheduler for kernel 4.1 
+- add TOI for 4.1
+- add UKSM for 4.1
++ now the most important nrjQL patches are really working inside ;-)
+- thanks to Alfred Chen and Giuseppe Ghibò for the latest QL patches
+- ---------------------------------------------------------------------
+- Kernel 4.1 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-ql) will be used for development and experimental flavours,
+- instead (-one) is born by the -1 & -ql merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
+* Mon Jun 29 2015 Nicolo' Costanza <abitrules@yahoo.it> 4.1.0-ONE
++ update to 4.1.0 - mainline
++ it's first version of "nrj/nrjQL" stable 4.1.x, in early development
+- stage, so, it's only for testing purposes, please, dont use this srpm,
+- for your daily PC working, because is still to fix all over!!!
+- create_configs scripts have been prepared for the 4.1 series
+- defconfigs have been prepared for the 4.1 series
+- patches have been added/update for the 4.1 series
+- kernel specs have been updated to the 4.1 series
+- custom openmandriva/rosa features have been backported from previous
+- ---------------------------------------------------------------------
+- Kernel 4.1 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-ql) will be used for development and experimental flavours,
+- instead (-one) is born by the -1 % -69 merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
 * Thu Jun 25 2015 Nicolo' Costanza <abitrules@yahoo.it> 3.19.8-ONE
 + update to 3.19.8 (EOL) - stable 
 - sync / add new patches
