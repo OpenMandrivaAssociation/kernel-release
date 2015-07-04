@@ -4,10 +4,10 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define _disable_ld_no_undefined 1
 
 #
-%define kernelversion	3
-%define patchlevel	19
+%define kernelversion	4
+%define patchlevel	1
 # sublevel is now used for -stable patches
-%define sublevel	8
+%define sublevel	1
 
 # Package release
 %define mibrel		1
