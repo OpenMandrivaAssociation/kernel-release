@@ -1647,6 +1647,10 @@ LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 # get rid of unwanted files
 find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
 
+pwd
+#pushd ../configs
+#ln -s arm64.config aarch64.config
+#popd
 
 %build
 

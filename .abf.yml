@@ -1,4 +1,4 @@
 sources:
   linux-4.1.tar.xz: 2470435c2218f0bcbd46ef2a0000694aca340273
   patch-4.1.1.xz: 2b8d258b0d5ccab320ec21b58e15d5f19051875b
-  linux-4.1.1-nicco1.tar.xz: 7be0f7ba4fdcbab06b1dd08e6f5876b18a3b327f
+  linux-4.1.1-nicco1.tar.xz: 156eb61d0e8b316ece2bf2c273aafebc04bc8d88
