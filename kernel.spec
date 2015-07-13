@@ -157,7 +157,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 # build perf and cpupower tools
 %if %{mdvver} == 201500
-%define build_perf		1
+%define build_perf		0
 %define build_cpupower		1
 %endif
 %if %{mdvver} == 201410
