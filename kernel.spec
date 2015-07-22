@@ -7,7 +7,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	4
 %define patchlevel	1
 # sublevel is now used for -stable patches
-%define sublevel	2
+%define sublevel	3
 
 # Package release
 %define mibrel		1
@@ -2664,6 +2664,21 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+
+* Wed Jul 22 2015 Nicolo' Costanza <abitrules@yahoo.it> 4.1.3-ONE1
++ update to 4.1.3 - stable
+- some custom openmandriva / rosa config keys have been backported
+- revisited bfs process scheduler: the patch set is now 22 patches
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 4.1 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-ql) will be used for development and experimental flavours,
+- instead (-one) is born by the -1 & -ql merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
+
 * Sun Jul 12 2015 Nicolo' Costanza <abitrules@yahoo.it> 4.1.2-ONE1
 + update to 4.1.2 - stable
 - enable FIRMWARE EDID DOWNLOAD feature
