@@ -10,7 +10,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define sublevel	3
 
 # Package release
-%define mibrel		1
+%define mibrel		2
 
 # kernel Makefile extraversion is substituted by
 # kpatch wich are either 0 (empty), rc (kpatch)
@@ -2053,6 +2053,10 @@ EOF
 cat > $kernel_files-posttrans <<EOF
 if [ -x /usr/sbin/dkms_autoinstaller -a -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
     /usr/sbin/dkms_autoinstaller start %{kversion}-$kernel_flavour-%{buildrpmrel}
+fi
+
+if [ -x /usr/sbin/dkms -a -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
+	systemctl restart dkms
 fi
 EOF
 
