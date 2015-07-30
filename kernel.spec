@@ -2155,6 +2155,10 @@ sed -i -e 's,CONFIG_FSCACHE_DEBUG=y,CONFIG_FSCACHE_DEBUG=n,g' %{patches_dir}/con
 sed -i -e 's,CONFIG_CACHEFILES_DEBUG=y,CONFIG_CACHEFILES_DEBUG=n,g' %{patches_dir}/configs/*.config
 sed -i -e 's,CONFIG_DYNAMIC_DEBUG=y,CONFIG_DYNAMIC_DEBUG=n,g' %{patches_dir}/configs/*.config
 sed -i -e 's,# CONFIG_CC_OPTIMIZE_FOR_SIZE is not set,CONFIG_CC_OPTIMIZE_FOR_SIZE=y,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_PM_DEBUG=y,CONFIG_PM_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_PM_SLEEP_DEBUG=y,CONFIG_PM_SLEEP_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_NETFILTER_DEBUG=y,CONFIG_NETFILTER_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_DEBUG_MEMORY_INIT=y,CONFIG_DEBUG_MEMORY_INIT=n,g' %{patches_dir}/configs/*.config
 
 # %{patches_dir}/scripts/apply_patches-vanilla
 # %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
