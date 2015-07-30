@@ -10,7 +10,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define sublevel	3
 
 # Package release
-%define mibrel		2
+%define mibrel		1
 
 # kernel Makefile extraversion is substituted by
 # kpatch wich are either 0 (empty), rc (kpatch)
@@ -32,7 +32,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		1
+%define rpmrel		2
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -2055,8 +2055,9 @@ if [ -x /usr/sbin/dkms_autoinstaller -a -d /usr/src/linux-%{kversion}-$kernel_fl
     /usr/sbin/dkms_autoinstaller start %{kversion}-$kernel_flavour-%{buildrpmrel}
 fi
 
-if [ -x /usr/sbin/dkms -a -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
-	systemctl restart dkms
+if [ -e %{_unitdir}/dkms.service -a -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
+	/bin/systemctl --quiet restart dkms.service
+    /bin/systemctl --quiet try-restart fedora-loadmodules.service
 fi
 
 EOF
