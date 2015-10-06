@@ -2291,7 +2291,8 @@ CreateKernel versatile
 %{patches_dir}/scripts/apply_patches-QL
 
 %ifarch x86_64 %{arm}
-%{patches_dir}/scripts/apply_patches-QL-x64
+# (tpg) missing ?
+#%{patches_dir}/scripts/apply_patches-QL-x64
 %endif
 
 %{patches_dir}/scripts/create_configs-QL %debug --user_cpu="%{target_arch}"
@@ -2675,6 +2676,22 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+
+* Wed Sep 30 2015 Nicolo' Costanza <abitrules@yahoo.it> 4.1.9-1
++ update to 4.1.9 - LTS (longterm)
+- drop two old patches now in mainstream
+- update BFS to: official BFS 464, linux-4.1-ck2
+- update TOI to: tuxonice-for-linux-4.1.8-2015-09-23
+- fixed a clock (hz) issue on defconfigs
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 4.1 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-ql1) will be used for development and experimental flavours,
+- instead (-one1) is born by the -1 & -ql merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
 
 * Wed Jul 22 2015 Nicolo' Costanza <abitrules@yahoo.it> 4.1.3-ONE1
 + update to 4.1.3 - stable
