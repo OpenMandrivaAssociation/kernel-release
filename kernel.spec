@@ -7,7 +7,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	4
 %define patchlevel	1
 # sublevel is now used for -stable patches
-%define sublevel	3
+%define sublevel	9
 
 # Package release
 %define mibrel		1
@@ -32,7 +32,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		2
+%define rpmrel		1
 %endif
 
 # fakerel and fakever never change, they are used to fool
