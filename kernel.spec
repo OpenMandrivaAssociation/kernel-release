@@ -7,7 +7,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	4
 %define patchlevel	1
 # sublevel is now used for -stable patches
-%define sublevel	3
+%define sublevel	9
 
 # Package release
 %define mibrel		1
@@ -32,7 +32,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
 %endif
 %else
-%define rpmrel		3
+%define rpmrel		1
 %endif
 
 # fakerel and fakever never change, they are used to fool
@@ -130,7 +130,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 %define build_nrjQL_desktop		1
 %define build_nrjQL_realtime	0
-%define build_nrjQL_laptop		0
+%define build_nrjQL_laptop		1
 %define build_nrjQL_netbook		0
 %define build_nrjQL_server		0
 %define build_nrjQL_server_games	0
@@ -141,7 +141,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %ifarch %{ix86}
 %define build_nrjQL_desktop_pae		1
 %define build_nrjQL_realtime_pae	0
-%define build_nrjQL_laptop_pae		0
+%define build_nrjQL_laptop_pae		1
 %define build_nrjQL_netbook_pae		0
 %endif
 
@@ -2670,6 +2670,22 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+
+* Wed Sep 30 2015 Nicolo' Costanza <abitrules@yahoo.it> 4.1.9-1
++ update to 4.1.9 - LTS (longterm)
+- drop two old patches now in mainstream
+- update BFS to: official BFS 464, linux-4.1-ck2
+- update TOI to: tuxonice-for-linux-4.1.8-2015-09-23
+- fixed a clock (hz) issue on defconfigs
+- small fixes and cleanups
+- ---------------------------------------------------------------------
+- Kernel 4.1 for mdv 2010.2, 2011.0, cooker, rosa.lts2012.0, rosa2012.1
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/
+- The rel (-1) (mainline serie), with official kernel sources and addons,
+- the rel (-ql1) will be used for development and experimental flavours,
+- instead (-one1) is born by the -1 & -ql merge, can generate all flavours
+- Yin & Yang (69) release - it's a very complete kernel flavour sets
+- ---------------------------------------------------------------------
 
 * Wed Jul 22 2015 Nicolo' Costanza <abitrules@yahoo.it> 4.1.3-ONE1
 + update to 4.1.3 - stable
