@@ -2286,7 +2286,7 @@ CreateKernel versatile
 %{patches_dir}/scripts/apply_patches-QL
 
 %ifarch x86_64 %{arm}
-%{patches_dir}/scripts/apply_patches-QL-x64
+#{patches_dir}/scripts/apply_patches-QL-x64
 %endif
 
 %{patches_dir}/scripts/create_configs-QL %debug --user_cpu="%{target_arch}"
