@@ -1,4 +1,4 @@
 sources:
-  "linux-4.1.9-nicco1.tar.xz": db3bd67638fad088a85af96d87a5fe9330abaec7
-  "linux-4.1.tar.xz": 2470435c2218f0bcbd46ef2a0000694aca340273
-  "patch-4.1.9.xz": eec260d4722e0b7ddb190ebe78897bf974fd45c9
+  linux-4.1.12-nicco1.tar.xz: a497ca879073f958fa4abc55bd2c540e37a17385
+  linux-4.1.tar.xz: 2470435c2218f0bcbd46ef2a0000694aca340273
+  patch-4.1.9.xz: eec260d4722e0b7ddb190ebe78897bf974fd45c9
