@@ -7,7 +7,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	4
 %define patchlevel	1
 # sublevel is now used for -stable patches
-%define sublevel	9
+%define sublevel	12
 
 # Package release
 %define mibrel		1
@@ -93,7 +93,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 %define build_desktop			0
 %define build_netbook			0
-%define build_server			0
+%define build_server			1
 
 %ifarch %{ix86}
 %define build_desktop586		0
@@ -103,7 +103,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 # MIB low latency optimized flavours called "nrj V.5" plus 32bit PAE versions
 
-%define build_nrj_desktop		0
+%define build_nrj_desktop		1
 %define build_nrj_realtime		0
 %define build_nrj_server		0
 %define build_nrj_laptop		0
