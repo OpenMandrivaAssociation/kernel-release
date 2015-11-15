@@ -105,7 +105,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 %define build_nrj_desktop		1
 %define build_nrj_realtime		0
-%define build_nrj_server		0
+%define build_nrj_server		1
 %define build_nrj_laptop		0
 %define build_nrj_netbook		0
 
