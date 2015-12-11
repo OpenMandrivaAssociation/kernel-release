@@ -1,4 +1,4 @@
 sources:
-  "linux-4.1.12-nicco1.tar.xz": 6684787f6e0f66907b0e3ab7d8d59eb77af1262b
+  "linux-4.1.13-nicco1.tar.xz": 5834dcf07a757b0f31b21915f3707cdcbbf5fc89
   "linux-4.1.tar.xz": 2470435c2218f0bcbd46ef2a0000694aca340273
-  "patch-4.1.12.xz": b549dbacc7d8ed9c5f82637c4975ae7a1fd6572a
+  "patch-4.1.13.xz": 78fd172e91047d43768cb90c1986fff591595af2
