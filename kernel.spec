@@ -1627,6 +1627,13 @@ cd %src_dir
 %patch2 -p1
 %endif
 
+%{patches_dir}/scripts/apply_patches
+%{patches_dir}/scripts/apply_patches-NRJ
+# %{patches_dir}/scripts/apply_patches-NRJ-only
+%{patches_dir}/scripts/apply_patches-geek
+%{patches_dir}/scripts/apply_patches-latest
+%{patches_dir}/scripts/apply_patches-QL
+# PATCH END
 
 #
 # Setup Begin
@@ -1640,6 +1647,10 @@ cd %src_dir
 %define debug --no-debug
 %endif
 
+#%{patches_dir}/scripts/create_configs %debug --user_cpu="%{target_arch}"
+%{patches_dir}/scripts/create_configs-old-mdv %debug --user_cpu="%{target_arch}"
+%{patches_dir}/scripts/create_configs-withBFQ %debug --user_cpu="%{target_arch}"
+%{patches_dir}/scripts/create_configs-QL %debug --user_cpu="%{target_arch}"
 
 # make sure the kernel has the sublevel we know it has...
 LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
@@ -2129,7 +2140,6 @@ CreateKernel() {
 rm -rf %{temp_root}
 install -d %{temp_root}
 
-
 # make sure we are in the directory
 cd %src_dir
 
@@ -2161,14 +2171,6 @@ sed -i -e 's,CONFIG_PM_SLEEP_DEBUG=y,CONFIG_PM_SLEEP_DEBUG=n,g' %{patches_dir}/c
 sed -i -e 's,CONFIG_NETFILTER_DEBUG=y,CONFIG_NETFILTER_DEBUG=n,g' %{patches_dir}/configs/*.config
 sed -i -e 's,CONFIG_DEBUG_MEMORY_INIT=y,CONFIG_DEBUG_MEMORY_INIT=n,g' %{patches_dir}/configs/*.config
 
-# %{patches_dir}/scripts/apply_patches-vanilla
-# %{patches_dir}/scripts/create_configs-vanilla %debug --user_cpu="%{target_arch}"
-
-%{patches_dir}/scripts/apply_patches
-%{patches_dir}/scripts/apply_patches-geek
-%{patches_dir}/scripts/apply_patches-latest
-%{patches_dir}/scripts/create_configs-old-mdv %debug --user_cpu="%{target_arch}"
-
 %ifarch %{ix86}
 %if %build_desktop586
 CreateKernel desktop586
@@ -2198,9 +2200,6 @@ CreateKernel desktop-pae
 CreateKernel netbook-pae
 %endif
 %endif
-
-%{patches_dir}/scripts/apply_patches-NRJ
-%{patches_dir}/scripts/create_configs-withBFQ %debug --user_cpu="%{target_arch}"
 
 %ifarch %{ix86}
 %if %build_nrj_desktop586
@@ -2288,14 +2287,10 @@ CreateKernel versatile
 %endif
 %endif
 
-%{patches_dir}/scripts/apply_patches-QL
-
 %ifarch x86_64 %{arm}
 # (tpg) missing ?
 #%{patches_dir}/scripts/apply_patches-QL-x64
 %endif
-
-%{patches_dir}/scripts/create_configs-QL %debug --user_cpu="%{target_arch}"
 
 %if %build_nrjQL_desktop
 CreateKernel nrjQL-desktop
@@ -2361,10 +2356,8 @@ CreateKernel nrjQL-desktop-core2-pae
 %endif
 %endif
 
-
 # set extraversion to match srpm to get nice version reported by the tools
 LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
-
 
 ############################################################
 ### Linker start3 > Check point to build for omv or rosa ###
@@ -2393,8 +2386,6 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %endif
 
 %endif
-
-
 
 %if %{build_cpupower}
 # make sure version-gen.sh is executable.
