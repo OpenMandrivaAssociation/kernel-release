@@ -1647,6 +1647,34 @@ cd %src_dir
 %define debug --no-debug
 %endif
 
+# uncommetting next row: this improves HT with newer cpus, it may have regressions with old ones
+# sed -i -e 's,CONFIG_SMT_NICE=y,# CONFIG_SMT_NICE is not set,g' %{patches_dir}/configs/*.config
+
+# requested change by Colin Close: to test if that may fix the UEFI issues
+sed -i -e 's,CONFIG_EFIVAR_FS=m,CONFIG_EFIVAR_FS=y,g' %{patches_dir}/configs/*.config
+# https://wiki.archlinux.org/index.php/Unified_Extensible_Firmware_Interface
+sed -i -e 's,CONFIG_EFI_VARS=y,CONFIG_EFI_VARS=n,g' %{patches_dir}/configs/*.config
+
+# add some more optimizations requested by TPG
+sed -i -e 's,CONFIG_LOCKDEP_SUPPORT=y,CONFIG_LOCKDEP_SUPPORT=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_DEBUG_KERNEL=y,CONFIG_DEBUG_KERNEL=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SLAB_DEBUG=y,CONFIG_SLAB_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SLUB_DEBUG=y,CONFIG_SLUB_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SLUB_DEBUG_ON=y,CONFIG_SLUB_DEBUG_ON=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_HAVE_DEBUG_KMEMLEAK=y,CONFIG_HAVE_DEBUG_KMEMLEAK=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SCHED_DEBUG=y,CONFIG_SCHED_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SCHEDSTATS=y,CONFIG_SCHEDSTATS=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SND_DEBUG=y,CONFIG_SND_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_SND_PCM_XRUN_DEBUG=y,CONFIG_SND_PCM_XRUN_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_FSCACHE_DEBUG=y,CONFIG_FSCACHE_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_CACHEFILES_DEBUG=y,CONFIG_CACHEFILES_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_DYNAMIC_DEBUG=y,CONFIG_DYNAMIC_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,# CONFIG_CC_OPTIMIZE_FOR_SIZE is not set,CONFIG_CC_OPTIMIZE_FOR_SIZE=y,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_PM_DEBUG=y,CONFIG_PM_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_PM_SLEEP_DEBUG=y,CONFIG_PM_SLEEP_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_NETFILTER_DEBUG=y,CONFIG_NETFILTER_DEBUG=n,g' %{patches_dir}/configs/*.config
+sed -i -e 's,CONFIG_DEBUG_MEMORY_INIT=y,CONFIG_DEBUG_MEMORY_INIT=n,g' %{patches_dir}/configs/*.config
+
 #%{patches_dir}/scripts/create_configs %debug --user_cpu="%{target_arch}"
 %{patches_dir}/scripts/create_configs-old-mdv %debug --user_cpu="%{target_arch}"
 %{patches_dir}/scripts/create_configs-withBFQ %debug --user_cpu="%{target_arch}"
@@ -2146,34 +2174,6 @@ install -d %{temp_root}
 
 # make sure we are in the directory
 cd %src_dir
-
-# uncommetting next row: this improves HT with newer cpus, it may have regressions with old ones
-# sed -i -e 's,CONFIG_SMT_NICE=y,# CONFIG_SMT_NICE is not set,g' %{patches_dir}/configs/*.config
-
-# requested change by Colin Close: to test if that may fix the UEFI issues
-sed -i -e 's,CONFIG_EFIVAR_FS=m,CONFIG_EFIVAR_FS=y,g' %{patches_dir}/configs/*.config
-# https://wiki.archlinux.org/index.php/Unified_Extensible_Firmware_Interface
-sed -i -e 's,CONFIG_EFI_VARS=y,CONFIG_EFI_VARS=n,g' %{patches_dir}/configs/*.config
-
-# add some more optimizations requested by TPG
-sed -i -e 's,CONFIG_LOCKDEP_SUPPORT=y,CONFIG_LOCKDEP_SUPPORT=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_DEBUG_KERNEL=y,CONFIG_DEBUG_KERNEL=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_SLAB_DEBUG=y,CONFIG_SLAB_DEBUG=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_SLUB_DEBUG=y,CONFIG_SLUB_DEBUG=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_SLUB_DEBUG_ON=y,CONFIG_SLUB_DEBUG_ON=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_HAVE_DEBUG_KMEMLEAK=y,CONFIG_HAVE_DEBUG_KMEMLEAK=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_SCHED_DEBUG=y,CONFIG_SCHED_DEBUG=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_SCHEDSTATS=y,CONFIG_SCHEDSTATS=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_SND_DEBUG=y,CONFIG_SND_DEBUG=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_SND_PCM_XRUN_DEBUG=y,CONFIG_SND_PCM_XRUN_DEBUG=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_FSCACHE_DEBUG=y,CONFIG_FSCACHE_DEBUG=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_CACHEFILES_DEBUG=y,CONFIG_CACHEFILES_DEBUG=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_DYNAMIC_DEBUG=y,CONFIG_DYNAMIC_DEBUG=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,# CONFIG_CC_OPTIMIZE_FOR_SIZE is not set,CONFIG_CC_OPTIMIZE_FOR_SIZE=y,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_PM_DEBUG=y,CONFIG_PM_DEBUG=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_PM_SLEEP_DEBUG=y,CONFIG_PM_SLEEP_DEBUG=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_NETFILTER_DEBUG=y,CONFIG_NETFILTER_DEBUG=n,g' %{patches_dir}/configs/*.config
-sed -i -e 's,CONFIG_DEBUG_MEMORY_INIT=y,CONFIG_DEBUG_MEMORY_INIT=n,g' %{patches_dir}/configs/*.config
 
 %ifarch %{ix86}
 %if %build_desktop586
