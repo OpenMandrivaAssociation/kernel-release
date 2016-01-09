@@ -1700,20 +1700,20 @@ pwd
 %if %{mdvver} == 201500
 # Make sure we don't use gold
 export LD="%{_target_platform}-ld.bfd"
-export LDFLAGS="$LDFLAGS --hash-style=sysv --build-id=none"
+export LDFLAGS="--hash-style=sysv --build-id=none"
 export PYTHON=%{__python2}
 %endif
 
 %if %{mdvver} == 201400
 # Make sure we don't use gold
 export LD="%{_target_platform}-ld.bfd"
-export LDFLAGS="$LDFLAGS --hash-style=sysv --build-id=none"
+export LDFLAGS="--hash-style=sysv --build-id=none"
 %endif
 
 %if %{mdvver} == 201300
 # Make sure we don't use gold
 export LD="%{_target_platform}-ld.bfd"
-export LDFLAGS="$LDFLAGS --hash-style=sysv --build-id=none"
+export LDFLAGS="--hash-style=sysv --build-id=none"
 %endif
 ############################################################
 ###  Linker end2 > Check point to build for omv or rosa ###
@@ -2369,7 +2369,7 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %if %{build_perf}
 
 %if %{mdvver} == 201500
-%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%__cc PYTHON=%{__python2} WERROR=0 LDFLAGS="$LDFLAGS -Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
+%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%__cc PYTHON=%{__python2} WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
 %smake -C tools/perf -s CC=%__cc prefix=%{_prefix} PYTHON=%{__python2} man
 %endif
 %if %{mdvver} == 201410
@@ -2377,12 +2377,12 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 %smake -C tools/perf -s prefix=%{_prefix} man
 %endif
 %if %{mdvver} == 201400
-%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} LDFLAGS="$LDFLAGS" all
-%smake -C tools/perf -s prefix=%{_prefix} LDFLAGS="$LDFLAGS" man
+%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} LDFLAGS="%optflags" all
+%smake -C tools/perf -s prefix=%{_prefix} LDFLAGS="%optflags" man
 %endif
 %if %{mdvver} == 201300
-%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} LDFLAGS="$LDFLAGS" all
-%smake -C tools/perf -s prefix=%{_prefix} LDFLAGS="$LDFLAGS" man
+%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} LDFLAGS="%optflags" all
+%smake -C tools/perf -s prefix=%{_prefix} LDFLAGS="%optflags" man
 %endif
 %if %{mdvver} <= 201210
 %smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} all
@@ -2396,16 +2396,16 @@ LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 chmod +x tools/power/cpupower/utils/version-gen.sh
 
 %if %{mdvver} == 201500
-%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="$LDFLAGS"
+%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%optflags"
 %endif
 %if %{mdvver} == 201410
 %make -C tools/power/cpupower CPUFREQ_BENCH=false
 %endif
 %if %{mdvver} == 201400
-%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="$LDFLAGS"
+%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%optflags"
 %endif
 %if %{mdvver} == 201300
-%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="$LDFLAGS"
+%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%optflags"
 %endif
 %if %{mdvver} < 201300
 %make -C tools/power/cpupower CPUFREQ_BENCH=false
@@ -2519,16 +2519,16 @@ make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__p
 %if %{build_cpupower}
 
 %if %{mdvver} == 201500
-%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="$LDFLAGS" install
+%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%optflags" install
 %endif
 %if %{mdvver} == 201410
 make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false install
 %endif
 %if %{mdvver} == 201400
-%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false LDFLAGS="$LDFLAGS" install
+%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false LDFLAGS="%optflags" install
 %endif
 %if %{mdvver} == 201300
-%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false LDFLAGS="$LDFLAGS" install
+%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false LDFLAGS="%optflags" install
 %endif
 %if %{mdvver} < 201300
 make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false install
