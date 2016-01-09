@@ -485,8 +485,8 @@ Patch2:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/stable-review
 Source11:	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/stable-review/patch-%{kversion}-%{kpatch}.sign
 %else
 Patch1:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/testing/patch-%{kernelversion}.%{patchlevel}-%{kpatch}.xz
-Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/testing/patch-%{kernelversion}.%{patchlevel}-%{kpatch}.sign	
-%endif	
+Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/testing/patch-%{kernelversion}.%{patchlevel}-%{kpatch}.sign
+%endif
 %endif
 %if %kgit
 Patch2:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/snapshots/patch-%{kernelversion}.%{patchlevel}-%{kpatch}-git%{kgit}.xz
@@ -1809,10 +1809,10 @@ BuildKernel() {
 	install -d %{temp_modules}/$KernelVer
 	%smake INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer INSTALL_MOD_STRIP=1 modules_install
 
-	# headers	
+	# headers
 	%make INSTALL_HDR_PATH=%{temp_root}%_prefix KERNELRELEASE=$KernelVer headers_install
 	# kernel headers for cross toolchains
-	for arch in %{cross_header_archs}; do	
+	for arch in %{cross_header_archs}; do
 		%make SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
 	done
 
@@ -1829,7 +1829,7 @@ SaveDevel() {
 	mkdir -p $TempDevelRoot
 	for i in $(find . -name 'Makefile*'); do cp -R --parents $i $TempDevelRoot;done
 	for i in $(find . -name 'Kconfig*' -o -name 'Kbuild*'); do cp -R --parents $i $TempDevelRoot;done
-    cp -fR Documentation/DocBook/media/*.b64 $TempDevelRoot/Documentation/DocBook/media/
+	cp -fR Documentation/DocBook/media/*.b64 $TempDevelRoot/Documentation/DocBook/media/
 	cp -fR include $TempDevelRoot
 	# ln -s ../generated/uapi/linux/version.h $TempDevelRoot/include/linux/version.h
 	cp -fR scripts $TempDevelRoot
@@ -2472,7 +2472,7 @@ rm -rf %{target_source}/.tmp_depmod/
 
 # compressing modules
 %if %{build_modxz}
-find %{target_modules} -name "*.ko" | %kxargs xz -6e
+find %{target_modules} -name "*.ko" | %kxargs xz -6e -T0
 %else
 find %{target_modules} -name "*.ko" | %kxargs gzip -9
 %endif
