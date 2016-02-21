@@ -7,7 +7,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 %define kernelversion	4
 %define patchlevel	1
 # sublevel is now used for -stable patches
-%define sublevel	15
+%define sublevel	18
 
 # Package release
 %define mibrel		1
@@ -93,7 +93,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 
 %define build_desktop			0
 %define build_netbook			0
-%define build_server			1
+%define build_server			0
 
 %ifarch %{ix86}
 %define build_desktop586		0
@@ -129,7 +129,7 @@ Packager: Nicolo' Costanza <abitrules@yahoo.it>
 # MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI
 
 %define build_nrjQL_desktop		1
-%define build_nrjQL_realtime	0
+%define build_nrjQL_realtime		0
 %define build_nrjQL_laptop		1
 %define build_nrjQL_netbook		0
 %define build_nrjQL_server		0
