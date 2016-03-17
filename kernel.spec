@@ -707,10 +707,6 @@ SaveDevel() {
 		rm -rf $TempDevelRoot/include/kvm/arm*
         rm -rf $TempDevelRoot/include/soc
 	%endif
-	%ifnarch %{ix86} x86_64
-		rm -rf $TempDevelRoot/arch/x86
-	%endif
-
 	# Clean the scripts tree, and make sure everything is ok (sanity check)
 	# running prepare+scripts (tree was already "prepared" in build)
 	pushd $TempDevelRoot >/dev/null
