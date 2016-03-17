@@ -735,9 +735,7 @@ $DevelRoot/arch/arm
 $DevelRoot/arch/arm64
 %endif
 $DevelRoot/arch/um
-%ifarch %{ix86} x86_64
 $DevelRoot/arch/x86
-%endif
 $DevelRoot/block
 $DevelRoot/crypto
 # here
