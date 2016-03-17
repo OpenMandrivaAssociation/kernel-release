@@ -182,6 +182,7 @@ Autoreqprov: 	no
 BuildRequires: 	bc
 BuildRequires: 	binutils
 BuildRequires: 	gcc
+BuildRequires: 	openssl-devel
 BuildRequires: 	diffutils
 # For power tools
 BuildRequires:	pkgconfig(ncurses)
