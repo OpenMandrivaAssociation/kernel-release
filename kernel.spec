@@ -132,6 +132,12 @@ Source2: 	disable-mrproper-prepare-scripts-configs-in-devel-rpms.patch
 
 Source4: 	README.kernel-sources
 Source5:	kernel.rpmlintrc
+# configs
+Source6:	x86_64.config
+
+Source7:	i386.config
+Source8:	arm64.config
+Source9:	arm.config
 
 # config and systemd service file from fedora
 Source50:	cpupower.service
@@ -583,7 +589,7 @@ export PYTHON=%{__python2}
 PrepareKernel() {
 	name=$1
 	extension=$2
-	config_dir=%{_sourcedir}/
+	config_dir=%{_sourcedir}
 	echo "Make config for kernel $extension"
 	%smake -s mrproper
 	cp ${config_dir}/%{target_arch}.config .config
