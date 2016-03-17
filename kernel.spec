@@ -73,24 +73,10 @@
 ############################################################
 ### Linker start1 > Check point to build for omv or rosa ###
 ############################################################
-%if %cross_compiling
-%if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
-%define kmake %make ARCH=%target_arch CROSS_COMPILE=%(echo %__cc |sed -e 's,-gcc,-,') CC="$CC" LD="$LD" LDFLAGS="$LDFLAGS"
-%else
-%define kmake %make ARCH=%target_arch CROSS_COMPILE=%(echo %__cc |sed -e 's,-gcc,-,') LD="$LD" LDFLAGS="$LDFLAGS"
-%endif
-# there are places where parallel make don't work
-%define smake make ARCH=%target_arch CROSS_COMPILE=%(echo %__cc |sed -e 's,-gcc,-,') LD="$LD" LDFLAGS="$LDFLAGS"
-%else
-%if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
-%define kmake %make CC="$CC" LD="$LD" LDFLAGS="$LDFLAGS"
-%else
 %define kmake ARCH=%{target_arch} %make LD="$LD" LDFLAGS="$LDFLAGS"
-%endif
 # there are places where parallel make don't work
 # usually we use this
 %define smake make LD="$LD" LDFLAGS="$LDFLAGS"
-%endif
 
 ###################################################
 ###  Linker end1 > Check point to build for omv ###
@@ -602,7 +588,6 @@ PrepareKernel() {
 
 BuildKernel() {
 	KernelVer=$1
-
 	echo "Building kernel $KernelVer"
 	    # (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
 		%ifarch x86_64
