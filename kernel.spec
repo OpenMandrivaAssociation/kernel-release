@@ -1,37 +1,23 @@
 # utils/cpuidle-info.c:193: error: undefined reference to 'cpufreq_cpu_exists'
 %define _disable_ld_no_undefined 1
 
-#
+# compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	5
-# sublevel is now used for -stable patches
 %define sublevel	0
-
-# Package release
-%define mibrel		1
+%define tar_ver   	%{kernelversion}.%{patchlevel}
+%define buildrel     	%{kversion}-%{buildrpmrel}
+%define rpmtag		%{disttag}
+# if you need rebuild your kernel and bump release here is what you need
+%define rpmrel		1
+%define buildrpmrel     %{rpmrel}%{rpmtag}
 
 # kernel Makefile extraversion is substituted by
 # kpatch wich are either 0 (empty), rc (kpatch)
-%define kpatch		0
-# kernel.org -gitX patch (only the number after "git")
-%define kgit		0
+%define kpatch		%{nil}
 
 # kernel base name (also name of srpm)
 %define kname 		kernel
-
-# Patch tarball tag
-%define ktag		nicco
-
-%define rpmtag		%{disttag}
-%if %kpatch
-%if %kgit
-%define rpmrel		%mkrel 0.%{kpatch}.%{kgit}.%{mibrel}
-%else
-%define rpmrel		%mkrel 0.%{kpatch}.%{mibrel}
-%endif
-%else
-%define rpmrel		1
-%endif
 
 # fakerel and fakever never change, they are used to fool
 # rpm/urpmi/smart
@@ -41,32 +27,6 @@
 # version defines
 %define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}
 %define kverrel   	%{kversion}-%{rpmrel}
-
-# When we are using a pre/rc patch, the tarball is a sublevel -1
-%if %kpatch
-%if %sublevel
-%define tar_ver   	%{kernelversion}.%{patchlevel}
-%else
-%define tar_ver		%{kernelversion}.%(expr %{patchlevel} - 1)
-%endif
-%define patch_ver 	%{kversion}-%{kpatch}-%{ktag}%{mibrel}
-%else
-%define tar_ver   	%{kernelversion}.%{patchlevel}
-%define patch_ver 	%{kversion}-%{ktag}%{mibrel}
-%endif
-
-# Used for not making too long names for rpms or search paths
-# replaced mibrel with rpmrel / release > we can use only ONE sources folder for nrj & nrjQL
-%if %kpatch
-%if %kgit
-%define buildrpmrel     0.%{kpatch}.%{kgit}.%{rpmrel}%{rpmtag}
-%else
-%define buildrpmrel     0.%{kpatch}.%{rpmrel}%{rpmtag}
-%endif
-%else
-%define buildrpmrel     %{rpmrel}%{rpmtag}
-%endif
-%define buildrel     	%{kversion}-%{buildrpmrel}
 
 # Having different top level names for packges means that you have to remove
 # them by hard :(
@@ -80,233 +40,35 @@
 %define debug_package 		%{nil}
 
 # Build defines
-%define build_doc 			0
-%define build_source 			0
-%define build_devel 			1
-%define build_debug	 		0
+%bcond_with build_doc
+%bcond_without build_source
+%bcond_without build_devel
+%bcond_with build_debug
 
 %define	cross_header_archs	arm arm64 mips
 
-# Old Mandriva kernel flavours plus new two PAE flavours added by MIB
-
-%define build_desktop			0
-%define build_netbook			0
-%define build_server			1
-
-%ifarch %{ix86}
-%define build_desktop586		0
-%define build_desktop_pae		0
-%define build_netbook_pae		0
-%endif
-
-# MIB low latency optimized flavours called "nrj V.5" plus 32bit PAE versions
-
-%define build_nrj_desktop		0
-%define build_nrj_realtime		0
-%define build_nrj_server		0
-%define build_nrj_laptop		0
-%define build_nrj_netbook		0
-
-%ifarch %{ix86}
-%define build_nrj_desktop586		0
-%define build_nrj_desktop_pae		0
-%define build_nrj_realtime_pae		0
-%define build_nrj_laptop_pae		0
-%define build_nrj_netbook_pae		0
-%endif
-
-# MIB experimental low latency "32bit cpu level" optimized, called "nrj V.5" flavours plus PAE versions
-
-%ifarch %{ix86}
-%define build_nrj_netbook_atom		0
-%define build_nrj_netbook_atom_pae	0
-%define build_nrj_desktop_core2   	0
-%define build_nrj_desktop_core2_pae   	0
-%endif
-
-# MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI
-
-%define build_nrjQL_desktop		0
-%define build_nrjQL_realtime		0
-%define build_nrjQL_laptop		0
-%define build_nrjQL_netbook		0
-%define build_nrjQL_server		0
-%define build_nrjQL_server_games	0
-%define build_nrjQL_server_computing	0
-
-# MIB experimental low latency optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
-
-%ifarch %{ix86}
-%define build_nrjQL_desktop_pae		1
-%define build_nrjQL_realtime_pae	0
-%define build_nrjQL_laptop_pae		0
-%define build_nrjQL_netbook_pae		0
-%endif
-
-# MIB experimental "32bit cpu level" optimized flavours called "nrjQL V.5" with BFS, CK1, UKSM, TOI plus PAE 
-
-%ifarch %{ix86}
-%define build_nrjQL_desktop_core2	 0
-%define build_nrjQL_desktop_core2_pae  	 0
-%endif
-
+# BEGIN OF FLAVOURS
+%bcond_with build_desktop
+%bcond_without build_server
 # END OF FLAVOURS
 
-
 # build perf and cpupower tools
-%define build_perf		0
-%define build_cpupower		0
+%bcond_with build_perf
+%bcond_with build_cpupower
 
 # compress modules with xz
-%define build_modxz		1
+%bcond_without build_modxz
 
 # ARM builds
 %ifarch %{armx}
-%define build_desktop		0
-%define build_netbook		0
-%define build_server		0
-%define build_iop32x		0
-# disable all nrj flavours
-%define build_nrjQL_laptop	0
-%define build_nrjQL_desktop	0
-%define build_nrjQL_server	0
-%define build_nrj_desktop	0
-%define build_nrj_laptop	0
-%define build_kirkwood		1
-%define build_versatile		1
-# no cpupower tools on arm yet
-%define build_cpupower		0
-%define build_perf		0
-# arm is currently not using xz
-%define build_modxz		0
+%bcond_with build_desktop
+%bcond_with build_server
 %endif
 # End of user definitions
 
 
-# buildtime flags
-%{?_without_desktop586: %global build_desktop586 0}
-%{?_without_desktop: %global build_desktop 0}
-%{?_without_netbook: %global build_netbook 0}
-%{?_without_server: %global build_server 0}
-
-%{?_without_desktop_pae: %global build_desktop_pae 0}
-%{?_without_netbook_pae: %global build_netbook_pae 0}
-
-%{?_without_nrj_desktop586: %global build_nrj_desktop586 0}
-%{?_without_nrj_desktop: %global build_nrj_desktop 0}
-%{?_without_nrj_realtime: %global build_nrj_realtime 0}
-%{?_without_nrj_server: %global build_nrj_server 0}
-%{?_without_nrj_laptop: %global build_nrj_laptop 0}
-%{?_without_nrj_netbook: %global build_nrj_netbook 0}
-
-%{?_without_nrj_desktop_pae: %global build_nrj_desktop_pae 0}
-%{?_without_nrj_realtime_pae: %global build_nrj_realtime_pae 0}
-%{?_without_nrj_laptop_pae: %global build_nrj_laptop_pae 0}
-%{?_without_nrj_netbook_pae: %global build_nrj_netbook_pae 0}
-
-%{?_without_nrj_netbook_atom: %global build_nrj_netbook_atom 0}
-%{?_without_nrj_netbook_atom_pae: %global build_nrj_netbook_atom_pae 0}
-%{?_without_nrj_desktop_core2: %global build_nrj_desktop_core2 0}
-%{?_without_nrj_desktop_core2_pae: %global build_nrj_desktop_core2_pae 0}
-
-
-%{?_without_nrjQL_desktop: %global build_nrjQL_desktop 0}
-%{?_without_nrjQL_realtime: %global build_nrjQL_realtime 0}
-
-%{?_without_nrjQL_laptop: %global build_nrjQL_laptop 0}
-%{?_without_nrjQL_laptop: %global build_nrjQL_netbook 0}
-
-%{?_without_nrjQL_server: %global build_nrjQL_server 0}
-%{?_without_nrjQL_gameserver: %global build_nrjQL_server_games 0}
-%{?_without_nrjQL_gameserver: %global build_nrjQL_server_computing 0}
-
-%{?_without_nrjQL_desktop_pae: %global build_nrjQL_desktop_pae 0}
-%{?_without_nrjQL_desktop_pae: %global build_nrjQL_realtime_pae 0}
-
-%{?_without_nrjQL_laptop_pae: %global build_nrjQL_laptop_pae 0}
-%{?_without_nrjQL_laptop_pae: %global build_nrjQL_netbook_pae 0}
-
-%{?_without_nrjQL_desktop_core2: %global build_nrjQL_desktop_core2 0}
-%{?_without_nrjQL_desktop_core2_pae: %global build_nrjQL_desktop_core2_pae 0}
-
-
-%{?_without_doc: %global build_doc 0}
-%{?_without_source: %global build_source 0}
-%{?_without_devel: %global build_devel 0}
-%{?_without_debug: %global build_debug 0}
-%{?_without_perf: %global build_perf 0}
-%{?_without_cpupower: %global build_cpupower 0}
-%{?_without_modxz: %global build_modxz 0}
-
-
-
-%{?_with_desktop586: %global build_desktop586 1}
-%{?_with_desktop: %global build_desktop 1}
-%{?_with_netbook: %global build_netbook 1}
-%{?_with_server: %global build_server 1}
-
-%{?_with_desktop_pae: %global build_desktop_pae 1}
-%{?_with_netbook_pae: %global build_netbook_pae 1}
-
-%{?_with_nrj_desktop586: %global build_nrj_desktop586 1}
-%{?_with_nrj_desktop: %global build_nrj_desktop 1}
-%{?_with_nrj_realtime: %global build_nrj_realtime 1}
-%{?_with_nrj_server: %global build_nrj_server 1}
-%{?_with_nrj_laptop: %global build_nrj_laptop 1}
-%{?_with_nrj_netbook: %global build_nrj_netbook 1}
-
-%{?_with_nrj_desktop_pae: %global build_nrj_desktop_pae 1}
-%{?_with_nrj_realtime_pae: %global build_nrj_realtime_pae 1}
-%{?_with_nrj_laptop_pae: %global build_nrj_laptop_pae 1}
-%{?_with_nrj_netbook_pae: %global build_nrj_netbook_pae 1}
-
-%{?_with_nrj_netbook_atom: %global build_nrj_netbook_atom 1}
-%{?_with_nrj_netbook_atom_pae: %global build_nrj_netbook_atom_pae 1}
-%{?_with_nrj_desktop_core2: %global build_nrj_desktop_core2 1}
-%{?_with_nrj_desktop_core2_pae: %global build_nrj_desktop_core2_pae 1}
-
-
-%{?_with_nrjQL_desktop: %global build_nrjQL_desktop 1}
-%{?_with_nrjQL_realtime: %global build_nrjQL_realtime 1}
-
-%{?_with_nrjQL_laptop: %global build_nrjQL_laptop 1}
-%{?_with_nrjQL_laptop: %global build_nrjQL_netbook 1}
-
-%{?_with_nrjQL_server: %global build_nrjQL_server 1}
-%{?_with_nrjQL_gameserver: %global build_nrjQL_server_games 1}
-%{?_with_nrjQL_gameserver: %global build_nrjQL_server_computing 1}
-
-%{?_with_nrjQL_desktop_pae: %global build_nrjQL_desktop_pae 1}
-%{?_with_nrjQL_desktop_pae: %global build_nrjQL_realtime_pae 1}
-
-%{?_with_nrjQL_laptop_pae: %global build_nrjQL_laptop_pae 1}
-%{?_with_nrjQL_laptop_pae: %global build_nrjQL_netbook_pae 1}
-
-%{?_with_nrjQL_desktop_core2: %global build_nrjQL_desktop_core2 1}
-%{?_with_nrjQL_desktop_core2_pae: %global build_nrjQL_desktop_core2_pae 1}
-
-
-%{?_with_doc: %global build_doc 1}
-%{?_with_source: %global build_source 1}
-%{?_with_devel: %global build_devel 1}
-%{?_with_debug: %global build_debug 1}
-%{?_with_perf: %global build_perf 1}
-%{?_with_cpupower: %global build_cpupower 1}
-%{?_with_modxz: %global build_modxz 1}
-
-
-# ARM builds
-%{?_with_iop32x: %global build_iop32x 1}
-%{?_with_kirkwood: %global build_kirkwood 1}
-%{?_with_versatile: %global build_versatile 1}
-%{?_without_iop32x: %global build_iop32x 0}
-%{?_without_kirkwood: %global build_kirkwood 0}
-%{?_without_versatile: %global build_versatile 0}
-
 # For the .nosrc.rpm
-%define build_nosrc 	0
-%{?_with_nosrc: %global build_nosrc 1}
-
+%bcond_with build_nosrc
 
 ############################################################
 ### Linker start1 > Check point to build for omv or rosa ###
@@ -329,11 +91,9 @@
 %define smake make LD="$LD" LDFLAGS="$LDFLAGS"
 %endif
 
-###########################################################
-###  Linker end1 > Check point to build for omv or rosa ###
-###########################################################
-
-
+###################################################
+###  Linker end1 > Check point to build for omv ###
+###################################################
 # Parallelize xargs invocations on smp machines
 %define kxargs xargs %([ -z "$RPM_BUILD_NCPUS" ] \\\
 	&& RPM_BUILD_NCPUS="`/usr/bin/getconf _NPROCESSORS_ONLN`"; \\\
@@ -364,7 +124,7 @@ URL:            http://www.kernel.org
 Source0: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.xz
 Source1: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.sign
 ### This is for stripped SRC RPM
-%if %build_nosrc
+%if %{with build_nosrc}
 NoSource: 0
 %endif
 # This is for disabling *config, mrproper, prepare, scripts on -devel rpms
@@ -380,55 +140,12 @@ Source51:	cpupower.config
 # our patch tarball
 #Source100: 	linux-%{patch_ver}.tar.xz
 
-####################################################################
-#
-# Patches
-
-#
-# Patch0 to Patch100 are for core kernel upgrades.
-#
-
-# Pre linus patch: ftp://ftp.kernel.org/pub/linux/kernel/v3.0/testing
-
-%if %kpatch
-%if %sublevel
-Patch2:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/stable-review/patch-%{kversion}-%{kpatch}.xz
-Source11:	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/stable-review/patch-%{kversion}-%{kpatch}.sign
-%else
-Patch1:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/testing/patch-%{kernelversion}.%{patchlevel}-%{kpatch}.xz
-Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/testing/patch-%{kernelversion}.%{patchlevel}-%{kpatch}.sign
-%endif
-%endif
-%if %kgit
-Patch2:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/snapshots/patch-%{kernelversion}.%{patchlevel}-%{kpatch}-git%{kgit}.xz
-Source11: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/snapshots/patch-%{kernelversion}.%{patchlevel}-%{kpatch}-git%{kgit}.sign
-%endif
-%if %sublevel
-%if %kpatch
-%define prev_sublevel %(expr %{sublevel} - 1)
-%if %prev_sublevel
-Patch1:   	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/patch-%{kernelversion}.%{patchlevel}.%{prev_sublevel}.xz
-Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/patch-%{kernelversion}.%{patchlevel}.%{prev_sublevel}.sign
-%endif
-%else
-Patch1:   	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/patch-%{kversion}.xz
-Source10: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/patch-%{kversion}.sign
-%endif
-%endif
-
-#END
-####################################################################
-
 # Defines for the things that are needed for all the kernels
 #
 %define common_desc_kernel The kernel package contains the Linux kernel (vmlinuz), the core of your \
-Mandriva and ROSA operating system. The kernel handles the basic functions \
+OpenMandriva LX operating system. The kernel handles the basic functions \
 of the operating system: memory allocation, process allocation, device \
 input and output, etc.
-
-%define common_desc_kernel_smp This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter.
 
 
 ### Global Requires/Provides
@@ -472,17 +189,17 @@ BuildRequires:  numa-devel
 
 # for perf, cpufreq and all other tools
 # for cpupower
-%if %{build_cpupower}
+%if %{with build_cpupower}
 BuildRequires:		pciutils-devel
 %endif
 
 # for docs
-%if %{build_doc}
+%if %{with build_doc}
 BuildRequires:          xmlto
 %endif
 
 # for perf
-%if %{build_perf}
+%if %{with build_perf}
 BuildRequires:		asciidoc
 BuildRequires:		audit-devel
 BuildRequires:		binutils-devel
@@ -511,9 +228,6 @@ Suggests:		microcode
 
 %description
 %common_desc_kernel
-%ifnarch %{arm}
-%common_desc_kernel_smp
-%endif
 
 # Define obsolete/provides to help automatic upgrades of old kernel-xen-pvops
 %define latest_obsoletes_server kernel-xen-pvops-latest < 3.2.1-1
@@ -531,9 +245,6 @@ Release:	%{fakerel}				\
 Provides:	%kprovides1 %kprovides2 %kprovides3	\
 %{expand:%%{?kprovides_%{1}:Provides: %{kprovides_%{1}}}} \
 Provides:   %{kname}-%{1}              			 \
-%if %{build_nrj_desktop}              		\
-Provides:   kernel-desktop              		\
-%endif                                  		\
 Requires(pre):	%requires1 %requires2 %requires3 %requires4 \
 Requires:	%requires2 %requires5			\
 Obsoletes:	%kobsoletes1 %kobsoletes2 %kobsoletes3	\
@@ -548,11 +259,8 @@ Summary:	%{expand:%{summary_%(echo %{1} | sed -e "s/-/_/")}} \
 Group:		System/Kernel and hardware		\
 %description -n %{kname}-%{1}-%{buildrel}		\
 %common_desc_kernel %{expand:%{info_%(echo %{1} | sed -e "s/-/_/")}} \
-%ifnarch %{arm}						\
-%common_desc_kernel_smp					\
-%endif							\
 							\
-%if %build_devel					\
+%if %{with build_devel}					\
 %package -n	%{kname}-%{1}-devel-%{buildrel}		\
 Version:	%{fakever}				\
 Release:	%{fakerel}				\
@@ -574,7 +282,7 @@ If you want to build your own kernel, you need to install the full \
 							\
 %endif							\
 							\
-%if %build_debug					\
+%if %{with build_debug}					\
 %package -n	%{kname}-%{1}-%{buildrel}-debuginfo	\
 Version:	%{fakever}				\
 Release:	%{fakerel}				\
@@ -608,7 +316,7 @@ Conflicts:	arch(x86_64)				\
 This package is a virtual rpm that aims to make sure you always have the \
 latest %{kname}-%{1} installed...			\
 							\
-%if %build_devel					\
+%if %{with build_devel}					\
 %package -n %{kname}-%{1}-devel-latest			\
 Version:	%{kversion}				\
 Release:	%{rpmrel}				\
@@ -632,7 +340,7 @@ latest %{kname}-%{1}-devel installed...			\
 %preun -n %{kname}-%{1}-%{buildrel} -f kernel_files.%{1}-preun \
 %postun -n %{kname}-%{1}-%{buildrel} -f kernel_files.%{1}-postun \
 							\
-%if %build_devel					\
+%if %{with build_devel}					\
 %post -n %{kname}-%{1}-devel-%{buildrel} -f kernel_devel_files.%{1}-post \
 %preun -n %{kname}-%{1}-devel-%{buildrel} -f kernel_devel_files.%{1}-preun \
 %postun -n %{kname}-%{1}-devel-%{buildrel} -f kernel_devel_files.%{1}-postun \
@@ -641,32 +349,18 @@ latest %{kname}-%{1}-devel installed...			\
 %files -n %{kname}-%{1}-%{buildrel} -f kernel_files.%{1} \
 %files -n %{kname}-%{1}-latest				\
 							\
-%if %build_devel					\
+%if %{with build_devel}					\
 %files -n %{kname}-%{1}-devel-%{buildrel} -f kernel_devel_files.%{1} \
 %files -n %{kname}-%{1}-devel-latest			\
 %endif							\
 							\
-%if %build_debug					\
+%if %{with build_debug}					\
 %files -n %{kname}-%{1}-%{buildrel}-debuginfo -f kernel_debug_files.%{1} \
 %endif
 
-%ifarch %{ix86}
-#
-# kernel-desktop586: i586, smp-alternatives, 4GB
-#
-%if %build_desktop586
-%define summary_desktop586 Linux kernel for desktop use with i586 & 4GB RAM
-%define info_desktop586 This kernel is compiled for desktop use, single or \
-multiple i586 processor(s)/core(s) and less than 4GB RAM, using HZ_1000, \
-voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%mkflavour desktop586
-%endif
-%endif
-
-#
 # kernel-desktop: i686, smp-alternatives, 4 GB / x86_64
 #
-%if %build_desktop
+%if %{with build_desktop}
 %ifarch %{ix86}
 %define summary_desktop Linux Kernel for desktop use with i686 & 4GB RAM
 %define info_desktop This kernel is compiled for desktop use, single or \
@@ -682,27 +376,7 @@ voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
 %endif
 
 #
-# kernel-netbook: i686, smp-alternatives, 4 GB / x86_64
-#
-%if %build_netbook
-%ifarch %{ix86}
-%define summary_netbook Linux Kernel for netbook use with i686 & 4GB RAM
-%define info_netbook This kernel is compiled for netbook use, single or \
-multiple i686 processor(s)/core(s) and less than 4GB RAM, using HZ_250, \
-voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler.
-%else
-%define summary_netbook Linux Kernel for netbook use with %{_arch}
-%define info_netbook This kernel is compiled for netbook use, single or \
-multiple %{_arch} processor(s)/core(s), using HZ_250, \
-voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%endif
-%mkflavour netbook
-%endif
-
-#
-# kernel-server: i686, smp-alternatives, 64 GB / x86_64
-#
-%if %build_server
+%if %{with build_server}
 %ifarch %{ix86}
 %define summary_server Linux Kernel for server use with i686 & 64GB RAM
 %define info_server This kernel is compiled for server use, single or \
@@ -711,582 +385,15 @@ no preempt, HZ_100, CFS cpu scheduler and BFQ i/o scheduler, PERFORMANCE governo
 %else
 %define summary_server Linux Kernel for server use with %{_arch}
 %define info_server This kernel is compiled for server use, single or \
-multiple %{_arch} processor(s)/core(s), using no preempt, HZ_100, \
 CFS cpu scheduler and BFQ i/o scheduler, PERFORMANCE governor.
 %endif
 %mkflavour server
 %endif
 
-%ifarch %{ix86}
-#
-# kernel-desktop-pae: i686, smp-alternatives, 64GB
-#
-%if %build_desktop_pae
-%define summary_desktop_pae Linux kernel for desktop use with i686 & upto 64GB RAM
-%define info_desktop_pae This kernel is compiled for desktop use, single or \
-multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_1000, \
-voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%mkflavour desktop-pae
-%endif
-%endif
-
-%ifarch %{ix86}
-#
-# kernel-netbook-pae: i686, smp-alternatives, 64 GB
-#
-%if %build_netbook_pae
-%define summary_netbook_pae Linux Kernel for for netbook use with i686 & upto 64GB RAM
-%define info_netbook_pae This kernel is compiled for netbook use, single or \
-multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_250, \
-voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%mkflavour netbook-pae
-%endif
-%endif
-
-%ifarch %{ix86}
-#
-# kernel-nrj-desktop586: nrj, i586, smp-alternatives, 4GB
-#
-%if %build_nrj_desktop586
-%define summary_nrj_desktop586 Linux kernel for desktop use with i586 & 4GB RAM
-%define info_nrj_desktop586 This kernel is compiled for desktop use, single or \
-multiple i586 processor(s)/core(s) and less than 4GB RAM, using HZ_1000, \
-full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%mkflavour nrj-desktop586
-%endif
-%endif
-
-#
-# kernel-nrj-desktop: nrj, i686, smp-alternatives, 4 GB / x86_64
-#
-%if %build_nrj_desktop
-%ifarch %{ix86}
-%define summary_nrj_desktop Linux Kernel for desktop use with i686 & 4GB RAM
-%define info_nrj_desktop This kernel is compiled for desktop use, single or \
-multiple i686 processor(s)/core(s) and less than 4GB RAM, using HZ_1000, \
-full preempt, rcu boost, RIFS cpu scheduler and BFQ I/O scheduler, ONDEMAND governor.
-%else
-%define summary_nrj_desktop Linux Kernel for desktop use with %{_arch}
-%define info_nrj_desktop This kernel is compiled for desktop use, single or \
-multiple %{_arch} processor(s)/core(s), using HZ_1000, \
-full preempt, rcu boost, RIFS cpu scheduler and BFQ I/O scheduler, ONDEMAND governor.
-%endif
-%mkflavour nrj-desktop
-%endif
-
-#
-# kernel-nrj-realtime: nrj, i686, smp-alternatives, 4 GB / x86_64
-#
-%if %build_nrj_realtime
-%ifarch %{ix86}
-%define summary_nrj_realtime Linux Kernel for low latency use with i686 & 4GB RAM
-%define info_nrj_realtime This kernel is compiled for low latency use, single or \
-multiple i686 processor(s)/core(s) and less than 4GB RAM, using HZ_1000, \
-full preempt, rcu boost, CFS cpu scheduler and new BFQ I/O scheduler, PERFORMANCE governor.
-%else
-%define summary_nrj_realtime Linux Kernel for low latency use with %{_arch}
-%define info_nrj_realtime This kernel is compiled for low latency use, single or \
-multiple %{_arch} processor(s)/core(s), using HZ_1000, \
-full preempt, rcu boost, CFS cpu scheduler and new BFQ I/O scheduler, PERFORMANCE governor.
-%endif
-%mkflavour nrj-realtime
-%endif
-
-#
-# kernel-nrj-server: i686, smp-alternatives, 64 GB / x86_64
-#
-%if %build_nrj_server
-%ifarch %{ix86}
-%define summary_nrj_server Linux Kernel for server use with i686 & 64GB RAM
-%define info_nrj_server This kernel is compiled for server use, single or \
-multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using \
-no preempt, HZ_100, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%else
-%define summary_nrj_server Linux Kernel for server use with %{_arch}
-%define info_nrj_server This kernel is compiled for server use, single or \
-multiple %{_arch} processor(s)/core(s), using no preempt, HZ_100, \
-CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%endif
-%mkflavour nrj-server
-%endif
-
-#
-# kernel-nrj-laptop: nrj, i686, smp-alternatives, 4 GB / x86_64
-#
-%if %build_nrj_laptop
-%ifarch %{ix86}
-%define summary_nrj_laptop Linux Kernel for laptop use with i686 & 4GB RAM
-%define info_nrj_laptop This kernel is compiled for laptop use, single or \
-multiple i686 processor(s)/core(s) and less than 4GB RAM, using HZ_300, \
-full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%else
-%define summary_nrj_laptop Linux Kernel for laptop use with %{_arch}
-%define info_nrj_laptop This kernel is compiled for laptop use, single or \
-multiple %{_arch} processor(s)/core(s), using HZ_300, \
-full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%endif
-%mkflavour nrj-laptop
-%endif
-
-#
-# kernel-nrj-netbook: nrj, i686, smp-alternatives, 4 GB / x86_64
-#
-%if %build_nrj_netbook
-%ifarch %{ix86}
-%define summary_nrj_netbook Linux Kernel for netbook use with i686 & 4GB RAM
-%define info_nrj_netbook This kernel is compiled for netbook use, single or \
-multiple i686 processor(s)/core(s) and less than 4GB RAM, using HZ_250, \
-full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%else
-%define summary_nrj_netbook Linux Kernel for netbook use with %{_arch}
-%define info_nrj_netbook This kernel is compiled for netbook use, single or \
-multiple %{_arch} processor(s)/core(s), using HZ_250, \
-full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%endif
-%mkflavour nrj-netbook
-%endif
-
-#
-%ifarch %{ix86}
-#
-# kernel-nrj-desktop-pae: nrj, i686, smp-alternatives, 64GB
-#
-%if %build_nrj_desktop_pae
-%define summary_nrj_desktop_pae Linux kernel for desktop use with i686 & upto 64GB RAM
-%define info_nrj_desktop_pae This kernel is compiled for desktop use, single or \
-multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_1000, \
-full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%mkflavour nrj-desktop-pae
-%endif
-%endif
-
-#
-%ifarch %{ix86}
-#
-# kernel-nrj-realtime-pae: nrj, i686, smp-alternatives, 64GB
-#
-%if %build_nrj_realtime_pae
-%define summary_nrj_realtime_pae Linux kernel for low latency use with i686 & upto 64GB RAM
-%define info_nrj_realtime_pae This kernel is compiled for low latency use, single or \
-multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_1000, \
-full preempt, rcu boost, CFS cpu scheduler and new BFQ I/O scheduler, PERFORMANCE governor.
-%mkflavour nrj-realtime-pae
-%endif
-%endif
-
-#
-%ifarch %{ix86}
-#
-# kernel-nrj-laptop-pae: nrj, i686, smp-alternatives, 64 GB
-#
-%if %build_nrj_laptop_pae
-%define summary_nrj_laptop_pae Linux Kernel for for laptop use with i686 & upto 64GB RAM
-%define info_nrj_laptop_pae This kernel is compiled for laptop use, single or \
-multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_300, \
-full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%mkflavour nrj-laptop-pae
-%endif
-%endif
-
-#
-%ifarch %{ix86}
-#
-# kernel-nrj-netbook-pae: nrj, i686, smp-alternatives, 64 GB
-#
-%if %build_nrj_netbook_pae
-%define summary_nrj_netbook_pae Linux Kernel for for netbook use with i686 & upto 64GB RAM
-%define info_nrj_netbook_pae This kernel is compiled for netbook use, single or \
-multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_250, \
-full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%mkflavour nrj-netbook-pae
-%endif
-%endif
-
-#
-%ifarch %{ix86}
-#
-# kernel-nrj-netbook-atom: nrj, for Intel Atom cpu, smp-alternatives, 4 GB
-#
-%if %build_nrj_netbook_atom
-%define summary_nrj_netbook_atom Linux Kernel for netbook use with Intel Atom cpu, less than 4GB RAM
-%define info_nrj_netbook_atom This kernel is compiled for netbook use, single or \
-multiple Intel Atom cpu processor(s)/core(s) and less than 4GB RAM, using HZ_250, \
-full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%mkflavour nrj-netbook-atom
-%endif
-%endif
-
-#
-%ifarch %{ix86}
-#
-# kernel-nrj-netbook-atom-pae: nrj, for Intel Atom cpu, smp-alternatives, 64 GB
-#
-%if %build_nrj_netbook_atom_pae
-%define summary_nrj_netbook_atom_pae Linux Kernel for netbook use with Intel Atom cpu & upto 64GB RAM
-%define info_nrj_netbook_atom_pae This kernel is compiled for netbook use, single or \
-multiple Intel Atom cpu processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_250, \
-full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%mkflavour nrj-netbook-atom-pae
-%endif
-%endif
-
-#
-%ifarch %{ix86}
-#
-# kernel-nrj-desktop-core2: nrj, Intel Core 2 and newer, smp-alternatives, 4 GB 
-#
-%if %build_nrj_desktop_core2
-%define summary_nrj_desktop_core2 Linux Kernel for desktop use with i686 & 4GB RAM
-%define info_nrj_desktop_core2 This kernel is compiled for desktop use, single or \
-multiple Intel Core 2 and newer processor(s)/core(s) and less than 4GB RAM, using HZ_1000, \
-full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%mkflavour nrj-desktop-core2
-%endif
-%endif
-
-#
-%ifarch %{ix86}
-#
-# kernel-nrj-desktop-core2-pae: nrj, Intel Core 2 and newer, smp-alternatives, 64 GB
-#
-%if %build_nrj_desktop_core2_pae
-%define summary_nrj_desktop_core2_pae Linux Kernel for desktop use with i686 & upto 64GB RAM
-%define info_nrj_desktop_core2_pae This kernel is compiled for desktop use, single or \
-multiple Intel Core 2 and newer processor(s)/core(s) and up to 64GB RAM using PAE, using HZ_1000, \
-full preempt, rcu boost, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
-%mkflavour nrj-desktop-core2-pae
-%endif
-%endif
-
-#
-# ARM kernels
-#
-%ifarch %{arm}
-%if %build_iop32x
-%define summary_iop32x Linux Kernel for Arm machines based on Xscale IOP32X
-%define info_iop32x This kernel is compiled for iop32x boxes. It will run on n2100 \
-or ss4000e or sanmina boards.
-%mkflavour iop32x
-%endif
-%if %build_kirkwood
-%define summary_kirkwood Linux Kernel for Arm machines based on Kirkwood
-%define info_kirkwood This kernel is compiled for kirkwood boxes. It will run on openrd boards.
-%mkflavour kirkwood
-%endif
-%if %build_versatile
-%define summary_versatile Linux Kernel for Versatile arm machines
-%define info_versatile This kernel is compiled for Versatile boxes. It will run on Qemu for instance.
-%mkflavour versatile
-%endif
-%endif
-
-#
-# kernel-nrjQL-desktop: nrjQL, i686, smp-alternatives, 4 GB / x86_64
-#
-%if %build_nrjQL_desktop
-%ifarch %{ix86}
-%define summary_nrjQL_desktop Linux Kernel for desktop use with i686 & 4GB RAM
-%define info_nrjQL_desktop This kernel is compiled for desktop use, single or \
-multiple i686 processor(s)/core(s), less than 4GB RAM (usually 3-3.5GB detected)\
-using HZ_1000, full preempt, rcu boost, CK1, BFS cpu scheduler, BFQ I/O scheduler.\
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter.
-%else
-%define summary_nrjQL_desktop Linux Kernel for desktop use with %{_arch}
-%define info_nrjQL_desktop This kernel is compiled for desktop use, single or \
-multiple %{_arch} processor(s)/core(s),\
-using HZ_1000, full preempt, rcu boost, CK1, BFS cpu scheduler, BFQ I/O scheduler.\
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter.
-%endif
-%mkflavour nrjQL-desktop
-%endif
-
-#
-# kernel-nrjQL-realtime: nrjQL, i686, smp-alternatives, 4 GB / x86_64
-#
-%if %build_nrjQL_realtime
-%ifarch %{ix86}
-%define summary_nrjQL_realtime Linux Kernel for desktop and realtime use with i686 & 4GB RAM
-%define info_nrjQL_realtime This kernel is compiled for desktop and realtime use, single or \
-multiple i686 processor(s)/core(s) and less than 4GB RAM (usually 3-3.5GB detected), \
-using full preempt and realtime, rcu boost, CK1, BFS cpu scheduler, BFQ I/O scheduler.\
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter.
-%else
-%define summary_nrjQL_realtime Linux Kernel for desktop and realtime use with %{_arch}
-%define info_nrjQL_realtime This kernel is compiled for desktop and realtime use, single or \
-multiple %{_arch} processor(s)/core(s), \
-using full preempt and realtime, rcu boost, CK1, BFS cpu scheduler, BFQ I/O scheduler.\
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter.
-%endif
-%mkflavour nrjQL-realtime
-%endif
-
-#
-# kernel-nrjQL-laptop: nrjQL, i686, smp-alternatives, 4 GB / x86_64
-#
-%if %build_nrjQL_laptop
-%ifarch %{ix86}
-%define summary_nrjQL_laptop Linux Kernel for laptop use with i686 & 4GB RAM
-%define info_nrjQL_laptop This kernel is compiled for laptop use, single or \
-multiple i686 processor(s)/core(s) and less than 4GB RAM (usually 3-3.5GB detected), \
-using HZ_300 and CPU frequency scaling ondemand default, everything to save battery, \
-using full preempt, rcu boost, CK1, BFS cpu scheduler, BFQ I/O scheduler, \
-and some other laptop-specific optimizations. \
-If you want to sacrifice battery life for performance, you better use the \
-%{kname}-desktop. \
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter. \
-NOTE! This kernel also uses TuxOnIce by default.
-%else
-%define summary_nrjQL_laptop Linux Kernel for laptop use with %{_arch}
-%define info_nrjQL_laptop This kernel is compiled for laptop use, single or \
-multiple %{_arch} processor(s)/core(s), \
-using HZ_300 and CPU frequency scaling ondemand default, everything to save battery, \
-using full preempt, rcu boost, CK1, BFS cpu scheduler, BFQ I/O scheduler, \
-and some other laptop-specific optimizations. \
-If you want to sacrifice battery life for performance, you better use the \
-%{kname}-desktop. \
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter. \
-NOTE! This kernel also uses TuxOnIce by default.
-%endif
-%mkflavour nrjQL-laptop
-%endif
-
-#
-# kernel-nrjQL-netbook: nrj, i686, smp-alternatives, 4 GB / x86_64
-#
-%if %build_nrjQL_netbook
-%ifarch %{ix86}
-%define summary_nrjQL_netbook Linux Kernel for netbook use with i686 & 4GB RAM
-%define info_nrjQL_netbook This kernel is compiled for netbook use, single or \
-multiple i686 processor(s)/core(s) and less than 4GB RAM (usually 3-3.5GB detected), \
-using HZ_250 and CPU frequency scaling ondemand default, everything to save battery, \
-using full preempt, rcu boost, CK1, BFS cpu scheduler, BFQ I/O scheduler, \
-and some other netbook-specific optimizations. \
-If you want to sacrifice battery life for performance, you better use the \
-%{kname}-desktop. \
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter. \
-NOTE! This kernel also uses TuxOnIce by default.
-%else
-%define summary_nrjQL_netbook Linux Kernel for netbook use with %{_arch}
-%define info_nrjQL_netbook This kernel is compiled for netbook use, single or \
-multiple %{_arch} processor(s)/core(s), \
-using HZ_250 and CPU frequency scaling ondemand default, everything to save battery, \
-using full preempt, rcu boost, CK1, BFS cpu scheduler, BFQ I/O scheduler, \
-and some other netbook-specific optimizations. \
-If you want to sacrifice battery life for performance, you better use the \
-%{kname}-desktop. \
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter. \
-NOTE! This kernel also uses TuxOnIce by default.
-%endif
-%mkflavour nrjQL-netbook
-%endif
-
-#
-# kernel-server: i686, smp-alternatives, 64 GB / x86_64
-#
-%if %build_nrjQL_server
-%ifarch %{ix86}
-%define summary_nrjQL_server Linux Kernel for server use with i686 & 64GB RAM
-%define info_nrjQL_server This kernel is compiled for server use, single or \
-multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using \
-no preempt, HZ_100, CK1, BFS cpu scheduler, BFQ I/O scheduler. \
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter.
-%else
-%define summary_nrjQL_server Linux Kernel for server use with %{_arch}
-%define info_nrjQL_server This kernel is compiled for server use, single or \
-multiple %{_arch} processor(s)/core(s), using no preempt, HZ_100, \
-CK1, BFS cpu scheduler, BFQ I/O scheduler. \
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter.
-%endif
-%mkflavour nrjQL-server
-%endif
-
-#
-# kernel-server-computing: i686, smp-alternatives, 64 GB / x86_64
-#
-%if %build_nrjQL_server_computing
-%ifarch %{ix86}
-%define summary_nrjQL_server_computing Linux Kernel for server use with i686 & 64GB RAM
-%define info_nrjQL_server_computing This kernel is compiled for server use, to obtain a \
-optimized dedicated encoding / compiling / computational machine, single or \
-multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using \
-no preempt, HZ_100, CK1, BFS cpu scheduler, BFQ I/O scheduler. \
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter.
-%else
-%define summary_nrjQL_server_computing Linux Kernel for server use with %{_arch}
-%define info_nrjQL_server_computing This kernel is compiled for server use, to obtain a \
-optimized dedicated encoding / compiling / computational machine, single or \
-multiple %{_arch} processor(s)/core(s), using no preempt, HZ_100, \
-CK1, BFS cpu scheduler, BFQ I/O scheduler. \
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter.
-%endif
-%mkflavour nrjQL-server-computing
-%endif
-
-#
-# kernel-server-games: i686, smp-alternatives, 64 GB / x86_64
-#
-%if %build_nrjQL_server_games
-%ifarch %{ix86}
-%define summary_nrjQL_server_games Linux Kernel for games server use with i686 & 64GB RAM
-%define info_nrjQL_server_games This kernel is compiled for games server use, single or \
-multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, \
-using no preempt, HZ_3000, CK1, BFS cpu scheduler, BFQ I/O scheduler. \
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter.
-%else
-%define summary_nrjQL_server_games Linux Kernel for games server use with %{_arch}
-%define info_nrjQL_server_games This kernel is compiled for games server use, single or \
-multiple %{_arch} processor(s)/core(s), \
-using no preempt, HZ_3000, CK1, BFS cpu scheduler, BFQ I/O scheduler. \
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter.
-%endif
-%mkflavour nrjQL-server-games
-%endif
-
-#
-%ifarch %{ix86}
-#
-# kernel-nrjQL-desktop-pae: nrjQL, i686, smp-alternatives, 64GB
-#
-%if %build_nrjQL_desktop_pae
-%define summary_nrjQL_desktop_pae Linux kernel for desktop use with i686 & upto 64GB RAM
-%define info_nrjQL_desktop_pae This kernel is compiled for desktop use, single or \
-multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, \
-using HZ_1000, full preempt, rcu boost, CK1, BFS cpu scheduler, BFQ I/O scheduler.\
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter.
-%mkflavour nrjQL-desktop-pae
-%endif
-%endif
-
-#
-%ifarch %{ix86}
-#
-# kernel-nrjQL-realtime-pae: nrjQL, i686, smp-alternatives, 64GB
-#
-%if %build_nrjQL_realtime_pae
-%define summary_nrjQL_realtime_pae Linux kernel for desktop and realtime use with i686 & upto 64GB RAM
-%define info_nrjQL_realtime_pae This kernel is compiled for desktop and realtime use, single or \
-multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, \
-using full preempt and realtime, rcu boost, CK1, BFS cpu scheduler, BFQ I/O scheduler.\
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter.
-%mkflavour nrjQL-realtime-pae
-%endif
-%endif
-
-#
-%ifarch %{ix86}
-#
-# kernel-nrjQL-laptop-pae: nrjQL, i686, smp-alternatives, 64 GB
-#
-%if %build_nrjQL_laptop_pae
-%define summary_nrjQL_laptop_pae Linux Kernel for for laptop use with i686 & upto 64GB RAM
-%define info_nrjQL_laptop_pae This kernel is compiled for laptop use, single or \
-multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, \
-using HZ_300 and CPU frequency scaling ondemand default, everything to save battery, \
-using full preempt, rcu boost, CK1, BFS cpu scheduler, BFQ I/O scheduler, \
-and some other laptop-specific optimizations. \
-If you want to sacrifice battery life for performance, you better use the \
-%{kname}-desktop. \
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter. \
-NOTE! This kernel also uses TuxOnIce by default.
-%mkflavour nrjQL-laptop-pae
-%endif
-%endif
-
-#
-%ifarch %{ix86}
-#
-# kernel-nrjQL-netbook-pae: nrjQL, i686, smp-alternatives, 64 GB
-#
-%if %build_nrjQL_netbook_pae
-%define summary_nrjQL_netbook_pae Linux Kernel for netbook use with i686 & upto 64GB RAM
-%define info_nrjQL_netbook_pae This kernel is compiled for netbook use, single or \
-multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, \
-using HZ_250 and CPU frequency scaling ondemand default, everything to save battery, \
-using full preempt, rcu boost, CK1, BFS cpu scheduler, BFQ I/O scheduler, \
-and some other netbook-specific optimizations. \
-If you want to sacrifice battery life for performance, you better use the \
-%{kname}-desktop. \
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter. \
-NOTE! This kernel also uses TuxOnIce by default.
-%mkflavour nrjQL-netbook-pae
-%endif
-%endif
-
-#
-%ifarch %{ix86}
-#
-# kernel-nrjQL-desktop-core2: nrjQL, Intel Core 2 and newer, smp-alternatives, 4 GB 
-#
-%if %build_nrjQL_desktop_core2
-%define summary_nrjQL_desktop_core2 Linux Kernel for desktop use with i686 & 4GB RAM
-%define info_nrjQL_desktop_core2 This kernel is compiled for desktop use, single or \
-multiple Intel Core 2 and newer processor(s)/core(s) and less than 4GB RAM (usually 3-3.5GB detected), \
-using HZ_1000, full preempt, rcu boost, CK1, BFS cpu scheduler, BFQ I/O scheduler.\
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter.
-%mkflavour nrjQL-desktop-core2
-%endif
-%endif
-
-#
-%ifarch %{ix86}
-#
-# kernel-nrjQL-desktop-core2-pae: nrjQL, Intel Core 2 and newer, smp-alternatives, 64 GB
-#
-%if %build_nrjQL_desktop_core2_pae
-%define summary_nrjQL_desktop_core2_pae Linux Kernel for desktop use with i686 & upto 64GB RAM
-%define info_nrjQL_desktop_core2_pae This kernel is compiled for desktop use, single or \
-multiple Intel Core 2 and newer processor(s)/core(s) and up to 64GB RAM using PAE, \
-using HZ_1000, full preempt, rcu boost, CK1, BFS cpu scheduler, BFQ I/O scheduler.\
-This kernel relies on in-kernel smp alternatives to switch between up & smp \
-mode depending on detected hardware. To force the kernel to boot in single \
-processor mode, use the "nosmp" boot parameter.
-%mkflavour nrjQL-desktop-core2-pae
-%endif
-%endif
-
-
 #
 # kernel-source
 #
-%if %build_source
+%if %{with build_source}
 %package -n %{kname}-source-%{buildrel}
 Version: 	%{fakever}
 Release: 	%{fakerel}
@@ -1324,7 +431,7 @@ latest %{kname}-source installed...
 #
 # kernel-doc: documentation for the Linux kernel
 #
-%if %build_doc
+%if %with build_doc
 %package -n %{kname}-doc
 Version: 	%{kversion}
 Release: 	%{rpmrel}
@@ -1343,7 +450,7 @@ Linux kernel modules at load time.
 #
 # kernel/tools
 #
-%if %{build_perf}
+%if %{with build_perf}
 %package -n perf
 Version:	%{kversion}
 Release:	%{rpmrel}
@@ -1354,7 +461,7 @@ Group:		System/Kernel and hardware
 the perf tool and the supporting documentation.
 %endif
 
-%if %{build_cpupower}
+%if %{with build_cpupower}
 %package -n cpupower
 Version:	%{kversion}
 Release:	%{rpmrel}
@@ -1398,7 +505,7 @@ should use the 'kernel-devel' package instead.
 %files headers
 %_includedir/*
 # Don't conflict with cpupower-devel
-%if %{build_cpupower}
+%if %{with build_cpupower}
 %exclude %_includedir/cpufreq.h
 %endif
 
@@ -1434,7 +541,7 @@ following platforms:
 cd %src_dir
 %patch1 -p1
 
-%if %build_debug
+%if %{with build_debug}
 %define debug --debug
 %else
 %define debug --no-debug
@@ -1445,6 +552,8 @@ LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 
 # get rid of unwanted files
 find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
+# more all .gitignore/.get_maintainer.ignore files
+find . -name "*.g*ignore" -exec rm {} \;
 
 %build
 %setup_compile_flags
@@ -1764,7 +873,7 @@ cat > $kernel_files <<EOF
 %doc README.kernel-sources
 EOF
 
-%if %build_debug
+%if %{with build_debug}
     cat ../kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
 %endif
 
@@ -1790,7 +899,7 @@ fi
 
 popd > /dev/null
 %endif
-%if %build_devel
+%if %{with build_devel}
 # create kernel-devel symlinks if matching -devel- rpm is installed
 if [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
 	rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/{build,source}
@@ -1829,7 +938,7 @@ if [ -L initrd-$kernel_flavour.img ]; then
 	fi
 fi
 popd > /dev/null
-%if %build_devel
+%if %{with build_devel}
 if [ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build ]; then
 	rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
 fi
@@ -1861,10 +970,10 @@ CreateKernel() {
 	PrepareKernel $flavour $flavour-%{buildrpmrel}
 
 	BuildKernel %{kversion}-$flavour-%{buildrpmrel}
-	%if %build_devel
+	%if %{with build_devel}
 		SaveDevel $flavour
 	%endif
-	%if %build_debug
+	%if %{with build_debug}
 		SaveDebug $flavour
 	%endif
 	CreateFiles $flavour
@@ -1883,185 +992,18 @@ install -d %{temp_root}
 # make sure we are in the directory
 cd %src_dir
 
-%ifarch %{ix86}
-%if %build_desktop586
-CreateKernel desktop586
-%endif
-%endif
-
-%if %build_desktop
+%if %{with build_desktop}
 CreateKernel desktop
 %endif
 
-%if %build_netbook
-CreateKernel netbook
-%endif
-
-%if %build_server
+%if %{with build_server}
 CreateKernel server
 %endif
 
-%ifarch %{ix86}
-%if %build_desktop_pae
-CreateKernel desktop-pae
-%endif
-%endif
-
-%ifarch %{ix86}
-%if %build_netbook_pae
-CreateKernel netbook-pae
-%endif
-%endif
-
-%ifarch %{ix86}
-%if %build_nrj_desktop586
-CreateKernel nrj-desktop586
-%endif
-%endif
-
-%if %build_nrj_desktop
-CreateKernel nrj-desktop
-%endif
-
-%if %build_nrj_realtime
-CreateKernel nrj-realtime
-%endif
-
-%if %build_nrj_server
-CreateKernel nrj-server
-%endif
-
-%if %build_nrj_laptop
-CreateKernel nrj-laptop
-%endif
-
-%if %build_nrj_netbook
-CreateKernel nrj-netbook
-%endif
-
-%ifarch %{ix86}
-%if %build_nrj_desktop_pae
-CreateKernel nrj-desktop-pae
-%endif
-%endif
-
-%ifarch %{ix86}
-%if %build_nrj_realtime_pae
-CreateKernel nrj-realtime-pae
-%endif
-%endif
-
-%ifarch %{ix86}
-%if %build_nrj_laptop_pae
-CreateKernel nrj-laptop-pae
-%endif
-%endif
-
-%ifarch %{ix86}
-%if %build_nrj_netbook_pae
-CreateKernel nrj-netbook-pae
-%endif
-%endif
-
-%ifarch %{ix86}
-%if %build_nrj_netbook_atom
-CreateKernel nrj-netbook-atom
-%endif
-%endif
-
-%ifarch %{ix86}
-%if %build_nrj_netbook_atom_pae
-CreateKernel nrj-netbook-atom-pae
-%endif
-%endif
-
-%ifarch %{ix86}
-%if %build_nrj_desktop_core2
-CreateKernel nrj-desktop-core2
-%endif
-%endif
-
-%ifarch %{ix86}
-%if %build_nrj_desktop_core2_pae
-CreateKernel nrj-desktop-core2-pae
-%endif
-%endif
-
-%ifarch %{arm}
-%if %build_iop32x
-CreateKernel iop32x
-%endif
-%if %build_kirkwood
-CreateKernel kirkwood
-%endif
-%if %build_versatile
-CreateKernel versatile
-%endif
-%endif
-
-%if %build_nrjQL_desktop
-CreateKernel nrjQL-desktop
-%endif
-
-%if %build_nrjQL_realtime
-CreateKernel nrjQL-realtime
-%endif
-
-%if %build_nrjQL_laptop
-CreateKernel nrjQL-laptop
-%endif
-
-%if %build_nrjQL_netbook
-CreateKernel nrjQL-netbook
-%endif
-
-%if %build_nrjQL_server
-CreateKernel nrjQL-server
-%endif
-
-%if %build_nrjQL_server_computing
-CreateKernel nrjQL-server-computing
-%endif
-
-%if %build_nrjQL_server_games
-CreateKernel nrjQL-server-games
-%endif
-
-%ifarch %{ix86}
-%if %build_nrjQL_desktop_pae
-CreateKernel nrjQL-desktop-pae
-%endif
-%endif
-
-%ifarch %{ix86}
-%if %build_nrjQL_realtime_pae
-CreateKernel nrjQL-realtime-pae
-%endif
-%endif
-
-%ifarch %{ix86}
-%if %build_nrjQL_laptop_pae
-CreateKernel nrjQL-laptop-pae
-%endif
-%endif
-
-%ifarch %{ix86}
-%if %build_nrjQL_netbook_pae
-CreateKernel nrjQL-netbook-pae
-%endif
-%endif
-
-%ifarch %{ix86}
-%if %build_nrjQL_desktop_core2
-CreateKernel nrjQL-desktop-core2
-%endif
-%endif
-
-%ifarch %{ix86}
-%if %build_nrjQL_desktop_core2_pae
-CreateKernel nrjQL-desktop-core2-pae
-%endif
-%endif
+# how to build own flavour
+# %if %build_nrjQL_desktop
+# CreateKernel nrjQL-desktop
+# %endif
 
 # set extraversion to match srpm to get nice version reported by the tools
 #LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
@@ -2070,12 +1012,12 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 ############################################################
 ### Linker start3 > Check point to build for omv or rosa ###
 ############################################################
-%if %{build_perf}
+%if %{with build_perf}
 %smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%__cc PYTHON=%{__python2} WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
 %smake -C tools/perf -s CC=%__cc prefix=%{_prefix} PYTHON=%{__python2} man
 %endif
 
-%if %{build_cpupower}
+%if %{with build_cpupower}
 # make sure version-gen.sh is executable.
 chmod +x tools/power/cpupower/utils/version-gen.sh
 %kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%optflags"
@@ -2085,12 +1027,8 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 ############################################################
 
 # We don't make to repeat the depend code at the install phase
-%if %build_source
-%ifarch %{arm}
-    PrepareKernel "kirkwood" %{buildrpmrel}custom
-%else
+%if %{with build_source}
     PrepareKernel "" %{buildrpmrel}custom
-%endif
 %smake -s mrproper
 %endif
 
@@ -2113,7 +1051,7 @@ rm -rf %{buildroot}
 cp -a %{temp_root} %{buildroot}
 
 # Create directories infastructure
-%if %build_source
+%if %{with build_source}
 install -d %{target_source}
 
 tar cf - . | tar xf - -C %{target_source}
@@ -2134,11 +1072,11 @@ rm -f %{target_source}/{.config.old,.config.cmd,.gitignore,.lst,.mailmap}
 rm -f %{target_source}/{.missing-syscalls.d,arch/.gitignore,firmware/.gitignore}
 rm -rf %{target_source}/.tmp_depmod/
 
-#endif %build_source
+#endif %{with build_source}
 %endif
 
 # compressing modules
-%if %{build_modxz}
+%if %{with build_modxz}
 find %{target_modules} -name "*.ko" | %kxargs xz -6e -T0
 %else
 find %{target_modules} -name "*.ko" | %kxargs gzip -9
@@ -2170,7 +1108,7 @@ popd
 
 # need to set extraversion to match srpm again to avoid rebuild
 sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
-%if %{build_perf}
+%if %{with build_perf}
 
 # perf tool binary and supporting scripts/binaries
 make -C tools/perf -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__python2} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
@@ -2183,7 +1121,7 @@ make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__p
 ############################################################
 ### Linker start4 > Check point to build for omv or rosa ###
 ############################################################
-%if %{build_cpupower}
+%if %{with build_cpupower}
 %make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%optflags" install
 
 rm -f %{buildroot}%{_libdir}/*.{a,la}
@@ -2199,7 +1137,7 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 ### Linker start4 > Check point to build for omv or rosa ###
 ############################################################
 
-%if %build_source
+%if %{with build_source}
 %files -n %{kname}-source-%{buildrel}
 %dir %{_kerneldir}
 %dir %{_kerneldir}/arch
@@ -2270,12 +1208,12 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %files -n %{kname}-source-latest
 %endif
 
-%if %build_doc
+%if %{with build_doc}
 %files -n %{kname}-doc
 %doc linux-%{tar_ver}/Documentation/*
 %endif
 
-%if %{build_perf}
+%if %{with build_perf}
 %files -n perf
 %{_bindir}/perf
 %ifarch x86_64
@@ -2292,7 +1230,7 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %{_sysconfdir}/bash_completion.d/perf
 %endif
 
-%if %{build_cpupower}
+%if %{with build_cpupower}
 %files -n cpupower -f cpupower.lang
 %{_bindir}/cpupower
 %{_libdir}/libcpupower.so.0
