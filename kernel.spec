@@ -713,8 +713,8 @@ SaveDevel() {
 	# Clean the scripts tree, and make sure everything is ok (sanity check)
 	# running prepare+scripts (tree was already "prepared" in build)
 	pushd $TempDevelRoot >/dev/null
-		%smake -s prepare scripts
-		%smake -s clean
+		%smake ARCH=%{target_arch} -s prepare scripts
+		%smake ARCH=%{target_arch} -s clean
 	popd >/dev/null
 	rm -f $TempDevelRoot/.config.old
 
