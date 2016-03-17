@@ -85,9 +85,10 @@
 %if %(if [ -z "$CC" ] ; then echo 0; else echo 1; fi)
 %define kmake %make CC="$CC" LD="$LD" LDFLAGS="$LDFLAGS"
 %else
-%define kmake %make LD="$LD" LDFLAGS="$LDFLAGS"
+%define kmake ARCH=%{target_arch} %make LD="$LD" LDFLAGS="$LDFLAGS"
 %endif
 # there are places where parallel make don't work
+# usually we use this
 %define smake make LD="$LD" LDFLAGS="$LDFLAGS"
 %endif
 
