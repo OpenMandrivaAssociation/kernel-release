@@ -596,11 +596,6 @@ BuildKernel() {
 			%kmake -s all CC=gcc CXX=g++ CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
 		%endif
 
-	# kirkwood boxes have u-boot
-	if [ "$KernelVer" = "%{kversion}-kirkwood-%{buildrpmrel}" ]; then
-		%kmake uImage LOADADDR="0x00008000"
-	fi
-
 	# Start installing stuff
 	install -d %{temp_boot}
 	install -m 644 System.map %{temp_boot}/System.map-$KernelVer
@@ -848,15 +843,16 @@ CreateFiles() {
 	kernel_files=../kernel_files.$kernel_flavour
 
 ker="vmlinuz"
-if [ "$kernel_flavour" = "kirkwood" ]; then
-       ker="uImage"
-fi
 ### Create the kernel_files.*
 cat > $kernel_files <<EOF
 %{_bootdir}/System.map-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %{_bootdir}/symvers-%{kversion}-$kernel_flavour-%{buildrpmrel}.xz
 %{_bootdir}/config-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %{_bootdir}/$ker-%{kversion}-$kernel_flavour-%{buildrpmrel}
+# device tree binary
+%ifarch %{armx}
+%{_bootdir}/dtb-%{kversion}-$kernel_flavour-%{buildrpmrel}
+%endif
 %dir %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/
 %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/kernel
 %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/modules.*
