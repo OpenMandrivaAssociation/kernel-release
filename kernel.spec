@@ -869,10 +869,7 @@ EOF
 
 ### Create kernel Post script
 cat > $kernel_files-post <<EOF
-%ifarch %{arm}
-/sbin/installkernel -i -N %{kversion}-$kernel_flavour-%{buildrpmrel}
-%else
-/sbin/installkernel %{kversion}-$kernel_flavour-%{buildrpmrel}
+/usr/bin/kernel-install add %{kversion}-$kernel_flavour-%{buildrpmrel}
 pushd /boot > /dev/null
 if [ -L vmlinuz-$kernel_flavour ]; then
 	rm -f vmlinuz-$kernel_flavour
@@ -915,7 +912,7 @@ EOF
 
 ### Create kernel Preun script on the fly
 cat > $kernel_files-preun <<EOF
-/sbin/installkernel -R %{kversion}-$kernel_flavour-%{buildrpmrel}
+/usr/bin/kernel-install remove %{kversion}-$kernel_flavour-%{buildrpmrel}
 pushd /boot > /dev/null
 if [ -L vmlinuz-$kernel_flavour ]; then
 	if [ "$(readlink vmlinuz-$kernel_flavour)" = "vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}" ]; then
@@ -942,7 +939,7 @@ EOF
 
 ### Create kernel Postun script on the fly
 cat > $kernel_files-postun <<EOF
-/sbin/kernel_remove_initrd %{kversion}-$kernel_flavour-%{buildrpmrel}
+rm -f /boot/initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img
 rm -rf /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel} >/dev/null
 if [ -d /var/lib/dkms ]; then
     rm -f /var/lib/dkms/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
