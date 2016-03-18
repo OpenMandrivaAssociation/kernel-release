@@ -869,14 +869,14 @@ EOF
 
 ### Create kernel Post script
 cat > $kernel_files-post <<EOF
-/usr/bin/kernel-install add %{kversion}-$kernel_flavour-%{buildrpmrel}
+/usr/bin/kernel-install add %{kversion}-$kernel_flavour-%{buildrpmrel} /boot/vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}
 pushd /boot > /dev/null
 if [ -L vmlinuz-$kernel_flavour ]; then
-	rm -f vmlinuz-$kernel_flavour
+    rm -f vmlinuz-$kernel_flavour
 fi
 ln -sf vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} vmlinuz-$kernel_flavour
 if [ -L initrd-$kernel_flavour.img ]; then
-	rm -f initrd-$kernel_flavour.img
+    rm -f initrd-$kernel_flavour.img
 fi
 ln -sf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img initrd-$kernel_flavour.img
 if [ -e initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ]; then
@@ -888,9 +888,9 @@ popd > /dev/null
 %if %{with build_devel}
 # create kernel-devel symlinks if matching -devel- rpm is installed
 if [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
-	rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/{build,source}
-	ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
-	ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source
+    rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/{build,source}
+    ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
+    ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source
 fi
 %endif
 EOF
@@ -902,7 +902,7 @@ if [ -x /usr/sbin/dkms_autoinstaller -a -d /usr/src/linux-%{kversion}-$kernel_fl
 fi
 
 if [ -x %{_sbindir}/dkms -a -e %{_unitdir}/dkms.service -a -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
-	/bin/systemctl --quiet restart dkms.service
+    /bin/systemctl --quiet restart dkms.service
     /bin/systemctl --quiet try-restart fedora-loadmodules.service
     %{_sbindir}/dkms autoinstall --verbose --kernelver %{kversion}-$kernel_flavour-%{buildrpmrel}
 fi
@@ -914,27 +914,26 @@ cat > $kernel_files-preun <<EOF
 /usr/bin/kernel-install remove %{kversion}-$kernel_flavour-%{buildrpmrel}
 pushd /boot > /dev/null
 if [ -L vmlinuz-$kernel_flavour ]; then
-	if [ "$(readlink vmlinuz-$kernel_flavour)" = "vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}" ]; then
-		rm -f vmlinuz-$kernel_flavour
-	fi
+    if [ "$(readlink vmlinuz-$kernel_flavour)" = "vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}" ]; then
+	rm -f vmlinuz-$kernel_flavour
+    fi
 fi
 if [ -L initrd-$kernel_flavour.img ]; then
-	if [ "$(readlink initrd-$kernel_flavour.img)" = "initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img" ]; then
-		rm -f initrd-$kernel_flavour.img
-	fi
+    if [ "$(readlink initrd-$kernel_flavour.img)" = "initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img" ]; then
+	rm -f initrd-$kernel_flavour.img
+    fi
 fi
 popd > /dev/null
 %if %{with build_devel}
 if [ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build ]; then
-	rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
+    rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
 fi
 if [ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source ]; then
-	rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source
+    rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source
 fi
 %endif
 exit 0
 EOF
-
 
 ### Create kernel Postun script on the fly
 cat > $kernel_files-postun <<EOF
