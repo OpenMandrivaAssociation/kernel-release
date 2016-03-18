@@ -885,7 +885,6 @@ if [ -e initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ]; then
 fi
 
 popd > /dev/null
-%endif
 %if %{with build_devel}
 # create kernel-devel symlinks if matching -devel- rpm is installed
 if [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
