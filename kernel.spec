@@ -9,7 +9,7 @@
 %define buildrel     	%{kversion}-%{buildrpmrel}
 %define rpmtag		%{disttag}
 # if you need rebuild your kernel and bump release here is what you need
-%define rpmrel		1
+%define rpmrel		2
 %define buildrpmrel     %{rpmrel}%{rpmtag}
 
 # kernel Makefile extraversion is substituted by
