@@ -624,6 +624,9 @@ BuildKernel() {
 	# headers
 	%make INSTALL_HDR_PATH=%{temp_root}%_prefix KERNELRELEASE=$KernelVer headers_install
 	# kernel headers for cross toolchains
+	%ifarch %{armx}
+		%{smake} ARCH=%{target_arch} V=1 dtbs INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
+	%endif
 	for arch in %{cross_header_archs}; do
 		%make SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
 	done
