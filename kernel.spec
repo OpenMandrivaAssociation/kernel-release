@@ -114,14 +114,11 @@ Source1: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_
 %if %{with build_nosrc}
 NoSource: 0
 %endif
-# This is for disabling *config, mrproper, prepare, scripts on -devel rpms
-Source2: 	disable-mrproper-prepare-scripts-configs-in-devel-rpms.patch
 
 Source4: 	README.kernel-sources
 Source5:	kernel.rpmlintrc
 # configs
 Source6:	x86_64.config
-
 Source7:	i386.config
 Source8:	arm64.config
 Source9:	arm.config
@@ -700,9 +697,6 @@ SaveDevel() {
 
 	# fix permissions
 	chmod -R a+rX $TempDevelRoot
-
-	# disable mrproper in -devel rpms
-	#patch -p1 --fuzz=0 -d $TempDevelRoot -i %{SOURCE2}
 
 	kernel_devel_files=../kernel_devel_files.$devel_flavour
 
