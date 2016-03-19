@@ -714,7 +714,6 @@ SaveDevel() {
 
     kernel_devel_files=../kernel_devel_files.$devel_flavour
 
-
 ### Create the kernel_devel_files.*
 cat > $kernel_devel_files <<EOF
 %dir $DevelRoot
@@ -1005,7 +1004,6 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 PrepareKernel "" %{buildrpmrel}custom
 %{smake} -s mrproper
 %endif
-
 
 ###
 ### install
