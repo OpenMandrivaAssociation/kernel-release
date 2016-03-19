@@ -1,43 +1,48 @@
 # utils/cpuidle-info.c:193: error: undefined reference to 'cpufreq_cpu_exists'
 %define _disable_ld_no_undefined 1
 
+# IMPORTNAT
+# This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	5
 %define sublevel	0
+
 %define tar_ver   	%{kernelversion}.%{patchlevel}
-%define buildrel     	%{kversion}-%{buildrpmrel}
-%define rpmtag		%{disttag}
-# if you need rebuild your kernel and bump release here is what you need
+%define buildrel	%{kversion}-%{buildrpmrel}
+%define rpmtag	%{disttag}
+
+# IMPORTANT
+# This is the place where you set release version %{version}-1omv2015
 %define rpmrel		2
-%define buildrpmrel     %{rpmrel}%{rpmtag}
+%define buildrpmrel	%{rpmrel}%{rpmtag}
 
 # kernel Makefile extraversion is substituted by
 # kpatch wich are either 0 (empty), rc (kpatch)
 %define kpatch		%{nil}
 
 # kernel base name (also name of srpm)
-%define kname 		kernel
+%define kname		kernel
 
 # fakerel and fakever never change, they are used to fool
 # rpm/urpmi/smart
 %define fakever		1
-%define fakerel 	%mkrel 1
+%define fakerel		%mkrel 1
 
 # version defines
-%define kversion  	%{kernelversion}.%{patchlevel}.%{sublevel}
-%define kverrel   	%{kversion}-%{rpmrel}
+%define kversion	%{kernelversion}.%{patchlevel}.%{sublevel}
+%define kverrel		%{kversion}-%{rpmrel}
 
 # Having different top level names for packges means that you have to remove
 # them by hard :(
-%define top_dir_name 	%{kname}-%{_arch}
+%define top_dir_name	%{kname}-%{_arch}
 
-%define build_dir 	${RPM_BUILD_DIR}/%{top_dir_name}
-%define src_dir 	%{build_dir}/linux-%{tar_ver}
+%define build_dir	${RPM_BUILD_DIR}/%{top_dir_name}
+%define src_dir		%{build_dir}/linux-%{tar_ver}
 
 # Disable useless debug rpms...
-%define _enable_debug_packages 	%{nil}
-%define debug_package 		%{nil}
+%define _enable_debug_packages	%{nil}
+%define debug_package		%{nil}
 
 # Build defines
 %bcond_with build_doc
@@ -89,33 +94,32 @@
 # Sparc arch wants sparc64 kernels
 %define target_arch    %(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/')
 
-
 #
 # SRC RPM description
 #
-Summary: 	Linux kernel built for Mandriva and ROSA
+Summary: 	Linux kernel built for %{distribution}
 Name:		%{kname}
-Version: 	%{kversion}
-Release: 	%{rpmrel}
-License: 	GPLv2
-Group: 	 	System/Kernel and hardware
-ExclusiveArch: %{ix86} x86_64 %{armx}
-ExclusiveOS: 	Linux
-URL:            http://www.kernel.org
+Version:	%{kversion}
+Release:	%{rpmrel}
+License:	GPLv2
+Group:		System/Kernel and hardware
+ExclusiveArch:	%{ix86} x86_64 %{armx}
+ExclusiveOS:	Linux
+URL:		http://www.kernel.org
 
 ####################################################################
 #
 # Sources
 #
 ### This is for full SRC RPM
-Source0: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.xz
-Source1: 	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.sign
+Source0:	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.xz
+Source1:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.sign
 ### This is for stripped SRC RPM
 %if %{with build_nosrc}
-NoSource: 0
+NoSource:	0
 %endif
 
-Source4: 	README.kernel-sources
+Source4:	README.kernel-sources
 Source5:	kernel.rpmlintrc
 # configs
 Source6:	x86_64.config
@@ -133,22 +137,22 @@ Source51:	cpupower.config
 # Defines for the things that are needed for all the kernels
 #
 %define common_desc_kernel The kernel package contains the Linux kernel (vmlinuz), the core of your \
-OpenMandriva LX operating system. The kernel handles the basic functions \
+OpenMandriva Lx operating system. The kernel handles the basic functions \
 of the operating system: memory allocation, process allocation, device \
 input and output, etc.
 
 
 ### Global Requires/Provides
-%define requires1	microcode
-%define requires2	dracut >= 026
+%define requires1	microcode_ctl
+#%define requires2	dracut >= 026
 %define requires3	kmod >= 12
 %define requires4	sysfsutils >=  2.1.0-12
 %define requires5	kernel-firmware
 
-%define kprovides1 	%{kname} = %{kverrel}
-%define kprovides2 	kernel = %{tar_ver}
-%define kprovides3 	alsa = 1.0.27
-%define kprovides_server drbd-api = 88
+%define kprovides1	%{kname} = %{kverrel}
+%define kprovides2	kernel = %{tar_ver}
+%define kprovides3	alsa = 1.0.27
+%define kprovides_server	drbd-api = 88
 
 %define	kobsoletes1	dkms-r8192se <= 0019.1207.2010-2
 %define	kobsoletes2	dkms-lzma <= 4.43-32
@@ -161,60 +165,57 @@ input and output, etc.
 %define kconflicts5	dkms-nvidia304 < 304.108-1
 # nvidia173 does not support this kernel
 
-Autoreqprov: 	no
+Autoreqprov:	no
 
-BuildRequires: 	bc
-BuildRequires: 	binutils
-BuildRequires: 	gcc
-BuildRequires: 	openssl-devel
-BuildRequires: 	diffutils
+BuildRequires:	bc
+BuildRequires:	binutils
+BuildRequires:	gcc
+BuildRequires:	openssl-devel
+BuildRequires:	diffutils
 # For power tools
 BuildRequires:	pkgconfig(ncurses)
-BuildRequires:	kmod-devel kmod-compat
+BuildRequires:	kmod-devel
 
 %ifarch x86_64
-BuildRequires:  numa-devel
+BuildRequires:	numa-devel
 %endif
 
-# BuildRequires:  audit-devel perl-devel (need only for perf???)
-
-# for perf, cpufreq and all other tools
 # for cpupower
 %if %{with build_cpupower}
-BuildRequires:		pciutils-devel
+BuildRequires:	pciutils-devel
 %endif
 
 # for docs
 %if %{with build_doc}
-BuildRequires:          xmlto
+BuildRequires:	xmlto
 %endif
 
 # for perf
 %if %{with build_perf}
-BuildRequires:		asciidoc
-BuildRequires:		audit-devel
-BuildRequires:		binutils-devel
-BuildRequires:		bison
+BuildRequires:	asciidoc
+BuildRequires:	audit-devel
+BuildRequires:	binutils-devel
+BuildRequires:	bison
 # BuildRequires:	docbook-style-xsl
-BuildRequires:		elfutils-devel
-BuildRequires:		flex
+BuildRequires:	elfutils-devel
+BuildRequires:	flex
 # BuildRequires:	gettext
 # BuildRequires:	gtk2-devel
-BuildRequires:		libunwind-devel
-BuildRequires:		newt-devel
-BuildRequires:		perl-devel
+BuildRequires:	libunwind-devel
+BuildRequires:	newt-devel
+BuildRequires:	perl-devel
 # BuildRequires:	perl(ExtUtils::Embed)
-BuildRequires:		pkgconfig(gtk+-2.0)
-BuildRequires:		pkgconfig(python2)
-BuildRequires:		zlib-devel
+BuildRequires:	pkgconfig(gtk+-2.0)
+BuildRequires:	pkgconfig(python2)
+BuildRequires:	zlib-devel
 %endif
 
 %ifarch %{arm}
-BuildRequires:		uboot-mkimage
+BuildRequires:	uboot-mkimage
 %endif
 
 # might be useful too:
-Suggests:		microcode
+Suggests:	microcode_ctl
 
 
 %description
@@ -255,7 +256,11 @@ Group:		System/Kernel and hardware		\
 %package -n	%{kname}-%{1}-devel-%{buildrel}		\
 Version:	%{fakever}				\
 Release:	%{fakerel}				\
-Requires:	glibc-devel ncurses-devel make gcc perl	\
+Requires:	glibc-devel				\
+Requires:	ncurses-devel				\
+Requires:	make					\
+Requires:	gcc					\
+Requires:	perl					\
 Summary:	The kernel-devel files for %{kname}-%{1}-%{buildrel} \
 Group:		Development/Kernel			\
 Provides:	%{kname}-devel = %{kverrel} 		\
@@ -407,11 +412,11 @@ drivers against, install the *-devel-* rpm that is matching your kernel.
 # kernel-source-latest: virtual rpm
 #
 %package -n %{kname}-source-latest
-Version: 	%{kversion}
-Release: 	%{rpmrel}
-Summary: 	Virtual rpm for latest %{kname}-source
-Group:   	Development/Kernel
-Requires: 	%{kname}-source-%{buildrel}
+Version:	%{kversion}
+Release:	%{rpmrel}
+Summary:	Virtual rpm for latest %{kname}-source
+Group:		Development/Kernel
+Requires:	%{kname}-source-%{buildrel}
 Buildarch:	noarch
 
 %description -n %{kname}-source-latest
@@ -424,10 +429,10 @@ latest %{kname}-source installed...
 #
 %if %with build_doc
 %package -n %{kname}-doc
-Version: 	%{kversion}
-Release: 	%{rpmrel}
-Summary: 	Various documentation bits found in the %{kname} source
-Group: 		Documentation
+Version:	%{kversion}
+Release:	%{rpmrel}
+Summary:	Various documentation bits found in the %{kname} source
+Group:		Documentation
 Buildarch:	noarch
 
 %description -n %{kname}-doc
@@ -456,19 +461,22 @@ the perf tool and the supporting documentation.
 %package -n cpupower
 Version:	%{kversion}
 Release:	%{rpmrel}
-Summary:	the cpupower tools
+Summary:	The cpupower tools
 Group:		System/Kernel and hardware
-Requires(post):  rpm-helper >= 0.24.0-3
-Requires(preun): rpm-helper >= 0.24.0-3
-Obsoletes:	cpufreq cpufrequtils
+Requires(post): 	rpm-helper >= 0.24.0-3
+Requires(preun):	rpm-helper >= 0.24.0-3
+Obsoletes:	cpufreq < 2.0-3
+Provides:	cpufreq = 2.0-3
+Obsoletes:	cpufrequtils < 008-6
+Provides:	cpufrequtils = 008-6
 
 %description -n cpupower
-the cpupower tools.
+The cpupower tools.
 
 %package -n cpupower-devel
 Version:	%{kversion}
 Release:	%{rpmrel}
-Summary:	devel files for cpupower
+Summary:	Devel files for cpupower
 Group:		Development/Kernel
 Requires:	cpupower = %{kversion}-%{rpmrel}
 Conflicts:	%{_lib}cpufreq-devel
@@ -478,8 +486,8 @@ This package contains the development files for cpupower.
 %endif
 
 %package headers
-Version:	%kversion
-Release:	%rpmrel
+Version:	%{kversion}
+Release:	%{rpmrel}
 Summary:	Linux kernel header files mostly used by your C library
 Group:		System/Kernel and hardware
 Epoch:		1
@@ -494,29 +502,29 @@ This package is not suitable for building kernel modules, you
 should use the 'kernel-devel' package instead.
 
 %files headers
-%_includedir/*
+%{_includedir}/*
 # Don't conflict with cpupower-devel
 %if %{with build_cpupower}
-%exclude %_includedir/cpufreq.h
+%exclude %{_includedir}/cpufreq.h
 %endif
 
-%package -n	cross-%{name}-headers	
-Version:	%kversion
-Release:	%rpmrel
+%package -n cross-%{name}-headers
+Version:	%{kversion}
+Release:	%{rpmrel}
 Summary:	Linux kernel header files for cross toolchains
 Group:		System/Kernel and hardware
 Epoch:		1
 BuildArch:	noarch
 
 %description -n	cross-%{name}-headers
-C header files from the Linux kernel. The header files define	
+C header files from the Linux kernel. The header files define
 structures and constants that are needed for building most
 standard programs, notably the C library.
 
-This package is only of interest if you're cross-compiling for one of the	
+This package is only of interest if you're cross-compiling for one of the
 following platforms:
 %{cross_header_archs}
-	
+
 %files -n cross-%{name}-headers
 %{_prefix}/*-%{_target_os}/include/*
 
@@ -572,133 +580,139 @@ export PYTHON=%{__python2}
 %define temp_modules %{temp_root}%{_modulesdir}
 
 PrepareKernel() {
-	name=$1
-	extension=$2
-	config_dir=%{_sourcedir}
-	echo "Make config for kernel $extension"
-	%smake -s mrproper
-	cp ${config_dir}/%{target_arch}.config .config
-	# make sure EXTRAVERSION says what we want it to say
-	sed -ri "s|^(EXTRAVERSION =).*|\1 -$extension|" Makefile
-	%smake oldconfig
+    name=$1
+    extension=$2
+    config_dir=%{_sourcedir}
+    echo "Make config for kernel $extension"
+    %smake -s mrproper
+    cp ${config_dir}/%{target_arch}.config .config
+    # make sure EXTRAVERSION says what we want it to say
+    sed -ri "s|^(EXTRAVERSION =).*|\1 -$extension|" Makefile
+    %smake oldconfig
 }
 
 BuildKernel() {
-	KernelVer=$1
-	echo "Building kernel $KernelVer"
-	    # (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
-		%ifarch x86_64
-			%kmake -s all CC=gcc CXX=g++ CFLAGS="$CFLAGS -fwhole-program -flto" LDFLAGS="$LDFLAGS -flto"
-		%else
-			%kmake -s all CC=gcc CXX=g++ CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
-		%endif
+    KernelVer=$1
+    echo "Building kernel $KernelVer"
+# (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
+%ifarch x86_64
+    %kmake -s all CC=gcc CXX=g++ CFLAGS="$CFLAGS -fwhole-program -flto" LDFLAGS="$LDFLAGS -flto"
+%else
+    %kmake -s all CC=gcc CXX=g++ CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+%endif
 
-	# Start installing stuff
-	install -d %{temp_boot}
-	install -m 644 System.map %{temp_boot}/System.map-$KernelVer
-	install -m 644 .config %{temp_boot}/config-$KernelVer
-	xz -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
+# Start installing stuff
+    install -d %{temp_boot}
+    install -m 644 System.map %{temp_boot}/System.map-$KernelVer
+    install -m 644 .config %{temp_boot}/config-$KernelVer
+    xz -7 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
 
-	%ifarch %{arm}
-		if [ -f arch/arm/boot/uImage ]; then
-			cp -f arch/arm/boot/uImage %{temp_boot}/uImage-$KernelVer
-		else
-			cp -f arch/arm/boot/zImage %{temp_boot}/vmlinuz-$KernelVer
-		fi
-	%else
-		cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-$KernelVer
-	%endif
+%ifarch %{arm}
+    if [ -f arch/arm/boot/uImage ]; then
+	cp -f arch/arm/boot/uImage %{temp_boot}/uImage-$KernelVer
+    else
+	cp -f arch/arm/boot/zImage %{temp_boot}/vmlinuz-$KernelVer
+    fi
+%else
+    cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-$KernelVer
+%endif
 
-	# modules
-	install -d %{temp_modules}/$KernelVer
-	%smake INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer INSTALL_MOD_STRIP=1 modules_install
+# modules
+    install -d %{temp_modules}/$KernelVer
+    %smake INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer INSTALL_MOD_STRIP=1 modules_install
 
-	# headers
-	%make INSTALL_HDR_PATH=%{temp_root}%_prefix KERNELRELEASE=$KernelVer headers_install
-	# kernel headers for cross toolchains
-	%ifarch %{armx}
-		%{smake} ARCH=%{target_arch} V=1 dtbs INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
-	%endif
-	for arch in %{cross_header_archs}; do
-		%make SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
-	done
+# headers
+    %make INSTALL_HDR_PATH=%{temp_root}%_prefix KERNELRELEASE=$KernelVer headers_install
 
-	# remove /lib/firmware, we use a separate kernel-firmware
-	rm -rf %{temp_root}/lib/firmware
+# kernel headers for cross toolchains
+%ifarch %{armx}
+    %smake ARCH=%{target_arch} V=1 dtbs INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
+%endif
+
+    for arch in %{cross_header_archs}; do
+	%make SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
+    done
+
+# remove /lib/firmware, we use a separate kernel-firmware
+    rm -rf %{temp_root}/lib/firmware
 }
 
 SaveDevel() {
-	devel_flavour=$1
+    devel_flavour=$1
 
-	DevelRoot=/usr/src/linux-%{kversion}-$devel_flavour-%{buildrpmrel}
-	TempDevelRoot=%{temp_root}$DevelRoot
+    DevelRoot=/usr/src/linux-%{kversion}-$devel_flavour-%{buildrpmrel}
+    TempDevelRoot=%{temp_root}$DevelRoot
 
-	mkdir -p $TempDevelRoot
-	for i in $(find . -name 'Makefile*'); do cp -R --parents $i $TempDevelRoot;done
-	for i in $(find . -name 'Kconfig*' -o -name 'Kbuild*'); do cp -R --parents $i $TempDevelRoot;done
-	cp -fR Documentation/DocBook/media/*.b64 $TempDevelRoot/Documentation/DocBook/media/
-	cp -fR include $TempDevelRoot
-	# ln -s ../generated/uapi/linux/version.h $TempDevelRoot/include/linux/version.h
-	cp -fR scripts $TempDevelRoot
-	cp -fR kernel/time/timeconst.bc $TempDevelRoot/kernel/time/
-	cp -fR kernel/bounds.c $TempDevelRoot/kernel
-	cp -fR tools/include $TempDevelRoot/tools/
-	%ifarch %{arm}
-		cp -fR arch/%{target_arch}/tools $TempDevelRoot/arch/%{target_arch}/
-	%endif
-	%ifarch %{ix86} x86_64
-		cp -fR arch/x86/kernel/asm-offsets.{c,s} $TempDevelRoot/arch/x86/kernel/
-		cp -fR arch/x86/kernel/asm-offsets_{32,64}.c $TempDevelRoot/arch/x86/kernel/
-        	cp -fR arch/x86/purgatory/* $TempDevelRoot/arch/x86/purgatory/
-		cp -fR arch/x86/entry/syscalls/syscall* $TempDevelRoot/arch/x86/entry/syscalls/
-		cp -fR arch/x86/include $TempDevelRoot/arch/x86/
-		cp -fR arch/x86/tools $TempDevelRoot/arch/x86/
-	%else
-		cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} $TempDevelRoot/arch/%{target_arch}/kernel/
-		for f in $(find arch/%{target_arch} -name include); do cp -fR --parents $f $TempDevelRoot; done
-	%endif
-	cp -fR .config Module.symvers $TempDevelRoot
+    mkdir -p $TempDevelRoot
+    for i in $(find . -name 'Makefile*'); do cp -R --parents $i $TempDevelRoot;done
+    for i in $(find . -name 'Kconfig*' -o -name 'Kbuild*'); do cp -R --parents $i $TempDevelRoot;done
+    cp -fR Documentation/DocBook/media/*.b64 $TempDevelRoot/Documentation/DocBook/media/
+    cp -fR include $TempDevelRoot
+#     ln -s ../generated/uapi/linux/version.h $TempDevelRoot/include/linux/version.h
+    cp -fR scripts $TempDevelRoot
+    cp -fR kernel/time/timeconst.bc $TempDevelRoot/kernel/time/
+    cp -fR kernel/bounds.c $TempDevelRoot/kernel
+    cp -fR tools/include $TempDevelRoot/tools/
+%ifarch %{arm}
+    cp -fR arch/%{target_arch}/tools $TempDevelRoot/arch/%{target_arch}/
+%endif
 
-	# Needed for truecrypt build (Danny)
-	cp -fR drivers/md/dm.h $TempDevelRoot/drivers/md/
+%ifarch %{ix86} x86_64
+    cp -fR arch/x86/kernel/asm-offsets.{c,s} $TempDevelRoot/arch/x86/kernel/
+    cp -fR arch/x86/kernel/asm-offsets_{32,64}.c $TempDevelRoot/arch/x86/kernel/
+    cp -fR arch/x86/purgatory/* $TempDevelRoot/arch/x86/purgatory/
+    cp -fR arch/x86/entry/syscalls/syscall* $TempDevelRoot/arch/x86/entry/syscalls/
+    cp -fR arch/x86/include $TempDevelRoot/arch/x86/
+    cp -fR arch/x86/tools $TempDevelRoot/arch/x86/
+%else
+    cp -fR arch/%{target_arch}/kernel/asm-offsets.{c,s} $TempDevelRoot/arch/%{target_arch}/kernel/
+    for f in $(find arch/%{target_arch} -name include); do cp -fR --parents $f $TempDevelRoot; done
+%endif
 
-	# Needed for lguest
-	cp -fR drivers/lguest/lg.h $TempDevelRoot/drivers/lguest/
+    cp -fR .config Module.symvers $TempDevelRoot
 
-	# Needed for lirc_gpio (#39004)
-	cp -fR drivers/media/pci/bt8xx/bttv{,p}.h $TempDevelRoot/drivers/media/pci/bt8xx/
-	cp -fR drivers/media/pci/bt8xx/bt848.h $TempDevelRoot/drivers/media/pci/bt8xx/
-	cp -fR drivers/media/common/btcx-risc.h $TempDevelRoot/drivers/media/common/
+# Needed for truecrypt build (Danny)
+    cp -fR drivers/md/dm.h $TempDevelRoot/drivers/md/
 
-	# Needed for external dvb tree (#41418)
-	cp -fR drivers/media/dvb-core/*.h $TempDevelRoot/drivers/media/dvb-core/
-	cp -fR drivers/media/dvb-frontends/lgdt330x.h $TempDevelRoot/drivers/media/dvb-frontends/
+# Needed for lguest
+    cp -fR drivers/lguest/lg.h $TempDevelRoot/drivers/lguest/
 
-	# add acpica header files, needed for fglrx build
-	cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
+# Needed for lirc_gpio (#39004)
+    cp -fR drivers/media/pci/bt8xx/bttv{,p}.h $TempDevelRoot/drivers/media/pci/bt8xx/
+    cp -fR drivers/media/pci/bt8xx/bt848.h $TempDevelRoot/drivers/media/pci/bt8xx/
+    cp -fR drivers/media/common/btcx-risc.h $TempDevelRoot/drivers/media/common/
 
-	for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
+# Needed for external dvb tree (#41418)
+    cp -fR drivers/media/dvb-core/*.h $TempDevelRoot/drivers/media/dvb-core/
+    cp -fR drivers/media/dvb-frontends/lgdt330x.h $TempDevelRoot/drivers/media/dvb-frontends/
+
+# add acpica header files, needed for fglrx build
+    cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
+
+    for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
 		 mips mn10300 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
 		rm -rf $TempDevelRoot/arch/$i
-	done
+    done
 
-	%ifnarch %{arm}
-		rm -rf $TempDevelRoot/arch/arm*
-		rm -rf $TempDevelRoot/include/kvm/arm*
-        rm -rf $TempDevelRoot/include/soc
-	%endif
-	# Clean the scripts tree, and make sure everything is ok (sanity check)
-	# running prepare+scripts (tree was already "prepared" in build)
-	pushd $TempDevelRoot >/dev/null
-		%smake ARCH=%{target_arch} -s prepare scripts
-		%smake ARCH=%{target_arch} -s clean
-	popd >/dev/null
-	rm -f $TempDevelRoot/.config.old
+%ifnarch %{arm}
+    rm -rf $TempDevelRoot/arch/arm*
+    rm -rf $TempDevelRoot/include/kvm/arm*
+    rm -rf $TempDevelRoot/include/soc
+%endif
 
-	# fix permissions
-	chmod -R a+rX $TempDevelRoot
+# Clean the scripts tree, and make sure everything is ok (sanity check)
+# running prepare+scripts (tree was already "prepared" in build)
+    pushd $TempDevelRoot >/dev/null
+    %smake ARCH=%{target_arch} -s prepare scripts
+    %smake ARCH=%{target_arch} -s clean
+    popd >/dev/null
 
-	kernel_devel_files=../kernel_devel_files.$devel_flavour
+    rm -f $TempDevelRoot/.config.old
+
+# fix permissions
+    chmod -R a+rX $TempDevelRoot
+
+    kernel_devel_files=../kernel_devel_files.$devel_flavour
 
 
 ### Create the kernel_devel_files.*
@@ -773,13 +787,12 @@ $DevelRoot/arch/Kconfig
 %doc README.kernel-sources
 EOF
 
-
 ### Create -devel Post script on the fly
 cat > $kernel_devel_files-post <<EOF
 if [ -d /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel} ]; then
-	rm -f /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/{build,source}
-	ln -sf $DevelRoot /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/build
-	ln -sf $DevelRoot /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/source
+    rm -f /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/{build,source}
+    ln -sf $DevelRoot /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/build
+    ln -sf $DevelRoot /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/source
 fi
 EOF
 
@@ -787,10 +800,10 @@ EOF
 ### Create -devel Preun script on the fly
 cat > $kernel_devel_files-preun <<EOF
 if [ -L /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/build ]; then
-	rm -f /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/build
+    rm -f /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/build
 fi
 if [ -L /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/source ]; then
-	rm -f /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/source
+    rm -f /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/source
 fi
 exit 0
 EOF
@@ -802,39 +815,26 @@ EOF
 }
 
 SaveDebug() {
-	debug_flavour=$1
+    debug_flavour=$1
 
-	install -m 644 vmlinux \
-	      %{temp_boot}/vmlinux-%{kversion}-$debug_flavour-%{buildrpmrel}
-	kernel_debug_files=../kernel_debug_files.$debug_flavour
-	echo "%{_bootdir}/vmlinux-%{kversion}-$debug_flavour-%{buildrpmrel}" \
-		>> $kernel_debug_files
+    install -m 644 vmlinux %{temp_boot}/vmlinux-%{kversion}-$debug_flavour-%{buildrpmrel}
+    kernel_debug_files=../kernel_debug_files.$debug_flavour
+    echo "%{_bootdir}/vmlinux-%{kversion}-$debug_flavour-%{buildrpmrel}" >> $kernel_debug_files
 
-	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel \
-		-name "*.ko" | \
-		%kxargs -I '{}' objcopy --only-keep-debug '{}' '{}'.debug
-	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel \
-		-name "*.ko" | %kxargs -I '{}' \
-		sh -c 'cd `dirname {}`; \
-		       objcopy --add-gnu-debuglink=`basename {}`.debug \
-		       --strip-debug `basename {}`'
+    find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" | %kxargs -I '{}' objcopy --only-keep-debug '{}' '{}'.debug
+    find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" | %kxargs -I '{}' sh -c 'cd `dirname {}`; objcopy --add-gnu-debuglink=`basename {}`.debug --strip-debug `basename {}`'
 
-	pushd %{temp_modules}
-	find %{kversion}-$debug_flavour-%{buildrpmrel}/kernel \
-		-name "*.ko.debug" > debug_module_list
-	popd
-	cat %{temp_modules}/debug_module_list | \
-		sed 's|\(.*\)|%{_modulesdir}/\1|' >> $kernel_debug_files
-	cat %{temp_modules}/debug_module_list | \
-		sed 's|\(.*\)|%exclude %{_modulesdir}/\1|' \
-		>> ../kernel_exclude_debug_files.$debug_flavour
-	rm -f %{temp_modules}/debug_module_list
+    pushd %{temp_modules}
+    find %{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko.debug" > debug_module_list
+    popd
+    cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%{_modulesdir}/\1|' >> $kernel_debug_files
+    cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%exclude %{_modulesdir}/\1|' >> ../kernel_exclude_debug_files.$debug_flavour
+    rm -f %{temp_modules}/debug_module_list
 }
 
 CreateFiles() {
-	kernel_flavour=$1
-
-	kernel_files=../kernel_files.$kernel_flavour
+    kernel_flavour=$1
+    kernel_files=../kernel_files.$kernel_flavour
 
 ker="vmlinuz"
 ### Create the kernel_files.*
@@ -938,20 +938,19 @@ fi
 EOF
 }
 
-
 CreateKernel() {
-	flavour=$1
+    flavour=$1
 
-	PrepareKernel $flavour $flavour-%{buildrpmrel}
+    PrepareKernel $flavour $flavour-%{buildrpmrel}
 
-	BuildKernel %{kversion}-$flavour-%{buildrpmrel}
-	%if %{with build_devel}
-		SaveDevel $flavour
-	%endif
-	%if %{with build_debug}
-		SaveDebug $flavour
-	%endif
-	CreateFiles $flavour
+    BuildKernel %{kversion}-$flavour-%{buildrpmrel}
+%if %{with build_devel}
+    SaveDevel $flavour
+%endif
+%if %{with build_debug}
+    SaveDebug $flavour
+%endif
+    CreateFiles $flavour
 }
 
 
@@ -988,14 +987,14 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 ### Linker start3 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_perf}
-%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%__cc PYTHON=%{__python2} WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
-%smake -C tools/perf -s CC=%__cc prefix=%{_prefix} PYTHON=%{__python2} man
+%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%{__cc} PYTHON=%{__python2} WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
+%smake -C tools/perf -s CC=%{__cc} prefix=%{_prefix} PYTHON=%{__python2} man
 %endif
 
 %if %{with build_cpupower}
 # make sure version-gen.sh is executable.
 chmod +x tools/power/cpupower/utils/version-gen.sh
-%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%optflags"
+%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%{optflags}"
 %endif
 ############################################################
 ###  Linker end3 > Check point to build for omv or rosa  ###
@@ -1003,7 +1002,7 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 
 # We don't make to repeat the depend code at the install phase
 %if %{with build_source}
-    PrepareKernel "" %{buildrpmrel}custom
+PrepareKernel "" %{buildrpmrel}custom
 %smake -s mrproper
 %endif
 
@@ -1012,7 +1011,7 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 ### install
 ###
 %install
-install -m 644 %{SOURCE4}  .
+install -m 644 %{SOURCE4} .
 
 cd %src_dir
 
@@ -1028,7 +1027,6 @@ cp -a %{temp_root} %{buildroot}
 # Create directories infastructure
 %if %{with build_source}
 install -d %{target_source}
-
 tar cf - . | tar xf - -C %{target_source}
 chmod -R a+rX %{target_source}
 
@@ -1039,7 +1037,7 @@ for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68k
 	rm -rf %{target_source}/arch/$i
 done
 %ifnarch %{arm}
-	rm -rf %{target_source}/include/kvm/arm*
+    rm -rf %{target_source}/include/kvm/arm*
 %endif
 
 # other misc files
@@ -1060,24 +1058,23 @@ find %{target_modules} -name "*.ko" | %kxargs gzip -9
 # We used to have a copy of PrepareKernel here
 # Now, we make sure that the thing in the linux dir is what we want it to be
 for i in %{target_modules}/*; do
-	rm -f $i/build $i/source
+    rm -f $i/build $i/source
 done
 
 # sniff, if we compressed all the modules, we change the stamp :(
 # we really need the depmod -ae here
 pushd %{target_modules}
 for i in *; do
-	/sbin/depmod -ae -b %{buildroot} -F %{target_boot}/System.map-$i $i
-	echo $?
+    /sbin/depmod -ae -b %{buildroot} -F %{target_boot}/System.map-$i $i
+    echo $?
 done
 
 for i in *; do
-	pushd $i
-	echo "Creating modules.description for $i"
-	modules=`find . -name "*.ko.[g,x]z"`
-	echo $modules | %kxargs /sbin/modinfo \
-	| perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
-	popd
+    pushd $i
+    echo "Creating modules.description for $i"
+    modules=`find . -name "*.ko.[g,x]z"`
+    echo $modules | %kxargs /sbin/modinfo | perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
+    popd
 done
 popd
 
@@ -1092,12 +1089,11 @@ make -C tools/perf -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__py
 make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__python2} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
 %endif
 
-
 ############################################################
 ### Linker start4 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_cpupower}
-%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%optflags" install
+%make -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{optflags}" install
 
 rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
@@ -1114,6 +1110,7 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 
 %if %{with build_source}
 %files -n %{kname}-source-%{buildrel}
+%doc README.kernel-sources
 %dir %{_kerneldir}
 %dir %{_kerneldir}/arch
 %dir %{_kerneldir}/include
@@ -1178,7 +1175,6 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %{_kerneldir}/Makefile
 %{_kerneldir}/README
 %{_kerneldir}/REPORTING-BUGS
-%doc README.kernel-sources
 
 %files -n %{kname}-source-latest
 %endif
