@@ -576,11 +576,11 @@ PrepareKernel() {
 	extension=$2
 	config_dir=%{_sourcedir}
 	echo "Make config for kernel $extension"
-	%smake -s mrproper
+	%{smake} -s mrproper
 	cp ${config_dir}/%{target_arch}.config .config
 	# make sure EXTRAVERSION says what we want it to say
 	sed -ri "s|^(EXTRAVERSION =).*|\1 -$extension|" Makefile
-	%smake oldconfig
+	%{smake} oldconfig
 }
 
 BuildKernel() {
@@ -611,7 +611,7 @@ BuildKernel() {
 
 	# modules
 	install -d %{temp_modules}/$KernelVer
-	%smake INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer INSTALL_MOD_STRIP=1 modules_install
+	%{smake} INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer INSTALL_MOD_STRIP=1 modules_install
 
 	# headers
 	%make INSTALL_HDR_PATH=%{temp_root}%_prefix KERNELRELEASE=$KernelVer headers_install
@@ -620,7 +620,7 @@ BuildKernel() {
 		%{smake} ARCH=%{target_arch} V=1 dtbs INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
 	%endif
 	for arch in %{cross_header_archs}; do
-		%make SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
+		%{make} SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
 	done
 
 	# remove /lib/firmware, we use a separate kernel-firmware
@@ -690,8 +690,8 @@ SaveDevel() {
 	# Clean the scripts tree, and make sure everything is ok (sanity check)
 	# running prepare+scripts (tree was already "prepared" in build)
 	pushd $TempDevelRoot >/dev/null
-		%smake ARCH=%{target_arch} -s prepare scripts
-		%smake ARCH=%{target_arch} -s clean
+		%{smake} ARCH=%{target_arch} -s prepare scripts
+		%{smake} ARCH=%{target_arch} -s clean
 	popd >/dev/null
 	rm -f $TempDevelRoot/.config.old
 
@@ -988,8 +988,8 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 ### Linker start3 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_perf}
-%smake -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%__cc PYTHON=%{__python2} WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
-%smake -C tools/perf -s CC=%__cc prefix=%{_prefix} PYTHON=%{__python2} man
+%{smake} -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%__cc PYTHON=%{__python2} WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
+%{smake} -C tools/perf -s CC=%__cc prefix=%{_prefix} PYTHON=%{__python2} man
 %endif
 
 %if %{with build_cpupower}
@@ -1004,7 +1004,7 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 # We don't make to repeat the depend code at the install phase
 %if %{with build_source}
     PrepareKernel "" %{buildrpmrel}custom
-%smake -s mrproper
+%{smake} -s mrproper
 %endif
 
 
