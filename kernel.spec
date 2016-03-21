@@ -53,7 +53,7 @@
 %define	cross_header_archs	arm arm64 mips
 
 # BEGIN OF FLAVOURS
-%bcond_with build_desktop
+%bcond_without build_desktop
 %bcond_without build_server
 # END OF FLAVOURS
 
@@ -67,7 +67,7 @@
 # ARM builds
 %ifarch %{armx}
 %bcond_with build_desktop
-%bcond_with build_server
+%bcond_without build_server
 %endif
 # End of user definitions
 
@@ -122,10 +122,11 @@ NoSource:	0
 Source4:	README.kernel-sources
 Source5:	kernel.rpmlintrc
 # configs
-Source6:	x86_64.config
-Source7:	i386.config
-Source8:	arm64.config
-Source9:	arm.config
+Source6:	x86_64-desktop.config
+Source7:	x86_64-server.config
+Source8:	i386.config
+Source9:	arm64.config
+Source10:	arm.config
 
 # config and systemd service file from fedora
 Source50:	cpupower.service
@@ -585,7 +586,7 @@ PrepareKernel() {
     config_dir=%{_sourcedir}
     echo "Make config for kernel $extension"
     %{smake} -s mrproper
-    cp ${config_dir}/%{target_arch}.config .config
+    cp ${config_dir}/%{target_arch}-$flavour.config .config
     # make sure EXTRAVERSION says what we want it to say
     sed -ri "s|^(EXTRAVERSION =).*|\1 -$extension|" Makefile
     %{smake} oldconfig
