@@ -129,7 +129,7 @@ NoSource:	0
 %endif
 
 Source4:	README.kernel-sources
-Source5:	kernel.rpmlintrc
+Source5:	kernel-release.rpmlintrc
 # configs
 Source6:	x86_64-desktop.config
 Source7:	x86_64-server.config
