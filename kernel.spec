@@ -52,10 +52,19 @@
 
 %define	cross_header_archs	arm arm64 mips
 
+%ifarch x86_64
 # BEGIN OF FLAVOURS
 %bcond_without build_desktop
 %bcond_without build_server
 # END OF FLAVOURS
+%endif
+
+%ifarch %{ix86}
+# BEGIN OF FLAVOURS
+%bcond_without build_desktop
+%bcond_with build_server
+# END OF FLAVOURS
+%endif
 
 # build perf and cpupower tools
 %bcond_with build_perf
@@ -124,9 +133,11 @@ Source5:	kernel.rpmlintrc
 # configs
 Source6:	x86_64-desktop.config
 Source7:	x86_64-server.config
-Source8:	i386.config
-Source9:	arm64.config
-Source10:	arm.config
+# for i586 only desktop flavour
+Source8:	i386-desktop.config
+# Server flavour for ARMx, todo: add desktop
+Source9:	arm64-server.config
+Source10:	arm-server.config
 
 # config and systemd service file from fedora
 Source50:	cpupower.service
