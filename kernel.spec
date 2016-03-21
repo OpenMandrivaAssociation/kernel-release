@@ -14,7 +14,7 @@
 
 # IMPORTANT
 # This is the place where you set release version %{version}-1omv2015
-%define rpmrel		2
+%define rpmrel		3
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
 # kernel Makefile extraversion is substituted by
@@ -68,7 +68,7 @@
 
 # build perf and cpupower tools
 %bcond_with build_perf
-%bcond_with build_cpupower
+%bcond_without build_cpupower
 
 # compress modules with xz
 %bcond_without build_modxz
