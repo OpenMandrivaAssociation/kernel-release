@@ -38,7 +38,6 @@
 %define top_dir_name	%{kname}-%{_arch}
 
 %define build_dir	${RPM_BUILD_DIR}/%{top_dir_name}
-%define src_dir		%{build_dir}/linux-%{tar_ver}
 
 # Disable useless debug rpms...
 %define _enable_debug_packages	%{nil}
@@ -122,7 +121,7 @@ URL:		http://www.kernel.org
 #
 ### This is for full SRC RPM
 Source0:	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.xz
-Source1:		ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.sign
+Source1:	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.sign
 ### This is for stripped SRC RPM
 %if %{with build_nosrc}
 NoSource:	0
@@ -143,8 +142,38 @@ Source10:	arm-server.config
 Source50:	cpupower.service
 Source51:	cpupower.config
 
-# our patch tarball
-#Source100: 	linux-%{patch_ver}.tar.xz
+# Patches
+# aarch64 PCI support (Opteron A1100 and friends)
+# Backported from https://github.com/semihalf-nowicki-tomasz/linux.git
+# pci-acpi-v5 branch
+Patch0:		0001-PCI-ACPI-IA64-fix-IO-port-generic-range-check.patch
+Patch1:		0002-irqchip-GICv3-Refactor-gic_of_init-for-GICv3-driver.patch
+Patch2:		0003-irqchip-GICv3-Add-ACPI-support-for-GICv3-initializat.patch
+Patch3:		0004-irqchip-GICv3-ACPI-Add-redistributor-support-via-GIC.patch
+Patch4:		0005-irqchip-GICv3-remove-gic-root-node-in-ITS.patch
+Patch5:		0006-irqchip-gicv3-its-Mark-its_init-and-its-children-as-.patch
+Patch6:		0007-irqchip-GICv3-ITS-Refator-ITS-dt-init-code-to-prepar.patch
+Patch7:		0008-ARM64-ACPI-PCI-I-O-Remapping-Table-IORT-initial-supp.patch
+Patch8:		0009-irqchip-gicv3-its-Probe-ITS-in-the-ACPI-way.patch
+Patch9:		0010-acpi-gicv3-msi-Factor-out-code-that-might-be-reused-.patch
+Patch10:	0011-acpi-gicv3-its-Use-MADT-ITS-subtable-to-do-PCI-MSI-d.patch
+Patch11:	0012-ACPI-MCFG-Move-mmcfg_list-management-to-drivers-acpi.patch
+Patch12:	0013-acpi-pci-mcfg-Provide-default-RAW-ACPI-PCI-config-sp.patch
+Patch13:	0014-arm64-acpi-Use-MCFG-library-and-empty-PCI-config-spa.patch
+Patch14:	0015-pci-acpi-ecam-Add-flag-to-indicate-whether-ECAM-regi.patch
+Patch15:	0016-x86-pci-Cleanup-platform-specific-MCFG-data-by-using.patch
+Patch16:	0017-pci-acpi-x86-ia64-Move-ACPI-host-bridge-device-compa.patch
+Patch17:	0018-pci-acpi-Provide-generic-way-to-assign-bus-domain-nu.patch
+Patch18:	0019-x86-ia64-Include-acpi_pci_-add-remove-_bus-to-the-de.patch
+Patch19:	0020-acpi-mcfg-Add-default-PCI-config-accessors-implement.patch
+Patch20:	0021-pci-of-Move-the-PCI-I-O-space-management-to-PCI-core.patch
+Patch21:	0022-drivers-pci-add-generic-code-to-claim-bus-resources.patch
+Patch22:	0023-pci-acpi-Support-for-ACPI-based-generic-PCI-host-con.patch
+Patch23:	0024-pci-acpi-Match-PCI-config-space-accessors-against-pl.patch
+Patch24:	0025-arm64-pci-acpi-Assign-legacy-IRQs-once-device-is-ena.patch
+Patch25:	0026-arm64-pci-acpi-Start-using-ACPI-based-PCI-host-bridg.patch
+# https://lkml.org/lkml/2016/3/21/235
+Patch26:	pci-acpi-fix-IO-port-generic-range-check.patch
 
 # Defines for the things that are needed for all the kernels
 #
@@ -548,9 +577,8 @@ following platforms:
 # End packages - here begins build stage
 #
 %prep
-%setup -q -n %top_dir_name -c
-cd %src_dir
-%patch1 -p1
+%setup -q -n linux-%{tar_ver}
+%apply_patches
 
 %if %{with build_debug}
 %define debug --debug
@@ -608,9 +636,9 @@ BuildKernel() {
     echo "Building kernel $KernelVer"
 # (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
 %ifarch x86_64
-    %kmake -s all CC=gcc CXX=g++ CFLAGS="$CFLAGS -fwhole-program -flto" LDFLAGS="$LDFLAGS -flto"
+    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS -fwhole-program -flto" LDFLAGS="$LDFLAGS -flto"
 %else
-    %kmake -s all CC=gcc CXX=g++ CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
 %endif
 
 # Start installing stuff
@@ -715,8 +743,8 @@ SaveDevel() {
 # Clean the scripts tree, and make sure everything is ok (sanity check)
 # running prepare+scripts (tree was already "prepared" in build)
     pushd $TempDevelRoot >/dev/null
-    %{smake} ARCH=%{target_arch} -s prepare scripts
-    %{smake} ARCH=%{target_arch} -s clean
+    %{smake} ARCH=%{target_arch} prepare scripts
+    %{smake} ARCH=%{target_arch} clean
     popd >/dev/null
 
     rm -f $TempDevelRoot/.config.old
@@ -724,7 +752,7 @@ SaveDevel() {
 # fix permissions
     chmod -R a+rX $TempDevelRoot
 
-    kernel_devel_files=../kernel_devel_files.$devel_flavour
+    kernel_devel_files=kernel_devel_files.$devel_flavour
 
 ### Create the kernel_devel_files.*
 cat > $kernel_devel_files <<EOF
@@ -845,7 +873,7 @@ SaveDebug() {
 
 CreateFiles() {
     kernel_flavour=$1
-    kernel_files=../kernel_files.$kernel_flavour
+    kernel_files=kernel_files.$kernel_flavour
 
 ker="vmlinuz"
 ### Create the kernel_files.*
@@ -865,7 +893,7 @@ cat > $kernel_files <<EOF
 EOF
 
 %if %{with build_debug}
-    cat ../kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
+    cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
 %endif
 
 ### Create kernel Post script
@@ -974,9 +1002,6 @@ CreateKernel() {
 rm -rf %{temp_root}
 install -d %{temp_root}
 
-# make sure we are in the directory
-cd %src_dir
-
 %if %{with build_desktop}
 CreateKernel desktop
 %endif
@@ -1023,8 +1048,6 @@ PrepareKernel "" %{buildrpmrel}custom
 %install
 install -m 644 %{SOURCE4} .
 
-cd %src_dir
-
 # Directories definition needed for installing
 %define target_source %{buildroot}%{_kerneldir}
 %define target_boot %{buildroot}%{_bootdir}
@@ -1039,6 +1062,9 @@ cp -a %{temp_root} %{buildroot}
 install -d %{target_source}
 tar cf - . | tar xf - -C %{target_source}
 chmod -R a+rX %{target_source}
+
+# File lists aren't needed
+rm -f %{target_source}/*_files.* %{target_source}/README.kernel-sources
 
 # we remove all the source files that we don't ship
 # first architecture files
@@ -1082,7 +1108,7 @@ done
 for i in *; do
     pushd $i
     echo "Creating modules.description for $i"
-    modules=`find . -name "*.ko.[g,x]z"`
+    modules=`find . -name "*.ko.[gx]z"`
     echo $modules | %kxargs /sbin/modinfo | perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
     popd
 done
@@ -1107,7 +1133,6 @@ make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__p
 
 rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
-mv cpupower.lang ../
 chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
 mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
 install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
@@ -1191,7 +1216,7 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 
 %if %{with build_doc}
 %files -n %{kname}-doc
-%doc linux-%{tar_ver}/Documentation/*
+%doc Documentation/*
 %endif
 
 %if %{with build_perf}
