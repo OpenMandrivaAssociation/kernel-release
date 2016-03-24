@@ -1,0 +1,55 @@
+From 230e22a7335cfe2aabc45f534503c2055d3f7f92 Mon Sep 17 00:00:00 2001
+From: Tomasz Nowicki <tn@semihalf.com>
+Date: Thu, 8 Oct 2015 18:00:30 +0200
+Subject: [PATCH 06/26] irqchip, gicv3, its: Mark its_init() and its children
+ as __init
+
+gicv3_init_bases() is the only caller for its_init(),
+also it is a __init function, so mark its_init() as __init too,
+then recursively mark the functions called as __init.
+
+This will help to introduce ITS initialization using ACPI tables as
+we will use acpi_table_parse_entries family functions there which
+belong to __init section as well.
+
+Signed-off-by: Hanjun Guo <hanjun.guo@linaro.org>
+Signed-off-by: Tomasz Nowicki <tn@semihalf.com>
+---
+ drivers/irqchip/irq-gic-v3-its.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+index e7bc5c4..0e8dfac 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -669,7 +669,7 @@ static int its_chunk_to_lpi(int chunk)
+ 	return (chunk << IRQS_PER_CHUNK_SHIFT) + 8192;
+ }
+ 
+-static int its_lpi_init(u32 id_bits)
++static int __init its_lpi_init(u32 id_bits)
+ {
+ 	lpi_chunks = its_lpi_to_chunk(1UL << id_bits);
+ 
+@@ -1428,7 +1428,8 @@ static void its_enable_quirks(struct its_node *its)
+ 	gic_enable_quirks(iidr, its_quirks, its);
+ }
+ 
+-static int its_probe(struct device_node *node, struct irq_domain *parent)
++static int __init its_probe(struct device_node *node,
++			    struct irq_domain *parent)
+ {
+ 	struct resource res;
+ 	struct its_node *its;
+@@ -1589,7 +1590,7 @@ static struct of_device_id its_device_id[] = {
+ 	{},
+ };
+ 
+-int its_init(struct device_node *node, struct rdists *rdists,
++int __init its_init(struct device_node *node, struct rdists *rdists,
+ 	     struct irq_domain *parent_domain)
+ {
+ 	struct device_node *np;
+-- 
+2.7.2
+

@@ -1,0 +1,58 @@
+From 236e08d2285a8693f491a83b567e68c119bb0a01 Mon Sep 17 00:00:00 2001
+From: Tomasz Nowicki <tn@semihalf.com>
+Date: Wed, 13 Jan 2016 12:17:42 +0100
+Subject: [PATCH 13/26] acpi, pci, mcfg: Provide default RAW ACPI PCI config
+ space accessors.
+
+Lets keep RAW ACPI PCI config space accessors empty by default,
+since we are note sure if they are necessary accross all archs.
+Once we sort this out, we can provide generic version or let
+architectures to overwrite, like now x86.
+
+Suggested-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Tomasz Nowicki <tn@semihalf.com>
+Tested-by: Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>
+Tested-by: Jeremy Linton <jeremy.linton@arm.com>
+Tested-by: Duc Dang <dhdang@apm.com>
+Tested-by: Dongdong Liu <liudongdong3@huawei.com>
+Tested-by: Hanjun Guo <hanjun.guo@linaro.org>
+Tested-by: Graeme Gregory <graeme.gregory@linaro.org>
+Tested-by: Sinan Kaya <okaya@codeaurora.org>
+---
+ drivers/acpi/pci_mcfg.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/drivers/acpi/pci_mcfg.c b/drivers/acpi/pci_mcfg.c
+index ea84365..0467b00 100644
+--- a/drivers/acpi/pci_mcfg.c
++++ b/drivers/acpi/pci_mcfg.c
+@@ -21,6 +21,26 @@
+ static DEFINE_MUTEX(pci_mmcfg_lock);
+ LIST_HEAD(pci_mmcfg_list);
+ 
++/*
++ * raw_pci_read/write - raw ACPI PCI config space accessors.
++ *
++ * By defauly (__weak) these accessors are empty and should be overwritten
++ * by architectures which support operations on ACPI PCI_Config regions,
++ * see osl.c file.
++ */
++
++int __weak raw_pci_read(unsigned int domain, unsigned int bus,
++			unsigned int devfn, int reg, int len, u32 *val)
++{
++	return PCIBIOS_DEVICE_NOT_FOUND;
++}
++
++int __weak raw_pci_write(unsigned int domain, unsigned int bus,
++			 unsigned int devfn, int reg, int len, u32 val)
++{
++	return PCIBIOS_DEVICE_NOT_FOUND;
++}
++
+ static void list_add_sorted(struct pci_mmcfg_region *new)
+ {
+ 	struct pci_mmcfg_region *cfg;
+-- 
+2.7.2
+
