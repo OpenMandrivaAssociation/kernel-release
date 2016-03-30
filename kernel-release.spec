@@ -14,7 +14,7 @@
 
 # IMPORTANT
 # This is the place where you set release version %{version}-1omv2015
-%define rpmrel		5
+%define rpmrel		6
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
 # kernel Makefile extraversion is substituted by
@@ -177,6 +177,7 @@ Patch26:	pci-acpi-fix-IO-port-generic-range-check.patch
 # https://github.com/docker/docker/issues/20950
 # https://lkml.org/lkml/2016/3/14/274
 Patch27:	0027-ext4-overlayfs-mount-operation.patch
+Patch28:	0001-Add-support-for-Acer-Predator-macro-keys.patch
 
 # Defines for the things that are needed for all the kernels
 #
