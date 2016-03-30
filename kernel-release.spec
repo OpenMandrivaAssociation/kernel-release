@@ -14,7 +14,7 @@
 
 # IMPORTANT
 # This is the place where you set release version %{version}-1omv2015
-%define rpmrel		4
+%define rpmrel		4.1
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
 # kernel Makefile extraversion is substituted by
@@ -535,6 +535,8 @@ Release:	%{rpmrel}
 Summary:	Linux kernel header files mostly used by your C library
 Group:		System/Kernel and hardware
 Epoch:		1
+# (tpg) fix bug https://issues.openmandriva.org/show_bug.cgi?id=1580
+Provides:	kernel-headers
 %rename linux-userspace-headers
 
 %description headers
