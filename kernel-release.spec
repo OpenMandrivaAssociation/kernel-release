@@ -14,7 +14,7 @@
 
 # IMPORTANT
 # This is the place where you set release version %{version}-1omv2015
-%define rpmrel		7
+%define rpmrel		8
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
 # kernel Makefile extraversion is substituted by
@@ -450,7 +450,6 @@ Summary: 	The Linux source code for %{kname}-%{buildrel}
 Group: 		Development/Kernel
 Autoreqprov: 	no
 Provides: 	kernel-source = %{kverrel}
-Requires:	kernel-release = %{kverrel}
 Buildarch:	noarch
 
 %description -n %{kname}-source-%{buildrel}
@@ -486,7 +485,6 @@ Version:	%{kversion}
 Release:	%{rpmrel}
 Summary:	Various documentation bits found in the %{kname} source
 Group:		Documentation
-Requires:	kernel-release = %{kverrel}
 Buildarch:	noarch
 
 %description -n %{kname}-doc
@@ -506,7 +504,6 @@ Version:	%{kversion}
 Release:	%{rpmrel}
 Summary:	perf tool and the supporting documentation
 Group:		System/Kernel and hardware
-Requires:	kernel-release = %{kverrel}
 
 %description -n perf
 the perf tool and the supporting documentation.
@@ -520,7 +517,6 @@ Summary:	The cpupower tools
 Group:		System/Kernel and hardware
 Requires(post): 	rpm-helper >= 0.24.0-3
 Requires(preun):	rpm-helper >= 0.24.0-3
-Requires:	kernel-release = %{kverrel}
 Obsoletes:	cpufreq < 2.0-3
 Provides:	cpufreq = 2.0-3
 Obsoletes:	cpufrequtils < 008-6
@@ -536,7 +532,6 @@ Summary:	Devel files for cpupower
 Group:		Development/Kernel
 Requires:	cpupower = %{kversion}-%{rpmrel}
 Conflicts:	%{_lib}cpufreq-devel
-Requires:	kernel-release-devel = %{kverrel}
 %description -n cpupower-devel
 This package contains the development files for cpupower.
 %endif
@@ -548,8 +543,8 @@ Summary:	Linux kernel header files mostly used by your C library
 Group:		System/Kernel and hardware
 Epoch:		1
 # (tpg) fix bug https://issues.openmandriva.org/show_bug.cgi?id=1580
-Provides:	kernel-headers
-Requires:	kernel-release = %{kverrel}
+Provides:	kernel-headers = %{kverrel}
+Requires:	%{kname} = %{kverrel}
 %rename linux-userspace-headers
 
 %description headers
