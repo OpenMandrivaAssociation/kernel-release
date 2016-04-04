@@ -753,9 +753,9 @@ SaveDevel() {
 		rm -rf $TempDevelRoot/arch/$i
     done
 
-%ifnarch %{arm}
-    rm -rf $TempDevelRoot/arch/arm
-    rm -rf $TempDevelRoot/include/kvm/arm
+%ifnarch %{armx}
+    rm -rf $TempDevelRoot/arch/arm*
+    rm -rf $TempDevelRoot/include/kvm/arm*
     rm -rf $TempDevelRoot/include/soc
 %endif
 
@@ -815,7 +815,7 @@ $DevelRoot/include/ras
 $DevelRoot/include/rdma
 $DevelRoot/include/rxrpc
 $DevelRoot/include/scsi
-%ifarch %{arm}
+%ifarch %{armx}
 $DevelRoot/include/soc
 %endif
 $DevelRoot/include/sound
@@ -1092,7 +1092,7 @@ for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68k
 	 mips nios2 openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
 	rm -rf %{target_source}/arch/$i
 done
-%ifnarch %{arm}
+%ifnarch %{armx}
     rm -rf %{target_source}/include/kvm/arm*
 %endif
 
