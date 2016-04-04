@@ -616,6 +616,9 @@ find . -name "*.g*ignore" -exec rm {} \;
 export LD="%{_target_platform}-ld.bfd"
 export LDFLAGS="--hash-style=sysv --build-id=none"
 export PYTHON=%{__python2}
+mkdir -p bfd
+ln -s %{_bindir}/ld.bfd bfd/ld
+export PATH=$PWD/bfd:$PATH
 
 ############################################################
 ###  Linker end2 > Check point to build for omv or rosa ###
@@ -666,8 +669,10 @@ BuildKernel() {
     else
 	cp -f arch/arm/boot/zImage %{temp_boot}/vmlinuz-$KernelVer
     fi
-%else
-    cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-$KernelVer
+%endif
+
+%ifarch aarch64
+	cp -f arch/arm64/boot/Image.gz %{temp_boot}/vmlinuz-$KernelVer
 %endif
 
 # modules
@@ -688,6 +693,7 @@ BuildKernel() {
 
 # remove /lib/firmware, we use a separate kernel-firmware
     rm -rf %{temp_root}/lib/firmware
+    rm -rf bfd/
 }
 
 SaveDevel() {
@@ -748,15 +754,14 @@ SaveDevel() {
     done
 
 %ifnarch %{arm}
-    rm -rf $TempDevelRoot/arch/arm*
-    rm -rf $TempDevelRoot/include/kvm/arm*
+    rm -rf $TempDevelRoot/arch/arm
+    rm -rf $TempDevelRoot/include/kvm/arm
     rm -rf $TempDevelRoot/include/soc
 %endif
 
 # Clean the scripts tree, and make sure everything is ok (sanity check)
 # running prepare+scripts (tree was already "prepared" in build)
     pushd $TempDevelRoot >/dev/null
-    %{smake} ARCH=%{target_arch} prepare scripts
     %{smake} ARCH=%{target_arch} clean
     popd >/dev/null
 
@@ -773,8 +778,10 @@ cat > $kernel_devel_files <<EOF
 %dir $DevelRoot/arch
 %dir $DevelRoot/include
 $DevelRoot/Documentation
-%ifarch %{armx}
+%ifarch %{arm}
 $DevelRoot/arch/arm
+%endif
+%ifarch aarch64
 $DevelRoot/arch/arm64
 %endif
 $DevelRoot/arch/um
