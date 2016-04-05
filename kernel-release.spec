@@ -178,6 +178,7 @@ Patch26:	pci-acpi-fix-IO-port-generic-range-check.patch
 # https://lkml.org/lkml/2016/3/14/274
 Patch27:	0027-ext4-overlayfs-mount-operation.patch
 Patch28:	0001-Add-support-for-Acer-Predator-macro-keys.patch
+Patch29:	pass-ldbfd-4.5.0-linux.patch
 
 # Defines for the things that are needed for all the kernels
 #
