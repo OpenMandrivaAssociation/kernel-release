@@ -754,12 +754,6 @@ SaveDevel() {
 		rm -rf $TempDevelRoot/arch/$i
     done
 
-%ifnarch %{armx}
-    rm -rf $TempDevelRoot/arch/arm*
-    rm -rf $TempDevelRoot/include/kvm/arm*
-    rm -rf $TempDevelRoot/include/soc
-%endif
-
 # Clean the scripts tree, and make sure everything is ok (sanity check)
 # running prepare+scripts (tree was already "prepared" in build)
     pushd $TempDevelRoot >/dev/null
@@ -779,12 +773,8 @@ cat > $kernel_devel_files <<EOF
 %dir $DevelRoot/arch
 %dir $DevelRoot/include
 $DevelRoot/Documentation
-%ifarch %{arm}
 $DevelRoot/arch/arm
-%endif
-%ifarch aarch64
 $DevelRoot/arch/arm64
-%endif
 $DevelRoot/arch/um
 $DevelRoot/arch/x86
 $DevelRoot/block
@@ -816,9 +806,7 @@ $DevelRoot/include/ras
 $DevelRoot/include/rdma
 $DevelRoot/include/rxrpc
 $DevelRoot/include/scsi
-%ifarch %{armx}
 $DevelRoot/include/soc
-%endif
 $DevelRoot/include/sound
 $DevelRoot/include/target
 $DevelRoot/include/trace
