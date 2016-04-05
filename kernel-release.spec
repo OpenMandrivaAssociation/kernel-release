@@ -178,8 +178,6 @@ Patch26:	pci-acpi-fix-IO-port-generic-range-check.patch
 # https://lkml.org/lkml/2016/3/14/274
 Patch27:	0027-ext4-overlayfs-mount-operation.patch
 Patch28:	0001-Add-support-for-Acer-Predator-macro-keys.patch
-# kernel vdso need bfd linker
-Patch29:	pass-ldbfd-4.5.0-linux.patch
 
 # Defines for the things that are needed for all the kernels
 #
@@ -618,6 +616,9 @@ find . -name "*.g*ignore" -exec rm {} \;
 export LD="%{_target_platform}-ld.bfd"
 export LDFLAGS="--hash-style=sysv --build-id=none"
 export PYTHON=%{__python2}
+mkdir -p bfd
+ln -s %{_bindir}/ld.bfd bfd/ld
+export PATH=$PWD/bfd:$PATH
 
 ############################################################
 ###  Linker end2 > Check point to build for omv or rosa ###
@@ -747,6 +748,17 @@ SaveDevel() {
 # add acpica header files, needed for fglrx build
     cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
 
+    for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
+		 mips mn10300 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
+		rm -rf $TempDevelRoot/arch/$i
+    done
+
+%ifnarch %{armx}
+    rm -rf $TempDevelRoot/arch/arm*
+    rm -rf $TempDevelRoot/include/kvm/arm*
+    rm -rf $TempDevelRoot/include/soc
+%endif
+
 # Clean the scripts tree, and make sure everything is ok (sanity check)
 # running prepare+scripts (tree was already "prepared" in build)
     pushd $TempDevelRoot >/dev/null
@@ -766,7 +778,14 @@ cat > $kernel_devel_files <<EOF
 %dir $DevelRoot/arch
 %dir $DevelRoot/include
 $DevelRoot/Documentation
-$DevelRoot/arch/
+%ifarch %{arm}
+$DevelRoot/arch/arm
+%endif
+%ifarch aarch64
+$DevelRoot/arch/arm64
+%endif
+$DevelRoot/arch/um
+$DevelRoot/arch/x86
 $DevelRoot/block
 $DevelRoot/crypto
 # here
@@ -823,6 +842,7 @@ $DevelRoot/Kbuild
 $DevelRoot/Kconfig
 $DevelRoot/Makefile
 $DevelRoot/Module.symvers
+$DevelRoot/arch/Kconfig
 %doc README.kernel-sources
 EOF
 
@@ -1065,6 +1085,16 @@ chmod -R a+rX %{target_source}
 
 # File lists aren't needed
 rm -f %{target_source}/*_files.* %{target_source}/README.kernel-sources
+
+# we remove all the source files that we don't ship
+# first architecture files
+for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
+	 mips nios2 openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
+	rm -rf %{target_source}/arch/$i
+done
+%ifnarch %{armx}
+    rm -rf %{target_source}/include/kvm/arm*
+%endif
 
 # other misc files
 rm -f %{target_source}/{.config.old,.config.cmd,.gitignore,.lst,.mailmap}
