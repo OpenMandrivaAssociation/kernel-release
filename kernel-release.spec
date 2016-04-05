@@ -664,6 +664,7 @@ BuildKernel() {
     install -m 644 .config %{temp_boot}/config-$KernelVer
     xz -7 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
 
+# armv7
 %ifarch %{arm}
     if [ -f arch/arm/boot/uImage ]; then
 	cp -f arch/arm/boot/uImage %{temp_boot}/uImage-$KernelVer
@@ -672,8 +673,14 @@ BuildKernel() {
     fi
 %endif
 
+#arm64
 %ifarch aarch64
 	cp -f arch/arm64/boot/Image.gz %{temp_boot}/vmlinuz-$KernelVer
+%endif
+
+# intel
+%ifarch %{ix86} x86_64
+	cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-$KernelVer
 %endif
 
 # modules
