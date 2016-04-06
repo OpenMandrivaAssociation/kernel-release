@@ -197,7 +197,6 @@ input and output, etc.
 
 %define kprovides1	%{kname} = %{kverrel}
 %define kprovides2	kernel = %{tar_ver}
-%define kprovides3	alsa = 1.0.27
 %define kprovides_server	drbd-api = 88
 
 %define	kobsoletes1	dkms-r8192se <= 0019.1207.2010-2
