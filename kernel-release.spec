@@ -14,7 +14,7 @@
 
 # IMPORTANT
 # This is the place where you set release version %{version}-1omv2015
-%define rpmrel		8
+%define rpmrel		9
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
 # kernel Makefile extraversion is substituted by
@@ -279,7 +279,7 @@ Suggests:	microcode_ctl
 %package -n %{kname}-%{1}-%{buildrel}			\
 Version:	%{fakever}				\
 Release:	%{fakerel}				\
-Provides:	%kprovides1 %kprovides2 %kprovides3	\
+Provides:	%kprovides1 %kprovides2			\
 %{expand:%%{?kprovides_%{1}:Provides: %{kprovides_%{1}}}} \
 Provides:   %{kname}-%{1}              			 \
 Requires(pre):	%requires1 %requires2 %requires3 %requires4 \
@@ -309,6 +309,7 @@ Requires:	perl					\
 Summary:	The kernel-devel files for %{kname}-%{1}-%{buildrel} \
 Group:		Development/Kernel			\
 Provides:	%{kname}-devel = %{kverrel} 		\
+Provides:	kernel-devel				\
 Provides:	%{kname}-%{1}-devel			\
 Requires:	%{kname}-%{1}-%{buildrel}		\
 %ifarch %{ix86}						\
