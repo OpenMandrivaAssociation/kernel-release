@@ -6,9 +6,13 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	5
-%define sublevel	0
+%define sublevel	1
 
+%if 0%{sublevel}
+%define tar_ver   	%{kernelversion}.%{patchlevel}.%{sublevel}
+%else
 %define tar_ver   	%{kernelversion}.%{patchlevel}
+%endif
 %define buildrel	%{kversion}-%{buildrpmrel}
 %define rpmtag	%{disttag}
 
@@ -172,8 +176,6 @@ Patch22:	0023-pci-acpi-Support-for-ACPI-based-generic-PCI-host-con.patch
 Patch23:	0024-pci-acpi-Match-PCI-config-space-accessors-against-pl.patch
 Patch24:	0025-arm64-pci-acpi-Assign-legacy-IRQs-once-device-is-ena.patch
 Patch25:	0026-arm64-pci-acpi-Start-using-ACPI-based-PCI-host-bridg.patch
-# https://lkml.org/lkml/2016/3/21/235
-Patch26:	pci-acpi-fix-IO-port-generic-range-check.patch
 # https://github.com/docker/docker/issues/20950
 # https://lkml.org/lkml/2016/3/14/274
 Patch27:	0027-ext4-overlayfs-mount-operation.patch
