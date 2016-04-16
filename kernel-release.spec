@@ -18,7 +18,7 @@
 
 # IMPORTANT
 # This is the place where you set release version %{version}-1omv2015
-%define rpmrel		9
+%define rpmrel		10
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
 # kernel Makefile extraversion is substituted by
@@ -547,7 +547,10 @@ Group:		System/Kernel and hardware
 Epoch:		1
 # (tpg) fix bug https://issues.openmandriva.org/show_bug.cgi?id=1580
 Provides:	kernel-headers = %{kverrel}
-Requires:	%{kname} = %{kverrel}
+# remove this requires, we don't need to install
+# kernel binary into chroot
+# in all other cases kernel already installed here
+#Requires:	%{kname} = %{kverrel}
 %rename linux-userspace-headers
 
 %description headers
