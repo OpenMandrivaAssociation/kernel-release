@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	5
-%define sublevel	1
+%define sublevel	2
 
 %if 0%{sublevel}
 %define tar_ver   	%{kernelversion}.%{patchlevel}.%{sublevel}
@@ -176,9 +176,6 @@ Patch22:	0023-pci-acpi-Support-for-ACPI-based-generic-PCI-host-con.patch
 Patch23:	0024-pci-acpi-Match-PCI-config-space-accessors-against-pl.patch
 Patch24:	0025-arm64-pci-acpi-Assign-legacy-IRQs-once-device-is-ena.patch
 Patch25:	0026-arm64-pci-acpi-Start-using-ACPI-based-PCI-host-bridg.patch
-# https://github.com/docker/docker/issues/20950
-# https://lkml.org/lkml/2016/3/14/274
-Patch27:	0027-ext4-overlayfs-mount-operation.patch
 Patch28:	0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch29:	pass-ldbfd-4.5.0-linux.patch
 
