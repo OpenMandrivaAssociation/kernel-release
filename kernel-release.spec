@@ -6,15 +6,19 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	5
-%define sublevel	0
+%define sublevel	2
 
+%if 0%{sublevel}
+%define tar_ver   	%{kernelversion}.%{patchlevel}.%{sublevel}
+%else
 %define tar_ver   	%{kernelversion}.%{patchlevel}
+%endif
 %define buildrel	%{kversion}-%{buildrpmrel}
 %define rpmtag	%{disttag}
 
 # IMPORTANT
 # This is the place where you set release version %{version}-1omv2015
-%define rpmrel		4.1
+%define rpmrel		10
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
 # kernel Makefile extraversion is substituted by
@@ -172,11 +176,8 @@ Patch22:	0023-pci-acpi-Support-for-ACPI-based-generic-PCI-host-con.patch
 Patch23:	0024-pci-acpi-Match-PCI-config-space-accessors-against-pl.patch
 Patch24:	0025-arm64-pci-acpi-Assign-legacy-IRQs-once-device-is-ena.patch
 Patch25:	0026-arm64-pci-acpi-Start-using-ACPI-based-PCI-host-bridg.patch
-# https://lkml.org/lkml/2016/3/21/235
-Patch26:	pci-acpi-fix-IO-port-generic-range-check.patch
-# https://github.com/docker/docker/issues/20950
-# https://lkml.org/lkml/2016/3/14/274
-Patch27:	0027-ext4-overlayfs-mount-operation.patch
+Patch28:	0001-Add-support-for-Acer-Predator-macro-keys.patch
+Patch29:	pass-ldbfd-4.5.0-linux.patch
 
 # Defines for the things that are needed for all the kernels
 #
@@ -195,7 +196,6 @@ input and output, etc.
 
 %define kprovides1	%{kname} = %{kverrel}
 %define kprovides2	kernel = %{tar_ver}
-%define kprovides3	alsa = 1.0.27
 %define kprovides_server	drbd-api = 88
 
 %define	kobsoletes1	dkms-r8192se <= 0019.1207.2010-2
@@ -278,7 +278,7 @@ Suggests:	microcode_ctl
 %package -n %{kname}-%{1}-%{buildrel}			\
 Version:	%{fakever}				\
 Release:	%{fakerel}				\
-Provides:	%kprovides1 %kprovides2 %kprovides3	\
+Provides:	%kprovides1 %kprovides2			\
 %{expand:%%{?kprovides_%{1}:Provides: %{kprovides_%{1}}}} \
 Provides:   %{kname}-%{1}              			 \
 Requires(pre):	%requires1 %requires2 %requires3 %requires4 \
@@ -308,7 +308,9 @@ Requires:	perl					\
 Summary:	The kernel-devel files for %{kname}-%{1}-%{buildrel} \
 Group:		Development/Kernel			\
 Provides:	%{kname}-devel = %{kverrel} 		\
+Provides:	kernel-devel				\
 Provides:	%{kname}-%{1}-devel			\
+Requires:	%{kname}-%{1}-%{buildrel}		\
 %ifarch %{ix86}						\
 Conflicts:	arch(x86_64)				\
 %endif							\
@@ -329,6 +331,7 @@ Release:	%{fakerel}				\
 Summary:	Files with debuginfo for %{kname}-%{1}-%{buildrel} \
 Group:		Development/Debug			\
 Provides:	kernel-debug = %{kverrel} 		\
+Requires:	%{kname}-%{1}-%{buildrel}		\
 %ifarch %{ix86}						\
 Conflicts:	arch(x86_64)				\
 %endif							\
@@ -437,7 +440,12 @@ CFS cpu scheduler and BFQ i/o scheduler, PERFORMANCE governor.
 %package -n %{kname}-source-%{buildrel}
 Version: 	%{fakever}
 Release: 	%{fakerel}
-Requires: 	glibc-devel, ncurses-devel, make, gcc, perl, diffutils
+Requires: 	glibc-devel
+Requires: 	ncurses-devel
+Requires: 	make
+Requires: 	gcc
+Requires: 	perl
+Requires: 	diffutils
 Summary: 	The Linux source code for %{kname}-%{buildrel}
 Group: 		Development/Kernel
 Autoreqprov: 	no
@@ -524,7 +532,6 @@ Summary:	Devel files for cpupower
 Group:		Development/Kernel
 Requires:	cpupower = %{kversion}-%{rpmrel}
 Conflicts:	%{_lib}cpufreq-devel
-
 %description -n cpupower-devel
 This package contains the development files for cpupower.
 %endif
@@ -536,7 +543,11 @@ Summary:	Linux kernel header files mostly used by your C library
 Group:		System/Kernel and hardware
 Epoch:		1
 # (tpg) fix bug https://issues.openmandriva.org/show_bug.cgi?id=1580
-Provides:	kernel-headers
+Provides:	kernel-headers = %{kverrel}
+# remove this requires, we don't need to install
+# kernel binary into chroot
+# in all other cases kernel already installed here
+#Requires:	%{kname} = %{kverrel}
 %rename linux-userspace-headers
 
 %description headers
@@ -608,6 +619,9 @@ find . -name "*.g*ignore" -exec rm {} \;
 export LD="%{_target_platform}-ld.bfd"
 export LDFLAGS="--hash-style=sysv --build-id=none"
 export PYTHON=%{__python2}
+mkdir -p bfd
+ln -s %{_bindir}/ld.bfd bfd/ld
+export PATH=$PWD/bfd:$PATH
 
 ############################################################
 ###  Linker end2 > Check point to build for omv or rosa ###
@@ -652,14 +666,23 @@ BuildKernel() {
     install -m 644 .config %{temp_boot}/config-$KernelVer
     xz -7 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
 
+# armv7
 %ifarch %{arm}
     if [ -f arch/arm/boot/uImage ]; then
 	cp -f arch/arm/boot/uImage %{temp_boot}/uImage-$KernelVer
     else
 	cp -f arch/arm/boot/zImage %{temp_boot}/vmlinuz-$KernelVer
     fi
-%else
-    cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-$KernelVer
+%endif
+
+#arm64
+%ifarch aarch64
+	cp -f arch/arm64/boot/Image.gz %{temp_boot}/vmlinuz-$KernelVer
+%endif
+
+# intel
+%ifarch %{ix86} x86_64
+	cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-$KernelVer
 %endif
 
 # modules
@@ -680,6 +703,7 @@ BuildKernel() {
 
 # remove /lib/firmware, we use a separate kernel-firmware
     rm -rf %{temp_root}/lib/firmware
+    rm -rf bfd/
 }
 
 SaveDevel() {
@@ -739,16 +763,9 @@ SaveDevel() {
 		rm -rf $TempDevelRoot/arch/$i
     done
 
-%ifnarch %{arm}
-    rm -rf $TempDevelRoot/arch/arm*
-    rm -rf $TempDevelRoot/include/kvm/arm*
-    rm -rf $TempDevelRoot/include/soc
-%endif
-
 # Clean the scripts tree, and make sure everything is ok (sanity check)
 # running prepare+scripts (tree was already "prepared" in build)
     pushd $TempDevelRoot >/dev/null
-    %{smake} ARCH=%{target_arch} prepare scripts
     %{smake} ARCH=%{target_arch} clean
     popd >/dev/null
 
@@ -765,10 +782,8 @@ cat > $kernel_devel_files <<EOF
 %dir $DevelRoot/arch
 %dir $DevelRoot/include
 $DevelRoot/Documentation
-%ifarch %{armx}
 $DevelRoot/arch/arm
 $DevelRoot/arch/arm64
-%endif
 $DevelRoot/arch/um
 $DevelRoot/arch/x86
 $DevelRoot/block
@@ -800,9 +815,7 @@ $DevelRoot/include/ras
 $DevelRoot/include/rdma
 $DevelRoot/include/rxrpc
 $DevelRoot/include/scsi
-%ifarch %{arm}
 $DevelRoot/include/soc
-%endif
 $DevelRoot/include/sound
 $DevelRoot/include/target
 $DevelRoot/include/trace
@@ -1077,7 +1090,7 @@ for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68k
 	 mips nios2 openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
 	rm -rf %{target_source}/arch/$i
 done
-%ifnarch %{arm}
+%ifnarch %{armx}
     rm -rf %{target_source}/include/kvm/arm*
 %endif
 
