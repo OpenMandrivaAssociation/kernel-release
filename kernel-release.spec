@@ -18,7 +18,7 @@
 
 # IMPORTANT
 # This is the place where you set release version %{version}-1omv2015
-%define rpmrel		1
+%define rpmrel		11
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
 # kernel Makefile extraversion is substituted by
