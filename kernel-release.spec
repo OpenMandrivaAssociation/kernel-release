@@ -124,8 +124,8 @@ URL:		http://www.kernel.org
 # Sources
 #
 ### This is for full SRC RPM
-Source0:	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.xz
-Source1:	ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.sign
+Source0:	http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.xz
+Source1:	http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.sign
 ### This is for stripped SRC RPM
 %if %{with build_nosrc}
 NoSource:	0
