@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	5
-%define sublevel	2
+%define sublevel	3
 
 %if 0%{sublevel}
 %define tar_ver   	%{kernelversion}.%{patchlevel}.%{sublevel}
@@ -18,7 +18,7 @@
 
 # IMPORTANT
 # This is the place where you set release version %{version}-1omv2015
-%define rpmrel		12
+%define rpmrel		1
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
 # kernel Makefile extraversion is substituted by
