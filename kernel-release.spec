@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	5
-%define sublevel	3
+%define sublevel	4
 
 %if 0%{sublevel}
 %define tar_ver   	%{kernelversion}.%{patchlevel}.%{sublevel}
