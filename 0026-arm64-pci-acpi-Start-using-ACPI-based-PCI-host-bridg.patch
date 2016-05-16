@@ -1,33 +1,5 @@
-From 16255e5b92fc3a6feef521078c86d520fe7f008b Mon Sep 17 00:00:00 2001
-From: Tomasz Nowicki <tn@semihalf.com>
-Date: Tue, 16 Feb 2016 12:36:14 +0100
-Subject: [PATCH 26/26] arm64, pci, acpi: Start using ACPI based PCI host
- bridge driver for ARM64.
-
-It is perfectly fine to use ACPI_PCI_HOST_GENERIC for ARM64,
-so lets get rid of PCI init empty stub, related ACPI header and
-go with full-blown PCI host controller driver.
-
-Signed-off-by: Tomasz Nowicki <tn@semihalf.com>
-TO: Catalin Marinas <catalin.marinas@arm.com>
-TO: Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>
-TO: Will Deacon <will.deacon@arm.com>
-TO: Arnd Bergmann <arnd@arndb.de>
-CC: Liviu Dudau <Liviu.Dudau@arm.com>
-Tested-by: Duc Dang <dhdang@apm.com>
-Tested-by: Dongdong Liu <liudongdong3@huawei.com>
-Tested-by: Hanjun Guo <hanjun.guo@linaro.org>
-Tested-by: Graeme Gregory <graeme.gregory@linaro.org>
-Tested-by: Sinan Kaya <okaya@codeaurora.org>
----
- arch/arm64/Kconfig      | 1 +
- arch/arm64/kernel/pci.c | 9 ---------
- 2 files changed, 1 insertion(+), 9 deletions(-)
-
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 552e996..09c49ea 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
+--- linux-4.5/arch/arm64/Kconfig.0035~	2016-04-03 10:30:59.934786425 +0200
++++ linux-4.5/arch/arm64/Kconfig	2016-04-03 10:31:01.638070081 +0200
 @@ -2,6 +2,7 @@ config ARM64
  	def_bool y
  	select ACPI_CCA_REQUIRED if ACPI
@@ -36,13 +8,11 @@ index 552e996..09c49ea 100644
  	select ACPI_REDUCED_HARDWARE_ONLY if ACPI
  	select ARCH_HAS_DEVMEM_IS_ALLOWED
  	select ARCH_HAS_ATOMIC64_DEC_IF_POSITIVE
-diff --git a/arch/arm64/kernel/pci.c b/arch/arm64/kernel/pci.c
-index 6e77e1b..1de0168 100644
---- a/arch/arm64/kernel/pci.c
-+++ b/arch/arm64/kernel/pci.c
-@@ -65,12 +65,3 @@ int pcibios_alloc_irq(struct pci_dev *dev)
- 
- 	return 0;
+--- linux-4.5/arch/arm64/kernel/pci.c.0035~	2016-04-03 10:31:01.638070081 +0200
++++ linux-4.5/arch/arm64/kernel/pci.c	2016-04-03 10:31:34.936216826 +0200
+@@ -78,12 +78,3 @@ int raw_pci_write(unsigned int domain, u
+ {
+ 	return -ENXIO;
  }
 -
 -#ifdef CONFIG_ACPI
@@ -53,6 +23,3 @@ index 6e77e1b..1de0168 100644
 -	return NULL;
 -}
 -#endif
--- 
-2.7.2
-
