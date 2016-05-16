@@ -1,66 +1,5 @@
-From 1661ca8b8a0e3a9f53d887a77c4759cc8372e409 Mon Sep 17 00:00:00 2001
-From: Tomasz Nowicki <tn@semihalf.com>
-Date: Wed, 4 Nov 2015 13:56:43 +0100
-Subject: [PATCH 08/26] ARM64, ACPI, PCI: I/O Remapping Table (IORT) initial
- support.
-
-IORT shows representation of IO topology for ARM based systems.
-It describes how various components are connected together on
-parent-child basis e.g. PCI RC -> SMMU -> ITS.
-
-Initial support allows to:
-- register ITS MSI chip along with ITS translation ID and domain token
-- find registered domain token based on ITS translation ID
-- find registered domain token corresponding to given PCI device
-- find PCI device DeviceID based on its RequesterID
-
-Additional features like:
-- devices to SMMU binding
-- finding platform device DeviceID based on its RequesterID
-will be added in next series.
-
-Signed-off-by: Tomasz Nowicki <tn@semihalf.com>
----
- drivers/acpi/Kconfig    |   3 +
- drivers/acpi/Makefile   |   1 +
- drivers/acpi/iort.c     | 326 ++++++++++++++++++++++++++++++++++++++++++++++++
- drivers/irqchip/Kconfig |   1 +
- include/linux/iort.h    |  38 ++++++
- 5 files changed, 369 insertions(+)
- create mode 100644 drivers/acpi/iort.c
- create mode 100644 include/linux/iort.h
-
-diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
-index 82b96ee..183ffa3 100644
---- a/drivers/acpi/Kconfig
-+++ b/drivers/acpi/Kconfig
-@@ -57,6 +57,9 @@ config ACPI_SYSTEM_POWER_STATES_SUPPORT
- config ACPI_CCA_REQUIRED
- 	bool
- 
-+config IORT_TABLE
-+	bool
-+
- config ACPI_DEBUGGER
- 	bool "AML debugger interface"
- 	select ACPI_DEBUG
-diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-index cb648a4..7ea903d 100644
---- a/drivers/acpi/Makefile
-+++ b/drivers/acpi/Makefile
-@@ -80,6 +80,7 @@ obj-$(CONFIG_ACPI_CUSTOM_METHOD)+= custom_method.o
- obj-$(CONFIG_ACPI_BGRT)		+= bgrt.o
- obj-$(CONFIG_ACPI_CPPC_LIB)	+= cppc_acpi.o
- obj-$(CONFIG_ACPI_DEBUGGER_USER) += acpi_dbg.o
-+obj-$(CONFIG_IORT_TABLE) 	+= iort.o
- 
- # processor has its own "processor." module_param namespace
- processor-y			:= processor_driver.o
-diff --git a/drivers/acpi/iort.c b/drivers/acpi/iort.c
-new file mode 100644
-index 0000000..13efc5f
---- /dev/null
-+++ b/drivers/acpi/iort.c
+--- linux-4.5/drivers/acpi/iort.c.0017~	2016-04-03 10:22:30.225774606 +0200
++++ linux-4.5/drivers/acpi/iort.c	2016-04-03 10:22:30.225774606 +0200
 @@ -0,0 +1,326 @@
 +/*
 + * Copyright (C) 2015, Linaro Ltd.
@@ -388,23 +327,40 @@ index 0000000..13efc5f
 +	return 0;
 +}
 +arch_initcall(iort_table_detect);
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index fb50911..8410999 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
+--- linux-4.5/drivers/acpi/Kconfig.0017~	2016-03-14 05:28:54.000000000 +0100
++++ linux-4.5/drivers/acpi/Kconfig	2016-04-03 10:22:30.225774606 +0200
+@@ -57,6 +57,9 @@ config ACPI_SYSTEM_POWER_STATES_SUPPORT
+ config ACPI_CCA_REQUIRED
+ 	bool
+ 
++config IORT_TABLE
++	bool
++
+ config ACPI_DEBUGGER
+ 	bool "AML debugger interface"
+ 	select ACPI_DEBUG
+--- linux-4.5/drivers/acpi/Makefile.0017~	2016-04-03 10:22:28.782667710 +0200
++++ linux-4.5/drivers/acpi/Makefile	2016-04-03 10:22:30.225774606 +0200
+@@ -81,6 +81,7 @@ obj-$(CONFIG_ACPI_CUSTOM_METHOD)+= custo
+ obj-$(CONFIG_ACPI_BGRT)		+= bgrt.o
+ obj-$(CONFIG_ACPI_CPPC_LIB)	+= cppc_acpi.o
+ obj-$(CONFIG_ACPI_DEBUGGER_USER) += acpi_dbg.o
++obj-$(CONFIG_IORT_TABLE) 	+= iort.o
+ 
+ # processor has its own "processor." module_param namespace
+ processor-y			:= processor_driver.o
+--- linux-4.5/drivers/irqchip/Kconfig.0017~	2016-04-03 10:22:30.225774606 +0200
++++ linux-4.5/drivers/irqchip/Kconfig	2016-04-03 10:25:11.974315142 +0200
 @@ -31,6 +31,7 @@ config ARM_GIC_V3
  config ARM_GIC_V3_ITS
  	bool
  	select PCI_MSI_IRQ_DOMAIN
 +	select IORT_TABLE if ACPI
  
- config HISILICON_IRQ_MBIGEN
- 	bool "Support mbigen interrupt controller"
-diff --git a/include/linux/iort.h b/include/linux/iort.h
-new file mode 100644
-index 0000000..92cde45
---- /dev/null
-+++ b/include/linux/iort.h
+ config ARM_NVIC
+ 	bool
+--- linux-4.5/include/linux/iort.h.0017~	2016-04-03 10:22:30.226774681 +0200
++++ linux-4.5/include/linux/iort.h	2016-04-03 10:22:30.226774681 +0200
 @@ -0,0 +1,38 @@
 +/*
 + * Copyright (C) 2015, Linaro Ltd.
@@ -444,6 +400,3 @@ index 0000000..92cde45
 +#endif /* CONFIG_IORT_TABLE */
 +
 +#endif /* __IORT_H__ */
--- 
-2.7.2
-
