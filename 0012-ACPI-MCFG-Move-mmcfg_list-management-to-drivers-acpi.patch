@@ -1,44 +1,6 @@
-From 115a7f03ceb93cf5e843eddedb7a716995a00a9d Mon Sep 17 00:00:00 2001
-From: Jayachandran C <jchandra@broadcom.com>
-Date: Fri, 29 Jan 2016 14:35:36 +0530
-Subject: [PATCH 12/26] ACPI: MCFG: Move mmcfg_list management to drivers/acpi
-
-Move pci_mmcfg_list handling to a drivers/acpi/pci_mcfg.c. This is
-to share the API and code with ARM64 later. The corresponding
-declarations are moved from asm/pci_x86.h to linux/pci-acpi.h
-
-As a part of this we introduce three functions that can be
-implemented by the arch code: pci_mmconfig_map_resource() to map a
-mcfg entry, pci_mmconfig_unmap_resource to do the corresponding
-unmap and pci_mmconfig_enabled to see if the arch setup of
-mcfg entries was successful. We also provide weak implementations
-of these, which will be used from ARM64. On x86, we retain the
-old logic by providing platform specific implementation.
-
-This patch is purely rearranging code, it should not have any
-impact on the logic of MCFG parsing or list handling.
-
-Signed-off-by: Jayachandran C <jchandra@broadcom.com>
-[Xen parts:]
-Acked-by: David Vrabel <david.vrabel@citrix.com>
----
- arch/x86/include/asm/pci_x86.h |  24 +---
- arch/x86/pci/mmconfig-shared.c | 269 +++++------------------------------
- arch/x86/pci/mmconfig_32.c     |   1 +
- arch/x86/pci/mmconfig_64.c     |   1 +
- arch/x86/pci/numachip.c        |   1 +
- drivers/acpi/Makefile          |   1 +
- drivers/acpi/pci_mcfg.c        | 312 +++++++++++++++++++++++++++++++++++++++++
- drivers/xen/pci.c              |   5 +-
- include/linux/pci-acpi.h       |  33 +++++
- 9 files changed, 386 insertions(+), 261 deletions(-)
- create mode 100644 drivers/acpi/pci_mcfg.c
-
-diff --git a/arch/x86/include/asm/pci_x86.h b/arch/x86/include/asm/pci_x86.h
-index 46873fb..7824626 100644
---- a/arch/x86/include/asm/pci_x86.h
-+++ b/arch/x86/include/asm/pci_x86.h
-@@ -122,33 +122,11 @@ extern int pci_legacy_init(void);
+--- linux-4.5/arch/x86/include/asm/pci_x86.h.0021~	2016-03-14 05:28:54.000000000 +0100
++++ linux-4.5/arch/x86/include/asm/pci_x86.h	2016-04-03 10:25:37.226312907 +0200
+@@ -124,33 +124,11 @@ extern int pci_legacy_init(void);
  extern void pcibios_fixup_irqs(void);
  
  /* pci-mmconfig.c */
@@ -73,10 +35,28 @@ index 46873fb..7824626 100644
  
  /*
   * On AMD Fam10h CPUs, all PCI MMIO configuration space accesses must use
-diff --git a/arch/x86/pci/mmconfig-shared.c b/arch/x86/pci/mmconfig-shared.c
-index dd30b7e..626710b 100644
---- a/arch/x86/pci/mmconfig-shared.c
-+++ b/arch/x86/pci/mmconfig-shared.c
+--- linux-4.5/arch/x86/pci/mmconfig_32.c.0021~	2016-03-14 05:28:54.000000000 +0100
++++ linux-4.5/arch/x86/pci/mmconfig_32.c	2016-04-03 10:25:37.226312907 +0200
+@@ -12,6 +12,7 @@
+ #include <linux/pci.h>
+ #include <linux/init.h>
+ #include <linux/rcupdate.h>
++#include <linux/pci-acpi.h>
+ #include <asm/e820.h>
+ #include <asm/pci_x86.h>
+ 
+--- linux-4.5/arch/x86/pci/mmconfig_64.c.0021~	2016-03-14 05:28:54.000000000 +0100
++++ linux-4.5/arch/x86/pci/mmconfig_64.c	2016-04-03 10:25:37.226312907 +0200
+@@ -10,6 +10,7 @@
+ #include <linux/acpi.h>
+ #include <linux/bitmap.h>
+ #include <linux/rcupdate.h>
++#include <linux/pci-acpi.h>
+ #include <asm/e820.h>
+ #include <asm/pci_x86.h>
+ 
+--- linux-4.5/arch/x86/pci/mmconfig-shared.c.0021~	2016-03-14 05:28:54.000000000 +0100
++++ linux-4.5/arch/x86/pci/mmconfig-shared.c	2016-04-03 10:25:37.226312907 +0200
 @@ -12,13 +12,12 @@
  
  #include <linux/pci.h>
@@ -186,7 +166,7 @@ index dd30b7e..626710b 100644
  static const char *__init pci_mmcfg_e7520(void)
  {
  	u32 win;
-@@ -543,73 +462,6 @@ static void __init pci_mmcfg_reject_broken(int early)
+@@ -543,73 +462,6 @@ static void __init pci_mmcfg_reject_brok
  	}
  }
  
@@ -260,7 +240,7 @@ index dd30b7e..626710b 100644
  #ifdef CONFIG_ACPI_APEI
  extern int (*arch_apei_filter_addr)(int (*func)(__u64 start, __u64 size,
  				     void *data), void *data);
-@@ -662,13 +514,20 @@ static void __init __pci_mmcfg_init(int early)
+@@ -662,13 +514,20 @@ static void __init __pci_mmcfg_init(int
  
  static int __initdata known_bridge;
  
@@ -291,7 +271,7 @@ index dd30b7e..626710b 100644
  		__pci_mmcfg_init(0);
  	}
  }
-@@ -720,99 +579,41 @@ static int __init pci_mmcfg_late_insert_resources(void)
+@@ -720,99 +579,41 @@ static int __init pci_mmcfg_late_insert_
   */
  late_initcall(pci_mmcfg_late_insert_resources);
  
@@ -303,14 +283,14 @@ index dd30b7e..626710b 100644
 -	int rc;
 -	struct resource *tmp = NULL;
 -	struct pci_mmcfg_region *cfg;
-+	struct resource *tmp;
- 
+-
 -	if (!(pci_probe & PCI_PROBE_MMCONF) || pci_mmcfg_arch_init_failed)
 -		return -ENODEV;
 -
 -	if (start > end)
 -		return -EINVAL;
--
++	struct resource *tmp;
+ 
 -	mutex_lock(&pci_mmcfg_lock);
 -	cfg = pci_mmconfig_lookup(seg, start);
 -	if (cfg) {
@@ -416,34 +396,8 @@ index dd30b7e..626710b 100644
 +{
 +	return (pci_probe & PCI_PROBE_MMCONF) && !pci_mmcfg_arch_init_failed;
  }
-diff --git a/arch/x86/pci/mmconfig_32.c b/arch/x86/pci/mmconfig_32.c
-index 43984bc..38a37f8 100644
---- a/arch/x86/pci/mmconfig_32.c
-+++ b/arch/x86/pci/mmconfig_32.c
-@@ -12,6 +12,7 @@
- #include <linux/pci.h>
- #include <linux/init.h>
- #include <linux/rcupdate.h>
-+#include <linux/pci-acpi.h>
- #include <asm/e820.h>
- #include <asm/pci_x86.h>
- 
-diff --git a/arch/x86/pci/mmconfig_64.c b/arch/x86/pci/mmconfig_64.c
-index bea5249..29253ec 100644
---- a/arch/x86/pci/mmconfig_64.c
-+++ b/arch/x86/pci/mmconfig_64.c
-@@ -10,6 +10,7 @@
- #include <linux/acpi.h>
- #include <linux/bitmap.h>
- #include <linux/rcupdate.h>
-+#include <linux/pci-acpi.h>
- #include <asm/e820.h>
- #include <asm/pci_x86.h>
- 
-diff --git a/arch/x86/pci/numachip.c b/arch/x86/pci/numachip.c
-index 2e565e6..c181eeb 100644
---- a/arch/x86/pci/numachip.c
-+++ b/arch/x86/pci/numachip.c
+--- linux-4.5/arch/x86/pci/numachip.c.0021~	2016-03-14 05:28:54.000000000 +0100
++++ linux-4.5/arch/x86/pci/numachip.c	2016-04-03 10:25:37.226312907 +0200
 @@ -14,6 +14,7 @@
   */
  
@@ -452,11 +406,9 @@ index 2e565e6..c181eeb 100644
  #include <asm/pci_x86.h>
  
  static u8 limit __read_mostly;
-diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-index 7ea903d..e5e4393 100644
---- a/drivers/acpi/Makefile
-+++ b/drivers/acpi/Makefile
-@@ -40,6 +40,7 @@ acpi-$(CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC) += processor_pdc.o
+--- linux-4.5/drivers/acpi/Makefile.0021~	2016-04-03 10:25:37.219312353 +0200
++++ linux-4.5/drivers/acpi/Makefile	2016-04-03 10:25:37.227312986 +0200
+@@ -40,6 +40,7 @@ acpi-$(CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC)
  acpi-y				+= ec.o
  acpi-$(CONFIG_ACPI_DOCK)	+= dock.o
  acpi-y				+= pci_root.o pci_link.o pci_irq.o
@@ -464,12 +416,9 @@ index 7ea903d..e5e4393 100644
  acpi-y				+= acpi_lpss.o acpi_apd.o
  acpi-y				+= acpi_platform.o
  acpi-y				+= acpi_pnp.o
-diff --git a/drivers/acpi/pci_mcfg.c b/drivers/acpi/pci_mcfg.c
-new file mode 100644
-index 0000000..ea84365
---- /dev/null
-+++ b/drivers/acpi/pci_mcfg.c
-@@ -0,0 +1,312 @@
+--- linux-4.5/drivers/acpi/pci_mcfg.c.0021~	2016-04-03 10:25:37.227312986 +0200
++++ linux-4.5/drivers/acpi/pci_mcfg.c	2016-04-03 10:25:37.229313145 +0200
+@@ -0,0 +1,332 @@
 +/*
 + * pci_mcfg.c
 + *
@@ -492,6 +441,26 @@ index 0000000..ea84365
 +
 +static DEFINE_MUTEX(pci_mmcfg_lock);
 +LIST_HEAD(pci_mmcfg_list);
++
++/*
++ * raw_pci_read/write - raw ACPI PCI config space accessors.
++ *
++ * By defauly (__weak) these accessors are empty and should be overwritten
++ * by architectures which support operations on ACPI PCI_Config regions,
++ * see osl.c file.
++ */
++
++int __weak raw_pci_read(unsigned int domain, unsigned int bus,
++			unsigned int devfn, int reg, int len, u32 *val)
++{
++	return PCIBIOS_DEVICE_NOT_FOUND;
++}
++
++int __weak raw_pci_write(unsigned int domain, unsigned int bus,
++			 unsigned int devfn, int reg, int len, u32 val)
++{
++	return PCIBIOS_DEVICE_NOT_FOUND;
++}
 +
 +static void list_add_sorted(struct pci_mmcfg_region *new)
 +{
@@ -782,10 +751,8 @@ index 0000000..ea84365
 +
 +	pr_info(PREFIX " MCFG table loaded %d entries\n", n);
 +}
-diff --git a/drivers/xen/pci.c b/drivers/xen/pci.c
-index 7494dbe..97aa9d3 100644
---- a/drivers/xen/pci.c
-+++ b/drivers/xen/pci.c
+--- linux-4.5/drivers/xen/pci.c.0021~	2016-03-14 05:28:54.000000000 +0100
++++ linux-4.5/drivers/xen/pci.c	2016-04-03 10:25:37.227312986 +0200
 @@ -27,9 +27,6 @@
  #include <asm/xen/hypervisor.h>
  #include <asm/xen/hypercall.h>
@@ -805,10 +772,8 @@ index 7494dbe..97aa9d3 100644
  		return 0;
  
  	if (list_empty(&pci_mmcfg_list))
-diff --git a/include/linux/pci-acpi.h b/include/linux/pci-acpi.h
-index 89ab057..e9450ef 100644
---- a/include/linux/pci-acpi.h
-+++ b/include/linux/pci-acpi.h
+--- linux-4.5/include/linux/pci-acpi.h.0021~	2016-03-14 05:28:54.000000000 +0100
++++ linux-4.5/include/linux/pci-acpi.h	2016-04-03 10:25:37.227312986 +0200
 @@ -106,6 +106,39 @@ extern const u8 pci_acpi_dsm_uuid[];
  #define RESET_DELAY_DSM		0x08
  #define FUNCTION_DELAY_DSM	0x09
@@ -849,6 +814,3 @@ index 89ab057..e9450ef 100644
  #else	/* CONFIG_ACPI */
  static inline void acpi_pci_add_bus(struct pci_bus *bus) { }
  static inline void acpi_pci_remove_bus(struct pci_bus *bus) { }
--- 
-2.7.2
-

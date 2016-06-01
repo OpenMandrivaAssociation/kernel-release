@@ -5,20 +5,29 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	5
-%define sublevel	3
+%define patchlevel	6
+%define sublevel	0
+%define relc		0
 
+%if 0%{relc}
+%define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
+%else
 %if 0%{sublevel}
 %define tar_ver   	%{kernelversion}.%{patchlevel}.%{sublevel}
 %else
 %define tar_ver   	%{kernelversion}.%{patchlevel}
+%endif
 %endif
 %define buildrel	%{kversion}-%{buildrpmrel}
 %define rpmtag	%{disttag}
 
 # IMPORTANT
 # This is the place where you set release version %{version}-1omv2015
-%define rpmrel		1
+%if 0%{relc}
+%define rpmrel		0.rc%{relc}.1
+%else
+%define rpmrel		0.1
+%endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
 # kernel Makefile extraversion is substituted by
@@ -132,59 +141,70 @@ NoSource:	0
 %endif
 
 Source4:	README.kernel-sources
-Source5:	kernel-release.rpmlintrc
+Source5:	%{name}.rpmlintrc
 # configs
-Source6:	x86_64-desktop.config
-Source7:	x86_64-server.config
+Source6:	common.config
+# x86_64
+Source7:	x86_64-common.config
+Source8:	x86_64-desktop.config
+Source9:	x86_64-server.config
 # for i586 only desktop flavour
-Source8:	i386-desktop.config
+Source10:	i386-desktop.config
 # Server flavour for ARMx, todo: add desktop
-Source9:	arm64-server.config
-Source10:	arm-server.config
+Source11:	arm64-server.config
+Source12:	arm-server.config
 
 # config and systemd service file from fedora
 Source50:	cpupower.service
 Source51:	cpupower.config
 
 # Patches
+# Numbers 0 to 9 are reserved for upstream patches
+# (-stable patch, -rc, ...)
+%if 0%{relc}
+Patch0:		https://cdn.kernel.org/pub/linux/kernel/v4.x/testing/patch-4.6-rc%{relc}.xz
+%endif
 # aarch64 PCI support (Opteron A1100 and friends)
 # Backported from https://github.com/semihalf-nowicki-tomasz/linux.git
 # pci-acpi-v5 branch
-Patch0:		0001-PCI-ACPI-IA64-fix-IO-port-generic-range-check.patch
-Patch1:		0002-irqchip-GICv3-Refactor-gic_of_init-for-GICv3-driver.patch
-Patch2:		0003-irqchip-GICv3-Add-ACPI-support-for-GICv3-initializat.patch
-Patch3:		0004-irqchip-GICv3-ACPI-Add-redistributor-support-via-GIC.patch
-Patch4:		0005-irqchip-GICv3-remove-gic-root-node-in-ITS.patch
-Patch5:		0006-irqchip-gicv3-its-Mark-its_init-and-its-children-as-.patch
-Patch6:		0007-irqchip-GICv3-ITS-Refator-ITS-dt-init-code-to-prepar.patch
-Patch7:		0008-ARM64-ACPI-PCI-I-O-Remapping-Table-IORT-initial-supp.patch
-Patch8:		0009-irqchip-gicv3-its-Probe-ITS-in-the-ACPI-way.patch
-Patch9:		0010-acpi-gicv3-msi-Factor-out-code-that-might-be-reused-.patch
-Patch10:	0011-acpi-gicv3-its-Use-MADT-ITS-subtable-to-do-PCI-MSI-d.patch
-Patch11:	0012-ACPI-MCFG-Move-mmcfg_list-management-to-drivers-acpi.patch
-Patch12:	0013-acpi-pci-mcfg-Provide-default-RAW-ACPI-PCI-config-sp.patch
-Patch13:	0014-arm64-acpi-Use-MCFG-library-and-empty-PCI-config-spa.patch
-Patch14:	0015-pci-acpi-ecam-Add-flag-to-indicate-whether-ECAM-regi.patch
-Patch15:	0016-x86-pci-Cleanup-platform-specific-MCFG-data-by-using.patch
-Patch16:	0017-pci-acpi-x86-ia64-Move-ACPI-host-bridge-device-compa.patch
-Patch17:	0018-pci-acpi-Provide-generic-way-to-assign-bus-domain-nu.patch
-Patch18:	0019-x86-ia64-Include-acpi_pci_-add-remove-_bus-to-the-de.patch
-Patch19:	0020-acpi-mcfg-Add-default-PCI-config-accessors-implement.patch
-Patch20:	0021-pci-of-Move-the-PCI-I-O-space-management-to-PCI-core.patch
-Patch21:	0022-drivers-pci-add-generic-code-to-claim-bus-resources.patch
-Patch22:	0023-pci-acpi-Support-for-ACPI-based-generic-PCI-host-con.patch
-Patch23:	0024-pci-acpi-Match-PCI-config-space-accessors-against-pl.patch
-Patch24:	0025-arm64-pci-acpi-Assign-legacy-IRQs-once-device-is-ena.patch
-Patch25:	0026-arm64-pci-acpi-Start-using-ACPI-based-PCI-host-bridg.patch
-Patch28:	0001-Add-support-for-Acer-Predator-macro-keys.patch
-Patch29:	pass-ldbfd-4.5.0-linux.patch
+Patch10:	0001-PCI-ACPI-IA64-fix-IO-port-generic-range-check.patch
+Patch16:	0007-irqchip-GICv3-ITS-Refator-ITS-dt-init-code-to-prepar.patch
+Patch17:	0008-ARM64-ACPI-PCI-I-O-Remapping-Table-IORT-initial-supp.patch
+Patch18:	0009-irqchip-gicv3-its-Probe-ITS-in-the-ACPI-way.patch
+Patch19:	0010-acpi-gicv3-msi-Factor-out-code-that-might-be-reused-.patch
+Patch20:	0011-acpi-gicv3-its-Use-MADT-ITS-subtable-to-do-PCI-MSI-d.patch
+Patch21:	0012-ACPI-MCFG-Move-mmcfg_list-management-to-drivers-acpi.patch
+Patch23:	0014-arm64-acpi-Use-MCFG-library-and-empty-PCI-config-spa.patch
+Patch24:	0015-pci-acpi-ecam-Add-flag-to-indicate-whether-ECAM-regi.patch
+Patch25:	0016-x86-pci-Cleanup-platform-specific-MCFG-data-by-using.patch
+Patch26:	0017-pci-acpi-x86-ia64-Move-ACPI-host-bridge-device-compa.patch
+Patch27:	0018-pci-acpi-Provide-generic-way-to-assign-bus-domain-nu.patch
+Patch28:	0019-x86-ia64-Include-acpi_pci_-add-remove-_bus-to-the-de.patch
+Patch29:	0020-acpi-mcfg-Add-default-PCI-config-accessors-implement.patch
+Patch30:	0021-pci-of-Move-the-PCI-I-O-space-management-to-PCI-core.patch
+Patch31:	0022-drivers-pci-add-generic-code-to-claim-bus-resources.patch
+Patch32:	0023-pci-acpi-Support-for-ACPI-based-generic-PCI-host-con.patch
+Patch33:	0024-pci-acpi-Match-PCI-config-space-accessors-against-pl.patch
+Patch34:	0025-arm64-pci-acpi-Assign-legacy-IRQs-once-device-is-ena.patch
+Patch35:	0026-arm64-pci-acpi-Start-using-ACPI-based-PCI-host-bridg.patch
+Patch38:	0001-Add-support-for-Acer-Predator-macro-keys.patch
+Patch39:	pass-ldbfd-4.5.0-linux.patch
 
 # Defines for the things that are needed for all the kernels
 #
+%if 0%{relc}
+%define common_desc_kernel The kernel package contains the Linux kernel (vmlinuz), the core of your \
+OpenMandriva Lx operating system. The kernel handles the basic functions \
+of the operating system: memory allocation, process allocation, device \
+input and output, etc. \
+This version is a preview of an upcoming kernel version, and may be helpful if you are using \
+very current hardware.
+%else
 %define common_desc_kernel The kernel package contains the Linux kernel (vmlinuz), the core of your \
 OpenMandriva Lx operating system. The kernel handles the basic functions \
 of the operating system: memory allocation, process allocation, device \
 input and output, etc.
+%endif
 
 
 ### Global Requires/Provides
@@ -307,8 +327,8 @@ Requires:	gcc					\
 Requires:	perl					\
 Summary:	The kernel-devel files for %{kname}-%{1}-%{buildrel} \
 Group:		Development/Kernel			\
+Provides:	kernel-devel = %{kverrel}		\
 Provides:	%{kname}-devel = %{kverrel} 		\
-Provides:	kernel-devel				\
 Provides:	%{kname}-%{1}-devel			\
 Requires:	%{kname}-%{1}-%{buildrel}		\
 %ifarch %{ix86}						\
@@ -545,9 +565,7 @@ Epoch:		1
 # (tpg) fix bug https://issues.openmandriva.org/show_bug.cgi?id=1580
 Provides:	kernel-headers = %{kverrel}
 Obsoletes:	kernel-headers < %{kverrel}
-# remove this requires, we don't need to install
-# kernel binary into chroot
-# in all other cases kernel already installed here
+# We don't need the kernel binary in chroot
 #Requires:	%{kname} = %{kverrel}
 %rename linux-userspace-headers
 
@@ -645,7 +663,7 @@ PrepareKernel() {
     config_dir=%{_sourcedir}
     echo "Make config for kernel $extension"
     %{smake} -s mrproper
-    cp ${config_dir}/%{target_arch}-$flavour.config .config
+    cat ${config_dir}/common.config ${config_dir}/common-$flavour.config ${config_dir}/%{target_arch}-common.config ${config_dir}/%{target_arch}-$flavour.config >.config 2>/dev/null || :
     # make sure EXTRAVERSION says what we want it to say
     sed -ri "s|^(EXTRAVERSION =).*|\1 -$extension|" Makefile
     %{smake} oldconfig
@@ -667,23 +685,18 @@ BuildKernel() {
     install -m 644 .config %{temp_boot}/config-$KernelVer
     xz -7 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
 
-# armv7
 %ifarch %{arm}
     if [ -f arch/arm/boot/uImage ]; then
 	cp -f arch/arm/boot/uImage %{temp_boot}/uImage-$KernelVer
     else
 	cp -f arch/arm/boot/zImage %{temp_boot}/vmlinuz-$KernelVer
     fi
-%endif
-
-#arm64
+%else
 %ifarch aarch64
-	cp -f arch/arm64/boot/Image.gz %{temp_boot}/vmlinuz-$KernelVer
+    cp -f arch/arm64/boot/Image.gz %{temp_boot}/vmlinuz-$KernelVer
+%else
+    cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-$KernelVer
 %endif
-
-# intel
-%ifarch %{ix86} x86_64
-	cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-$KernelVer
 %endif
 
 # modules
@@ -704,7 +717,7 @@ BuildKernel() {
 
 # remove /lib/firmware, we use a separate kernel-firmware
     rm -rf %{temp_root}/lib/firmware
-    rm -rf bfd/
+    rm -rf bfd
 }
 
 SaveDevel() {
@@ -765,7 +778,6 @@ SaveDevel() {
     done
 
 # Clean the scripts tree, and make sure everything is ok (sanity check)
-# running prepare+scripts (tree was already "prepared" in build)
     pushd $TempDevelRoot >/dev/null
     %{smake} ARCH=%{target_arch} clean
     popd >/dev/null
@@ -1091,9 +1103,6 @@ for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68k
 	 mips nios2 openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
 	rm -rf %{target_source}/arch/$i
 done
-%ifnarch %{armx}
-    rm -rf %{target_source}/include/kvm/arm*
-%endif
 
 # other misc files
 rm -f %{target_source}/{.config.old,.config.cmd,.gitignore,.lst,.mailmap}
