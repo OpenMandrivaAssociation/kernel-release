@@ -26,7 +26,7 @@
 %if 0%{relc}
 %define rpmrel		0.rc%{relc}.1
 %else
-%define rpmrel		2
+%define rpmrel		3
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
