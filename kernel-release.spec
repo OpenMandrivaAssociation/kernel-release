@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	6
-%define sublevel	2
+%define sublevel	3
 %define relc		0
 
 %if 0%{relc}
@@ -26,7 +26,7 @@
 %if 0%{relc}
 %define rpmrel		0.rc%{relc}.1
 %else
-%define rpmrel		3
+%define rpmrel		1
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
@@ -164,6 +164,7 @@ Source51:	cpupower.config
 %if 0%{relc}
 Patch0:		https://cdn.kernel.org/pub/linux/kernel/v4.x/testing/patch-4.6-rc%{relc}.xz
 %endif
+Patch1:		die-floppy-die.patch
 # aarch64 PCI support (Opteron A1100 and friends)
 # Backported from https://github.com/semihalf-nowicki-tomasz/linux.git
 # pci-acpi-v5 branch
@@ -189,7 +190,9 @@ Patch34:	0025-arm64-pci-acpi-Assign-legacy-IRQs-once-device-is-ena.patch
 Patch35:	0026-arm64-pci-acpi-Start-using-ACPI-based-PCI-host-bridg.patch
 Patch38:	0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch39:	pass-ldbfd-4.5.0-linux.patch
-
+# (tpg) should be fixed in 4.7
+# https://bugzilla.kernel.org/show_bug.cgi?id=117981
+Patch50:	0050-f2fs-fix-to-return-0-if-err.patch
 # Defines for the things that are needed for all the kernels
 #
 %if 0%{relc}
