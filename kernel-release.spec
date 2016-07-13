@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	6
-%define sublevel	3
+%define sublevel	4
 %define relc		0
 
 %if 0%{relc}
@@ -175,7 +175,6 @@ Patch18:	0009-irqchip-gicv3-its-Probe-ITS-in-the-ACPI-way.patch
 Patch19:	0010-acpi-gicv3-msi-Factor-out-code-that-might-be-reused-.patch
 Patch20:	0011-acpi-gicv3-its-Use-MADT-ITS-subtable-to-do-PCI-MSI-d.patch
 Patch21:	0012-ACPI-MCFG-Move-mmcfg_list-management-to-drivers-acpi.patch
-Patch23:	0014-arm64-acpi-Use-MCFG-library-and-empty-PCI-config-spa.patch
 Patch24:	0015-pci-acpi-ecam-Add-flag-to-indicate-whether-ECAM-regi.patch
 Patch25:	0016-x86-pci-Cleanup-platform-specific-MCFG-data-by-using.patch
 Patch26:	0017-pci-acpi-x86-ia64-Move-ACPI-host-bridge-device-compa.patch
