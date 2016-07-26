@@ -5,28 +5,21 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	6
-%define sublevel	4
+%define patchlevel	7
+%define sublevel	0
 %define relc		0
 
-%if 0%{relc}
-%define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
-%else
-%if 0%{sublevel}
-%define tar_ver   	%{kernelversion}.%{patchlevel}.%{sublevel}
-%else
-%define tar_ver   	%{kernelversion}.%{patchlevel}
-%endif
-%endif
 %define buildrel	%{kversion}-%{buildrpmrel}
 %define rpmtag	%{disttag}
 
 # IMPORTANT
 # This is the place where you set release version %{version}-1omv2015
 %if 0%{relc}
-%define rpmrel		0.rc%{relc}.1
+%define rpmrel		0.%{relc}.1
+%define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		3
+%define rpmrel		1
+%define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
@@ -35,7 +28,7 @@
 %define kpatch		%{nil}
 
 # kernel base name (also name of srpm)
-%define kname		kernel-release
+%define kname		kernel-rc
 
 # fakerel and fakever never change, they are used to fool
 # rpm/urpmi/smart
@@ -119,7 +112,7 @@
 # SRC RPM description
 #
 Summary: 	Linux kernel built for %{distribution}
-Name:		kernel-release
+Name:		kernel-rc
 Version:	%{kversion}
 Release:	%{rpmrel}
 License:	GPLv2
@@ -162,18 +155,15 @@ Source51:	cpupower.config
 # Numbers 0 to 9 are reserved for upstream patches
 # (-stable patch, -rc, ...)
 %if 0%{relc}
-Patch0:		https://cdn.kernel.org/pub/linux/kernel/v4.x/testing/patch-4.6-rc%{relc}.xz
+Patch0:		https://cdn.kernel.org/pub/linux/kernel/v4.x/testing/patch-%(echo %{version}|cut -d. -f1-2)-rc%{relc}.xz
 %endif
 Patch1:		die-floppy-die.patch
 # aarch64 PCI support (Opteron A1100 and friends)
 # Backported from https://github.com/semihalf-nowicki-tomasz/linux.git
 # pci-acpi-v5 branch
 Patch10:	0001-PCI-ACPI-IA64-fix-IO-port-generic-range-check.patch
-Patch16:	0007-irqchip-GICv3-ITS-Refator-ITS-dt-init-code-to-prepar.patch
 Patch17:	0008-ARM64-ACPI-PCI-I-O-Remapping-Table-IORT-initial-supp.patch
-Patch18:	0009-irqchip-gicv3-its-Probe-ITS-in-the-ACPI-way.patch
 Patch19:	0010-acpi-gicv3-msi-Factor-out-code-that-might-be-reused-.patch
-Patch20:	0011-acpi-gicv3-its-Use-MADT-ITS-subtable-to-do-PCI-MSI-d.patch
 Patch21:	0012-ACPI-MCFG-Move-mmcfg_list-management-to-drivers-acpi.patch
 Patch24:	0015-pci-acpi-ecam-Add-flag-to-indicate-whether-ECAM-regi.patch
 Patch25:	0016-x86-pci-Cleanup-platform-specific-MCFG-data-by-using.patch
@@ -181,32 +171,21 @@ Patch26:	0017-pci-acpi-x86-ia64-Move-ACPI-host-bridge-device-compa.patch
 Patch27:	0018-pci-acpi-Provide-generic-way-to-assign-bus-domain-nu.patch
 Patch28:	0019-x86-ia64-Include-acpi_pci_-add-remove-_bus-to-the-de.patch
 Patch29:	0020-acpi-mcfg-Add-default-PCI-config-accessors-implement.patch
-Patch30:	0021-pci-of-Move-the-PCI-I-O-space-management-to-PCI-core.patch
 Patch31:	0022-drivers-pci-add-generic-code-to-claim-bus-resources.patch
 Patch32:	0023-pci-acpi-Support-for-ACPI-based-generic-PCI-host-con.patch
 Patch33:	0024-pci-acpi-Match-PCI-config-space-accessors-against-pl.patch
 Patch34:	0025-arm64-pci-acpi-Assign-legacy-IRQs-once-device-is-ena.patch
 Patch35:	0026-arm64-pci-acpi-Start-using-ACPI-based-PCI-host-bridg.patch
 Patch38:	0001-Add-support-for-Acer-Predator-macro-keys.patch
-Patch39:	pass-ldbfd-4.5.0-linux.patch
-# (tpg) should be fixed in 4.7
-# https://bugzilla.kernel.org/show_bug.cgi?id=117981
-Patch50:	0050-f2fs-fix-to-return-0-if-err.patch
+
 # Defines for the things that are needed for all the kernels
 #
-%if 0%{relc}
 %define common_desc_kernel The kernel package contains the Linux kernel (vmlinuz), the core of your \
 OpenMandriva Lx operating system. The kernel handles the basic functions \
 of the operating system: memory allocation, process allocation, device \
 input and output, etc. \
 This version is a preview of an upcoming kernel version, and may be helpful if you are using \
 very current hardware.
-%else
-%define common_desc_kernel The kernel package contains the Linux kernel (vmlinuz), the core of your \
-OpenMandriva Lx operating system. The kernel handles the basic functions \
-of the operating system: memory allocation, process allocation, device \
-input and output, etc.
-%endif
 
 
 ### Global Requires/Provides
@@ -287,8 +266,8 @@ Suggests:	microcode_ctl
 # so end users don't have to install compilers (and worse,
 # get compiler error messages on failures)
 %ifarch %{ix86} x86_64
-BuildRequires:	dkms-virtualbox
-BuildRequires:	dkms-vboxadditions
+BuildRequires:	dkms-virtualbox >= 5.0.24-1
+BuildRequires:	dkms-vboxadditions >= 5.0.24-1
 %endif
 
 %description
@@ -573,8 +552,7 @@ Group:		System/Kernel and hardware
 Epoch:		1
 # (tpg) fix bug https://issues.openmandriva.org/show_bug.cgi?id=1580
 Provides:	kernel-headers = %{kverrel}
-Obsoletes:	kernel-headers < %{kverrel}
-# We don't need the kernel binary in chroot
+# we don't need the kernel binary in chroot
 #Requires:	%{kname} = %{kverrel}
 %rename linux-userspace-headers
 
@@ -689,9 +667,6 @@ echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 export LD="%{_target_platform}-ld.bfd"
 export LDFLAGS="--hash-style=sysv --build-id=none"
 export PYTHON=%{__python2}
-mkdir -p bfd
-ln -s %{_bindir}/ld.bfd bfd/ld
-export PATH=$PWD/bfd:$PATH
 
 ############################################################
 ###  Linker end2 > Check point to build for omv or rosa ###
@@ -768,7 +743,6 @@ BuildKernel() {
 
 # remove /lib/firmware, we use a separate kernel-firmware
     rm -rf %{temp_root}/lib/firmware
-    rm -rf bfd
 }
 
 SaveDevel() {
@@ -828,8 +802,16 @@ SaveDevel() {
 		rm -rf $TempDevelRoot/arch/$i
     done
 
+%ifnarch %{arm}
+    rm -rf $TempDevelRoot/arch/arm*
+    rm -rf $TempDevelRoot/include/kvm/arm*
+    rm -rf $TempDevelRoot/include/soc
+%endif
+
 # Clean the scripts tree, and make sure everything is ok (sanity check)
+# running prepare+scripts (tree was already "prepared" in build)
     pushd $TempDevelRoot >/dev/null
+    %{smake} ARCH=%{target_arch} prepare scripts
     %{smake} ARCH=%{target_arch} clean
     popd >/dev/null
 
@@ -846,8 +828,10 @@ cat > $kernel_devel_files <<EOF
 %dir $DevelRoot/arch
 %dir $DevelRoot/include
 $DevelRoot/Documentation
+%ifarch %{armx}
 $DevelRoot/arch/arm
 $DevelRoot/arch/arm64
+%endif
 $DevelRoot/arch/um
 $DevelRoot/arch/x86
 $DevelRoot/block
@@ -879,7 +863,9 @@ $DevelRoot/include/ras
 $DevelRoot/include/rdma
 $DevelRoot/include/rxrpc
 $DevelRoot/include/scsi
+%ifarch %{arm}
 $DevelRoot/include/soc
+%endif
 $DevelRoot/include/sound
 $DevelRoot/include/target
 $DevelRoot/include/trace
@@ -1154,6 +1140,9 @@ for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68k
 	 mips nios2 openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
 	rm -rf %{target_source}/arch/$i
 done
+%ifnarch %{arm}
+    rm -rf %{target_source}/include/kvm/arm*
+%endif
 
 # other misc files
 rm -f %{target_source}/{.config.old,.config.cmd,.gitignore,.lst,.mailmap}
@@ -1319,7 +1308,7 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %files -n cpupower -f cpupower.lang
 %{_bindir}/cpupower
 %{_libdir}/libcpupower.so.0
-%{_libdir}/libcpupower.so.0.0.0
+%{_libdir}/libcpupower.so.0.0.1
 %{_unitdir}/cpupower.service
 %{_mandir}/man[1-8]/cpupower*
 %config(noreplace) %{_sysconfdir}/sysconfig/cpupower
