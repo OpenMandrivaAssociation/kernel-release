@@ -18,7 +18,7 @@
 %define rpmrel		0.%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -177,6 +177,7 @@ Patch33:	0024-pci-acpi-Match-PCI-config-space-accessors-against-pl.patch
 Patch34:	0025-arm64-pci-acpi-Assign-legacy-IRQs-once-device-is-ena.patch
 Patch35:	0026-arm64-pci-acpi-Start-using-ACPI-based-PCI-host-bridg.patch
 Patch38:	0001-Add-support-for-Acer-Predator-macro-keys.patch
+Patch40:	linux-4.7-intel-dvi-duallink.patch
 
 # Defines for the things that are needed for all the kernels
 #
