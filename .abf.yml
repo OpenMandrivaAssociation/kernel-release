@@ -1,2 +1,3 @@
 sources:
-  linux-4.7.tar.xz: 99551524779bf05382e363f4879101227664dd55
+  linux-4.6.5.tar.sign: c40f0c1c0dce6a08d9830ba4b5f12af61e01aab4
+  linux-4.6.5.tar.xz: 889a3078a9d01b94e994aa844f6ec9a25adc6481
