@@ -28,7 +28,11 @@
 %define kpatch		%{nil}
 
 # kernel base name (also name of srpm)
+%if 0%{relc}
+%define kname		kernel-rc
+%else
 %define kname		kernel-release
+%endif
 
 # fakerel and fakever never change, they are used to fool
 # rpm/urpmi/smart
@@ -112,7 +116,7 @@
 # SRC RPM description
 #
 Summary: 	Linux kernel built for %{distribution}
-Name:		kernel-release
+Name:		%{kname}
 Version:	%{kversion}
 Release:	%{rpmrel}
 License:	GPLv2
