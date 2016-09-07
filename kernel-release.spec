@@ -5,8 +5,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	6
-%define sublevel	5
+%define patchlevel	7
+%define sublevel	3
 %define relc		0
 
 %if 0%{relc}
@@ -25,8 +25,10 @@
 # This is the place where you set release version %{version}-1omv2015
 %if 0%{relc}
 %define rpmrel		0.rc%{relc}.1
+%define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		2
+%define rpmrel		1
+%define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
@@ -35,7 +37,11 @@
 %define kpatch		%{nil}
 
 # kernel base name (also name of srpm)
+%if 0%{relc}
+%define kname		kernel-rc
+%else
 %define kname		kernel-release
+%endif
 
 # fakerel and fakever never change, they are used to fool
 # rpm/urpmi/smart
@@ -119,7 +125,7 @@
 # SRC RPM description
 #
 Summary: 	Linux kernel built for %{distribution}
-Name:		kernel-release
+Name:		%{kname}
 Version:	%{kversion}
 Release:	%{rpmrel}
 License:	GPLv2
@@ -162,9 +168,13 @@ Source51:	cpupower.config
 # Numbers 0 to 9 are reserved for upstream patches
 # (-stable patch, -rc, ...)
 %if 0%{relc}
-Patch0:		https://cdn.kernel.org/pub/linux/kernel/v4.x/testing/patch-4.6-rc%{relc}.xz
+Patch0:		https://cdn.kernel.org/pub/linux/kernel/v4.x/testing/patch-%(echo %{version}|cut -d. -f1-2)-rc%{relc}.xz
+%else
+%if 0%{sublevel}
+Patch1:		https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
 %endif
-Patch1:		die-floppy-die.patch
+%endif
+Patch2:		die-floppy-die.patch
 # aarch64 PCI support (Opteron A1100 and friends)
 # Backported from https://github.com/semihalf-nowicki-tomasz/linux.git
 # pci-acpi-v5 branch
