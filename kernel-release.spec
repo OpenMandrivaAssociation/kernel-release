@@ -5,8 +5,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	7
-%define sublevel	6
+%define patchlevel	8
+%define sublevel	0
 %define relc		0
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -166,26 +166,14 @@ Patch1:		https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
 %endif
 %endif
 Patch2:		die-floppy-die.patch
-# aarch64 PCI support (Opteron A1100 and friends)
-# Backported from https://github.com/semihalf-nowicki-tomasz/linux.git
-# pci-acpi-v5 branch
-Patch10:	0001-PCI-ACPI-IA64-fix-IO-port-generic-range-check.patch
-Patch17:	0008-ARM64-ACPI-PCI-I-O-Remapping-Table-IORT-initial-supp.patch
-Patch19:	0010-acpi-gicv3-msi-Factor-out-code-that-might-be-reused-.patch
-Patch21:	0012-ACPI-MCFG-Move-mmcfg_list-management-to-drivers-acpi.patch
-Patch24:	0015-pci-acpi-ecam-Add-flag-to-indicate-whether-ECAM-regi.patch
-Patch25:	0016-x86-pci-Cleanup-platform-specific-MCFG-data-by-using.patch
-Patch26:	0017-pci-acpi-x86-ia64-Move-ACPI-host-bridge-device-compa.patch
-Patch27:	0018-pci-acpi-Provide-generic-way-to-assign-bus-domain-nu.patch
-Patch28:	0019-x86-ia64-Include-acpi_pci_-add-remove-_bus-to-the-de.patch
-Patch29:	0020-acpi-mcfg-Add-default-PCI-config-accessors-implement.patch
-Patch31:	0022-drivers-pci-add-generic-code-to-claim-bus-resources.patch
-Patch32:	0023-pci-acpi-Support-for-ACPI-based-generic-PCI-host-con.patch
-Patch33:	0024-pci-acpi-Match-PCI-config-space-accessors-against-pl.patch
-Patch34:	0025-arm64-pci-acpi-Assign-legacy-IRQs-once-device-is-ena.patch
-Patch35:	0026-arm64-pci-acpi-Start-using-ACPI-based-PCI-host-bridg.patch
-Patch38:	0001-Add-support-for-Acer-Predator-macro-keys.patch
-Patch40:	linux-4.7-intel-dvi-duallink.patch
+Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
+Patch4:		linux-4.7-intel-dvi-duallink.patch
+
+# Patches to external modules
+# Marked SourceXXX instead of PatchXXX because the modules
+# being touched aren't in the tree at the time %%apply_patches
+# runs...
+Source100:	vbox-kernel-4.8.patch
 
 # Defines for the things that are needed for all the kernels
 #
@@ -224,6 +212,7 @@ Autoreqprov:	no
 BuildRequires:	bc
 BuildRequires:	binutils
 BuildRequires:	gcc
+BuildRequires:	gcc-plugin-devel
 BuildRequires:	openssl-devel
 BuildRequires:	diffutils
 # For power tools
@@ -610,6 +599,8 @@ following platforms:
 %prep
 %setup -q -n linux-%{tar_ver}
 %apply_patches
+# patch doesn't seem to have proper permissions...
+chmod +x scripts/gcc-plugin.sh
 
 %if %{with build_debug}
 %define debug --debug
@@ -619,11 +610,6 @@ following platforms:
 
 # make sure the kernel has the sublevel we know it has...
 LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
-
-# get rid of unwanted files
-find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
-# wipe all .gitignore/.get_maintainer.ignore files
-find . -name "*.g*ignore" -exec rm {} \;
 
 # Pull in some externally maintained modules
 %ifarch %{ix86} x86_64
@@ -666,6 +652,12 @@ sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefi
 sed -i -e "/uname -m/iKERN_DIR=$(pwd)" drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 %endif
+patch -p1 -b -z .0100~ <%{SOURCE100}
+
+# get rid of unwanted files
+find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
+# wipe all .gitignore/.get_maintainer.ignore files
+find . -name "*.g*ignore" -exec rm {} \;
 
 %build
 %setup_compile_flags
@@ -763,7 +755,6 @@ SaveDevel() {
     mkdir -p $TempDevelRoot
     for i in $(find . -name 'Makefile*'); do cp -R --parents $i $TempDevelRoot;done
     for i in $(find . -name 'Kconfig*' -o -name 'Kbuild*'); do cp -R --parents $i $TempDevelRoot;done
-    cp -fR Documentation/DocBook/media/*.b64 $TempDevelRoot/Documentation/DocBook/media/
     cp -fR include $TempDevelRoot
 #     ln -s ../generated/uapi/linux/version.h $TempDevelRoot/include/linux/version.h
     cp -fR scripts $TempDevelRoot
@@ -1227,6 +1218,7 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %dir %{_kerneldir}/arch
 %dir %{_kerneldir}/include
 %dir %{_kerneldir}/certs
+%{_kerneldir}/.cocciconfig
 %{_kerneldir}/Documentation
 %{_kerneldir}/arch/Kconfig
 %{_kerneldir}/arch/arm
