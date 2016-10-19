@@ -803,7 +803,7 @@ SaveDevel() {
 		rm -rf $TempDevelRoot/arch/$i
     done
 
-%ifnarch %{arm}
+%ifnarch %{armx}
     rm -rf $TempDevelRoot/arch/arm*
     rm -rf $TempDevelRoot/include/kvm/arm*
     rm -rf $TempDevelRoot/include/soc
@@ -812,7 +812,10 @@ SaveDevel() {
 # Clean the scripts tree, and make sure everything is ok (sanity check)
 # running prepare+scripts (tree was already "prepared" in build)
     pushd $TempDevelRoot >/dev/null
+%ifnarch aarch64
+    # weird things here with arm64
     %{smake} ARCH=%{target_arch} prepare scripts
+%endif
     %{smake} ARCH=%{target_arch} clean
     popd >/dev/null
 
@@ -864,7 +867,7 @@ $DevelRoot/include/ras
 $DevelRoot/include/rdma
 $DevelRoot/include/rxrpc
 $DevelRoot/include/scsi
-%ifarch %{arm}
+%ifarch %{armx}
 $DevelRoot/include/soc
 %endif
 $DevelRoot/include/sound
