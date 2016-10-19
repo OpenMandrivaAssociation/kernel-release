@@ -215,6 +215,7 @@ BuildRequires:	binutils
 BuildRequires:	gcc
 BuildRequires:	gcc-plugin-devel
 BuildRequires:	openssl-devel
+BuildRequires:	openssl
 BuildRequires:	diffutils
 # For power tools
 BuildRequires:	pkgconfig(ncurses)
