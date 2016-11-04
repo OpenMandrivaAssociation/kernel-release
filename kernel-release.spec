@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	8
-%define sublevel	5
+%define sublevel	6
 %define relc		0
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -18,7 +18,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		2
+%define rpmrel		1
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -115,7 +115,7 @@
 #
 # SRC RPM description
 #
-Summary: 	Linux kernel built for %{distribution}
+Summary:	Linux kernel built for %{distribution}
 Name:		%{kname}
 Version:	%{kversion}
 Release:	%{rpmrel}
@@ -445,18 +445,18 @@ CFS cpu scheduler and BFQ i/o scheduler, PERFORMANCE governor.
 #
 %if %{with build_source}
 %package -n %{kname}-source-%{buildrel}
-Version: 	%{fakever}
-Release: 	%{fakerel}
-Requires: 	glibc-devel
-Requires: 	ncurses-devel
-Requires: 	make
-Requires: 	gcc
-Requires: 	perl
-Requires: 	diffutils
-Summary: 	The Linux source code for %{kname}-%{buildrel}
-Group: 		Development/Kernel
-Autoreqprov: 	no
-Provides: 	kernel-source = %{kverrel}
+Version:	%{fakever}
+Release:	%{fakerel}
+Requires:	glibc-devel
+Requires:	ncurses-devel
+Requires:	make
+Requires:	gcc
+Requires:	perl
+Requires:	diffutils
+Summary:	The Linux source code for %{kname}-%{buildrel}
+Group:		Development/Kernel
+Autoreqprov:	no
+Provides:	kernel-source = %{kverrel}
 Buildarch:	noarch
 
 %description -n %{kname}-source-%{buildrel}
@@ -731,7 +731,7 @@ BuildKernel() {
     %{smake} INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer INSTALL_MOD_STRIP=1 modules_install
 
 # headers
-    %{make} INSTALL_HDR_PATH=%{temp_root}%_prefix KERNELRELEASE=$KernelVer headers_install
+    %{make} INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer headers_install
 
 # kernel headers for cross toolchains
 %ifarch %{armx}
