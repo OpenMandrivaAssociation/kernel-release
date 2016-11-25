@@ -716,7 +716,11 @@ BuildKernel() {
     install -d %{temp_boot}
     install -m 644 System.map %{temp_boot}/System.map-$KernelVer
     install -m 644 .config %{temp_boot}/config-$KernelVer
-    xz -7 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
+%if %{with build_modxz}
+    xz -6e -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
+%else
+    gzip -9 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.gz
+%endif
 
 %ifarch %{arm}
     if [ -f arch/arm/boot/uImage ]; then
