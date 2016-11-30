@@ -1,4 +1,4 @@
 sources:
   linux-4.8.tar.sign: 4786c7a2e9b0163e9278d696f86f5ccbd838d11a
   linux-4.8.tar.xz: e375f93600a7b96191498af39e5a2416b6666e59
-  patch-4.8.10.xz: 7466b960ac8671acac02e5d8adb6bc62c69ff596
+  patch-4.8.11.xz: c5d33dca0c94421238a19a0c50d06f2c57d1a441
