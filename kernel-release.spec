@@ -5,8 +5,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	8
-%define sublevel	12
+%define patchlevel	9
+%define sublevel	0
 %define relc		0
 
 %define buildrel	%{kversion}-%{buildrpmrel}
