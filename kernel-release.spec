@@ -5,8 +5,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	8
-%define sublevel	12
+%define patchlevel	9
+%define sublevel	0
 %define relc		0
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -1158,7 +1158,7 @@ done
 %endif
 
 # other misc files
-rm -f %{target_source}/{.config.old,.config.cmd,.gitignore,.lst,.mailmap}
+rm -f %{target_source}/{.config.old,.config.cmd,.gitignore,.lst,.mailmap,.gitattributes}
 rm -f %{target_source}/{.missing-syscalls.d,arch/.gitignore,firmware/.gitignore}
 rm -rf %{target_source}/.tmp_depmod/
 
