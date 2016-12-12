@@ -1158,7 +1158,7 @@ done
 %endif
 
 # other misc files
-rm -f %{target_source}/{.config.old,.config.cmd,.gitignore,.lst,.mailmap}
+rm -f %{target_source}/{.config.old,.config.cmd,.gitignore,.lst,.mailmap,.gitattributes}
 rm -f %{target_source}/{.missing-syscalls.d,arch/.gitignore,firmware/.gitignore}
 rm -rf %{target_source}/.tmp_depmod/
 
