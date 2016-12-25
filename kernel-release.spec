@@ -18,7 +18,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -171,10 +171,10 @@ Patch4:		linux-4.7-intel-dvi-duallink.patch
 Patch5:		linux-4.8.1-buildfix.patch
 
 # BFQ IO scheduler, http://algogroup.unimore.it/people/paolo/disk_sched/
-Patch100:	0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.8.0.patch
-Patch101:	0002-block-introduce-the-BFQ-v7r11-I-O-sched-to-be-ported.patch
-Patch102:	0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-to-.patch
-Patch103:	0004-Turn-BFQ-v7r11-into-BFQ-v8r4-for-4.8.0.patch
+Patch100:	0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.5.0.patch
+Patch101:	0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.5.0.patch
+Patch102:	0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
+Patch103:	0004-Turn-into-BFQ-v8r6-for-4.9.0.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
