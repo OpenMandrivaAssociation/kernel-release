@@ -18,7 +18,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		2
+%define rpmrel		3
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -78,6 +78,8 @@
 # build perf and cpupower tools
 %bcond_with build_perf
 %bcond_without build_cpupower
+%bcond_without build_x86_energy_perf_policy
+%bcond_without build_turbostat
 
 # compress modules with xz
 %bcond_without build_modxz
@@ -549,6 +551,28 @@ Requires:	cpupower = %{kversion}-%{rpmrel}
 Conflicts:	%{_lib}cpufreq-devel
 %description -n cpupower-devel
 This package contains the development files for cpupower.
+%endif
+
+%if %{with build_x86_energy_perf_policy}
+%package -n x86_energy_perf_policy
+Version:	%{kversion}
+Release:	%{rpmrel}
+Summary:	Tool to control energy vs. performance on recent X86 processors
+Group:		System/Kernel and hardware
+
+%description -n x86_energy_perf_policy
+Tool to control energy vs. performance on recent X86 processors
+%endif
+
+%if %{with build_turbostat}
+%package -n turbostat
+Version:	%{kversion}
+Release:	%{rpmrel}
+Summary:	Tool to report processor frequency and idle statistics
+Group:		System/Kernel and hardware
+
+%description -n turbostat
+Tool to report processor frequency and idle statistics
 %endif
 
 %package headers
@@ -1117,6 +1141,17 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 chmod +x tools/power/cpupower/utils/version-gen.sh
 %kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%{optflags}"
 %endif
+
+%ifarch %{ix86} x86_64
+%if %{with build_x86_energy_perf_policy}
+%kmake -C tools/power/x86/x86_energy_perf_policy
+%endif
+
+%if %{with build_turbostat}
+%kmake -C tools/power/x86/turbostat
+%endif
+%endif
+
 ############################################################
 ###  Linker end3 > Check point to build for omv or rosa  ###
 ############################################################
@@ -1222,6 +1257,17 @@ chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
 mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
 install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
 install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
+%endif
+
+%ifarch %{ix86} x86_64
+%if %{with build_x86_energy_perf_policy}
+mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
+%kmake -C tools/power/x86/x86_energy_perf_policy install DESTDIR="%{buildroot}"
+%endif
+%if %{with build_turbostat}
+mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
+%kmake -C tools/power/x86/turbostat install DESTDIR="%{buildroot}"
+%endif
 %endif
 
 ############################################################
@@ -1334,4 +1380,18 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %files -n cpupower-devel
 %{_libdir}/libcpupower.so
 %{_includedir}/cpufreq.h
+%endif
+
+%ifarch %{ix86} x86_64
+%if %{with build_x86_energy_perf_policy}
+%files -n x86_energy_perf_policy
+%{_bindir}/x86_energy_perf_policy
+%{_mandir}/man8/x86_energy_perf_policy.8*
+%endif
+
+%if %{with build_turbostat}
+%files -n turbostat
+%{_bindir}/turbostat
+%{_mandir}/man8/turbostat.8*
+%endif
 %endif
