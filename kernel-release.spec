@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	9
-%define sublevel	0
+%define sublevel	1
 %define relc		0
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -78,6 +78,8 @@
 # build perf and cpupower tools
 %bcond_with build_perf
 %bcond_without build_cpupower
+%bcond_without build_x86_energy_perf_policy
+%bcond_without build_turbostat
 
 # compress modules with xz
 %bcond_without build_modxz
@@ -158,11 +160,13 @@ Source51:	cpupower.config
 # Patches
 # Numbers 0 to 9 are reserved for upstream patches
 # (-stable patch, -rc, ...)
+# Added as a Source rather that Patch because it needs to be
+# applied with "git apply" -- may contain binary patches.
 %if 0%{relc}
-Patch0:		https://cdn.kernel.org/pub/linux/kernel/v4.x/testing/patch-%(echo %{version}|cut -d. -f1-2)-rc%{relc}.xz
+Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/testing/patch-%(echo %{version}|cut -d. -f1-2)-rc%{relc}.xz
 %else
 %if 0%{sublevel}
-Patch1:		https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
+Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
 %endif
 %endif
 Patch2:		die-floppy-die.patch
@@ -174,7 +178,7 @@ Patch5:		linux-4.8.1-buildfix.patch
 Patch100:	0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.5.0.patch
 Patch101:	0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.5.0.patch
 Patch102:	0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
-Patch103:	0004-Turn-into-BFQ-v8r6-for-4.9.0.patch
+Patch103:	0004-Turn-into-BFQ-v8r7-for-4.9.0.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -219,9 +223,11 @@ BuildRequires:	bc
 BuildRequires:	binutils
 BuildRequires:	gcc
 BuildRequires:	gcc-plugin-devel
+BuildRequires:	gcc-c++
 BuildRequires:	openssl-devel
-BuildRequires:	openssl
 BuildRequires:	diffutils
+# For git apply
+BuildRequires:	git-core
 # For power tools
 BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	kmod-devel
@@ -551,6 +557,28 @@ Conflicts:	%{_lib}cpufreq-devel
 This package contains the development files for cpupower.
 %endif
 
+%if %{with build_x86_energy_perf_policy}
+%package -n x86_energy_perf_policy
+Version:	%{kversion}
+Release:	%{rpmrel}
+Summary:	Tool to control energy vs. performance on recent X86 processors
+Group:		System/Kernel and hardware
+
+%description -n x86_energy_perf_policy
+Tool to control energy vs. performance on recent X86 processors
+%endif
+
+%if %{with build_turbostat}
+%package -n turbostat
+Version:	%{kversion}
+Release:	%{rpmrel}
+Summary:	Tool to report processor frequency and idle statistics
+Group:		System/Kernel and hardware
+
+%description -n turbostat
+Tool to report processor frequency and idle statistics
+%endif
+
 %package headers
 Version:	%{kversion}
 Release:	%{rpmrel}
@@ -607,6 +635,11 @@ following platforms:
 #
 %prep
 %setup -q -n linux-%{tar_ver}
+%if 0%{relc} || 0%{sublevel}
+[ -e .git ] || git init
+xzcat %{SOURCE90} | git apply -
+rm -rf .git
+%endif
 %apply_patches
 # patch doesn't seem to have proper permissions...
 chmod +x scripts/gcc-plugin.sh
@@ -1117,6 +1150,17 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 chmod +x tools/power/cpupower/utils/version-gen.sh
 %kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%{optflags}"
 %endif
+
+%ifarch %{ix86} x86_64
+%if %{with build_x86_energy_perf_policy}
+%kmake -C tools/power/x86/x86_energy_perf_policy CC=gcc
+%endif
+
+%if %{with build_turbostat}
+%kmake -C tools/power/x86/turbostat CC=gcc
+%endif
+%endif
+
 ############################################################
 ###  Linker end3 > Check point to build for omv or rosa  ###
 ############################################################
@@ -1222,6 +1266,17 @@ chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
 mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
 install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
 install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
+%endif
+
+%ifarch %{ix86} x86_64
+%if %{with build_x86_energy_perf_policy}
+mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
+%kmake -C tools/power/x86/x86_energy_perf_policy install DESTDIR="%{buildroot}"
+%endif
+%if %{with build_turbostat}
+mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
+%kmake -C tools/power/x86/turbostat install DESTDIR="%{buildroot}"
+%endif
 %endif
 
 ############################################################
@@ -1334,4 +1389,18 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %files -n cpupower-devel
 %{_libdir}/libcpupower.so
 %{_includedir}/cpufreq.h
+%endif
+
+%ifarch %{ix86} x86_64
+%if %{with build_x86_energy_perf_policy}
+%files -n x86_energy_perf_policy
+%{_bindir}/x86_energy_perf_policy
+%{_mandir}/man8/x86_energy_perf_policy.8*
+%endif
+
+%if %{with build_turbostat}
+%files -n turbostat
+%{_bindir}/turbostat
+%{_mandir}/man8/turbostat.8*
+%endif
 %endif
