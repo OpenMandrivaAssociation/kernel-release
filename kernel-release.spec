@@ -1148,7 +1148,7 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 %if %{with build_cpupower}
 # make sure version-gen.sh is executable.
 chmod +x tools/power/cpupower/utils/version-gen.sh
-%kmake -C tools/power/cpupower CPUFREQ_BENCH=false CFLAGS="%{optflags}" LDFLAGS="%{ldflags}"
+%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%{ldflags}"
 %endif
 
 %ifarch %{ix86} x86_64
@@ -1258,7 +1258,7 @@ make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__p
 ### Linker start4 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_cpupower}
-%{make} -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{optflags}" install
+%{make} -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{ldflags}" install
 
 rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
