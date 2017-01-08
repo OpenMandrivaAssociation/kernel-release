@@ -1153,11 +1153,11 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 
 %ifarch %{ix86} x86_64
 %if %{with build_x86_energy_perf_policy}
-%kmake -C tools/power/x86/x86_energy_perf_policy CC=gcc
+%kmake -C tools/power/x86/x86_energy_perf_policy CC=gcc LDFLAGS=""
 %endif
 
 %if %{with build_turbostat}
-%kmake -C tools/power/x86/turbostat CC=gcc
+%kmake -C tools/power/x86/turbostat CC=gcc LDFLAGS=""
 %endif
 %endif
 
