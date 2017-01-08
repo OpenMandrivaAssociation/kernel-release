@@ -1148,7 +1148,7 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 %if %{with build_cpupower}
 # make sure version-gen.sh is executable.
 chmod +x tools/power/cpupower/utils/version-gen.sh
-%kmake -C tools/power/cpupower CPUFREQ_BENCH=false
+%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS=""
 %endif
 
 %ifarch %{ix86} x86_64
