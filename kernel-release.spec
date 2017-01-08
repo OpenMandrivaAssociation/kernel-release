@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	9
-%define sublevel	0
+%define sublevel	1
 %define relc		0
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -178,7 +178,7 @@ Patch5:		linux-4.8.1-buildfix.patch
 Patch100:	0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.5.0.patch
 Patch101:	0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.5.0.patch
 Patch102:	0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
-Patch103:	0004-Turn-into-BFQ-v8r6-for-4.9.0.patch
+Patch103:	0004-Turn-into-BFQ-v8r7-for-4.9.0.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
