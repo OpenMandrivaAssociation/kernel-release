@@ -225,6 +225,7 @@ BuildRequires:	gcc
 BuildRequires:	gcc-plugin-devel
 BuildRequires:	gcc-c++
 BuildRequires:	openssl-devel
+BuildRequires:	openssl
 BuildRequires:	diffutils
 # For git apply
 BuildRequires:	git-core
