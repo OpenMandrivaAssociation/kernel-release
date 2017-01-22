@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	9
-%define sublevel	2
+%define sublevel	5
 %define relc		0
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -225,6 +225,7 @@ BuildRequires:	gcc
 BuildRequires:	gcc-plugin-devel
 BuildRequires:	gcc-c++
 BuildRequires:	openssl-devel
+BuildRequires:	openssl
 BuildRequires:	diffutils
 # For git apply
 BuildRequires:	git-core
