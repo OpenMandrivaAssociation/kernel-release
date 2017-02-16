@@ -180,6 +180,9 @@ Patch101:	0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.5.0.patch
 Patch102:	0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
 Patch103:	0004-Turn-into-BFQ-v8r7-for-4.9.0.patch
 
+# (tpg) The Ultra Kernel Same Page Deduplication
+# http://kerneldedup.org/en/projects/uksm/download/
+Patch120:	uksm-0.1.2.5-for-v4.9.1+.patch
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
 # being touched aren't in the tree at the time %%apply_patches
