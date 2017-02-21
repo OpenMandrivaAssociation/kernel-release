@@ -171,7 +171,8 @@ Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
 %endif
 Patch2:		die-floppy-die.patch
 Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
-Patch4:		linux-4.7-intel-dvi-duallink.patch
+# (tpg) not needed or needs a rediff ?
+#Patch4:		linux-4.7-intel-dvi-duallink.patch
 Patch5:		linux-4.8.1-buildfix.patch
 
 # BFQ IO scheduler, http://algogroup.unimore.it/people/paolo/disk_sched/
