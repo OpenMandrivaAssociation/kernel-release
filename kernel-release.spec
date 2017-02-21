@@ -134,7 +134,7 @@ URL:		http://www.kernel.org
 ### This is for full SRC RPM
 Source0:	http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.xz
 Source1:	http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.sign
-Q### This is for stripped SRC RPM
+### This is for stripped SRC RPM
 %if %{with build_nosrc}
 NoSource:	0
 %endif
