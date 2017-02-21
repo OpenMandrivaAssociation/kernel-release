@@ -134,7 +134,7 @@ URL:		http://www.kernel.org
 ### This is for full SRC RPM
 Source0:	http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.xz
 Source1:	http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.sign
-### This is for stripped SRC RPM
+Q### This is for stripped SRC RPM
 %if %{with build_nosrc}
 NoSource:	0
 %endif
@@ -176,10 +176,10 @@ Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch5:		linux-4.8.1-buildfix.patch
 
 # BFQ IO scheduler, http://algogroup.unimore.it/people/paolo/disk_sched/
-Patch100:	0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.5.0.patch
-Patch101:	0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.5.0.patch
-Patch102:	0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
-Patch103:	0004-Turn-into-BFQ-v8r7-for-4.9.0.patch
+#Patch100:	0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.5.0.patch
+#Patch101:	0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.5.0.patch
+#Patch102:	0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
+#Patch103:	0004-Turn-into-BFQ-v8r7-for-4.9.0.patch
 
 # (tpg) The Ultra Kernel Same Page Deduplication
 # http://kerneldedup.org/en/projects/uksm/download/
