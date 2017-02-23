@@ -58,15 +58,17 @@
 %bcond_without build_source
 %bcond_without build_devel
 %bcond_with build_debug
+%if %mdvver >= 3000000
 # (tpg) enable build virtualbox module inside kernel
 # (tpg) available only on ix86 and x86_64
-%if %mdvver >= 3000000
 %ifarch %{ix86} x86_64
 %bcond_with virtualbox
 %endif
+# (tpg) by default use BFQ IO scheduler
+%bcond_without bfq
 %endif
 
-%define	cross_header_archs	arm arm64 mips
+%define cross_header_archs arm arm64
 
 %ifarch x86_64
 # BEGIN OF FLAVOURS
@@ -118,8 +120,7 @@
 	&& RPM_BUILD_NCPUS="`/usr/bin/getconf _NPROCESSORS_ONLN`"; \\\
 	[ "$RPM_BUILD_NCPUS" -gt 1 ] && echo "-P $RPM_BUILD_NCPUS")
 
-# Sparc arch wants sparc64 kernels
-%define target_arch    %(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/')
+%define target_arch %(echo %{_arch} | sed -e 's/arm.*/arm/' -e 's/aarch64/arm64/')
 
 #
 # SRC RPM description
@@ -183,16 +184,18 @@ Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch5:		linux-4.8.1-buildfix.patch
 
 # BFQ IO scheduler, http://algogroup.unimore.it/people/paolo/disk_sched/
-#Patch100:	0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.5.0.patch
-#Patch101:	0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.5.0.patch
-#Patch102:	0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
-#Patch103:	0004-Turn-into-BFQ-v8r7-for-4.9.0.patch
+%if %{with bfq}
+Patch100:	0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.10..patch
+Patch101:	0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.10.0.patch
+Patch102:	0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
+Patch103:	0004-Turn-BFQ-v7r11-for-4.10.0-into-BFQ-v8r8-for-4.10.0.patch
+%endif
 
 # (tpg) The Ultra Kernel Same Page Deduplication
-# http://kerneldedup.org/en/projects/uksm/download/
-# (tpg) needs to be updated to support 4.10.x kernels
-# (tpg) sources are here 
+# (tpg) http://kerneldedup.org/en/projects/uksm/download/
+# (tpg) sources can be found here https://github.com/dolohow/uksm
 Patch120:	uksm-4.10.patch
+
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
 # being touched aren't in the tree at the time %%apply_patches
@@ -744,6 +747,9 @@ PrepareKernel() {
     echo "Make config for kernel $extension"
     %{smake} -s mrproper
     cat ${config_dir}/common.config ${config_dir}/common-$flavour.config ${config_dir}/%{target_arch}-common.config ${config_dir}/%{target_arch}-$flavour.config >.config 2>/dev/null || :
+%if !%{with bfq}
+    sed -i -e 's/CONFIG_DEFAULT_IOSCHED="bfq"/CONFIG_DEFAULT_IOSCHED="cfq"/g' .config
+%endif
     # make sure EXTRAVERSION says what we want it to say
     sed -ri "s|^(EXTRAVERSION =).*|\1 -$extension|" Makefile
     %{smake} oldconfig
@@ -855,8 +861,8 @@ SaveDevel() {
     cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
 
     for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
-		 mips mn10300 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
-		rm -rf $TempDevelRoot/arch/$i
+	 mips mn10300 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
+	    rm -rf $TempDevelRoot/arch/$i
     done
 
 %ifnarch %{armx}
