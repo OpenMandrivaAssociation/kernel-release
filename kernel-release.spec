@@ -802,7 +802,7 @@ BuildKernel() {
 %endif
 
     for arch in %{cross_header_archs}; do
-	%{make} SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
+	%{make} ARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
     done
 
 # remove /lib/firmware, we use a separate kernel-firmware
