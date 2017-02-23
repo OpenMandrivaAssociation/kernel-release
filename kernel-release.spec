@@ -58,6 +58,13 @@
 %bcond_without build_source
 %bcond_without build_devel
 %bcond_with build_debug
+# (tpg) enable build virtualbox module inside kernel
+# (tpg) available only on ix86 and x86_64
+%if %mdvver >= 3000000
+%ifarch %{ix86} x86_64
+%bcond_without virtualbox
+%endif
+%endif
 
 %define	cross_header_archs	arm arm64 mips
 
@@ -283,11 +290,9 @@ Suggests:	microcode_ctl
 # Let's pull in some of the most commonly used DKMS modules
 # so end users don't have to install compilers (and worse,
 # get compiler error messages on failures)
-%if %mdvver >= 3000000
-%ifarch %{ix86} x86_64
+%if %{with virtualbox}
 BuildRequires:	dkms-virtualbox >= 5.0.24-1
 BuildRequires:	dkms-vboxadditions >= 5.0.24-1
-%endif
 %endif
 
 %description
@@ -661,8 +666,7 @@ chmod +x scripts/gcc-plugin.sh
 LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 
 # Pull in some externally maintained modules
-%if %mdvver >= 3000000
-%ifarch %{ix86} x86_64
+%if %{with virtualbox}
 # === VirtualBox guest additions ===
 # VirtualBox video driver
 cp -a $(ls --sort=time -1d /usr/src/vboxadditions-*|head -n1)/vboxvideo drivers/gpu/drm/
@@ -701,7 +705,6 @@ cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxpci drivers/pci/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefile*
 sed -i -e "/uname -m/iKERN_DIR=$(pwd)" drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
-%endif
 %endif
 
 # get rid of unwanted files
