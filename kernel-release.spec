@@ -184,7 +184,8 @@ Patch5:		linux-4.8.1-buildfix.patch
 # (tpg) The Ultra Kernel Same Page Deduplication
 # http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) needs to be updated to support 4.10.x kernels
-#Patch120:	uksm-0.1.2.5-for-v4.9.1+.patch
+# (tpg) sources are here 
+Patch120:	uksm-4.10.patch
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
 # being touched aren't in the tree at the time %%apply_patches
