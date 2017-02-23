@@ -62,7 +62,7 @@
 # (tpg) available only on ix86 and x86_64
 %if %mdvver >= 3000000
 %ifarch %{ix86} x86_64
-%bcond_without virtualbox
+%bcond_with virtualbox
 %endif
 %endif
 
