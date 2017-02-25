@@ -1366,7 +1366,6 @@ mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
 %{_kerneldir}/MAINTAINERS
 %{_kerneldir}/Makefile
 %{_kerneldir}/README
-%{_kerneldir}/REPORTING-BUGS
 
 %files -n %{kname}-source-latest
 %endif
