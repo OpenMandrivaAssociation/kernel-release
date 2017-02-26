@@ -62,7 +62,7 @@
 # (tpg) enable build virtualbox module inside kernel
 # (tpg) available only on ix86 and x86_64
 %ifarch %{ix86} x86_64
-%bcond_with virtualbox
+%bcond_without virtualbox
 %endif
 # (tpg) by default use BFQ IO scheduler
 %bcond_without bfq
