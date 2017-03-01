@@ -194,7 +194,7 @@ Patch103:	0004-Turn-BFQ-v7r11-for-4.10.0-into-BFQ-v8r8-for-4.10.0.patch
 # (tpg) The Ultra Kernel Same Page Deduplication
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
-Patch120:	uksm-4.10.patch
+Patch120:	uksm-0.1.2.6-for-v4.10.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
