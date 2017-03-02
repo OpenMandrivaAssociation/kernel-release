@@ -5,8 +5,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	9
-%define sublevel	10
+%define patchlevel	10
+%define sublevel	1
 %define relc		0
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -18,7 +18,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		2
+%define rpmrel		1
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -58,8 +58,17 @@
 %bcond_without build_source
 %bcond_without build_devel
 %bcond_with build_debug
+%if %mdvver >= 3000000
+# (tpg) enable build virtualbox module inside kernel
+# (tpg) available only on ix86 and x86_64
+%ifarch %{ix86} x86_64
+%bcond_without virtualbox
+%endif
+# (tpg) by default use BFQ IO scheduler
+%bcond_without bfq
+%endif
 
-%define	cross_header_archs	arm arm64 mips
+%define cross_header_archs arm arm64
 
 %ifarch x86_64
 # BEGIN OF FLAVOURS
@@ -111,8 +120,7 @@
 	&& RPM_BUILD_NCPUS="`/usr/bin/getconf _NPROCESSORS_ONLN`"; \\\
 	[ "$RPM_BUILD_NCPUS" -gt 1 ] && echo "-P $RPM_BUILD_NCPUS")
 
-# Sparc arch wants sparc64 kernels
-%define target_arch    %(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/')
+%define target_arch %(echo %{_arch} | sed -e 's/arm.*/arm/' -e 's/aarch64/arm64/')
 
 #
 # SRC RPM description
@@ -171,18 +179,23 @@ Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
 %endif
 Patch2:		die-floppy-die.patch
 Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
-Patch4:		linux-4.7-intel-dvi-duallink.patch
+# (tpg) not needed or needs a rediff ?
+#Patch4:		linux-4.7-intel-dvi-duallink.patch
 Patch5:		linux-4.8.1-buildfix.patch
 
 # BFQ IO scheduler, http://algogroup.unimore.it/people/paolo/disk_sched/
-Patch100:	0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.5.0.patch
-Patch101:	0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.5.0.patch
+%if %{with bfq}
+Patch100:	0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.10..patch
+Patch101:	0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.10.0.patch
 Patch102:	0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
-Patch103:	0004-Turn-into-BFQ-v8r7-for-4.9.0.patch
+Patch103:	0004-Turn-BFQ-v7r11-for-4.10.0-into-BFQ-v8r8-for-4.10.0.patch
+%endif
 
 # (tpg) The Ultra Kernel Same Page Deduplication
-# http://kerneldedup.org/en/projects/uksm/download/
-Patch120:	uksm-0.1.2.5-for-v4.9.1+.patch
+# (tpg) http://kerneldedup.org/en/projects/uksm/download/
+# (tpg) sources can be found here https://github.com/dolohow/uksm
+Patch120:	uksm-0.1.2.6-for-v4.10.patch
+
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
 # being touched aren't in the tree at the time %%apply_patches
@@ -280,11 +293,9 @@ Suggests:	microcode_ctl
 # Let's pull in some of the most commonly used DKMS modules
 # so end users don't have to install compilers (and worse,
 # get compiler error messages on failures)
-%if %mdvver >= 3000000
-%ifarch %{ix86} x86_64
+%if %{with virtualbox}
 BuildRequires:	dkms-virtualbox >= 5.0.24-1
 BuildRequires:	dkms-vboxadditions >= 5.0.24-1
-%endif
 %endif
 
 %description
@@ -658,8 +669,7 @@ chmod +x scripts/gcc-plugin.sh
 LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 
 # Pull in some externally maintained modules
-%if %mdvver >= 3000000
-%ifarch %{ix86} x86_64
+%if %{with virtualbox}
 # === VirtualBox guest additions ===
 # VirtualBox video driver
 cp -a $(ls --sort=time -1d /usr/src/vboxadditions-*|head -n1)/vboxvideo drivers/gpu/drm/
@@ -699,7 +709,6 @@ sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefi
 sed -i -e "/uname -m/iKERN_DIR=$(pwd)" drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 %endif
-%endif
 
 # get rid of unwanted files
 find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
@@ -738,6 +747,9 @@ PrepareKernel() {
     echo "Make config for kernel $extension"
     %{smake} -s mrproper
     cat ${config_dir}/common.config ${config_dir}/common-$flavour.config ${config_dir}/%{target_arch}-common.config ${config_dir}/%{target_arch}-$flavour.config >.config 2>/dev/null || :
+%if !%{with bfq}
+    sed -i -e 's/CONFIG_DEFAULT_IOSCHED="bfq"/CONFIG_DEFAULT_IOSCHED="cfq"/g' .config
+%endif
     # make sure EXTRAVERSION says what we want it to say
     sed -ri "s|^(EXTRAVERSION =).*|\1 -$extension|" Makefile
     %{smake} oldconfig
@@ -790,7 +802,7 @@ BuildKernel() {
 %endif
 
     for arch in %{cross_header_archs}; do
-	%{make} SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
+	%{make} ARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
     done
 
 # remove /lib/firmware, we use a separate kernel-firmware
@@ -849,8 +861,8 @@ SaveDevel() {
     cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
 
     for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
-		 mips mn10300 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
-		rm -rf $TempDevelRoot/arch/$i
+	 mips mn10300 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
+	    rm -rf $TempDevelRoot/arch/$i
     done
 
 %ifnarch %{armx}
@@ -1354,7 +1366,6 @@ mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
 %{_kerneldir}/MAINTAINERS
 %{_kerneldir}/Makefile
 %{_kerneldir}/README
-%{_kerneldir}/REPORTING-BUGS
 
 %files -n %{kname}-source-latest
 %endif
