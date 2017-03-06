@@ -5,8 +5,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	9
-%define sublevel	0
+%define patchlevel	10
+%define sublevel	1
 %define relc		0
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -58,8 +58,17 @@
 %bcond_without build_source
 %bcond_without build_devel
 %bcond_with build_debug
+%if %mdvver >= 3000000
+# (tpg) enable build virtualbox module inside kernel
+# (tpg) available only on ix86 and x86_64
+%ifarch %{ix86} x86_64
+%bcond_without virtualbox
+%endif
+# (tpg) by default use BFQ IO scheduler
+%bcond_without bfq
+%endif
 
-%define	cross_header_archs	arm arm64 mips
+%define cross_header_archs arm arm64
 
 %ifarch x86_64
 # BEGIN OF FLAVOURS
@@ -78,6 +87,8 @@
 # build perf and cpupower tools
 %bcond_with build_perf
 %bcond_without build_cpupower
+%bcond_without build_x86_energy_perf_policy
+%bcond_without build_turbostat
 
 # compress modules with xz
 %bcond_without build_modxz
@@ -109,8 +120,7 @@
 	&& RPM_BUILD_NCPUS="`/usr/bin/getconf _NPROCESSORS_ONLN`"; \\\
 	[ "$RPM_BUILD_NCPUS" -gt 1 ] && echo "-P $RPM_BUILD_NCPUS")
 
-# Sparc arch wants sparc64 kernels
-%define target_arch    %(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/')
+%define target_arch %(echo %{_arch} | sed -e 's/arm.*/arm/' -e 's/aarch64/arm64/')
 
 #
 # SRC RPM description
@@ -158,23 +168,33 @@ Source51:	cpupower.config
 # Patches
 # Numbers 0 to 9 are reserved for upstream patches
 # (-stable patch, -rc, ...)
+# Added as a Source rather that Patch because it needs to be
+# applied with "git apply" -- may contain binary patches.
 %if 0%{relc}
-Patch0:		https://cdn.kernel.org/pub/linux/kernel/v4.x/testing/patch-%(echo %{version}|cut -d. -f1-2)-rc%{relc}.xz
+Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/testing/patch-%(echo %{version}|cut -d. -f1-2)-rc%{relc}.xz
 %else
 %if 0%{sublevel}
-Patch1:		https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
+Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
 %endif
 %endif
 Patch2:		die-floppy-die.patch
 Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
-Patch4:		linux-4.7-intel-dvi-duallink.patch
+# (tpg) not needed or needs a rediff ?
+#Patch4:		linux-4.7-intel-dvi-duallink.patch
 Patch5:		linux-4.8.1-buildfix.patch
 
 # BFQ IO scheduler, http://algogroup.unimore.it/people/paolo/disk_sched/
-Patch100:	0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.8.0.patch
-Patch101:	0002-block-introduce-the-BFQ-v7r11-I-O-sched-to-be-ported.patch
-Patch102:	0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-to-.patch
-Patch103:	0004-Turn-BFQ-v7r11-into-BFQ-v8r4-for-4.8.0.patch
+%if %{with bfq}
+Patch100:	0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.10..patch
+Patch101:	0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.10.0.patch
+Patch102:	0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
+Patch103:	0004-Turn-BFQ-v7r11-for-4.10.0-into-BFQ-v8r8-for-4.10.0.patch
+%endif
+
+# (tpg) The Ultra Kernel Same Page Deduplication
+# (tpg) http://kerneldedup.org/en/projects/uksm/download/
+# (tpg) sources can be found here https://github.com/dolohow/uksm
+Patch120:	uksm-0.1.2.6-for-v4.10.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -219,9 +239,12 @@ BuildRequires:	bc
 BuildRequires:	binutils
 BuildRequires:	gcc
 BuildRequires:	gcc-plugin-devel
+BuildRequires:	gcc-c++
 BuildRequires:	openssl-devel
 BuildRequires:	openssl
 BuildRequires:	diffutils
+# For git apply
+BuildRequires:	git-core
 # For power tools
 BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	kmod-devel
@@ -270,11 +293,9 @@ Suggests:	microcode_ctl
 # Let's pull in some of the most commonly used DKMS modules
 # so end users don't have to install compilers (and worse,
 # get compiler error messages on failures)
-%if %mdvver >= 3000000
-%ifarch %{ix86} x86_64
+%if %{with virtualbox}
 BuildRequires:	dkms-virtualbox >= 5.0.24-1
 BuildRequires:	dkms-vboxadditions >= 5.0.24-1
-%endif
 %endif
 
 %description
@@ -551,6 +572,28 @@ Conflicts:	%{_lib}cpufreq-devel
 This package contains the development files for cpupower.
 %endif
 
+%if %{with build_x86_energy_perf_policy}
+%package -n x86_energy_perf_policy
+Version:	%{kversion}
+Release:	%{rpmrel}
+Summary:	Tool to control energy vs. performance on recent X86 processors
+Group:		System/Kernel and hardware
+
+%description -n x86_energy_perf_policy
+Tool to control energy vs. performance on recent X86 processors
+%endif
+
+%if %{with build_turbostat}
+%package -n turbostat
+Version:	%{kversion}
+Release:	%{rpmrel}
+Summary:	Tool to report processor frequency and idle statistics
+Group:		System/Kernel and hardware
+
+%description -n turbostat
+Tool to report processor frequency and idle statistics
+%endif
+
 %package headers
 Version:	%{kversion}
 Release:	%{rpmrel}
@@ -607,6 +650,11 @@ following platforms:
 #
 %prep
 %setup -q -n linux-%{tar_ver}
+%if 0%{relc} || 0%{sublevel}
+[ -e .git ] || git init
+xzcat %{SOURCE90} | git apply -
+rm -rf .git
+%endif
 %apply_patches
 # patch doesn't seem to have proper permissions...
 chmod +x scripts/gcc-plugin.sh
@@ -621,8 +669,7 @@ chmod +x scripts/gcc-plugin.sh
 LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 
 # Pull in some externally maintained modules
-%if %mdvver >= 3000000
-%ifarch %{ix86} x86_64
+%if %{with virtualbox}
 # === VirtualBox guest additions ===
 # VirtualBox video driver
 cp -a $(ls --sort=time -1d /usr/src/vboxadditions-*|head -n1)/vboxvideo drivers/gpu/drm/
@@ -662,7 +709,6 @@ sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefi
 sed -i -e "/uname -m/iKERN_DIR=$(pwd)" drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 %endif
-%endif
 
 # get rid of unwanted files
 find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
@@ -701,6 +747,9 @@ PrepareKernel() {
     echo "Make config for kernel $extension"
     %{smake} -s mrproper
     cat ${config_dir}/common.config ${config_dir}/common-$flavour.config ${config_dir}/%{target_arch}-common.config ${config_dir}/%{target_arch}-$flavour.config >.config 2>/dev/null || :
+%if !%{with bfq}
+    sed -i -e 's/CONFIG_DEFAULT_IOSCHED="bfq"/CONFIG_DEFAULT_IOSCHED="cfq"/g' .config
+%endif
     # make sure EXTRAVERSION says what we want it to say
     sed -ri "s|^(EXTRAVERSION =).*|\1 -$extension|" Makefile
     %{smake} oldconfig
@@ -753,7 +802,7 @@ BuildKernel() {
 %endif
 
     for arch in %{cross_header_archs}; do
-	%{make} SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
+	%{make} ARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
     done
 
 # remove /lib/firmware, we use a separate kernel-firmware
@@ -812,8 +861,8 @@ SaveDevel() {
     cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
 
     for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
-		 mips mn10300 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
-		rm -rf $TempDevelRoot/arch/$i
+	 mips mn10300 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
+	    rm -rf $TempDevelRoot/arch/$i
     done
 
 %ifnarch %{armx}
@@ -1115,8 +1164,19 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 %if %{with build_cpupower}
 # make sure version-gen.sh is executable.
 chmod +x tools/power/cpupower/utils/version-gen.sh
-%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%{optflags}"
+%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS=""
 %endif
+
+%ifarch %{ix86} x86_64
+%if %{with build_x86_energy_perf_policy}
+%kmake -C tools/power/x86/x86_energy_perf_policy CC=gcc LDFLAGS=""
+%endif
+
+%if %{with build_turbostat}
+%kmake -C tools/power/x86/turbostat CC=gcc LDFLAGS=""
+%endif
+%endif
+
 ############################################################
 ###  Linker end3 > Check point to build for omv or rosa  ###
 ############################################################
@@ -1214,7 +1274,7 @@ make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__p
 ### Linker start4 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_cpupower}
-%{make} -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{optflags}" install
+%{make} -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{ldflags}" install
 
 rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
@@ -1222,6 +1282,17 @@ chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
 mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
 install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
 install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
+%endif
+
+%ifarch %{ix86} x86_64
+%if %{with build_x86_energy_perf_policy}
+mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
+%kmake -C tools/power/x86/x86_energy_perf_policy install DESTDIR="%{buildroot}"
+%endif
+%if %{with build_turbostat}
+mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
+%kmake -C tools/power/x86/turbostat install DESTDIR="%{buildroot}"
+%endif
 %endif
 
 ############################################################
@@ -1295,7 +1366,6 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %{_kerneldir}/MAINTAINERS
 %{_kerneldir}/Makefile
 %{_kerneldir}/README
-%{_kerneldir}/REPORTING-BUGS
 
 %files -n %{kname}-source-latest
 %endif
@@ -1334,4 +1404,18 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %files -n cpupower-devel
 %{_libdir}/libcpupower.so
 %{_includedir}/cpufreq.h
+%endif
+
+%ifarch %{ix86} x86_64
+%if %{with build_x86_energy_perf_policy}
+%files -n x86_energy_perf_policy
+%{_bindir}/x86_energy_perf_policy
+%{_mandir}/man8/x86_energy_perf_policy.8*
+%endif
+
+%if %{with build_turbostat}
+%files -n turbostat
+%{_bindir}/turbostat
+%{_mandir}/man8/turbostat.8*
+%endif
 %endif

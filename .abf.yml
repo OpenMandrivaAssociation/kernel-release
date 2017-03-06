@@ -1,3 +1,4 @@
 sources:
-  linux-4.9.tar.sign: ad88a43b6e789e6ddd0f706db990e8b02a8e8061
-  linux-4.9.tar.xz: fa46da077c077467776cdc45a7b50d327a081ab4
+  linux-4.10.tar.sign: f98953fed9230a96ae7cf6ed95c7d274afcce3c1
+  linux-4.10.tar.xz: 1375424721130e93dd6f723537a4db9039a02643
+  patch-4.10.1.xz: 1d2ee4bc3848ce8e52aa7e3516b1866194971596
