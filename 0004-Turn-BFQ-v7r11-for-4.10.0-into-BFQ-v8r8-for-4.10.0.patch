@@ -564,19 +564,6 @@ index 0000000..13b5248
 +    Slightly extended version:
 +    http://algogroup.unimore.it/people/paolo/disk_sched/bfq-v1-suite-
 +							results.pdf
-diff --git a/Makefile b/Makefile
-index f1e6a02..ae9286c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1,7 +1,7 @@
- VERSION = 4
- PATCHLEVEL = 10
- SUBLEVEL = 1
--EXTRAVERSION =
-+EXTRAVERSION = -bfq
- NAME = Fearless Coyote
- 
- # *DOCUMENTATION*
 diff --git a/block/Kconfig.iosched b/block/Kconfig.iosched
 index f78cd1a..f2cd945 100644
 --- a/block/Kconfig.iosched
