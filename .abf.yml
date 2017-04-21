@@ -1,4 +1,4 @@
 sources:
   linux-4.10.tar.sign: f98953fed9230a96ae7cf6ed95c7d274afcce3c1
   linux-4.10.tar.xz: 1375424721130e93dd6f723537a4db9039a02643
-  patch-4.10.11.xz: d109d024f1e7a11b399b9d7fae491bb4d580836e
+  patch-4.10.12.xz: 06a9053bd59f0afb4a50dc21ce0667d800951f55
