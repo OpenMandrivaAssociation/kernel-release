@@ -188,7 +188,7 @@ Patch5:		linux-4.8.1-buildfix.patch
 Patch100:	0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.10..patch
 Patch101:	0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.10.0.patch
 Patch102:	0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
-Patch103:	0004-Turn-BFQ-v7r11-for-4.10.0-into-BFQ-v8r8-for-4.10.0.patch
+Patch103:	0004-Turn-BFQ-v7r11-for-4.10.0-into-BFQ-v8r10-for-4.10.0.patch
 %endif
 
 # (tpg) The Ultra Kernel Same Page Deduplication
