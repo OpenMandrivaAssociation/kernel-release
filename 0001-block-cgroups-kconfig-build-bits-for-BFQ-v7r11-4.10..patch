@@ -1,25 +1,5 @@
-From 8500f47272575b4616beb487c483019248d8c501 Mon Sep 17 00:00:00 2001
-From: Paolo Valente <paolo.valente@unimore.it>
-Date: Tue, 7 Apr 2015 13:39:12 +0200
-Subject: [PATCH 1/4] block: cgroups, kconfig, build bits for BFQ-v7r11-4.10.0
-
-Update Kconfig.iosched and do the related Makefile changes to include
-kernel configuration options for BFQ. Also increase the number of
-policies supported by the blkio controller so that BFQ can add its
-own.
-
-Signed-off-by: Paolo Valente <paolo.valente@unimore.it>
-Signed-off-by: Arianna Avanzini <avanzini@google.com>
----
- block/Kconfig.iosched  | 32 ++++++++++++++++++++++++++++++++
- block/Makefile         |  1 +
- include/linux/blkdev.h |  2 +-
- 3 files changed, 34 insertions(+), 1 deletion(-)
-
-diff --git a/block/Kconfig.iosched b/block/Kconfig.iosched
-index 421bef9..0ee5f0f 100644
---- a/block/Kconfig.iosched
-+++ b/block/Kconfig.iosched
+--- linux-4.11/block/Kconfig.iosched.0100~	2017-05-01 04:47:48.000000000 +0200
++++ linux-4.11/block/Kconfig.iosched	2017-05-01 21:48:10.714587978 +0200
 @@ -39,6 +39,27 @@ config CFQ_GROUP_IOSCHED
  	---help---
  	  Enable group IO scheduling in CFQ.
@@ -72,24 +52,20 @@ index 421bef9..0ee5f0f 100644
 +	default "bfq" if DEFAULT_BFQ
  	default "noop" if DEFAULT_NOOP
  
- endmenu
-diff --git a/block/Makefile b/block/Makefile
-index a827f98..3b14703 100644
---- a/block/Makefile
-+++ b/block/Makefile
-@@ -18,6 +18,7 @@ obj-$(CONFIG_BLK_DEV_THROTTLING)	+= blk-throttle.o
+ config MQ_IOSCHED_DEADLINE
+--- linux-4.11/block/Makefile.0100~	2017-05-01 21:46:24.144915836 +0200
++++ linux-4.11/block/Makefile	2017-05-01 21:48:45.494808373 +0200
+@@ -19,6 +19,7 @@ obj-$(CONFIG_BLK_DEV_THROTTLING)	+= blk-
  obj-$(CONFIG_IOSCHED_NOOP)	+= noop-iosched.o
  obj-$(CONFIG_IOSCHED_DEADLINE)	+= deadline-iosched.o
  obj-$(CONFIG_IOSCHED_CFQ)	+= cfq-iosched.o
 +obj-$(CONFIG_IOSCHED_BFQ)	+= bfq-iosched.o
+ obj-$(CONFIG_MQ_IOSCHED_DEADLINE)	+= mq-deadline.o
  
  obj-$(CONFIG_BLOCK_COMPAT)	+= compat_ioctl.o
- obj-$(CONFIG_BLK_CMDLINE_PARSER)	+= cmdline-parser.o
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 1ca8e8f..8e2d6ed 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -47,7 +47,7 @@ struct rq_wb;
+--- linux-4.11/include/linux/blkdev.h.0100~	2017-05-01 04:47:48.000000000 +0200
++++ linux-4.11/include/linux/blkdev.h	2017-05-01 21:46:24.145915842 +0200
+@@ -48,7 +48,7 @@ struct rq_wb;
   * Maximum number of blkcg policies allowed to be registered concurrently.
   * Defined here to simplify include dependency.
   */
@@ -98,6 +74,3 @@ index 1ca8e8f..8e2d6ed 100644
  
  typedef void (rq_end_io_fn)(struct request *, int);
  
--- 
-2.10.0
-

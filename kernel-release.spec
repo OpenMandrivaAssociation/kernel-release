@@ -5,9 +5,9 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	10
-%define sublevel	13
-%define relc		0
+%define patchlevel	11
+%define sublevel	0
+%define relc		%{nil}
 
 %define buildrel	%{kversion}-%{buildrpmrel}
 %define rpmtag	%{disttag}
@@ -58,17 +58,9 @@
 %bcond_without build_source
 %bcond_without build_devel
 %bcond_with build_debug
-%if %mdvver >= 3000000
-# (tpg) enable build virtualbox module inside kernel
-# (tpg) available only on ix86 and x86_64
-%ifarch %{ix86} x86_64
-%bcond_without virtualbox
-%endif
-# (tpg) by default use BFQ IO scheduler
-%bcond_without bfq
-%endif
+%bcond_with clang
 
-%define cross_header_archs arm arm64
+%define	cross_header_archs	arm arm64 mips
 
 %ifarch x86_64
 # BEGIN OF FLAVOURS
@@ -120,7 +112,8 @@
 	&& RPM_BUILD_NCPUS="`/usr/bin/getconf _NPROCESSORS_ONLN`"; \\\
 	[ "$RPM_BUILD_NCPUS" -gt 1 ] && echo "-P $RPM_BUILD_NCPUS")
 
-%define target_arch %(echo %{_arch} | sed -e 's/arm.*/arm/' -e 's/aarch64/arm64/')
+# Sparc arch wants sparc64 kernels
+%define target_arch    %(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/')
 
 #
 # SRC RPM description
@@ -149,17 +142,17 @@ NoSource:	0
 
 Source4:	README.kernel-sources
 Source5:	%{name}.rpmlintrc
-# configs
+# Global configs
 Source6:	common.config
-# x86_64
+Source8:	common-desktop.config
+Source9:	common-server.config
+# Architecture specific configs
 Source7:	x86_64-common.config
-Source8:	x86_64-desktop.config
-Source9:	x86_64-server.config
-# for i586 only desktop flavour
-Source10:	i386-desktop.config
-# Server flavour for ARMx, todo: add desktop
-Source11:	arm64-server.config
-Source12:	arm-server.config
+Source10:	i386-common.config
+Source11:	arm64-common.config
+Source12:	arm-common.config
+# Files called $ARCH-$FLAVOR.config are merged as well,
+# currently there's no need to have specific overloads there.
 
 # config and systemd service file from fedora
 Source50:	cpupower.service
@@ -179,22 +172,59 @@ Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
 %endif
 Patch2:		die-floppy-die.patch
 Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
-# (tpg) not needed or needs a rediff ?
-#Patch4:		linux-4.7-intel-dvi-duallink.patch
+Patch4:		linux-4.7-intel-dvi-duallink.patch
 Patch5:		linux-4.8.1-buildfix.patch
 
-# BFQ IO scheduler, http://algogroup.unimore.it/people/paolo/disk_sched/
-%if %{with bfq}
-Patch100:	0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.10..patch
-Patch101:	0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.10.0.patch
-Patch102:	0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
-Patch103:	0004-Turn-BFQ-v7r11-for-4.10.0-into-BFQ-v8r10-for-4.10.0.patch
-%endif
+# Patches to make it build with clang
+Patch1000:	0001-kbuild-LLVMLinux-Set-compiler-flags-for-clang.patch
+Patch1001:	0002-fs-LLVMLinux-Remove-warning-from-COMPATIBLE_IOCTL.patch
+Patch1002:	0003-kbuild-LLVMLinux-Add-support-for-generating-LLVM-bit.patch
+Patch1003:	0004-kbuild-LLVMLinux-Make-asm-offset-generation-work-wit.patch
+Patch1004:	0005-md-sysfs-LLVMLinux-Remove-nested-function-from-bcach.patch
+Patch1005:	0006-apparmor-LLVMLinux-Remove-VLAIS.patch
+Patch1006:	0007-exofs-LLVMLinux-Remove-VLAIS-from-exofs-FIXME-Check-.patch
+Patch1007:	0008-md-raid10-LLVMLinux-Remove-VLAIS-from-raid10-driver.patch
+Patch1008:	0009-fs-nfs-LLVMLinux-Remove-VLAIS-from-nfs.patch
+Patch1009:	0010-net-wimax-i2400-LLVMLinux-Remove-VLAIS-from-wimax-i2.patch
+Patch1010:	0011-Kbuild-LLVMLinux-Use-Oz-instead-of-Os-when-using-cla.patch
+Patch1011:	0012-WORKAROUND-x86-boot-LLVMLinux-Work-around-clang-PR39.patch
+Patch1012:	0013-DO-NOT-UPSTREAM-xen-LLVMLinux-Remove-VLAIS-from-xen-.patch
+Patch1013:	0014-DO-NOT-UPSTREAM-arm-LLVMLinux-Provide-__aeabi_-symbo.patch
+Patch1014:	0015-DO-NOT-UPSTREAM-arm-firmware-LLVMLinux-replace-naked.patch
+Patch1015:	0016-arm-LLVMLinux-Remove-unreachable-from-naked-function.patch
+Patch1016:	0017-MIPS-LLVMLinux-Fix-a-cast-to-type-not-present-in-uni.patch
+Patch1017:	0018-MIPS-LLVMLinux-Fix-an-inline-asm-input-output-type-m.patch
+Patch1018:	0019-MIPS-LLVMLinux-Silence-variable-self-assignment-warn.patch
+Patch1019:	0020-MIPS-LLVMLinux-Silence-unicode-warnings-when-preproc.patch
+Patch1020:	0021-Don-t-use-attributes-error-and-warning-with-clang.patch
+Patch1021:	0022-Fix-undefined-references-to-acpi_idle_driver-on-aarc.patch
+Patch1022:	0023-HACK-firmware-LLVMLinux-fix-EFI-libstub-with-clang.patch
+Patch1023:	0024-aarch64-crypto-LLVMLinux-Fix-inline-assembly-for-cla.patch
+Patch1024:	0025-aarch64-LLVMLinux-Make-spin_lock_prefetch-asm-code-c.patch
+Patch1025:	0026-LLVMLinux-Don-t-use-attribute-externally_visible-whe.patch
+Patch1026:	0027-x86-crypto-LLVMLinux-Fix-building-x86_64-AES-extensi.patch
+Patch1027:	0028-x86-LLVMLinux-Qualify-mul-as-mulq-to-make-clang-happ.patch
+Patch1028:	0029-kbuild-LLVMLinux-Add-Werror-to-cc-option-in-order-to.patch
+Patch1029:	0030-x86-kbuild-LLVMLinux-Check-for-compiler-support-of-f.patch
+#Patch1030:	0031-x86-cmpxchg-break.patch
 
-# (tpg) The Ultra Kernel Same Page Deduplication
-# (tpg) http://kerneldedup.org/en/projects/uksm/download/
-# (tpg) sources can be found here https://github.com/dolohow/uksm
-Patch120:	uksm-0.1.2.6-for-v4.10.patch
+# Pulled in as Source: rather than Patch: because it's arch specific
+# and can't be applied by %%apply_patches
+Source100:	vbox-kernel-4.10.patch
+
+# BFQ IO scheduler, http://algogroup.unimore.it/people/paolo/disk_sched/
+#Patch100:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.10.0-v8r10/0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.10..patch
+#Patch101:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.10.0-v8r10/0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.10.0.patch
+#Patch102:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.10.0-v8r10/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
+#Patch103:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.10.0-v8r10/0004-Turn-BFQ-v7r11-for-4.10.0-into-BFQ-v8r10-for-4.10.0.patch
+#
+# Until official 4.11 based patches are out, we're grabbing the patch from git:
+# git remote add bfq https://github.com/linusw/linux-bfq.git
+# git fetch --all
+# git checkout -b bfq-v8 bfq/bfq-v8
+# git diff v4.11
+# This patch is based on commit 1c3f56d6598f429a506204fb0bf54d357a3be45f
+Patch100:	kernel-4.11-bfqv8r11.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -240,7 +270,6 @@ BuildRequires:	gcc
 BuildRequires:	gcc-plugin-devel
 BuildRequires:	gcc-c++
 BuildRequires:	openssl-devel
-BuildRequires:	openssl
 BuildRequires:	diffutils
 # For git apply
 BuildRequires:	git-core
@@ -292,9 +321,11 @@ Suggests:	microcode-intel
 # Let's pull in some of the most commonly used DKMS modules
 # so end users don't have to install compilers (and worse,
 # get compiler error messages on failures)
-%if %{with virtualbox}
-BuildRequires:	dkms-virtualbox >= 5.0.24-1
-BuildRequires:	dkms-vboxadditions >= 5.0.24-1
+%if %mdvver >= 3000000
+%ifarch %{ix86} x86_64
+BuildRequires:	dkms-virtualbox >= 5.1.22-1
+BuildRequires:	dkms-vboxadditions >= 5.1.22-1
+%endif
 %endif
 
 %description
@@ -637,8 +668,11 @@ This package is only of interest if you're cross-compiling for one of the
 following platforms:
 %{cross_header_archs}
 
+%if 0
+# FIXME restore this option at some point
 %files -n cross-%{name}-headers
 %{_prefix}/*-%{_target_os}/include/*
+%endif
 
 # %endif (???)
 # from 1486-1505 >https://abf.io/openmandriva/kernel/commit/b967a6b9458236d594dac87de97193f0e172c55c
@@ -668,7 +702,9 @@ chmod +x scripts/gcc-plugin.sh
 LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 
 # Pull in some externally maintained modules
-%if %{with virtualbox}
+%if 0
+%if %mdvver >= 3000000
+%ifarch %{ix86} x86_64
 # === VirtualBox guest additions ===
 # VirtualBox video driver
 cp -a $(ls --sort=time -1d /usr/src/vboxadditions-*|head -n1)/vboxvideo drivers/gpu/drm/
@@ -707,6 +743,12 @@ cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxpci drivers/pci/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefile*
 sed -i -e "/uname -m/iKERN_DIR=$(pwd)" drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
+
+# Make it compatible with 4.10+ kernels
+find drivers/gpu/drm/vboxvideo fs/vboxsf drivers/bus/vboxguest drivers/virt/vboxdrv drivers/net/vboxnetadp drivers/net/vboxnetflt drivers/pci/vboxpci -name "*.c" -o -name "*.h" |xargs sed -i -e 's,true,TRUE,g;s,false,FALSE,g'
+patch -p1 -z .vbox410~ -b <%{SOURCE100}
+%endif
+%endif
 %endif
 
 # get rid of unwanted files
@@ -739,16 +781,38 @@ export PYTHON=%{__python2}
 %define temp_boot %{temp_root}%{_bootdir}
 %define temp_modules %{temp_root}%{_modulesdir}
 
+CreateConfig() {
+	arch="$1"
+	type="$2"
+	rm -f .config
+
+%if %{with clang}
+	CLANG_EXTRAS=clang-workarounds
+%else
+	CLANG_EXTRAS=""
+%endif
+
+	for i in common common-${type} ${arch}-common ${arch}-${type} $CLANG_EXTRAS; do
+		[ -e %{_sourcedir}/$i.config ] || continue
+		if [ -e .config ]; then
+			# Make sure the later configs override the former ones.
+			# More specific configs should be able to override generic ones no matter what.
+			NEWCONFIGS=`cat %{_sourcedir}/$i.config |grep -E '^(CONFIG_|# CONFIG_)' |sed -e 's,=.*,,;s,^# ,,;s, is not set,,'`
+			for j in $NEWCONFIGS; do
+				sed -i -e "/^$j=.*/d;/^# $j is not set/d" .config
+			done
+		fi
+		cat %{_sourcedir}/$i.config >>.config
+	done
+}
+
 PrepareKernel() {
     name=$1
     extension=$2
     config_dir=%{_sourcedir}
     echo "Make config for kernel $extension"
     %{smake} -s mrproper
-    cat ${config_dir}/common.config ${config_dir}/common-$flavour.config ${config_dir}/%{target_arch}-common.config ${config_dir}/%{target_arch}-$flavour.config >.config 2>/dev/null || :
-%if !%{with bfq}
-    sed -i -e 's/CONFIG_DEFAULT_IOSCHED="bfq"/CONFIG_DEFAULT_IOSCHED="cfq"/g' .config
-%endif
+    CreateConfig %{target_arch} ${flavour}
     # make sure EXTRAVERSION says what we want it to say
     sed -ri "s|^(EXTRAVERSION =).*|\1 -$extension|" Makefile
     %{smake} oldconfig
@@ -759,9 +823,17 @@ BuildKernel() {
     echo "Building kernel $KernelVer"
 # (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
 %ifarch x86_64
-    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS -fwhole-program -flto" LDFLAGS="$LDFLAGS -flto"
+%if %{with clang}
+    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS -flto" LDFLAGS="$LDFLAGS -flto"
+%else
+    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS -flto" LDFLAGS="$LDFLAGS -flto"
+%endif
+%else
+%if %{with clang}
+    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
 %else
     %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+%endif
 %endif
 
 # Start installing stuff
@@ -795,14 +867,16 @@ BuildKernel() {
 # headers
     %{make} INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer headers_install
 
-# kernel headers for cross toolchains
 %ifarch %{armx}
     %{smake} ARCH=%{target_arch} V=1 dtbs INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
 %endif
 
-    for arch in %{cross_header_archs}; do
-	%{make} ARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
-    done
+# kernel headers for cross toolchains
+# FIXME need to generate UAPI files for this to work (and those won't be
+# generated without configuring the kernel for this arch...
+#    for arch in %{cross_header_archs}; do
+#	%{make} SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
+#    done
 
 # remove /lib/firmware, we use a separate kernel-firmware
     rm -rf %{temp_root}/lib/firmware
@@ -860,14 +934,14 @@ SaveDevel() {
     cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
 
     for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
-	 mips mn10300 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
-	    rm -rf $TempDevelRoot/arch/$i
+		 mips mn10300 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
+	rm -rf $TempDevelRoot/arch/$i
     done
 
 %ifnarch %{armx}
-    rm -rf $TempDevelRoot/arch/arm*
-    rm -rf $TempDevelRoot/include/kvm/arm*
-    rm -rf $TempDevelRoot/include/soc
+   rm -rf $TempDevelRoot/arch/arm*
+   rm -rf $TempDevelRoot/include/kvm/arm*
+   rm -rf $TempDevelRoot/include/soc
 %endif
 
 # Clean the scripts tree, and make sure everything is ok (sanity check)
@@ -1129,7 +1203,15 @@ CreateKernel() {
 ###
 # DO it...
 ###
-
+# First of all, build the configs for every arch we care about
+# that way, we can be sure all *.config files have the right additions
+for a in arm arm64 i386 x86_64; do
+	for t in desktop server; do
+		CreateConfig $a $t
+		make ARCH=$a oldconfig
+	done
+done
+make mrproper
 
 # Create a simulacro of buildroot
 rm -rf %{temp_root}
@@ -1163,16 +1245,16 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 %if %{with build_cpupower}
 # make sure version-gen.sh is executable.
 chmod +x tools/power/cpupower/utils/version-gen.sh
-%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS=""
+%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%{optflags}"
 %endif
 
 %ifarch %{ix86} x86_64
 %if %{with build_x86_energy_perf_policy}
-%kmake -C tools/power/x86/x86_energy_perf_policy CC=gcc LDFLAGS=""
+%kmake -C tools/power/x86/x86_energy_perf_policy CC=clang LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none"
 %endif
 
 %if %{with build_turbostat}
-%kmake -C tools/power/x86/turbostat CC=gcc LDFLAGS=""
+%kmake -C tools/power/x86/turbostat CC=clang
 %endif
 %endif
 
@@ -1273,7 +1355,7 @@ make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__p
 ### Linker start4 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_cpupower}
-%{make} -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{ldflags}" install
+%{make} -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{optflags}" install
 
 rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
