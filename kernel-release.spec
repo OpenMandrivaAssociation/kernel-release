@@ -1242,10 +1242,12 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 %{smake} -C tools/perf -s CC=%{__cc} prefix=%{_prefix} PYTHON=%{__python2} man
 %endif
 
+%ifarch %{ix86} x86_64
 %if %{with build_cpupower}
 # make sure version-gen.sh is executable.
 chmod +x tools/power/cpupower/utils/version-gen.sh
 %kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%{optflags}"
+%endif
 %endif
 
 %ifarch %{ix86} x86_64
@@ -1354,6 +1356,7 @@ make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__p
 ############################################################
 ### Linker start4 > Check point to build for omv or rosa ###
 ############################################################
+%ifarch %{ix86} x86_64
 %if %{with build_cpupower}
 %{make} -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{optflags}" install
 
@@ -1363,6 +1366,7 @@ chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
 mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
 install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
 install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
+%endif
 %endif
 
 %ifarch %{ix86} x86_64
@@ -1473,6 +1477,7 @@ mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
 %{_sysconfdir}/bash_completion.d/perf
 %endif
 
+%ifarch %{ix86} x86_64
 %if %{with build_cpupower}
 %files -n cpupower -f cpupower.lang
 %{_bindir}/cpupower
@@ -1485,6 +1490,7 @@ mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
 %files -n cpupower-devel
 %{_libdir}/libcpupower.so
 %{_includedir}/cpufreq.h
+%endif
 %endif
 
 %ifarch %{ix86} x86_64
