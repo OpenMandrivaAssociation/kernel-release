@@ -18,7 +18,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		2
+%define rpmrel		3
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -208,9 +208,9 @@ Patch1028:	0029-kbuild-LLVMLinux-Add-Werror-to-cc-option-in-order-to.patch
 Patch1029:	0030-x86-kbuild-LLVMLinux-Check-for-compiler-support-of-f.patch
 #Patch1030:	0031-x86-cmpxchg-break.patch
 
-# Pulled in as Source: rather than Patch: because it's arch specific
+# Patches to VirtualBox and other external modules are
+# pulled in as Source: rather than Patch: because it's arch specific
 # and can't be applied by %%apply_patches
-Source100:	vbox-kernel-4.10.patch
 
 # BFQ IO scheduler, http://algogroup.unimore.it/people/paolo/disk_sched/
 #Patch100:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.10.0-v8r10/0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.10..patch
@@ -225,6 +225,12 @@ Source100:	vbox-kernel-4.10.patch
 # git diff v4.11
 # This patch is based on commit 1c3f56d6598f429a506204fb0bf54d357a3be45f
 Patch100:	kernel-4.11-bfqv8r11.patch
+
+# Anbox (http://anbox.io/) patches to Android IPC, rebased to 4.11
+# NOT YET
+#Patch200:	0001-ipc-namespace-a-generic-per-ipc-pointer-and-peripc_o.patch
+# NOT YET
+#Patch201:	0002-binder-implement-namepsace-support-for-Android-binde.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -702,7 +708,6 @@ chmod +x scripts/gcc-plugin.sh
 LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 
 # Pull in some externally maintained modules
-%if 0
 %if %mdvver >= 3000000
 %ifarch %{ix86} x86_64
 # === VirtualBox guest additions ===
@@ -743,11 +748,6 @@ cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxpci drivers/pci/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefile*
 sed -i -e "/uname -m/iKERN_DIR=$(pwd)" drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
-
-# Make it compatible with 4.10+ kernels
-find drivers/gpu/drm/vboxvideo fs/vboxsf drivers/bus/vboxguest drivers/virt/vboxdrv drivers/net/vboxnetadp drivers/net/vboxnetflt drivers/pci/vboxpci -name "*.c" -o -name "*.h" |xargs sed -i -e 's,true,TRUE,g;s,false,FALSE,g'
-patch -p1 -z .vbox410~ -b <%{SOURCE100}
-%endif
 %endif
 %endif
 
