@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	11
-%define sublevel	0
+%define sublevel	1
 %define relc		%{nil}
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -18,7 +18,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		3
+%define rpmrel		1
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -213,18 +213,16 @@ Patch1029:	0030-x86-kbuild-LLVMLinux-Check-for-compiler-support-of-f.patch
 # and can't be applied by %%apply_patches
 
 # BFQ IO scheduler, http://algogroup.unimore.it/people/paolo/disk_sched/
-#Patch100:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.10.0-v8r10/0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.10..patch
-#Patch101:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.10.0-v8r10/0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.10.0.patch
-#Patch102:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.10.0-v8r10/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
-#Patch103:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.10.0-v8r10/0004-Turn-BFQ-v7r11-for-4.10.0-into-BFQ-v8r10-for-4.10.0.patch
+Patch100:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r11/0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.11..patch
+Patch101:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r11/0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.11.0.patch
+Patch102:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r11/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
+Patch103:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r11/0004-blk-bfq-turn-BFQ-v7r11-for-4.11.0-into-BFQ-v8r11-for.patch
 #
-# Until official 4.11 based patches are out, we're grabbing the patch from git:
+# If you want to update a kernel major version but BFQ patches haven't been released, try (e.g.)
 # git remote add bfq https://github.com/linusw/linux-bfq.git
 # git fetch --all
 # git checkout -b bfq-v8 bfq/bfq-v8
 # git diff v4.11
-# This patch is based on commit 1c3f56d6598f429a506204fb0bf54d357a3be45f
-Patch100:	kernel-4.11-bfqv8r11.patch
 
 # Anbox (http://anbox.io/) patches to Android IPC, rebased to 4.11
 # NOT YET
