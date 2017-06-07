@@ -18,7 +18,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		2
+%define rpmrel		3
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -60,7 +60,14 @@
 %bcond_with build_debug
 %bcond_with clang
 
-%define	cross_header_archs	arm arm64 mips
+%global	cross_header_archs	aarch64-linux armv7hl-linux i586-linux i686-linux x86_64-linux x32-linux aarch64-linuxmusl armv7hl-linuxmusl i586-linuxmusl i686-linuxmusl x86_64-linuxmusl x32-linuxmusl
+%global long_cross_header_archs %(
+	for i in %{cross_header_archs}; do
+		CPU=$(echo $i |cut -d- -f1)
+		OS=$(echo $i |cut -d- -f2)
+		echo -n "$(rpm --macros %%{_usrlibrpm}/macros:%%{_usrlibrpm}/platform/${CPU}-${OS}/macros --target=${CPU} -E %%{_target_platform}) "
+	done
+)
 
 %ifarch x86_64
 # BEGIN OF FLAVOURS
@@ -212,6 +219,7 @@ Patch1027:	0028-x86-LLVMLinux-Qualify-mul-as-mulq-to-make-clang-happ.patch
 Patch1028:	0029-kbuild-LLVMLinux-Add-Werror-to-cc-option-in-order-to.patch
 Patch1029:	0030-x86-kbuild-LLVMLinux-Check-for-compiler-support-of-f.patch
 #Patch1030:	0031-x86-cmpxchg-break.patch
+Patch1031:	0001-Fix-for-compilation-with-clang.patch
 
 # Patches to VirtualBox and other external modules are
 # pulled in as Source: rather than Patch: because it's arch specific
@@ -666,28 +674,33 @@ should use the 'kernel-devel' package instead.
 %exclude %{_includedir}/cpufreq.h
 %endif
 
-%package -n cross-%{name}-headers
+%(
+for i in %{long_cross_header_archs}; do
+	[ "$i" = "%{_target_platform}" ] && continue
+	cat <<EOF
+%package -n cross-${i}-%{name}-headers
 Version:	%{kversion}
 Release:	%{rpmrel}
-Summary:	Linux kernel header files for cross toolchains
+Summary:	Linux kernel header files for ${i} cross toolchains
 Group:		System/Kernel and hardware
-Epoch:		1
 BuildArch:	noarch
+%if "%{name}" != "kernel"
+Provides:	cross-${i}-kernel-headers = %{EVRD}
+%endif
 
-%description -n	cross-%{name}-headers
+%description -n cross-${i}-%{name}-headers
 C header files from the Linux kernel. The header files define
 structures and constants that are needed for building most
 standard programs, notably the C library.
 
-This package is only of interest if you're cross-compiling for one of the
-following platforms:
-%{cross_header_archs}
+This package is only of interest if you're cross-compiling for
+${i} targets.
 
-%if 0
-# FIXME restore this option at some point
-%files -n cross-%{name}-headers
-%{_prefix}/*-%{_target_os}/include/*
-%endif
+%files -n cross-${i}-%{name}-headers
+%{_prefix}/${i}/include/*
+EOF
+done
+)
 
 # %endif (???)
 # from 1486-1505 >https://abf.io/openmandriva/kernel/commit/b967a6b9458236d594dac87de97193f0e172c55c
@@ -882,13 +895,6 @@ BuildKernel() {
 %ifarch %{armx}
     %{smake} ARCH=%{target_arch} V=1 dtbs INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
 %endif
-
-# kernel headers for cross toolchains
-# FIXME need to generate UAPI files for this to work (and those won't be
-# generated without configuring the kernel for this arch...
-#    for arch in %{cross_header_archs}; do
-#	%{make} SRCARCH=$arch INSTALL_HDR_PATH=%{temp_root}%{_prefix}/$arch-%{_target_os} KERNELRELEASE=$KernelVer headers_install
-#    done
 
 # remove /lib/firmware, we use a separate kernel-firmware
     rm -rf %{temp_root}/lib/firmware
@@ -1211,6 +1217,9 @@ CreateKernel() {
     CreateFiles $flavour
 }
 
+# Create a simulacro of buildroot
+rm -rf %{temp_root}
+install -d %{temp_root}
 
 ###
 # DO it...
@@ -1221,13 +1230,45 @@ for a in arm arm64 i386 x86_64; do
 	for t in desktop server; do
 		CreateConfig $a $t
 		make ARCH=$a oldconfig
+		if [ "$t" = "desktop" ]; then
+			# While we have a kernel configured for it, let's package
+			# headers for crosscompilers...
+			# Done in a for loop because we may have to install the same
+			# headers multiple times, e.g.
+			# aarch64-linux-gnu, aarch64-linux-musl, aarch64-linux-android
+			# all share the same kernel headers.
+			# This is a little ugly because the kernel's arch names don't match
+			# triplets...
+			for i in %{long_cross_header_archs}; do
+				[ "$i" = "%{_target_platform}" ] && continue
+				TripletArch=$(echo ${i} |cut -d- -f1)
+				SARCH=${a}
+				case $TripletArch in
+				aarch64)
+					[ "$a" != "arm64" ] && continue
+					;;
+				arm*)
+					[ "$a" != "arm" ] && continue
+					;;
+				i?86|athlon|pentium?)
+					[ "$a" != "i386" ] && continue
+					ARCH=x86
+					SARCH=x86
+					;;
+				x86_64)
+					[ "$a" != "x86_64" ] && continue
+					SARCH=x86
+					;;
+				*)
+					[ "$a" != "$TripletArch" ] && continue
+					;;
+				esac
+				%{smake} ARCH=${a} SRCARCH=${SARCH} INSTALL_HDR_PATH=%{temp_root}%{_prefix}/${i} headers_install
+			done
+		fi
 	done
 done
 make mrproper
-
-# Create a simulacro of buildroot
-rm -rf %{temp_root}
-install -d %{temp_root}
 
 %if %{with build_desktop}
 CreateKernel desktop
