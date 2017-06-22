@@ -236,6 +236,12 @@ Patch103:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r
 # (tpg) sources can be found here https://github.com/dolohow/uksm
 Patch120:	uksm-4.11.patch
 
+# (tpg) add zstd support
+# https://github.com/facebook/zstd/
+Patch130:	0001-lib-Add-xxhash-module.patch
+Patch131:	0002-lib-Add-zstd-modules.patch
+Patch132:	0003-btrfs-Add-zstd-support.patch
+Patch133:	0004-squashfs-Add-zstd-support.patch
 #
 # If you want to update a kernel major version but BFQ patches haven't been released, try (e.g.)
 # git remote add bfq https://github.com/linusw/linux-bfq.git
@@ -633,7 +639,7 @@ Summary:	Tool to control energy vs. performance on recent X86 processors
 Group:		System/Kernel and hardware
 
 %description -n x86_energy_perf_policy
-Tool to control energy vs. performance on recent X86 processors
+Tool to control energy vs. performance on recent X86 processors.
 %endif
 
 %if %{with build_turbostat}
@@ -644,7 +650,7 @@ Summary:	Tool to report processor frequency and idle statistics
 Group:		System/Kernel and hardware
 
 %description -n turbostat
-Tool to report processor frequency and idle statistics
+Tool to report processor frequency and idle statistics.
 %endif
 
 %package headers
