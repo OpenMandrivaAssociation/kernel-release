@@ -18,7 +18,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -226,6 +226,12 @@ Patch1031:	0001-Fix-for-compilation-with-clang.patch
 # and can't be applied by %%apply_patches
 
 # BFQ IO scheduler, http://algogroup.unimore.it/people/paolo/disk_sched/
+#
+# If you want to update a kernel major version but BFQ patches haven't been released, try (e.g.)
+# git remote add bfq https://github.com/linusw/linux-bfq.git
+# git fetch --all
+# git checkout -b bfq-v8 bfq/bfq-v8
+# git diff v4.11
 Patch100:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r11/0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.11..patch
 Patch101:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r11/0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.11.0.patch
 Patch102:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r11/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
@@ -242,12 +248,11 @@ Patch130:	0001-lib-Add-xxhash-module.patch
 Patch131:	0002-lib-Add-zstd-modules.patch
 Patch132:	0003-btrfs-Add-zstd-support.patch
 Patch133:	0004-squashfs-Add-zstd-support.patch
-#
-# If you want to update a kernel major version but BFQ patches haven't been released, try (e.g.)
-# git remote add bfq https://github.com/linusw/linux-bfq.git
-# git fetch --all
-# git checkout -b bfq-v8 bfq/bfq-v8
-# git diff v4.11
+
+# Add support for Hauppauge HVR-1975 TV tuners, based on
+# https://s3.amazonaws.com/hauppauge/linux/hvr-9x5-19x5-22x5-kernel-3.19-2015-07-10-v2.patch.tar.xz
+# Taken from http://www.hauppauge.com/site/support/linux.html
+Patch140:	hauppauge-hvr-1975.patch
 
 # Anbox (http://anbox.io/) patches to Android IPC, rebased to 4.11
 # NOT YET
@@ -723,8 +728,6 @@ xzcat %{SOURCE90} | git apply -
 rm -rf .git
 %endif
 %apply_patches
-# patch doesn't seem to have proper permissions...
-chmod +x scripts/gcc-plugin.sh
 
 %if %{with build_debug}
 %define debug --debug
