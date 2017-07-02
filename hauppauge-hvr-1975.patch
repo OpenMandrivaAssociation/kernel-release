@@ -12747,7 +12747,7 @@
  	depends on MEDIA_SUPPORT && I2C
 --- linux-4.11/drivers/media/tuners/silabs_tercab.c.0140~	2017-06-30 13:33:26.632750028 +0200
 +++ linux-4.11/drivers/media/tuners/silabs_tercab.c	2017-06-30 13:33:26.632750028 +0200
-@@ -0,0 +1,3454 @@
+@@ -0,0 +1,3452 @@
 +/*
 + * silabs_tercab.c - Silicon Labs terrestrial/cable hybrid tuner driver
 + * for the tuners Si2157 and Si2177
@@ -15622,7 +15622,7 @@
 +	return ret;
 +}
 +
-+static int silabs_tercab_release(struct dvb_frontend *fe)
++static void silabs_tercab_release(struct dvb_frontend *fe)
 +{
 +	struct silabs_tercab_priv *priv = fe->tuner_priv;
 +
@@ -15636,8 +15636,6 @@
 +	mutex_unlock(&silabs_tercab_list_mutex);
 +
 +	fe->tuner_priv = NULL;
-+
-+	return 0;
 +}
 +
 +static int silabs_tercab_get_frequency(struct dvb_frontend *fe, u32 *frequency)
@@ -23037,3 +23035,13 @@
  /* tv card specific */
  #define TDA9887_PRESENT			(1<<0)
  #define TDA9887_PORT1_INACTIVE		(1<<1)
+--- linux-4.11/drivers/media/tuners/Makefile.omv~	2017-07-02 23:42:29.309109663 +0200
++++ linux-4.11/drivers/media/tuners/Makefile	2017-07-02 23:43:25.462612146 +0200
+@@ -41,6 +41,7 @@ obj-$(CONFIG_MEDIA_TUNER_R820T) += r820t
+ obj-$(CONFIG_MEDIA_TUNER_MXL301RF) += mxl301rf.o
+ obj-$(CONFIG_MEDIA_TUNER_QM1D1C0042) += qm1d1c0042.o
+ obj-$(CONFIG_MEDIA_TUNER_M88RS6000T) += m88rs6000t.o
++obj-$(CONFIG_MEDIA_TUNER_SILABS_TERCAB) += silabs_tercab.o
+ 
+ ccflags-y += -I$(srctree)/drivers/media/dvb-core
+ ccflags-y += -I$(srctree)/drivers/media/dvb-frontends
