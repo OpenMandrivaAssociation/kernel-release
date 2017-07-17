@@ -240,7 +240,7 @@ Patch103:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r
 # (tpg) The Ultra Kernel Same Page Deduplication
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
-Patch120:	uksm-4.11.patch
+Patch120:	uksm-4.12.patch
 
 # (tpg) add zstd support
 # https://github.com/facebook/zstd/
