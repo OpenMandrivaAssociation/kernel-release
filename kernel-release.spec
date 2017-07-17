@@ -187,6 +187,7 @@ Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch4:		linux-4.7-intel-dvi-duallink.patch
 Patch5:		linux-4.8.1-buildfix.patch
 
+%if %{with clang}
 # Patches to make it build with clang
 Patch1000:	0001-kbuild-LLVMLinux-Set-compiler-flags-for-clang.patch
 Patch1001:	0002-fs-LLVMLinux-Remove-warning-from-COMPATIBLE_IOCTL.patch
@@ -220,6 +221,7 @@ Patch1028:	0029-kbuild-LLVMLinux-Add-Werror-to-cc-option-in-order-to.patch
 Patch1029:	0030-x86-kbuild-LLVMLinux-Check-for-compiler-support-of-f.patch
 #Patch1030:	0031-x86-cmpxchg-break.patch
 Patch1031:	0001-Fix-for-compilation-with-clang.patch
+%endif
 
 # Patches to VirtualBox and other external modules are
 # pulled in as Source: rather than Patch: because it's arch specific
