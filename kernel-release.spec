@@ -5,8 +5,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	11
-%define sublevel	8
+%define patchlevel	12
+%define sublevel	2
 %define relc		%{nil}
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -18,7 +18,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		2
+%define rpmrel		1
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
