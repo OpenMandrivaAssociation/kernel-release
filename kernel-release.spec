@@ -227,18 +227,6 @@ Patch1031:	0001-Fix-for-compilation-with-clang.patch
 # pulled in as Source: rather than Patch: because it's arch specific
 # and can't be applied by %%apply_patches
 
-# BFQ IO scheduler, http://algogroup.unimore.it/people/paolo/disk_sched/
-#
-# If you want to update a kernel major version but BFQ patches haven't been released, try (e.g.)
-# git remote add bfq https://github.com/linusw/linux-bfq.git
-# git fetch --all
-# git checkout -b bfq-v8 bfq/bfq-v8
-# git diff v4.11
-Patch100:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r11/0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.11..patch
-Patch101:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r11/0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.11.0.patch
-Patch102:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r11/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
-Patch103:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r11/0004-blk-bfq-turn-BFQ-v7r11-for-4.11.0-into-BFQ-v8r11-for.patch
-
 # (tpg) The Ultra Kernel Same Page Deduplication
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
