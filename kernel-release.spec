@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	12
-%define sublevel	2
+%define sublevel	3
 %define relc		%{nil}
 
 %define buildrel	%{kversion}-%{buildrpmrel}
