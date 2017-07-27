@@ -5,8 +5,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	11
-%define sublevel	8
+%define patchlevel	12
+%define sublevel	3
 %define relc		%{nil}
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -18,7 +18,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		2
+%define rpmrel		1
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -187,6 +187,7 @@ Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch4:		linux-4.7-intel-dvi-duallink.patch
 Patch5:		linux-4.8.1-buildfix.patch
 
+%if %{with clang}
 # Patches to make it build with clang
 Patch1000:	0001-kbuild-LLVMLinux-Set-compiler-flags-for-clang.patch
 Patch1001:	0002-fs-LLVMLinux-Remove-warning-from-COMPATIBLE_IOCTL.patch
@@ -220,27 +221,16 @@ Patch1028:	0029-kbuild-LLVMLinux-Add-Werror-to-cc-option-in-order-to.patch
 Patch1029:	0030-x86-kbuild-LLVMLinux-Check-for-compiler-support-of-f.patch
 #Patch1030:	0031-x86-cmpxchg-break.patch
 Patch1031:	0001-Fix-for-compilation-with-clang.patch
+%endif
 
 # Patches to VirtualBox and other external modules are
 # pulled in as Source: rather than Patch: because it's arch specific
 # and can't be applied by %%apply_patches
 
-# BFQ IO scheduler, http://algogroup.unimore.it/people/paolo/disk_sched/
-#
-# If you want to update a kernel major version but BFQ patches haven't been released, try (e.g.)
-# git remote add bfq https://github.com/linusw/linux-bfq.git
-# git fetch --all
-# git checkout -b bfq-v8 bfq/bfq-v8
-# git diff v4.11
-Patch100:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r11/0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.11..patch
-Patch101:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r11/0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.11.0.patch
-Patch102:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r11/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch
-Patch103:	http://algogroup.unimore.it/people/paolo/disk_sched/patches/4.11.0-v8r11/0004-blk-bfq-turn-BFQ-v7r11-for-4.11.0-into-BFQ-v8r11-for.patch
-
 # (tpg) The Ultra Kernel Same Page Deduplication
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
-Patch120:	uksm-4.11.patch
+Patch120:	uksm-4.12.patch
 
 # (tpg) add zstd support
 # https://github.com/facebook/zstd/
@@ -665,7 +655,10 @@ Summary:	Linux kernel header files mostly used by your C library
 Group:		System/Kernel and hardware
 Epoch:		1
 # (tpg) fix bug https://issues.openmandriva.org/show_bug.cgi?id=1580
+Provides:	kernel-headers = 1:%{kverrel}
+Conflicts:	kernel-headers < 1:%{kverrel}
 Provides:	kernel-headers = %{kverrel}
+Conflicts:	kernel-headers < %{kverrel}
 # we don't need the kernel binary in chroot
 #Requires:	%{kname} = %{kverrel}
 %rename linux-userspace-headers
