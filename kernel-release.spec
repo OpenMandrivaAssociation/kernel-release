@@ -655,7 +655,10 @@ Summary:	Linux kernel header files mostly used by your C library
 Group:		System/Kernel and hardware
 Epoch:		1
 # (tpg) fix bug https://issues.openmandriva.org/show_bug.cgi?id=1580
+Provides:	kernel-headers = 1:%{kverrel}
+Conflicts:	kernel-headers < 1:%{kverrel}
 Provides:	kernel-headers = %{kverrel}
+Conflicts:	kernel-headers < %{kverrel}
 # we don't need the kernel binary in chroot
 #Requires:	%{kname} = %{kverrel}
 %rename linux-userspace-headers
