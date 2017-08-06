@@ -1000,7 +1000,6 @@ $DevelRoot/certs
 $DevelRoot/drivers
 $DevelRoot/firmware
 $DevelRoot/fs
-$DevelRoot/include/Kbuild
 $DevelRoot/include/acpi
 $DevelRoot/include/asm-generic
 $DevelRoot/include/clocksource
@@ -1226,7 +1225,40 @@ install -d %{temp_root}
 ###
 # DO it...
 ###
-# First of all, build the configs for every arch we care about
+# First of all, let's check for new config options...
+for a in arm arm64 i386 x86_64; do
+	CreateConfig $a desktop
+	make ARCH=$a listnewconfig |grep '^CONFIG' >newconfigs.$a || :
+done
+cat newconfigs.* >newconfigs
+cat newconfigs.arm |while read r; do
+	if grep -qE "^$r\$" newconfigs.arm64 && grep -qE "^$r\$" newconfigs.arm64 && grep -qE "^$r\$" newconfigs.i386 && grep -qE "^$r\$" newconfigs.x86_64; then
+		echo $r >>newconfigs.common
+	fi
+done
+for i in arm arm64 i386 x86_64; do
+	cat newconfigs.$i |while read r; do
+		grep -qE "^$r\$" newconfigs.common || echo $r >>newconfigs.${i}only
+	done
+done
+if [ -s newconfigs ]; then
+	set +x
+	echo "New config options have been added - please update the *.config files."
+	echo "New config options you need to take care of:"
+	if [ -e newconfigs.common ]; then
+		echo "For common.config:"
+		cat newconfigs.common
+	fi
+	for i in arm arm64 i386 x86_64; do
+		[ -e newconfigs.${i}only ] || continue
+		echo "For $i-common.config:"
+		cat newconfigs.${i}only
+	done
+	exit 1
+fi
+rm -f newconfigs*
+
+# Build the configs for every arch we care about
 # that way, we can be sure all *.config files have the right additions
 for a in arm arm64 i386 x86_64; do
 	for t in desktop server; do
@@ -1455,7 +1487,6 @@ mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
 %{_kerneldir}/firmware
 %{_kerneldir}/fs
 %{_kerneldir}/certs/*
-%{_kerneldir}/include/Kbuild
 %{_kerneldir}/include/acpi
 %{_kerneldir}/include/asm-generic
 %{_kerneldir}/include/clocksource
