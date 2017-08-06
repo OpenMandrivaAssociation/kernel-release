@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	12
-%define sublevel	4
+%define sublevel	5
 %define relc		%{nil}
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -176,7 +176,7 @@ Source51:	cpupower.config
 # Added as a Source rather that Patch because it needs to be
 # applied with "git apply" -- may contain binary patches.
 %if 0%{relc}
-Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/testing/patch-%(echo %{version}|cut -d. -f1-2)-rc%{relc}.xz
+Source90:	https://git.kernel.org/torvalds/p/v%{kernelversion}.%{patchlevel}-rc%{relc}/v%{tar_ver}
 %else
 %if 0%{sublevel}
 Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
@@ -717,7 +717,7 @@ done
 %setup -q -n linux-%{tar_ver}
 %if 0%{relc} || 0%{sublevel}
 [ -e .git ] || git init
-xzcat %{SOURCE90} | git apply -
+xzcat %{SOURCE90} |git apply - || git apply %{SOURCE90}
 rm -rf .git
 %endif
 %apply_patches
