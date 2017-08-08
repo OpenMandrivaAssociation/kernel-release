@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	12
-%define sublevel	3
+%define sublevel	5
 %define relc		%{nil}
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -18,7 +18,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -176,7 +176,7 @@ Source51:	cpupower.config
 # Added as a Source rather that Patch because it needs to be
 # applied with "git apply" -- may contain binary patches.
 %if 0%{relc}
-Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/testing/patch-%(echo %{version}|cut -d. -f1-2)-rc%{relc}.xz
+Source90:	https://git.kernel.org/torvalds/p/v%{kernelversion}.%{patchlevel}-rc%{relc}/v%{tar_ver}
 %else
 %if 0%{sublevel}
 Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
@@ -656,9 +656,7 @@ Group:		System/Kernel and hardware
 Epoch:		1
 # (tpg) fix bug https://issues.openmandriva.org/show_bug.cgi?id=1580
 Provides:	kernel-headers = 1:%{kverrel}
-Conflicts:	kernel-headers < 1:%{kverrel}
-Provides:	kernel-headers = %{kverrel}
-Conflicts:	kernel-headers < %{kverrel}
+Obsoletes:	kernel-headers < 1:%{kverrel}
 # we don't need the kernel binary in chroot
 #Requires:	%{kname} = %{kverrel}
 %rename linux-userspace-headers
@@ -717,7 +715,7 @@ done
 %setup -q -n linux-%{tar_ver}
 %if 0%{relc} || 0%{sublevel}
 [ -e .git ] || git init
-xzcat %{SOURCE90} | git apply -
+xzcat %{SOURCE90} |git apply - || git apply %{SOURCE90}
 rm -rf .git
 %endif
 %apply_patches
@@ -1000,7 +998,6 @@ $DevelRoot/certs
 $DevelRoot/drivers
 $DevelRoot/firmware
 $DevelRoot/fs
-$DevelRoot/include/Kbuild
 $DevelRoot/include/acpi
 $DevelRoot/include/asm-generic
 $DevelRoot/include/clocksource
@@ -1226,7 +1223,40 @@ install -d %{temp_root}
 ###
 # DO it...
 ###
-# First of all, build the configs for every arch we care about
+# First of all, let's check for new config options...
+for a in arm arm64 i386 x86_64; do
+	CreateConfig $a desktop
+	make ARCH=$a listnewconfig |grep '^CONFIG' >newconfigs.$a || :
+done
+cat newconfigs.* >newconfigs
+cat newconfigs.arm |while read r; do
+	if grep -qE "^$r\$" newconfigs.arm64 && grep -qE "^$r\$" newconfigs.arm64 && grep -qE "^$r\$" newconfigs.i386 && grep -qE "^$r\$" newconfigs.x86_64; then
+		echo $r >>newconfigs.common
+	fi
+done
+for i in arm arm64 i386 x86_64; do
+	cat newconfigs.$i |while read r; do
+		grep -qE "^$r\$" newconfigs.common || echo $r >>newconfigs.${i}only
+	done
+done
+if [ -s newconfigs ]; then
+	set +x
+	echo "New config options have been added - please update the *.config files."
+	echo "New config options you need to take care of:"
+	if [ -e newconfigs.common ]; then
+		echo "For common.config:"
+		cat newconfigs.common
+	fi
+	for i in arm arm64 i386 x86_64; do
+		[ -e newconfigs.${i}only ] || continue
+		echo "For $i-common.config:"
+		cat newconfigs.${i}only
+	done
+	exit 1
+fi
+rm -f newconfigs*
+
+# Build the configs for every arch we care about
 # that way, we can be sure all *.config files have the right additions
 for a in arm arm64 i386 x86_64; do
 	for t in desktop server; do
@@ -1455,7 +1485,6 @@ mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
 %{_kerneldir}/firmware
 %{_kerneldir}/fs
 %{_kerneldir}/certs/*
-%{_kerneldir}/include/Kbuild
 %{_kerneldir}/include/acpi
 %{_kerneldir}/include/asm-generic
 %{_kerneldir}/include/clocksource
