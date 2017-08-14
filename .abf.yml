@@ -1,4 +1,4 @@
 sources:
   linux-4.12.tar.sign: ec93e6fe5dd0175255b8da7fd94cf0916863cc56
   linux-4.12.tar.xz: f5dda0344401c436aa47685fbf345f4b7975fcf5
-  patch-4.12.5.xz: 35f8d19bd7aa549b45709244fb82b699b45cc2af
+  patch-4.12.6.xz: 0e13faa6faac3e904ef92de0e5196d1397ed8eb7
