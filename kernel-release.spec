@@ -352,8 +352,8 @@ Suggests:	microcode-intel
 # get compiler error messages on failures)
 %if %mdvver >= 3000000
 %ifarch %{ix86} x86_64
-BuildRequires:	dkms-virtualbox >= 5.1.22-1
-BuildRequires:	dkms-vboxadditions >= 5.1.22-1
+BuildRequires:	dkms-virtualbox >= 5.1.26-1
+BuildRequires:	dkms-vboxadditions >= 5.1.26-1
 %endif
 %endif
 
