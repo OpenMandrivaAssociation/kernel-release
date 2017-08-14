@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	12
-%define sublevel	5
+%define sublevel	6
 %define relc		%{nil}
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -59,7 +59,11 @@
 %bcond_without build_devel
 %bcond_with build_debug
 %bcond_with clang
+%if %mdvver > 3000000
+%bcond_without cross_headers
+%else
 %bcond_with cross_headers
+%endif
 
 %global	cross_header_archs	aarch64-linux armv7hl-linux i586-linux i686-linux x86_64-linux x32-linux aarch64-linuxmusl armv7hl-linuxmusl i586-linuxmusl i686-linuxmusl x86_64-linuxmusl x32-linuxmusl
 %global long_cross_header_archs %(
