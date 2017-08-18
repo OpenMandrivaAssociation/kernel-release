@@ -1,29 +1,9 @@
-From 308795a7713ca6fcd468b60fba9a2fca99cee6a0 Mon Sep 17 00:00:00 2001
-From: Nick Terrell <terrelln@fb.com>
-Date: Wed, 2 Aug 2017 18:02:13 -0700
-Subject: [PATCH v5 5/5] crypto: Add zstd support
-
-Adds zstd support to crypto and scompress. Only supports the default
-level.
-
-Signed-off-by: Nick Terrell <terrelln@fb.com>
----
- crypto/Kconfig   |   9 ++
- crypto/Makefile  |   1 +
- crypto/testmgr.c |  10 +++
- crypto/testmgr.h |  71 +++++++++++++++
- crypto/zstd.c    | 265 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 356 insertions(+)
- create mode 100644 crypto/zstd.c
-
-diff --git a/crypto/Kconfig b/crypto/Kconfig
-index caa770e..4fc3936 100644
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -1662,6 +1662,15 @@ config CRYPTO_LZ4HC
+--- linux-4.12/crypto/Kconfig.0134~	2017-07-03 01:07:02.000000000 +0200
++++ linux-4.12/crypto/Kconfig	2017-08-17 20:39:24.081537674 +0200
+@@ -1661,6 +1661,15 @@ config CRYPTO_LZ4HC
  	help
  	  This is the LZ4 high compression mode algorithm.
-
+ 
 +config CRYPTO_ZSTD
 +	tristate "Zstd compression algorithm"
 +	select CRYPTO_ALGAPI
@@ -34,25 +14,21 @@ index caa770e..4fc3936 100644
 +	  This is the zstd algorithm.
 +
  comment "Random Number Generation"
-
+ 
  config CRYPTO_ANSI_CPRNG
-diff --git a/crypto/Makefile b/crypto/Makefile
-index d41f033..b22e1e8 100644
---- a/crypto/Makefile
-+++ b/crypto/Makefile
-@@ -133,6 +133,7 @@ obj-$(CONFIG_CRYPTO_USER_API_HASH) += algif_hash.o
+--- linux-4.12/crypto/Makefile.0134~	2017-08-17 20:39:24.081537674 +0200
++++ linux-4.12/crypto/Makefile	2017-08-17 20:44:03.750238402 +0200
+@@ -137,6 +137,7 @@ obj-$(CONFIG_CRYPTO_USER_API_HASH) += al
  obj-$(CONFIG_CRYPTO_USER_API_SKCIPHER) += algif_skcipher.o
  obj-$(CONFIG_CRYPTO_USER_API_RNG) += algif_rng.o
  obj-$(CONFIG_CRYPTO_USER_API_AEAD) += algif_aead.o
 +obj-$(CONFIG_CRYPTO_ZSTD) += zstd.o
-
- ecdh_generic-y := ecc.o
- ecdh_generic-y += ecdh.o
-diff --git a/crypto/testmgr.c b/crypto/testmgr.c
-index 7125ba3..8a124d3 100644
---- a/crypto/testmgr.c
-+++ b/crypto/testmgr.c
-@@ -3603,6 +3603,16 @@ static const struct alg_test_desc alg_test_descs[] = {
+ 
+ #
+ # generic algorithms and the async_tx api
+--- linux-4.12/crypto/testmgr.c.0134~	2017-07-03 01:07:02.000000000 +0200
++++ linux-4.12/crypto/testmgr.c	2017-08-17 20:39:24.082537674 +0200
+@@ -3523,6 +3523,16 @@ static const struct alg_test_desc alg_te
  				.decomp = __VECS(zlib_deflate_decomp_tv_template)
  			}
  		}
@@ -68,15 +44,13 @@ index 7125ba3..8a124d3 100644
 +		}
  	}
  };
-
-diff --git a/crypto/testmgr.h b/crypto/testmgr.h
-index 6ceb0e2..e6b5920 100644
---- a/crypto/testmgr.h
-+++ b/crypto/testmgr.h
-@@ -34631,4 +34631,75 @@ static const struct comp_testvec lz4hc_decomp_tv_template[] = {
+ 
+--- linux-4.12/crypto/testmgr.h.0134~	2017-07-03 01:07:02.000000000 +0200
++++ linux-4.12/crypto/testmgr.h	2017-08-17 20:39:24.085537670 +0200
+@@ -34488,4 +34488,75 @@ static const struct comp_testvec lz4hc_d
  	},
  };
-
+ 
 +static const struct comp_testvec zstd_comp_tv_template[] = {
 +	{
 +		.inlen	= 68,
@@ -149,11 +123,8 @@ index 6ceb0e2..e6b5920 100644
 +	},
 +};
  #endif	/* _CRYPTO_TESTMGR_H */
-diff --git a/crypto/zstd.c b/crypto/zstd.c
-new file mode 100644
-index 0000000..9a76b3e
---- /dev/null
-+++ b/crypto/zstd.c
+--- linux-4.12/crypto/zstd.c.0134~	2017-08-17 20:39:24.085537670 +0200
++++ linux-4.12/crypto/zstd.c	2017-08-17 20:39:24.085537670 +0200
 @@ -0,0 +1,265 @@
 +/*
 + * Cryptographic API.
@@ -420,5 +391,3 @@ index 0000000..9a76b3e
 +MODULE_LICENSE("GPL");
 +MODULE_DESCRIPTION("Zstd Compression Algorithm");
 +MODULE_ALIAS_CRYPTO("zstd");
---
-2.9.3
