@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	12
-%define sublevel	9
+%define sublevel	10
 %define relc		%{nil}
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -270,6 +270,7 @@ Patch145:	saa716x-driver-integration.patch
 #Patch200:	0001-ipc-namespace-a-generic-per-ipc-pointer-and-peripc_o.patch
 # NOT YET
 #Patch201:	0002-binder-implement-namepsace-support-for-Android-binde.patch
+Patch250:	4.12.10-C11.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
