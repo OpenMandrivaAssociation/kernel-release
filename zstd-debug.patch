@@ -1,16 +1,12 @@
-diff --git a/fs/squashfs/zstd_wrapper.c b/fs/squashfs/zstd_wrapper.c
-index eeaabf8..6b28a28 100644
---- a/fs/squashfs/zstd_wrapper.c
-+++ b/fs/squashfs/zstd_wrapper.c
-@@ -79,6 +79,9 @@ static int zstd_uncompress(struct squashfs_sb_info *msblk, void *strm,
-        ZSTD_inBuffer in_buf = { NULL, 0, 0 };
-        ZSTD_outBuffer out_buf = { NULL, 0, 0 };
-
-+       printk("wksp->mem = %p\n", wksp->mem);
-+       printk("wksp->mem_size = %zu\n", wksp->mem_size);
-+       printk("wksp->window_size = %zu\n", wksp->window_size);
-        stream = ZSTD_initDStream(wksp->window_size, wksp->mem, wksp->mem_size);
-
-        if (!stream) {
-
-
+--- linux-4.12/fs/squashfs/zstd_wrapper.c~	2017-08-31 12:42:19.838995201 +0100
++++ linux-4.12/fs/squashfs/zstd_wrapper.c	2017-08-31 12:40:29.887495914 +0100
+@@ -79,6 +79,9 @@
+ 	ZSTD_inBuffer in_buf = { NULL, 0, 0 };
+ 	ZSTD_outBuffer out_buf = { NULL, 0, 0 };
+ 
++        printk("wksp->mem = %p\n", wksp->mem);
++        printk("wksp->mem_size = %zu\n", wksp->mem_size);
++        printk("wksp->window_size = %zu\n", wksp->window_size);
+ 	stream = ZSTD_initDStream(wksp->window_size, wksp->mem, wksp->mem_size);
+ 
+ 	if (!stream) {
