@@ -1,0 +1,16 @@
+diff --git a/fs/squashfs/zstd_wrapper.c b/fs/squashfs/zstd_wrapper.c
+index eeaabf8..6b28a28 100644
+--- a/fs/squashfs/zstd_wrapper.c
++++ b/fs/squashfs/zstd_wrapper.c
+@@ -79,6 +79,9 @@ static int zstd_uncompress(struct squashfs_sb_info *msblk, void *strm,
+        ZSTD_inBuffer in_buf = { NULL, 0, 0 };
+        ZSTD_outBuffer out_buf = { NULL, 0, 0 };
+
++       printk("wksp->mem = %p\n", wksp->mem);
++       printk("wksp->mem_size = %zu\n", wksp->mem_size);
++       printk("wksp->window_size = %zu\n", wksp->window_size);
+        stream = ZSTD_initDStream(wksp->window_size, wksp->mem, wksp->mem_size);
+
+        if (!stream) {
+
+
