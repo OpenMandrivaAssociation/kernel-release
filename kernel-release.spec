@@ -245,8 +245,6 @@ Patch132:	0003-btrfs-Add-zstd-support.patch
 Patch133:	0004-squashfs-Add-zstd-support.patch
 Patch134:	0005-crypto-Add-zstd-support.patch
 Patch135:	btrfs-zstd-backport-to-4.12-api.patch
-Patch136:	zstd-debug.patch
-
 
 # Add support for Hauppauge HVR-1975 TV tuners, based on
 # https://s3.amazonaws.com/hauppauge/linux/hvr-9x5-19x5-22x5-kernel-3.19-2015-07-10-v2.patch.tar.xz
