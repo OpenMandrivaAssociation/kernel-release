@@ -1,6 +1,6 @@
---- linux-4.12/crypto/Kconfig.0134~	2017-07-03 01:07:02.000000000 +0200
-+++ linux-4.12/crypto/Kconfig	2017-08-17 20:39:24.081537674 +0200
-@@ -1661,6 +1661,15 @@ config CRYPTO_LZ4HC
+--- linux-4.13/crypto/Kconfig.0134~	2017-09-03 22:56:17.000000000 +0200
++++ linux-4.13/crypto/Kconfig	2017-09-04 14:35:24.681180391 +0200
+@@ -1662,6 +1662,15 @@ config CRYPTO_LZ4HC
  	help
  	  This is the LZ4 high compression mode algorithm.
  
@@ -16,19 +16,19 @@
  comment "Random Number Generation"
  
  config CRYPTO_ANSI_CPRNG
---- linux-4.12/crypto/Makefile.0134~	2017-08-17 20:39:24.081537674 +0200
-+++ linux-4.12/crypto/Makefile	2017-08-17 20:44:03.750238402 +0200
-@@ -137,6 +137,7 @@ obj-$(CONFIG_CRYPTO_USER_API_HASH) += al
- obj-$(CONFIG_CRYPTO_USER_API_SKCIPHER) += algif_skcipher.o
- obj-$(CONFIG_CRYPTO_USER_API_RNG) += algif_rng.o
- obj-$(CONFIG_CRYPTO_USER_API_AEAD) += algif_aead.o
+--- linux-4.13/crypto/Makefile.0134~	2017-09-04 14:35:24.681180391 +0200
++++ linux-4.13/crypto/Makefile	2017-09-04 14:38:40.919589876 +0200
+@@ -138,6 +138,7 @@ ecdh_generic-y := ecc.o
+ ecdh_generic-y += ecdh.o
+ ecdh_generic-y += ecdh_helper.o
+ obj-$(CONFIG_CRYPTO_ECDH) += ecdh_generic.o
 +obj-$(CONFIG_CRYPTO_ZSTD) += zstd.o
  
  #
  # generic algorithms and the async_tx api
---- linux-4.12/crypto/testmgr.c.0134~	2017-07-03 01:07:02.000000000 +0200
-+++ linux-4.12/crypto/testmgr.c	2017-08-17 20:39:24.082537674 +0200
-@@ -3523,6 +3523,16 @@ static const struct alg_test_desc alg_te
+--- linux-4.13/crypto/testmgr.c.0134~	2017-09-03 22:56:17.000000000 +0200
++++ linux-4.13/crypto/testmgr.c	2017-09-04 14:35:24.682180389 +0200
+@@ -3603,6 +3603,16 @@ static const struct alg_test_desc alg_te
  				.decomp = __VECS(zlib_deflate_decomp_tv_template)
  			}
  		}
@@ -45,9 +45,9 @@
  	}
  };
  
---- linux-4.12/crypto/testmgr.h.0134~	2017-07-03 01:07:02.000000000 +0200
-+++ linux-4.12/crypto/testmgr.h	2017-08-17 20:39:24.085537670 +0200
-@@ -34488,4 +34488,75 @@ static const struct comp_testvec lz4hc_d
+--- linux-4.13/crypto/testmgr.h.0134~	2017-09-03 22:56:17.000000000 +0200
++++ linux-4.13/crypto/testmgr.h	2017-09-04 14:35:24.684180383 +0200
+@@ -34638,4 +34638,75 @@ static const struct comp_testvec lz4hc_d
  	},
  };
  
@@ -123,8 +123,8 @@
 +	},
 +};
  #endif	/* _CRYPTO_TESTMGR_H */
---- linux-4.12/crypto/zstd.c.0134~	2017-08-17 20:39:24.085537670 +0200
-+++ linux-4.12/crypto/zstd.c	2017-08-17 20:39:24.085537670 +0200
+--- linux-4.13/crypto/zstd.c.0134~	2017-09-04 14:35:24.685180380 +0200
++++ linux-4.13/crypto/zstd.c	2017-09-04 14:35:24.685180380 +0200
 @@ -0,0 +1,265 @@
 +/*
 + * Cryptographic API.
