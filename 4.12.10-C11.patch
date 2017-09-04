@@ -91,3 +91,14 @@
  CFLAGS += -I../../../../usr/include/
  LDFLAGS += -pthread
  
+--- linux-4.13/drivers/video/fbdev/i810/i810_dvt.c.omv~	2017-09-04 15:52:19.146422533 +0200
++++ linux-4.13/drivers/video/fbdev/i810/i810_dvt.c	2017-09-04 15:53:17.307284532 +0200
+@@ -207,7 +207,7 @@ void round_off_xres(u32 *xres)
+ 		*xres = 1600;
+ }
+ 
+-inline void round_off_yres(u32 *xres, u32 *yres)
++void round_off_yres(u32 *xres, u32 *yres)
+ {
+ 	*yres = (*xres * 3) >> 2;
+ }
