@@ -5,8 +5,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	12
-%define sublevel	10
+%define patchlevel	13
+%define sublevel	0
 %define relc		%{nil}
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -244,7 +244,6 @@ Patch131:	0002-lib-Add-zstd-modules.patch
 Patch132:	0003-btrfs-Add-zstd-support.patch
 Patch133:	0004-squashfs-Add-zstd-support.patch
 Patch134:	0005-crypto-Add-zstd-support.patch
-Patch135:	btrfs-zstd-backport-to-4.12-api.patch
 
 ### Additional hardware support
 ### TV tuners:

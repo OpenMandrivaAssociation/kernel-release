@@ -1,5 +1,5 @@
---- linux-4.12/arch/x86/entry/common.c.0250~	2017-07-03 01:07:02.000000000 +0200
-+++ linux-4.12/arch/x86/entry/common.c	2017-08-30 15:49:01.897576969 +0200
+--- linux-4.13/arch/x86/entry/common.c.0250~	2017-09-03 22:56:17.000000000 +0200
++++ linux-4.13/arch/x86/entry/common.c	2017-09-04 14:48:56.658723194 +0200
 @@ -178,7 +178,7 @@ static void exit_to_usermode_loop(struct
  }
  
@@ -18,8 +18,8 @@
  {
  	struct thread_info *ti = current_thread_info();
  	u32 cached_flags = READ_ONCE(ti->flags);
---- linux-4.12/drivers/staging/rtl8192u/Makefile.0250~	2017-07-03 01:07:02.000000000 +0200
-+++ linux-4.12/drivers/staging/rtl8192u/Makefile	2017-08-30 15:49:01.896576971 +0200
+--- linux-4.13/drivers/staging/rtl8192u/Makefile.0250~	2017-09-03 22:56:17.000000000 +0200
++++ linux-4.13/drivers/staging/rtl8192u/Makefile	2017-09-04 14:48:56.658723194 +0200
 @@ -1,6 +1,6 @@
  NIC_SELECT = RTL8192U
  
@@ -28,11 +28,11 @@
  ccflags-y += -O2
  
  ccflags-y += -DCONFIG_FORCE_HARD_FLOAT=y
---- linux-4.12/drivers/staging/rtl8723bs/include/ieee80211.h.0250~	2017-08-30 15:49:01.897576969 +0200
-+++ linux-4.12/drivers/staging/rtl8723bs/include/ieee80211.h	2017-08-30 15:50:20.456401817 +0200
+--- linux-4.13/drivers/staging/rtl8723bs/include/ieee80211.h.0250~	2017-09-04 14:48:56.659723191 +0200
++++ linux-4.13/drivers/staging/rtl8723bs/include/ieee80211.h	2017-09-04 14:50:35.319423023 +0200
 @@ -1008,18 +1008,18 @@ enum ieee80211_state {
- #define IP_FMT "%d.%d.%d.%d"
- #define IP_ARG(x) ((u8 *)(x))[0], ((u8 *)(x))[1], ((u8 *)(x))[2], ((u8 *)(x))[3]
+ #define IP_FMT "%pI4"
+ #define IP_ARG(x) (x)
  
 -extern __inline int is_multicast_mac_addr(const u8 *addr)
 +static inline int is_multicast_mac_addr(const u8 *addr)
@@ -52,8 +52,8 @@
  {
  	return ((addr[0] == 0x00) && (addr[1] == 0x00) && (addr[2] == 0x00) &&   \
  		(addr[3] == 0x00) && (addr[4] == 0x00) && (addr[5] == 0x00));
---- linux-4.12/lib/decompress_unlzo.c.0250~	2017-07-03 01:07:02.000000000 +0200
-+++ linux-4.12/lib/decompress_unlzo.c	2017-08-30 15:49:01.897576969 +0200
+--- linux-4.13/lib/decompress_unlzo.c.0250~	2017-09-03 22:56:17.000000000 +0200
++++ linux-4.13/lib/decompress_unlzo.c	2017-09-04 14:48:56.659723191 +0200
 @@ -52,7 +52,7 @@ static const unsigned char lzop_magic[]
  #define HEADER_SIZE_MIN       (9 + 7     + 4 + 8     + 1       + 4)
  #define HEADER_SIZE_MAX       (9 + 7 + 1 + 8 + 8 + 4 + 1 + 255 + 4)
@@ -63,19 +63,19 @@
  {
  	int l;
  	u8 *parse = input;
---- linux-4.12/Makefile.0250~	2017-08-30 15:49:01.896576971 +0200
-+++ linux-4.12/Makefile	2017-08-30 15:49:43.095485261 +0200
-@@ -303,7 +303,7 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH"
- 
+--- linux-4.13/Makefile.0250~	2017-09-04 14:48:56.659723191 +0200
++++ linux-4.13/Makefile	2017-09-04 14:51:00.831345374 +0200
+@@ -301,7 +301,7 @@ HOST_LFS_LIBS := $(shell getconf LFS_LIB
  HOSTCC       = gcc
  HOSTCXX      = g++
--HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu89
-+HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11
- HOSTCXXFLAGS = -O2
- 
- ifeq ($(shell $(HOSTCC) -v 2>&1 | grep -c "clang version"), 1)
-@@ -401,7 +401,7 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstric
- 		   -fno-strict-aliasing -fno-common \
+ HOSTCFLAGS   := -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 \
+-		-fomit-frame-pointer -std=gnu89 $(HOST_LFS_CFLAGS)
++		-fomit-frame-pointer -std=gnu11 $(HOST_LFS_CFLAGS)
+ HOSTCXXFLAGS := -O2 $(HOST_LFS_CFLAGS)
+ HOSTLDFLAGS  := $(HOST_LFS_LDFLAGS)
+ HOST_LOADLIBES := $(HOST_LFS_LIBS)
+@@ -399,7 +399,7 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstric
+ 		   -fno-strict-aliasing -fno-common -fshort-wchar \
  		   -Werror-implicit-function-declaration \
  		   -Wno-format-security \
 -		   -std=gnu89 $(call cc-option,-fno-PIE)
@@ -83,8 +83,8 @@
  
  
  KBUILD_AFLAGS_KERNEL :=
---- linux-4.12/tools/testing/selftests/sync/Makefile.0250~	2017-07-03 01:07:02.000000000 +0200
-+++ linux-4.12/tools/testing/selftests/sync/Makefile	2017-08-30 15:49:01.897576969 +0200
+--- linux-4.13/tools/testing/selftests/sync/Makefile.0250~	2017-09-03 22:56:17.000000000 +0200
++++ linux-4.13/tools/testing/selftests/sync/Makefile	2017-09-04 14:48:56.659723191 +0200
 @@ -1,4 +1,4 @@
 -CFLAGS += -O2 -g -std=gnu89 -pthread -Wall -Wextra
 +CFLAGS += -O2 -g -std=gnu11 -pthread -Wall -Wextra
