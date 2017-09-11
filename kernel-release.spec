@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	13
-%define sublevel	0
+%define sublevel	1
 %define relc		%{nil}
 
 %define buildrel	%{kversion}-%{buildrpmrel}
@@ -235,7 +235,7 @@ Patch1031:	0001-Fix-for-compilation-with-clang.patch
 # (tpg) The Ultra Kernel Same Page Deduplication
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
-Patch120:	uksm-4.12.patch
+Patch120:	uksm-4.13.patch
 
 # (tpg) add zstd support
 # https://github.com/facebook/zstd/
