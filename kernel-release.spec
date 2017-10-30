@@ -277,7 +277,7 @@ Patch250:	4.12.10-C11.patch
 # (tpg) some patches from ClearLinux
 Patch300:	0101-i8042-decrease-debug-message-level-to-info.patch
 Patch301:	0103-Increase-the-ext4-default-commit-age.patch
-Patch302	0105-pci-pme-wakeups.patch
+Patch302:	0105-pci-pme-wakeups.patch
 Patch303:	0106-ksm-wakeups.patch
 Patch304:	0107-intel_idle-tweak-cpuidle-cstates.patch
 Patch305:	0109-init_task-faster-timerslack.patch
