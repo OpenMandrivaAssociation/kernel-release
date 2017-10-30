@@ -893,7 +893,9 @@ PrepareKernel() {
     CreateConfig %{target_arch} ${flavour}
     # make sure EXTRAVERSION says what we want it to say
     sed -ri "s|^(EXTRAVERSION =).*|\1 -$extension|" Makefile
-    %{smake} oldconfig
+    %{smake} oldconfig && \
+    mv .config arch/%(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/' -e 's/x86_64.*/x86/' -e 's/i.*86.*/x86/')/configs/%{target_arch}_defconfig-${flavour} && \
+    echo "Created arch/%(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/' -e 's/x86_64.*/x86/' -e 's/i.*86.*/x86/')/configs/%{target_suffix}_defconfig-${flavour}."
 }
 
 BuildKernel() {
