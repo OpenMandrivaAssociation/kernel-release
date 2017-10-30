@@ -283,7 +283,8 @@ Patch304:	0107-intel_idle-tweak-cpuidle-cstates.patch
 Patch305:	0109-init_task-faster-timerslack.patch
 Patch306:	0110-fs-ext4-fsync-optimize-double-fsync-a-bunch.patch
 Patch307:	0111-overload-on-wakeup.patch
-Patch308:	0113-fix-initcall-timestamps.patch
+# needs a rediff
+#Patch308:	0113-fix-initcall-timestamps.patch
 Patch309:	0114-smpboot-reuse-timer-calibration.patch
 Patch310:	0116-Initialize-ata-before-graphics.patch
 Patch311:	0117-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
