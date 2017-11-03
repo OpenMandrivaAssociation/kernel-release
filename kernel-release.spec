@@ -18,7 +18,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -272,6 +272,7 @@ Patch145:	saa716x-driver-integration.patch
 # NOT YET
 #Patch201:	0002-binder-implement-namepsace-support-for-Android-binde.patch
 Patch250:	4.12.10-C11.patch
+Patch251:	kernel-4.14-K70LUX.patch
 
 %if %{with clr}
 # (tpg) some patches from ClearLinux
