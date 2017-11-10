@@ -18,7 +18,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -194,6 +194,38 @@ Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch4:		linux-4.7-intel-dvi-duallink.patch
 Patch5:		linux-4.8.1-buildfix.patch
 
+# Bootsplash system
+# https://lkml.org/lkml/2017/10/25/346
+# https://patchwork.kernel.org/patch/10026659/
+# Modified to apply on newer kernels. --bero
+Patch100:	RFC-01-14-bootsplash-Initial-implementation-showing-black-screen.patch
+# https://patchwork.kernel.org/patch/10026661/
+Patch101:	RFC-02-14-bootsplash-Add-platform-device.patch
+# https://patchwork.kernel.org/patch/10026617/
+Patch102:	RFC-03-14-bootsplash-Flush-framebuffer-after-drawing.patch
+# https://patchwork.kernel.org/patch/10026615/
+Patch103:	RFC-04-14-bootsplash-Redraw-on-suspend-hibernate.patch
+# https://patchwork.kernel.org/patch/10026635/
+# Modified to apply on newer kernels. --bero
+Patch104:	RFC-05-14-bootsplash-Disable-splash-on-oops.patch
+# https://patchwork.kernel.org/patch/10026643/
+Patch105:	RFC-06-14-bootsplash-Disable-on-SysRq-SAK.patch
+# https://patchwork.kernel.org/patch/10026641/
+Patch106:	RFC-07-14-bootsplash-Add-VT-keyboard-hook.patch
+# https://patchwork.kernel.org/patch/10026647/
+Patch107:	RFC-08-14-bootsplash-Add-file-reading-and-picture-rendering.patch
+# https://patchwork.kernel.org/patch/10026627/
+Patch108:	RFC-09-14-bootsplash-Add-corner-positioning.patch
+# https://patchwork.kernel.org/patch/10026639/
+Patch109:	RFC-10-14-bootsplash-Add-animation-support.patch
+# https://patchwork.kernel.org/patch/10026629/
+Patch110:	RFC-11-14-bootsplash-Redraw-fully-on-console_unblank.patch
+# https://patchwork.kernel.org/patch/10026637/
+Patch111:	RFC-12-14-bootsplash-Add-sysfs-ABI-documentation.patch
+# https://patchwork.kernel.org/patch/10026619/
+Patch112:	RFC-13-14-bootsplash-Add-main-documentation.patch
+# https://patchwork.kernel.org/patch/10026623/
+Patch113:	RFC-14-14-bootsplash-Update-MAINTAINERS.patch
 %if %{with clang}
 # Patches to make it build with clang
 Patch1000:	0001-kbuild-LLVMLinux-Set-compiler-flags-for-clang.patch
