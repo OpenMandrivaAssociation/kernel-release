@@ -18,7 +18,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -433,8 +433,8 @@ Suggests:	microcode-intel
 # get compiler error messages on failures)
 %if %mdvver >= 3000000
 %ifarch %{ix86} x86_64
-BuildRequires:	dkms-virtualbox >= 5.1.30-1
-BuildRequires:	dkms-vboxadditions >= 5.1.30-1
+BuildRequires:	dkms-virtualbox >= 5.2.0-1
+BuildRequires:	dkms-vboxadditions >= 5.2.0-1
 %endif
 %endif
 
@@ -827,39 +827,39 @@ cp -a $(ls --sort=time -1d /usr/src/vboxadditions-*|head -n1)/vboxvideo drivers/
 # fit into that anymore
 sed -i -e 's|800, 600|1024, 768|g' drivers/gpu/drm/vboxvideo/vbox_mode.c
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/gpu/drm/vboxvideo,g' drivers/gpu/drm/vboxvideo/Makefile*
-sed -i -e "/uname -m/iKERN_DIR=$(pwd)" drivers/gpu/drm/vboxvideo/Makefile*
+sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/gpu/drm/vboxvideo/Makefile*
 echo 'obj-m += vboxvideo/' >>drivers/gpu/drm/Makefile
 # VirtualBox shared folders
 cp -a $(ls --sort=time -1d /usr/src/vboxadditions-*|head -n1)/vboxsf fs/
 sed -i -e 's,\$(KBUILD_EXTMOD),fs/vboxsf,g' fs/vboxsf/Makefile*
-sed -i -e "/uname -m/iKERN_DIR=$(pwd)" fs/vboxsf/Makefile*
+sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," fs/vboxsf/Makefile*
 echo 'obj-m += vboxsf/' >>fs/Makefile
 # VirtualBox Guest-side communication
 cp -a $(ls --sort=time -1d /usr/src/vboxadditions-*|head -n1)/vboxguest drivers/bus/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/bus/vboxguest,g' drivers/bus/vboxguest/Makefile*
-sed -i -e "/uname -m/iKERN_DIR=$(pwd)" drivers/bus/vboxguest/Makefile*
+sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/bus/vboxguest/Makefile*
 echo 'obj-m += vboxguest/' >>drivers/bus/Makefile
 
 # === VirtualBox host modules ===
 # VirtualBox
 cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxdrv drivers/virt/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/virt/vboxdrv,g' drivers/virt/vboxdrv/Makefile*
-sed -i -e "/override MODULE/iKERN_DIR=$(pwd)" drivers/virt/vboxdrv/Makefile*
+sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/virt/vboxdrv/Makefile*
 echo 'obj-m += vboxdrv/' >>drivers/virt/Makefile
 # VirtualBox network adapter
 cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxnetadp drivers/net/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/net/vboxnetadp,g' drivers/net/vboxnetadp/Makefile*
-sed -i -e "/uname -m/iKERN_DIR=$(pwd)" drivers/net/vboxnetadp/Makefile*
+sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/net/vboxnetadp/Makefile*
 echo 'obj-m += vboxnetadp/' >>drivers/net/Makefile
 # VirtualBox network filter
 cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxnetflt drivers/net/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/net/vboxnetflt,g' drivers/net/vboxnetflt/Makefile*
-sed -i -e "/uname -m/iKERN_DIR=$(pwd)" drivers/net/vboxnetflt/Makefile*
+sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/net/vboxnetflt/Makefile*
 echo 'obj-m += vboxnetflt/' >>drivers/net/Makefile
 # VirtualBox PCI
 cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxpci drivers/pci/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefile*
-sed -i -e "/uname -m/iKERN_DIR=$(pwd)" drivers/pci/vboxpci/Makefile*
+sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 %endif
 %endif
