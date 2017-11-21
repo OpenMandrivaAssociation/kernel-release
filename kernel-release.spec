@@ -5,9 +5,11 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	13
-%define sublevel	13
-%define relc		%{nil}
+%define patchlevel	14
+%define sublevel	1
+%define relc		0
+# Only ever wrong on x.0 releases...
+%define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
 
 %define buildrel	%{kversion}-%{buildrpmrel}
 %define rpmtag	%{disttag}
@@ -59,8 +61,6 @@
 %bcond_without build_devel
 %bcond_with build_debug
 %bcond_with clang
-# (tpg) enable patches from ClearLinux
-%bcond_without clr
 %if %mdvver > 3000000
 %bcond_without cross_headers
 %else
@@ -183,7 +183,10 @@ Source51:	cpupower.config
 # Added as a Source rather that Patch because it needs to be
 # applied with "git apply" -- may contain binary patches.
 %if 0%{relc}
-Source90:	https://git.kernel.org/torvalds/p/v%{kernelversion}.%{patchlevel}-rc%{relc}/v%{tar_ver}
+#Source90:	https://git.kernel.org/torvalds/p/v%{kernelversion}.%{patchlevel}-rc%{relc}/v%{tar_ver}
+# Preferrable because it's already compressed (and therefore
+# much less of a pain for filestore) when it's available...
+Source90:	https://fossies.org/linux/kernel/v%{kernelversion}.%{patchlevel}/patch_v%{previous}_%{kernelversion}.%{patchlevel}-rc%{relc}.xz
 %else
 %if 0%{sublevel}
 Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
@@ -194,38 +197,6 @@ Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch4:		linux-4.7-intel-dvi-duallink.patch
 Patch5:		linux-4.8.1-buildfix.patch
 
-# Bootsplash system
-# https://lkml.org/lkml/2017/10/25/346
-# https://patchwork.kernel.org/patch/10026659/
-# Modified to apply on newer kernels. --bero
-Patch100:	RFC-01-14-bootsplash-Initial-implementation-showing-black-screen.patch
-# https://patchwork.kernel.org/patch/10026661/
-Patch101:	RFC-02-14-bootsplash-Add-platform-device.patch
-# https://patchwork.kernel.org/patch/10026617/
-Patch102:	RFC-03-14-bootsplash-Flush-framebuffer-after-drawing.patch
-# https://patchwork.kernel.org/patch/10026615/
-Patch103:	RFC-04-14-bootsplash-Redraw-on-suspend-hibernate.patch
-# https://patchwork.kernel.org/patch/10026635/
-# Modified to apply on newer kernels. --bero
-Patch104:	RFC-05-14-bootsplash-Disable-splash-on-oops.patch
-# https://patchwork.kernel.org/patch/10026643/
-Patch105:	RFC-06-14-bootsplash-Disable-on-SysRq-SAK.patch
-# https://patchwork.kernel.org/patch/10026641/
-Patch106:	RFC-07-14-bootsplash-Add-VT-keyboard-hook.patch
-# https://patchwork.kernel.org/patch/10026647/
-Patch107:	RFC-08-14-bootsplash-Add-file-reading-and-picture-rendering.patch
-# https://patchwork.kernel.org/patch/10026627/
-Patch108:	RFC-09-14-bootsplash-Add-corner-positioning.patch
-# https://patchwork.kernel.org/patch/10026639/
-Patch109:	RFC-10-14-bootsplash-Add-animation-support.patch
-# https://patchwork.kernel.org/patch/10026629/
-Patch110:	RFC-11-14-bootsplash-Redraw-fully-on-console_unblank.patch
-# https://patchwork.kernel.org/patch/10026637/
-Patch111:	RFC-12-14-bootsplash-Add-sysfs-ABI-documentation.patch
-# https://patchwork.kernel.org/patch/10026619/
-Patch112:	RFC-13-14-bootsplash-Add-main-documentation.patch
-# https://patchwork.kernel.org/patch/10026623/
-Patch113:	RFC-14-14-bootsplash-Update-MAINTAINERS.patch
 %if %{with clang}
 # Patches to make it build with clang
 Patch1000:	0001-kbuild-LLVMLinux-Set-compiler-flags-for-clang.patch
@@ -262,6 +233,37 @@ Patch1029:	0030-x86-kbuild-LLVMLinux-Check-for-compiler-support-of-f.patch
 Patch1031:	0001-Fix-for-compilation-with-clang.patch
 %endif
 
+# Bootsplash system
+# https://lkml.org/lkml/2017/10/25/346
+# https://patchwork.kernel.org/patch/10026659/
+Patch100:      RFC-01-14-bootsplash-Initial-implementation-showing-black-screen.patch
+# https://patchwork.kernel.org/patch/10026661/
+Patch101:      RFC-02-14-bootsplash-Add-platform-device.patch
+# https://patchwork.kernel.org/patch/10026617/
+Patch102:      RFC-03-14-bootsplash-Flush-framebuffer-after-drawing.patch
+# https://patchwork.kernel.org/patch/10026615/
+Patch103:      RFC-04-14-bootsplash-Redraw-on-suspend-hibernate.patch
+# https://patchwork.kernel.org/patch/10026635/
+Patch104:      RFC-05-14-bootsplash-Disable-splash-on-oops.patch
+# https://patchwork.kernel.org/patch/10026643/
+Patch105:      RFC-06-14-bootsplash-Disable-on-SysRq-SAK.patch
+# https://patchwork.kernel.org/patch/10026641/
+Patch106:      RFC-07-14-bootsplash-Add-VT-keyboard-hook.patch
+# https://patchwork.kernel.org/patch/10026647/
+Patch107:      RFC-08-14-bootsplash-Add-file-reading-and-picture-rendering.patch
+# https://patchwork.kernel.org/patch/10026627/
+Patch108:      RFC-09-14-bootsplash-Add-corner-positioning.patch
+# https://patchwork.kernel.org/patch/10026639/
+Patch109:      RFC-10-14-bootsplash-Add-animation-support.patch
+# https://patchwork.kernel.org/patch/10026629/
+Patch110:      RFC-11-14-bootsplash-Redraw-fully-on-console_unblank.patch
+# https://patchwork.kernel.org/patch/10026637/
+Patch111:      RFC-12-14-bootsplash-Add-sysfs-ABI-documentation.patch
+# https://patchwork.kernel.org/patch/10026619/
+Patch112:      RFC-13-14-bootsplash-Add-main-documentation.patch
+# https://patchwork.kernel.org/patch/10026623/
+Patch113:      RFC-14-14-bootsplash-Update-MAINTAINERS.patch
+
 # Patches to VirtualBox and other external modules are
 # pulled in as Source: rather than Patch: because it's arch specific
 # and can't be applied by %%apply_patches
@@ -269,15 +271,13 @@ Patch1031:	0001-Fix-for-compilation-with-clang.patch
 # (tpg) The Ultra Kernel Same Page Deduplication
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
-Patch120:	uksm-4.13.patch
+# Temporarily disabled for -rc releases until ported upstream
+Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.14.patch
 
-# (tpg) add zstd support
-# https://github.com/facebook/zstd/
-Patch130:	0001-lib-Add-xxhash-module.patch
-Patch131:	0002-lib-Add-zstd-modules.patch
-Patch132:	0003-btrfs-Add-zstd-support.patch
-Patch133:	0004-squashfs-Add-zstd-support.patch
-Patch134:	0005-crypto-Add-zstd-support.patch
+Patch125:	0005-crypto-Add-zstd-support.patch
+
+# Let's make Radeon Vega GPUs work...
+Patch130:	4.14-rc3-drm-amdgpu.patch
 
 ### Additional hardware support
 ### TV tuners:
@@ -288,7 +288,7 @@ Patch140:	hauppauge-hvr-1975.patch
 # SAA716x DVB driver
 # git clone git@github.com:crazycat69/linux_media
 # cd linux_media
-# tar cJf saa716x-driver.tar.xz drivers/media/pci/saa716x drivers/media/dvb-frontends/tas2101* drivers/media/dvb-frontends/isl6422* drivers/media/dvb-frontends/stv0910* drivers/media/tuners/av201x* drivers/media/tuners/stv6120*
+# tar cJf saa716x-driver.tar.xz drivers/media/pci/saa716x drivers/media/dvb-frontends/tas2101* drivers/media/dvb-frontends/isl6422* drivers/media/dvb-frontends/stv091x.h drivers/media/tuners/av201x* drivers/media/tuners/stv6120*
 # Patches 141 to 145 are a minimal set of patches to the DVB stack to make
 # the added driver work.
 Source140:	saa716x-driver.tar.xz
@@ -303,41 +303,13 @@ Patch145:	saa716x-driver-integration.patch
 #Patch200:	0001-ipc-namespace-a-generic-per-ipc-pointer-and-peripc_o.patch
 # NOT YET
 #Patch201:	0002-binder-implement-namepsace-support-for-Android-binde.patch
-Patch250:	4.12.10-C11.patch
-Patch251:	kernel-4.14-K70LUX.patch
-
-%if %{with clr}
-# (tpg) some patches from ClearLinux
-Patch300:	0101-i8042-decrease-debug-message-level-to-info.patch
-Patch301:	0103-Increase-the-ext4-default-commit-age.patch
-Patch302:	0105-pci-pme-wakeups.patch
-Patch303:	0106-ksm-wakeups.patch
-Patch304:	0107-intel_idle-tweak-cpuidle-cstates.patch
-Patch305:	0109-init_task-faster-timerslack.patch
-Patch306:	0110-fs-ext4-fsync-optimize-double-fsync-a-bunch.patch
-Patch307:	0111-overload-on-wakeup.patch
-# needs a rediff
-#Patch308:	0113-fix-initcall-timestamps.patch
-Patch309:	0114-smpboot-reuse-timer-calibration.patch
-Patch310:	0116-Initialize-ata-before-graphics.patch
-Patch311:	0117-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
-Patch312:	0119-e1000e-change-default-policy.patch
-Patch313:	0121-igb-no-runtime-pm-to-fix-reboot-oops.patch
-Patch314:	0122-tweak-perfbias.patch
-Patch315:	0123-e1000e-increase-pause-and-refresh-time.patch
-Patch316:	0124-kernel-time-reduce-ntp-wakeups.patch
-Patch317:	0125-init-wait-for-partition-and-retry-scan.patch
-Patch318:	0127-ext4-improve-a-little.patch
-Patch319:	0151-mm-Export-do_madvise.patch
-Patch320:	0152-x86-kvm-Notify-host-to-release-pages.patch
-Patch321:	0153-x86-Return-memory-from-guest-to-host-kernel.patch
-Patch322:	0154-sysctl-vm-Fine-grained-cache-shrinking.patch
-%endif
+Patch250:	4.14-C11.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
 # being touched aren't in the tree at the time %%apply_patches
 # runs...
+Source300:	vbox-4.14.patch
 
 # Defines for the things that are needed for all the kernels
 #
@@ -861,6 +833,8 @@ cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxpci drivers/pci/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefile*
 sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
+
+patch -p1 -b -z .0300~ <%{SOURCE300}
 %endif
 %endif
 
@@ -928,9 +902,7 @@ PrepareKernel() {
     CreateConfig %{target_arch} ${flavour}
     # make sure EXTRAVERSION says what we want it to say
     sed -ri "s|^(EXTRAVERSION =).*|\1 -$extension|" Makefile
-    %{smake} oldconfig && \
-    cp .config arch/%(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/' -e 's/x86_64.*/x86/' -e 's/i.*86.*/x86/')/configs/%{target_arch}_defconfig-${flavour} && \
-    echo "Created arch/%(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/' -e 's/x86_64.*/x86/' -e 's/i.*86.*/x86/')/configs/%{target_suffix}_defconfig-${flavour}."
+    %{smake} oldconfig
 }
 
 BuildKernel() {
@@ -1026,9 +998,6 @@ SaveDevel() {
 # Needed for truecrypt build (Danny)
     cp -fR drivers/md/dm.h $TempDevelRoot/drivers/md/
 
-# Needed for lguest
-    cp -fR drivers/lguest/lg.h $TempDevelRoot/drivers/lguest/
-
 # Needed for lirc_gpio (#39004)
     cp -fR drivers/media/pci/bt8xx/bttv{,p}.h $TempDevelRoot/drivers/media/pci/bt8xx/
     cp -fR drivers/media/pci/bt8xx/bt848.h $TempDevelRoot/drivers/media/pci/bt8xx/
@@ -1055,10 +1024,6 @@ SaveDevel() {
 # Clean the scripts tree, and make sure everything is ok (sanity check)
 # running prepare+scripts (tree was already "prepared" in build)
     pushd $TempDevelRoot >/dev/null
-%ifnarch aarch64
-    # weird things here with arm64
-    %{smake} ARCH=%{target_arch} prepare scripts
-%endif
     %{smake} ARCH=%{target_arch} clean
     popd >/dev/null
 
@@ -1107,7 +1072,6 @@ $DevelRoot/include/net
 $DevelRoot/include/pcmcia
 $DevelRoot/include/ras
 $DevelRoot/include/rdma
-$DevelRoot/include/rxrpc
 $DevelRoot/include/scsi
 %ifarch %{armx}
 $DevelRoot/include/soc
@@ -1594,7 +1558,6 @@ mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
 %{_kerneldir}/include/pcmcia
 %{_kerneldir}/include/ras
 %{_kerneldir}/include/rdma
-%{_kerneldir}/include/rxrpc
 %{_kerneldir}/include/scsi
 %{_kerneldir}/include/soc
 %{_kerneldir}/include/sound
