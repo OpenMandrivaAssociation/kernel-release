@@ -1,7 +1,7 @@
-diff --git a/drivers/video/console/fbcon.c b/drivers/video/console/fbcon.c
+diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
 index 4ac1a33be418..cbe8a4480037 100644
---- a/drivers/video/console/fbcon.c
-+++ b/drivers/video/console/fbcon.c
+--- a/drivers/video/fbdev/core/fbcon.c
++++ b/drivers/video/fbdev/core/fbcon.c
 @@ -1333,6 +1333,15 @@ static void fbcon_cursor(struct vc_data *vc, int mode)
  	int y;
   	int c = scr_readw((u16 *) vc->vc_pos);

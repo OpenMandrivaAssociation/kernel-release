@@ -484,7 +484,7 @@ index 000000000000..1c574caa94e4
 +#include <linux/vt_kern.h>
 +#include <linux/console.h>
 +#include <asm/types.h>
-+#include "../../console/fbcon.h"
++#include "fbcon.h"
 +
 +static void dummy_bmove(struct vc_data *vc, struct fb_info *info, int sy,
 +			int sx, int dy, int dx, int height, int width)
@@ -506,7 +506,7 @@ index 000000000000..1c574caa94e4
 +}
 +
 +static void dummy_clear_margins(struct vc_data *vc, struct fb_info *info,
-+				int bottom_only)
++				int color, int bottom_only)
 +{
 +	;
 +}
@@ -548,10 +548,10 @@ index 000000000000..1c574caa94e4
 +MODULE_AUTHOR("Max Staudt <mstaudt@suse.de>");
 +MODULE_DESCRIPTION("Dummy Blitting Operation");
 +MODULE_LICENSE("GPL");
-diff --git a/drivers/video/console/fbcon.c b/drivers/video/console/fbcon.c
+diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
 index 04612f938bab..4ac1a33be418 100644
---- a/drivers/video/console/fbcon.c
-+++ b/drivers/video/console/fbcon.c
+--- a/drivers/video/fbdev/core/fbcon.c
++++ b/drivers/video/fbdev/core/fbcon.c
 @@ -80,6 +80,7 @@
  #include <asm/irq.h>
  
@@ -599,10 +599,10 @@ index 04612f938bab..4ac1a33be418 100644
  	if (softback_top) {
  		if (softback_lines)
  			fbcon_set_origin(vc);
-diff --git a/drivers/video/console/fbcon.h b/drivers/video/console/fbcon.h
+diff --git a/drivers/video/fbdev/core/fbcon.h b/drivers/video/fbdev/core/fbcon.h
 index 18f3ac144237..45f94347fe5e 100644
---- a/drivers/video/console/fbcon.h
-+++ b/drivers/video/console/fbcon.h
+--- a/drivers/video/fbdev/core/fbcon.h
++++ b/drivers/video/fbdev/core/fbcon.h
 @@ -214,6 +214,11 @@ static inline int attr_col_ec(int shift, struct vc_data *vc,
  #define SCROLL_REDRAW	   0x004
  #define SCROLL_PAN_REDRAW  0x005
