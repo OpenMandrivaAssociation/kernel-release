@@ -61,6 +61,8 @@
 %bcond_without build_devel
 %bcond_with build_debug
 %bcond_with clang
+# (tpg) enable patches from ClearLinux
+%bcond_without clr
 %if %mdvver > 3000000
 %bcond_without cross_headers
 %else
@@ -311,6 +313,34 @@ Patch250:	4.14-C11.patch
 # runs...
 Source300:	vbox-4.14.patch
 Source301:	vbox-4.14-drm-next.patch
+
+%if %{with clr}
+# (tpg) some patches from ClearLinux
+Patch300:	0101-i8042-decrease-debug-message-level-to-info.patch
+Patch301:	0103-Increase-the-ext4-default-commit-age.patch
+Patch302:	0105-pci-pme-wakeups.patch
+Patch303:	0106-ksm-wakeups.patch
+Patch304:	0107-intel_idle-tweak-cpuidle-cstates.patch
+Patch305:	0109-init_task-faster-timerslack.patch
+Patch306:	0110-fs-ext4-fsync-optimize-double-fsync-a-bunch.patch
+Patch307:	0111-overload-on-wakeup.patch
+# needs a rediff
+#Patch308:	0113-fix-initcall-timestamps.patch
+Patch309:	0114-smpboot-reuse-timer-calibration.patch
+Patch310:	0116-Initialize-ata-before-graphics.patch
+Patch311:	0117-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
+Patch312:	0119-e1000e-change-default-policy.patch
+Patch313:	0121-igb-no-runtime-pm-to-fix-reboot-oops.patch
+Patch314:	0122-tweak-perfbias.patch
+Patch315:	0123-e1000e-increase-pause-and-refresh-time.patch
+Patch316:	0124-kernel-time-reduce-ntp-wakeups.patch
+Patch317:	0125-init-wait-for-partition-and-retry-scan.patch
+Patch318:	0127-ext4-improve-a-little.patch
+Patch319:	0151-mm-Export-do_madvise.patch
+Patch320:	0152-x86-kvm-Notify-host-to-release-pages.patch
+Patch321:	0153-x86-Return-memory-from-guest-to-host-kernel.patch
+Patch322:	0154-sysctl-vm-Fine-grained-cache-shrinking.patch
+%endif
 
 # Defines for the things that are needed for all the kernels
 #
