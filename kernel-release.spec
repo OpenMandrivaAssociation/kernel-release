@@ -335,7 +335,6 @@ Patch314:	0122-tweak-perfbias.patch
 Patch315:	0123-e1000e-increase-pause-and-refresh-time.patch
 Patch316:	0124-kernel-time-reduce-ntp-wakeups.patch
 Patch317:	0125-init-wait-for-partition-and-retry-scan.patch
-Patch318:	0127-ext4-improve-a-little.patch
 Patch319:	0151-mm-Export-do_madvise.patch
 Patch320:	0152-x86-kvm-Notify-host-to-release-pages.patch
 Patch321:	0153-x86-Return-memory-from-guest-to-host-kernel.patch
