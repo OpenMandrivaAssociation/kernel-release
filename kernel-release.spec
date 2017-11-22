@@ -316,29 +316,29 @@ Source301:	vbox-4.14-drm-next.patch
 
 %if %{with clr}
 # (tpg) some patches from ClearLinux
-Patch300:	0101-i8042-decrease-debug-message-level-to-info.patch
-Patch301:	0103-Increase-the-ext4-default-commit-age.patch
-Patch302:	0105-pci-pme-wakeups.patch
-Patch303:	0106-ksm-wakeups.patch
-Patch304:	0107-intel_idle-tweak-cpuidle-cstates.patch
-Patch305:	0109-init_task-faster-timerslack.patch
-Patch306:	0110-fs-ext4-fsync-optimize-double-fsync-a-bunch.patch
-Patch307:	0111-overload-on-wakeup.patch
+Patch400:	0101-i8042-decrease-debug-message-level-to-info.patch
+Patch401:	0103-Increase-the-ext4-default-commit-age.patch
+Patch402:	0105-pci-pme-wakeups.patch
+Patch403:	0106-ksm-wakeups.patch
+Patch404:	0107-intel_idle-tweak-cpuidle-cstates.patch
+Patch405:	0109-init_task-faster-timerslack.patch
+Patch406:	0110-fs-ext4-fsync-optimize-double-fsync-a-bunch.patch
+Patch407:	0111-overload-on-wakeup.patch
 # needs a rediff
-#Patch308:	0113-fix-initcall-timestamps.patch
-Patch309:	0114-smpboot-reuse-timer-calibration.patch
-Patch310:	0116-Initialize-ata-before-graphics.patch
-Patch311:	0117-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
-Patch312:	0119-e1000e-change-default-policy.patch
-Patch313:	0121-igb-no-runtime-pm-to-fix-reboot-oops.patch
-Patch314:	0122-tweak-perfbias.patch
-Patch315:	0123-e1000e-increase-pause-and-refresh-time.patch
-Patch316:	0124-kernel-time-reduce-ntp-wakeups.patch
-Patch317:	0125-init-wait-for-partition-and-retry-scan.patch
-Patch319:	0151-mm-Export-do_madvise.patch
-Patch320:	0152-x86-kvm-Notify-host-to-release-pages.patch
-Patch321:	0153-x86-Return-memory-from-guest-to-host-kernel.patch
-Patch322:	0154-sysctl-vm-Fine-grained-cache-shrinking.patch
+#Patch408:	0113-fix-initcall-timestamps.patch
+Patch409:	0114-smpboot-reuse-timer-calibration.patch
+Patch410:	0116-Initialize-ata-before-graphics.patch
+Patch411:	0117-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
+Patch412:	0119-e1000e-change-default-policy.patch
+Patch413:	0121-igb-no-runtime-pm-to-fix-reboot-oops.patch
+Patch414:	0122-tweak-perfbias.patch
+Patch415:	0123-e1000e-increase-pause-and-refresh-time.patch
+Patch416:	0124-kernel-time-reduce-ntp-wakeups.patch
+Patch417:	0125-init-wait-for-partition-and-retry-scan.patch
+Patch419:	0151-mm-Export-do_madvise.patch
+Patch420:	0152-x86-kvm-Notify-host-to-release-pages.patch
+Patch421:	0153-x86-Return-memory-from-guest-to-host-kernel.patch
+Patch422:	0154-sysctl-vm-Fine-grained-cache-shrinking.patch
 %endif
 
 # Defines for the things that are needed for all the kernels
