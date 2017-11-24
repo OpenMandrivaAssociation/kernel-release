@@ -1,4 +1,4 @@
 sources:
   linux-4.14.tar.xz: c64d80ad01a6a77bf46bce1bdc5c7f28bfb6bfd5
-  patch-4.14.1.xz: f213ecb2bfa3f0e88b9e15cbd09c67db894f8be2
   saa716x-driver.tar.xz: 603d6e561f6c09b19b05ca53b55458caad849c97
+  patch-4.14.2.xz: 29bbc33eac105ad68cc0405044759bd4a347ff1d
