@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	14
-%define sublevel	1
+%define sublevel	2
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -311,7 +311,6 @@ Patch250:	4.14-C11.patch
 # Marked SourceXXX instead of PatchXXX because the modules
 # being touched aren't in the tree at the time %%apply_patches
 # runs...
-Source300:	vbox-4.14.patch
 Source301:	vbox-4.14-drm-next.patch
 
 %if %{with clr}
@@ -435,8 +434,8 @@ Suggests:	microcode-intel
 # get compiler error messages on failures)
 %if %mdvver >= 3000000
 %ifarch %{ix86} x86_64
-BuildRequires:	dkms-virtualbox >= 5.2.0-1
-BuildRequires:	dkms-vboxadditions >= 5.2.0-1
+BuildRequires:	dkms-virtualbox >= 5.2.2-1
+BuildRequires:	dkms-vboxadditions >= 5.2.2-1
 %endif
 %endif
 
@@ -864,8 +863,7 @@ sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefi
 sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 
-patch -p1 -b -z .0300~ <%{SOURCE300}
-patch -p1 -b -z .0300~ <%{SOURCE301}
+patch -p1 -b -z .0301~ <%{SOURCE301}
 %endif
 %endif
 
