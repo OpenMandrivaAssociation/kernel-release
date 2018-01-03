@@ -279,7 +279,8 @@ Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.14.patch
 Patch125:	0005-crypto-Add-zstd-support.patch
 
 # Let's make Radeon Vega GPUs work...
-Patch130:	4.14-rc3-drm-amdgpu.patch
+# disable this for now as it does not apply
+#Patch130:	4.14-rc3-drm-amdgpu.patch
 
 ### Additional hardware support
 ### TV tuners:
