@@ -312,7 +312,7 @@ Patch250:	4.14-C11.patch
 # Marked SourceXXX instead of PatchXXX because the modules
 # being touched aren't in the tree at the time %%apply_patches
 # runs...
-Source301:	vbox-4.14-drm-next.patch
+#Source301:	vbox-4.14-drm-next.patch
 
 %if %{with clr}
 # (tpg) some patches from ClearLinux
@@ -864,7 +864,7 @@ sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefi
 sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 
-patch -p1 -b -z .0301~ <%{SOURCE301}
+#patch -p1 -b -z .0301~ <%{SOURCE301}
 %endif
 %endif
 
