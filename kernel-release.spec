@@ -863,7 +863,7 @@ sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefi
 sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 
-patch -p1 -b -z .0301~ <%{SOURCE301}
+#patch -p1 -b -z .0301~ <%{SOURCE301}
 %endif
 %endif
 
