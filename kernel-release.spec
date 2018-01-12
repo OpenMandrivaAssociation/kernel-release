@@ -306,7 +306,7 @@ Patch145:	saa716x-driver-integration.patch
 #Patch200:	0001-ipc-namespace-a-generic-per-ipc-pointer-and-peripc_o.patch
 # NOT YET
 #Patch201:	0002-binder-implement-namepsace-support-for-Android-binde.patch
-Patch250:	4.14-C11.patch
+#Patch250:	4.14-C11.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -349,7 +349,6 @@ of the operating system: memory allocation, process allocation, device \
 input and output, etc. \
 This version is a preview of an upcoming kernel version, and may be helpful if you are using \
 very current hardware.
-
 
 ### Global Requires/Provides
 #%define requires2	dracut >= 026
