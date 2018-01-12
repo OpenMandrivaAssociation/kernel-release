@@ -312,7 +312,7 @@ Patch145:	saa716x-driver-integration.patch
 # Marked SourceXXX instead of PatchXXX because the modules
 # being touched aren't in the tree at the time %%apply_patches
 # runs...
-Source301:	vbox-4.14-drm-next.patch
+#Source301:	vbox-4.14-drm-next.patch
 
 %if %{with clr}
 # (tpg) some patches from ClearLinux
