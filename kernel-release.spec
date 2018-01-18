@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	14
-%define sublevel	13
+%define sublevel	14
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -482,6 +482,9 @@ Requires:	ncurses-devel				\
 Requires:	make					\
 Requires:	gcc					\
 Requires:	perl					\
+%ifarch x86_64						\
+Requires:	pkgconfig(libelf)			\
+%endif							\
 Summary:	The kernel-devel files for %{kname}-%{1}-%{buildrel} \
 Group:		Development/Kernel			\
 Provides:	kernel-devel = %{kverrel}		\
@@ -872,6 +875,9 @@ find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
 # wipe all .gitignore/.get_maintainer.ignore files
 find . -name "*.g*ignore" -exec rm {} \;
 
+# fix missing exec flag on file introduced in 4.14.10-rc1
+chmod 755 tools/objtool/sync-check.sh
+
 %build
 %setup_compile_flags
 ############################################################
@@ -1038,6 +1044,16 @@ SaveDevel() {
 
 # add acpica header files, needed for fglrx build
     cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
+
+%ifarch x86_64
+# orc unwinder needs theese
+	cp -fR tools/build/Build{,.include} $TempDevelRoot/tools/build
+	cp -fR tools/build/fixdep.c $TempDevelRoot/tools/build
+	cp -fR tools/lib/{str_error_r.c,string.c} $TempDevelRoot/tools/lib
+	cp -fR tools/lib/subcmd/* $TempDevelRoot/tools/lib/subcmd
+	cp -fR tools/objtool/* $TempDevelRoot/tools/objtool
+	cp -fR tools/scripts/utilities.mak $TempDevelRoot/tools/scripts
+%endif
 
     for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
 		 mips mn10300 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
@@ -1476,6 +1492,16 @@ done
 rm -f %{target_source}/{.config.old,.config.cmd,.gitignore,.lst,.mailmap,.gitattributes}
 rm -f %{target_source}/{.missing-syscalls.d,arch/.gitignore,firmware/.gitignore}
 rm -rf %{target_source}/.tmp_depmod/
+
+# more cleaning
+pushd %{target_source}
+# lots of gitignore files
+find -iname ".gitignore" -delete
+# clean tools tree
+%smake -C tools clean
+%smake -C tools/build clean
+%smake -C tools/build/feature clean
+popd
 
 #endif %{with build_source}
 %endif
