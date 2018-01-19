@@ -341,6 +341,11 @@ Patch421:	0153-x86-Return-memory-from-guest-to-host-kernel.patch
 Patch422:	0154-sysctl-vm-Fine-grained-cache-shrinking.patch
 %endif
 
+# (tpg) patches from frugalware to help Spectre/Meltdown
+Patch500:	SME-BSP_SME-microcode-update-fixes.patch
+Patch501:	retpoline-fill_RSB_on_context_switch_for_affected_CPUs.patch
+Patch501:	retpoline_add_LFENCE_to_the_retpoline_filling_RSB_macros.patch
+
 # Defines for the things that are needed for all the kernels
 #
 %define common_desc_kernel The kernel package contains the Linux kernel (vmlinuz), the core of your \
@@ -375,9 +380,9 @@ Autoreqprov:	no
 
 BuildRequires:	bc
 BuildRequires:	binutils
-BuildRequires:	gcc
-BuildRequires:	gcc-plugin-devel
-BuildRequires:	gcc-c++
+BuildRequires:	gcc >= 7.2.1_2017.11-3
+BuildRequires:	gcc-plugin-devel >= 7.2.1_2017.11-3
+BuildRequires:	gcc-c++ >= 7.2.1_2017.11-3
 BuildRequires:	openssl-devel
 BuildRequires:	diffutils
 # For git apply
@@ -480,7 +485,7 @@ Release:	%{fakerel}				\
 Requires:	glibc-devel				\
 Requires:	ncurses-devel				\
 Requires:	make					\
-Requires:	gcc					\
+Requires:	gcc >= 7.2.1_2017.11-3			\
 Requires:	perl					\
 %ifarch x86_64						\
 Requires:	pkgconfig(libelf)			\
@@ -623,7 +628,7 @@ Release:	%{fakerel}
 Requires:	glibc-devel
 Requires:	ncurses-devel
 Requires:	make
-Requires:	gcc
+Requires:	gcc >= 7.2.1_2017.11-3
 Requires:	perl
 Requires:	diffutils
 Summary:	The Linux source code for %{kname}-%{buildrel}
