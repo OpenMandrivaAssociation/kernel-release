@@ -341,6 +341,11 @@ Patch421:	0153-x86-Return-memory-from-guest-to-host-kernel.patch
 Patch422:	0154-sysctl-vm-Fine-grained-cache-shrinking.patch
 %endif
 
+# (tpg) patches from frugalware to help Spectre/Meltdown
+Patch500:	SME-BSP_SME-microcode-update-fixes.patch
+Patch501:	retpoline-fill_RSB_on_context_switch_for_affected_CPUs.patch
+Patch501:	retpoline_add_LFENCE_to_the_retpoline_filling_RSB_macros.patch
+
 # Defines for the things that are needed for all the kernels
 #
 %define common_desc_kernel The kernel package contains the Linux kernel (vmlinuz), the core of your \
