@@ -375,9 +375,9 @@ Autoreqprov:	no
 
 BuildRequires:	bc
 BuildRequires:	binutils
-BuildRequires:	gcc
-BuildRequires:	gcc-plugin-devel
-BuildRequires:	gcc-c++
+BuildRequires:	gcc >= 7.2.1_2017.11-3
+BuildRequires:	gcc-plugin-devel >= 7.2.1_2017.11-3
+BuildRequires:	gcc-c++ >= 7.2.1_2017.11-3
 BuildRequires:	openssl-devel
 BuildRequires:	diffutils
 # For git apply
@@ -480,7 +480,7 @@ Release:	%{fakerel}				\
 Requires:	glibc-devel				\
 Requires:	ncurses-devel				\
 Requires:	make					\
-Requires:	gcc					\
+Requires:	gcc >= 7.2.1_2017.11-3			\
 Requires:	perl					\
 %ifarch x86_64						\
 Requires:	pkgconfig(libelf)			\
@@ -623,7 +623,7 @@ Release:	%{fakerel}
 Requires:	glibc-devel
 Requires:	ncurses-devel
 Requires:	make
-Requires:	gcc
+Requires:	gcc >= 7.2.1_2017.11-3
 Requires:	perl
 Requires:	diffutils
 Summary:	The Linux source code for %{kname}-%{buildrel}
