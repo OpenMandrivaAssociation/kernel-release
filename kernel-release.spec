@@ -345,7 +345,8 @@ Patch422:	0154-sysctl-vm-Fine-grained-cache-shrinking.patch
 Patch500:	SME-BSP_SME-microcode-update-fixes.patch
 Patch501:	retpoline-fill_RSB_on_context_switch_for_affected_CPUs.patch
 Patch502:	retpoline_add_LFENCE_to_the_retpoline_filling_RSB_macros.patch
-
+# (itchka) patch to fix segfaults with objtool when building external modules 
+Patch503:	4.14-objtool-fix-seg-fault-with-gold-linker.patch
 # Defines for the things that are needed for all the kernels
 #
 %define common_desc_kernel The kernel package contains the Linux kernel (vmlinuz), the core of your \
