@@ -344,7 +344,7 @@ Patch422:	0154-sysctl-vm-Fine-grained-cache-shrinking.patch
 # (tpg) patches from frugalware to help Spectre/Meltdown
 Patch500:	SME-BSP_SME-microcode-update-fixes.patch
 Patch501:	retpoline-fill_RSB_on_context_switch_for_affected_CPUs.patch
-Patch501:	retpoline_add_LFENCE_to_the_retpoline_filling_RSB_macros.patch
+Patch502:	retpoline_add_LFENCE_to_the_retpoline_filling_RSB_macros.patch
 
 # Defines for the things that are needed for all the kernels
 #
