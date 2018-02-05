@@ -327,10 +327,12 @@ Patch409:	0114-smpboot-reuse-timer-calibration.patch
 Patch410:	0116-Initialize-ata-before-graphics.patch
 Patch411:	0117-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
 Patch412:	0119-e1000e-change-default-policy.patch
-Patch413:	0121-igb-no-runtime-pm-to-fix-reboot-oops.patch
-Patch414:	0122-tweak-perfbias.patch
-Patch415:	0123-e1000e-increase-pause-and-refresh-time.patch
-Patch417:	0125-init-wait-for-partition-and-retry-scan.patch
+Patch413:	0120-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
+Patch414:	0121-igb-no-runtime-pm-to-fix-reboot-oops.patch
+Patch415:	0122-tweak-perfbias.patch
+Patch416:	0123-e1000e-increase-pause-and-refresh-time.patch
+Patch417:	0124-kernel-time-reduce-ntp-wakeups.patch
+Patch418:	0125-init-wait-for-partition-and-retry-scan.patch
 Patch419:	0151-mm-Export-do_madvise.patch
 Patch420:	0152-x86-kvm-Notify-host-to-release-pages.patch
 Patch421:	0153-x86-Return-memory-from-guest-to-host-kernel.patch
