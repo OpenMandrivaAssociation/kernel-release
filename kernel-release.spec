@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	15
-%define sublevel	3
+%define sublevel	4
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -714,6 +714,15 @@ Conflicts:	%{_lib}cpufreq-devel
 %description -n cpupower-devel
 This package contains the development files for cpupower.
 %endif
+
+%package -n bootsplash-packer
+Summary:	Tool for packing bootsplash images
+Group:		System/Kernel and hardware
+Version:	%{kversion}
+Release:	%{rpmrel}
+
+%description -n bootsplash-packer
+Tool for packing bootsplash images
 
 %if %{with build_x86_energy_perf_policy}
 %package -n x86_energy_perf_policy
@@ -1433,6 +1442,8 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%{optflags}"
 %endif
 
+%kmake -C tools/bootsplash LDFLAGS="%{optflags}"
+
 %ifarch %{ix86} x86_64
 %if %{with build_x86_energy_perf_policy}
 %kmake -C tools/power/x86/x86_energy_perf_policy CC=clang LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none"
@@ -1561,6 +1572,8 @@ install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
 install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %endif
 
+install -m755 tools/bootsplash/bootsplash-packer %{buildroot}%{_bindir}/
+
 %ifarch %{ix86} x86_64
 %if %{with build_x86_energy_perf_policy}
 mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
@@ -1680,6 +1693,9 @@ mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
 %{_libdir}/libcpupower.so
 %{_includedir}/cpufreq.h
 %endif
+
+%files -n bootsplash-packer
+%{_bindir}/bootsplash-packer
 
 %ifarch %{ix86} x86_64
 %if %{with build_x86_energy_perf_policy}
