@@ -968,7 +968,11 @@ BuildKernel() {
     install -m 644 System.map %{temp_boot}/System.map-$KernelVer
     install -m 644 .config %{temp_boot}/config-$KernelVer
 %if %{with build_modxz}
-    xz -6e -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
+%ifarch %{ix86} %{armx}
+    xz -5 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
+%else
+    xz -7 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
+%fi
 %else
     gzip -9 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.gz
 %endif
@@ -1514,7 +1518,11 @@ popd
 
 # compressing modules
 %if %{with build_modxz}
-find %{target_modules} -name "*.ko" | %kxargs xz -6e -T0
+%ifarch %{ix86} %{armx}
+find %{target_modules} -name "*.ko" | %kxargs xz -5 -T0
+%else
+find %{target_modules} -name "*.ko" | %kxargs xz -7 -T0
+%endif
 %else
 find %{target_modules} -name "*.ko" | %kxargs gzip -9
 %endif
