@@ -972,7 +972,7 @@ BuildKernel() {
     xz -5 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
 %else
     xz -7 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
-%fi
+%endif
 %else
     gzip -9 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.gz
 %endif
@@ -1209,7 +1209,7 @@ ker="vmlinuz"
 ### Create the kernel_files.*
 cat > $kernel_files <<EOF
 %{_bootdir}/System.map-%{kversion}-$kernel_flavour-%{buildrpmrel}
-%{_bootdir}/symvers-%{kversion}-$kernel_flavour-%{buildrpmrel}.xz
+%{_bootdir}/symvers-%{kversion}-$kernel_flavour-%{buildrpmrel}.*z
 %{_bootdir}/config-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %{_bootdir}/$ker-%{kversion}-$kernel_flavour-%{buildrpmrel}
 # device tree binary
