@@ -349,7 +349,7 @@ very current hardware.
 
 ### Global Requires/Provides
 #%define requires2	dracut >= 026
-%define requires3	kmod >= 12
+%define requires3	kmod >= 25
 %define requires4	sysfsutils >=  2.1.0-12
 %define requires5	kernel-firmware
 
@@ -357,9 +357,9 @@ very current hardware.
 %define kprovides2	kernel = %{tar_ver}
 %define kprovides_server	drbd-api = 88
 
-%define	kobsoletes1	dkms-r8192se <= 0019.1207.2010-2
-%define	kobsoletes2	dkms-lzma <= 4.43-32
-%define	kobsoletes3	dkms-psb <= 4.41.1-7
+%define kobsoletes1	dkms-r8192se <= 0019.1207.2010-2
+%define kobsoletes2	dkms-lzma <= 4.43-32
+%define kobsoletes3	dkms-psb <= 4.41.1-7
 
 %define kconflicts1	dkms-broadcom-wl < 5.100.82.112-12
 %define kconflicts2	dkms-fglrx < 13.200.5-1
@@ -375,13 +375,13 @@ BuildRequires:	binutils
 BuildRequires:	gcc >= 7.2.1_2017.11-3
 BuildRequires:	gcc-plugin-devel >= 7.2.1_2017.11-3
 BuildRequires:	gcc-c++ >= 7.2.1_2017.11-3
-BuildRequires:	openssl-devel
+BuildRequires:	pkgconfig(libssl)
 BuildRequires:	diffutils
 # For git apply
 BuildRequires:	git-core
 # For power tools
 BuildRequires:	pkgconfig(ncurses)
-BuildRequires:	kmod-devel
+BuildRequires:	pkgconfig(libkmod)
 
 %ifarch x86_64
 BuildRequires:	numa-devel
@@ -389,7 +389,7 @@ BuildRequires:	numa-devel
 
 # for cpupower
 %if %{with build_cpupower}
-BuildRequires:	pciutils-devel
+BuildRequires:	pkgconfig(libpci)
 %endif
 
 # for docs
@@ -403,20 +403,20 @@ BuildRequires:	pkgconfig(libelf)
 # for perf
 %if %{with build_perf}
 BuildRequires:	asciidoc
-BuildRequires:	audit-devel
+BuildRequires:	pkgconfig(audit)
 BuildRequires:	binutils-devel
 BuildRequires:	bison
 # BuildRequires:	docbook-style-xsl
 BuildRequires:	flex
 # BuildRequires:	gettext
 # BuildRequires:	gtk2-devel
-BuildRequires:	libunwind-devel
-BuildRequires:	newt-devel
+BuildRequires:	pkgconfig(libunwind)
+BuildRequires:	pkgconfig(libnewt)
 BuildRequires:	perl-devel
 # BuildRequires:	perl(ExtUtils::Embed)
 BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(python2)
-BuildRequires:	zlib-devel
+BuildRequires:	pkgconfig(zlib)
 %endif
 
 %ifarch %{arm}
@@ -454,14 +454,20 @@ Version:	%{fakever}				\
 Release:	%{fakerel}				\
 Provides:	%kprovides1 %kprovides2			\
 %{expand:%%{?kprovides_%{1}:Provides: %{kprovides_%{1}}}} \
-Provides:   %{kname}-%{1}              			 \
-Requires(pre):	%requires2 %requires3 %requires4 \
+Provides:	%{kname}-%{1}				\
+Requires(pre):	%requires2 %requires3 %requires4	\
 Requires:	%requires2 %requires5			\
 Obsoletes:	%kobsoletes1 %kobsoletes2 %kobsoletes3	\
 Conflicts:	%kconflicts1 %kconflicts2 %kconflicts3	\
 Conflicts:	%kconflicts4 %kconflicts5		\
 Provides:	should-restart = system			\
 Suggests:	crda					\
+Suggests:	iw					\
+%ifnarch %armx						\
+Suggests:	cpupower				\
+Suggests:	microcode-intel				\
+Suggests:	dracut >= 047				\
+%endif							\
 %ifarch %{ix86}						\
 Conflicts:	arch(x86_64)				\
 %endif							\
@@ -709,6 +715,7 @@ Summary:	Devel files for cpupower
 Group:		Development/Kernel
 Requires:	cpupower = %{kversion}-%{rpmrel}
 Conflicts:	%{_lib}cpufreq-devel
+
 %description -n cpupower-devel
 This package contains the development files for cpupower.
 %endif
@@ -720,7 +727,7 @@ Version:	%{kversion}
 Release:	%{rpmrel}
 
 %description -n bootsplash-packer
-Tool for packing bootsplash images
+Tool for packing bootsplash images.
 
 %if %{with build_x86_energy_perf_policy}
 %package -n x86_energy_perf_policy
