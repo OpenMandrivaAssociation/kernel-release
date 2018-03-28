@@ -39,7 +39,7 @@
 # fakerel and fakever never change, they are used to fool
 # rpm/urpmi/smart
 %define fakever		1
-%define fakerel		%mkrel 1
+%define fakerel		%mkrel 2
 
 # version defines
 %define kversion	%{kernelversion}.%{patchlevel}.%{sublevel}
