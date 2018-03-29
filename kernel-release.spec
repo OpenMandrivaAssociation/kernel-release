@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	15
-%define sublevel	12
+%define sublevel	14
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -348,7 +348,7 @@ very current hardware.
 
 
 ### Global Requires/Provides
-#%define requires2	dracut >= 026
+#define requires2	dracut >= 026
 %define requires3	kmod >= 25
 %define requires4	sysfsutils >=  2.1.0-12
 %define requires5	kernel-firmware
@@ -1426,9 +1426,9 @@ CreateKernel server
 %endif
 
 # how to build own flavour
-# %if %build_nrjQL_desktop
+# if %build_nrjQL_desktop
 # CreateKernel nrjQL-desktop
-# %endif
+# endif
 
 # set extraversion to match srpm to get nice version reported by the tools
 #LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
