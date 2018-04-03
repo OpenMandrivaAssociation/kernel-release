@@ -313,6 +313,10 @@ Patch250:	4.14-C11.patch
 # https://patchwork.kernel.org/project/LKML/list/?submitter=582
 Patch300:	v7-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.patch
 
+# https://patchwork.kernel.org/patch/10219221/
+# Fixes annoying dmesg messages every second on some hardware (e.g. hp Omen)
+Patch310:	thermal-int3400_thermal-Ignore-charger-events.patch
+
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
 # being touched aren't in the tree at the time %%apply_patches
