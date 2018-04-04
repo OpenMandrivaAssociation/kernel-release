@@ -1559,13 +1559,6 @@ mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
 %if %{with build_source}
 install -d %{target_source}
 
-# Drop script binaries that can be rebuilt
-find tools scripts -executable |while read r; do
-	if file $r |grep -q ELF; then
-		rm -f $r
-	fi
-done
-
 # Package what remains
 tar cf - . | tar xf - -C %{target_source}
 chmod -R a+rX %{target_source}
@@ -1599,6 +1592,12 @@ find -iname ".gitignore" -delete
 %smake -C tools/build clean
 %smake -C tools/build/feature clean
 rm -f .cache.mk
+# Drop script binaries that can be rebuilt
+find tools scripts -executable |while read r; do
+	if file $r |grep -q ELF; then
+		rm -f $r
+	fi
+done
 popd
 
 #endif %{with build_source}
@@ -1672,6 +1671,7 @@ popd
 %{_kerneldir}/CREDITS
 %{_kerneldir}/Kbuild
 %{_kerneldir}/Kconfig
+%{_kerneldir}/LICENSES
 %{_kerneldir}/MAINTAINERS
 %{_kerneldir}/Makefile
 %{_kerneldir}/README
