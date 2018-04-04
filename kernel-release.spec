@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	15
-%define sublevel	12
+%define sublevel	15
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -39,7 +39,7 @@
 # fakerel and fakever never change, they are used to fool
 # rpm/urpmi/smart
 %define fakever		1
-%define fakerel		%mkrel 2
+%define fakerel		%mkrel 1
 
 # version defines
 %define kversion	%{kernelversion}.%{patchlevel}.%{sublevel}
