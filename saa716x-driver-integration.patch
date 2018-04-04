@@ -38,15 +38,6 @@
  	depends on DVB_CORE && I2C
 --- linux-4.15/drivers/media/dvb-frontends/Makefile.0145~	2018-02-12 11:36:11.230946240 +0100
 +++ linux-4.15/drivers/media/dvb-frontends/Makefile	2018-02-12 11:36:11.311946764 +0100
-@@ -3,7 +3,7 @@
- # Makefile for the kernel DVB frontend device drivers.
- #
- 
--ccflags-y += -I$(srctree)/drivers/media/tuners/
-+ccflags-y += -I$(srctree)/drivers/media/tuners/ -I$(srctree)/include/media/
- 
- # FIXME: RTL2832 SDR driver uses power management directly from USB IF driver
- ifdef CONFIG_DVB_RTL2832_SDR
 @@ -98,6 +98,7 @@ obj-$(CONFIG_DVB_STV6110x) += stv6110x.o
  obj-$(CONFIG_DVB_M88DS3103) += m88ds3103.o
  obj-$(CONFIG_DVB_MN88472) += mn88472.o
@@ -108,8 +99,7 @@
 +obj-$(CONFIG_MEDIA_TUNER_AV201X) += av201x.o
 +obj-$(CONFIG_MEDIA_TUNER_STV6120) += stv6120.o
  
--ccflags-y += -I$(srctree)/drivers/media/dvb-frontends
-+ccflags-y += -I$(srctree)/drivers/media/dvb-frontends -I$(srctree)/include/media
+ ccflags-y += -I$(srctree)/drivers/media/dvb-frontends
 --- linux-4.15/drivers/media/tuners/tda18212.c.0145~	2018-02-12 11:36:11.260946434 +0100
 +++ linux-4.15/drivers/media/tuners/tda18212.c	2018-02-12 11:36:11.312946771 +0100
 @@ -153,7 +153,7 @@ static int tda18212_set_params(struct dv
