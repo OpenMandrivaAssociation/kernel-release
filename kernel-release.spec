@@ -834,6 +834,7 @@ git apply %{SOURCE112}
 # merge SAA716x DVB driver from extra tarball
 sed -i -e '/saa7164/isource "drivers/media/pci/saa716x/Kconfig"' drivers/media/pci/Kconfig
 sed -i -e '/saa7164/iobj-$(CONFIG_SAA716X_CORE) += saa716x/' drivers/media/pci/Makefile
+find drivers/media/tuners drivers/media/dvb-frontends -name "*.c" -o -name "*.h" |xargs sed -i -e 's,"dvb_frontend.h",<media/dvb_frontend.h>,g'
 
 %if %{with build_debug}
 %define debug --debug
@@ -1052,7 +1053,6 @@ SaveDevel() {
     cp -fR drivers/media/common/btcx-risc.h $TempDevelRoot/drivers/media/common/
 
 # Needed for external dvb tree (#41418)
-    cp -fR drivers/media/dvb-core/*.h $TempDevelRoot/drivers/media/dvb-core/
     cp -fR drivers/media/dvb-frontends/lgdt330x.h $TempDevelRoot/drivers/media/dvb-frontends/
 
 # add acpica header files, needed for fglrx build
