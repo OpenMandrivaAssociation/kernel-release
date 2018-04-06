@@ -23,7 +23,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -279,6 +279,9 @@ Source112:      RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-samp
 Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.15.patch
 
 Patch125:	0005-crypto-Add-zstd-support.patch
+
+# https://bugs.freedesktop.org/show_bug.cgi?id=100446
+Patch130:	nouveau-pascal-backlight.patch
 
 ### Additional hardware support
 ### TV tuners:
