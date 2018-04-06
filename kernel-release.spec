@@ -276,7 +276,7 @@ Source112:      RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-samp
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
 # Temporarily disabled for -rc releases until ported upstream
-Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.15.patch
+Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.16.patch
 
 Patch125:	0005-crypto-Add-zstd-support.patch
 
@@ -360,7 +360,9 @@ very current hardware.
 
 
 ### Global Requires/Provides
-%define requires2	dracut >= 026
+# do not require dracut, please it bloats dockers and other minimal instllations
+# better solution needs to be figured out
+#define requires2	dracut >= 026
 %define requires3	kmod >= 25
 %define requires4	sysfsutils >=  2.1.0-12
 %define requires5	kernel-firmware
