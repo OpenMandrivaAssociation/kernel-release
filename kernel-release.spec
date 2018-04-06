@@ -383,6 +383,7 @@ very current hardware.
 Autoreqprov:	no
 
 BuildRequires:	bc
+BuildRequires:	bison
 BuildRequires:	binutils
 BuildRequires:	gcc >= 7.2.1_2017.11-3
 BuildRequires:	gcc-plugin-devel >= 7.2.1_2017.11-3
