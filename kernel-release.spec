@@ -385,6 +385,7 @@ very current hardware.
 Autoreqprov:	no
 
 BuildRequires:	bc
+BuildRequires:	flex
 BuildRequires:	bison
 BuildRequires:	binutils
 BuildRequires:	gcc >= 7.2.1_2017.11-3
