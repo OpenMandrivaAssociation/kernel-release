@@ -9,7 +9,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	16
-%define sublevel	0
+%define sublevel	1
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -470,8 +470,8 @@ Release:	%{fakerel}				\
 Provides:	%kprovides1 %kprovides2			\
 %{expand:%%{?kprovides_%{1}:Provides: %{kprovides_%{1}}}} \
 Provides:	%{kname}-%{1}				\
-Requires(pre):	%requires2 %requires3 %requires4	\
-Requires:	%requires2 %requires5			\
+Requires(pre):	%requires3 %requires4			\
+Requires:	%requires5				\
 Obsoletes:	%kobsoletes1 %kobsoletes2 %kobsoletes3	\
 Conflicts:	%kconflicts1 %kconflicts2 %kconflicts3	\
 Conflicts:	%kconflicts4 %kconflicts5		\
