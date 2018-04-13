@@ -9,7 +9,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	16
-%define sublevel	1
+%define sublevel	2
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -308,7 +308,11 @@ Patch146:	saa716x-4.15.patch
 #Patch200:	0001-ipc-namespace-a-generic-per-ipc-pointer-and-peripc_o.patch
 # NOT YET
 #Patch201:	0002-binder-implement-namepsace-support-for-Android-binde.patch
+
 Patch250:	4.14-C11.patch
+Patch251:	https://raw.githubusercontent.com/frugalware/frugalware-current/master/source/base/kernel/0001-Make-it-possible-to-disable-SWIOTLB-code-on-admgpu-a.patch
+Patch252:	http://ant.spdns.eu/dma_coherent_ok-logic.patch
+Patch253:	http://ant.spdns.eu/amdgpu-test-1.patch
 
 # VirtualBox shared folders support
 # https://patchwork.kernel.org/patch/10315707/
