@@ -23,7 +23,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver   	%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -72,12 +72,12 @@
 %bcond_with cross_headers
 %endif
 
-%global	cross_header_archs	aarch64-linux armv7hl-linux i586-linux i686-linux x86_64-linux x32-linux aarch64-linuxmusl armv7hl-linuxmusl i586-linuxmusl i686-linuxmusl x86_64-linuxmusl x32-linuxmusl
+%global	cross_header_archs	aarch64-linux armv7hl-linux i686-linux x86_64-linux x32-linux riscv32-linux riscv64-linux aarch64-linuxmusl armv7hl-linuxmusl i686-linuxmusl x86_64-linuxmusl x32-linuxmusl riscv32-linuxmusl riscv64-linuxmusl aarch64-android armv7l-android armv8l-android
 %global long_cross_header_archs %(
 	for i in %{cross_header_archs}; do
 		CPU=$(echo $i |cut -d- -f1)
 		OS=$(echo $i |cut -d- -f2)
-		echo -n "$(rpm --macros %%{_usrlibrpm}/macros:%%{_usrlibrpm}/platform/${CPU}-${OS}/macros --target=${CPU} -E %%{_target_platform}) "
+		echo -n "$(rpm --target=${CPU}-${OS} -E %%{_target_platform}) "
 	done
 )
 
@@ -201,6 +201,9 @@ Patch2:		die-floppy-die.patch
 Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch4:		linux-4.7-intel-dvi-duallink.patch
 Patch5:		linux-4.8.1-buildfix.patch
+# gcc 8.x support
+# https://patchwork.kernel.org/patch/10286249/
+Patch6:		kernel-4.16-gcc-8.patch
 
 %if %{with clang}
 # Patches to make it build with clang
@@ -1101,10 +1104,8 @@ cat > $kernel_devel_files <<EOF
 %dir $DevelRoot/arch
 %dir $DevelRoot/include
 $DevelRoot/Documentation
-%ifarch %{armx}
 $DevelRoot/arch/arm
 $DevelRoot/arch/arm64
-%endif
 $DevelRoot/arch/riscv
 $DevelRoot/arch/um
 $DevelRoot/arch/x86
@@ -1405,6 +1406,9 @@ for a in arm arm64 i386 x86_64; do
 				x86_64)
 					[ "$a" != "x86_64" ] && continue
 					SARCH=x86
+					;;
+				riscv*)
+					SARCH=riscv
 					;;
 				*)
 					[ "$a" != "$TripletArch" ] && continue
