@@ -1082,12 +1082,6 @@ SaveDevel() {
 	rm -rf $TempDevelRoot/arch/$i
     done
 
-%ifnarch %{armx}
-   rm -rf $TempDevelRoot/arch/arm*
-   rm -rf $TempDevelRoot/include/kvm/arm*
-   rm -rf $TempDevelRoot/include/soc
-%endif
-
 # Clean the scripts tree, and make sure everything is ok (sanity check)
 # running prepare+scripts (tree was already "prepared" in build)
     pushd $TempDevelRoot >/dev/null
@@ -1141,9 +1135,7 @@ $DevelRoot/include/pcmcia
 $DevelRoot/include/ras
 $DevelRoot/include/rdma
 $DevelRoot/include/scsi
-%ifarch %{armx}
 $DevelRoot/include/soc
-%endif
 $DevelRoot/include/sound
 $DevelRoot/include/target
 $DevelRoot/include/trace
@@ -1585,9 +1577,6 @@ for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68k
 	 mips nios2 openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
 	rm -rf %{target_source}/arch/$i
 done
-%ifnarch %{arm}
-    rm -rf %{target_source}/include/kvm/arm*
-%endif
 
 # other misc files
 rm -f %{target_source}/{.config.old,.config.cmd,.gitignore,.lst,.mailmap,.gitattributes}
