@@ -348,7 +348,7 @@ very current hardware.
 
 
 ### Global Requires/Provides
-define requires2	dracut >= 047
+%define requires2	dracut >= 047
 %define requires3	kmod >= 25
 %define requires4	sysfsutils >=  2.1.0-12
 %define requires5	kernel-firmware
