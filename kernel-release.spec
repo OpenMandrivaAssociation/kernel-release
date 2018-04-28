@@ -1,5 +1,6 @@
 # utils/cpuidle-info.c:193: error: undefined reference to 'cpufreq_cpu_exists'
 %define _disable_ld_no_undefined 1
+%global optflags %optflags -O3
 
 # IMPORTNAT
 # This is the place where you set kernel version i.e 4.5.0
@@ -1545,23 +1546,23 @@ done
 # we really need the depmod -ae here
 cd %{target_modules}
 for i in *; do
-    /sbin/depmod -ae -b %{buildroot} -F %{target_boot}/System.map-$i $i
+    /sbin/depmod -ae -b %{buildroot} -F %{target_boot}/System.map-"$i" "$i"
     echo $?
 done
 
 for i in *; do
-    pushd $i
+    cd "$i"
     echo "Creating modules.description for $i"
     modules=$(find . -name "*.ko.[gx]z")
     echo $modules | %kxargs /sbin/modinfo | perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
-    popd
+    cd -
 done
 cd -
 
 # need to set extraversion to match srpm again to avoid rebuild
 sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
-%if %{with build_perf}
 
+%if %{with build_perf}
 # perf tool binary and supporting scripts/binaries
 make -C tools/perf -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__python2} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
 
