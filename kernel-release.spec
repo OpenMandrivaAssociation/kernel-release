@@ -6,7 +6,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	15
-%define sublevel	15
+%define sublevel	18
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -130,7 +130,7 @@
 ###################################################
 # Parallelize xargs invocations on smp machines
 %define kxargs xargs %([ -z "$RPM_BUILD_NCPUS" ] \\\
-	&& RPM_BUILD_NCPUS="`/usr/bin/getconf _NPROCESSORS_ONLN`"; \\\
+	&& RPM_BUILD_NCPUS="$(/usr/bin/getconf _NPROCESSORS_ONLN)"; \\\
 	[ "$RPM_BUILD_NCPUS" -gt 1 ] && echo "-P $RPM_BUILD_NCPUS")
 
 # Sparc arch wants sparc64 kernels
@@ -348,7 +348,7 @@ very current hardware.
 
 
 ### Global Requires/Provides
-%define requires2	dracut >= 026
+define requires2	dracut >= 047
 %define requires3	kmod >= 25
 %define requires4	sysfsutils >=  2.1.0-12
 %define requires5	kernel-firmware
@@ -931,7 +931,7 @@ CreateConfig() {
 		if [ -e .config ]; then
 			# Make sure the later configs override the former ones.
 			# More specific configs should be able to override generic ones no matter what.
-			NEWCONFIGS=`cat %{_sourcedir}/$i.config |grep -E '^(CONFIG_|# CONFIG_)' |sed -e 's,=.*,,;s,^# ,,;s, is not set,,'`
+			NEWCONFIGS=$(cat %{_sourcedir}/$i.config |grep -E '^(CONFIG_|# CONFIG_)' |sed -e 's,=.*,,;s,^# ,,;s, is not set,,')
 			for j in $NEWCONFIGS; do
 				sed -i -e "/^$j=.*/d;/^# $j is not set/d" .config
 			done
@@ -1082,9 +1082,9 @@ SaveDevel() {
 
 # Clean the scripts tree, and make sure everything is ok (sanity check)
 # running prepare+scripts (tree was already "prepared" in build)
-    pushd $TempDevelRoot >/dev/null
+    cd $TempDevelRoot >/dev/null
     %{smake} ARCH=%{target_arch} clean
-    popd >/dev/null
+    cd - >/dev/null
 
     rm -f $TempDevelRoot/.config.old
 
@@ -1198,11 +1198,11 @@ SaveDebug() {
     echo "%{_bootdir}/vmlinux-%{kversion}-$debug_flavour-%{buildrpmrel}" >> $kernel_debug_files
 
     find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" | %kxargs -I '{}' objcopy --only-keep-debug '{}' '{}'.debug
-    find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" | %kxargs -I '{}' sh -c 'cd `dirname {}`; objcopy --add-gnu-debuglink=`basename {}`.debug --strip-debug `basename {}`'
+    find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" | %kxargs -I '{}' sh -c 'cd $(dirname {}); objcopy --add-gnu-debuglink=$(basename {}).debug --strip-debug $(basename {})'
 
-    pushd %{temp_modules}
+    cd %{temp_modules}
     find %{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko.debug" > debug_module_list
-    popd
+    cd -
     cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%{_modulesdir}/\1|' >> $kernel_debug_files
     cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%exclude %{_modulesdir}/\1|' >> ../kernel_exclude_debug_files.$debug_flavour
     rm -f %{temp_modules}/debug_module_list
@@ -1236,7 +1236,7 @@ EOF
 ### Create kernel Post script
 cat > $kernel_files-post <<EOF
 /usr/bin/kernel-install add %{kversion}-$kernel_flavour-%{buildrpmrel} /boot/vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}
-pushd /boot > /dev/null
+cd /boot > /dev/null
 if [ -L vmlinuz-$kernel_flavour ]; then
     rm -f vmlinuz-$kernel_flavour
 fi
@@ -1250,7 +1250,8 @@ if [ -e initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ]; then
     ln -sf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img initrd.img
 fi
 
-popd > /dev/null
+cd - > /dev/null
+
 %if %{with build_devel}
 # create kernel-devel symlinks if matching -devel- rpm is installed
 if [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
@@ -1278,7 +1279,7 @@ EOF
 ### Create kernel Preun script on the fly
 cat > $kernel_files-preun <<EOF
 /usr/bin/kernel-install remove %{kversion}-$kernel_flavour-%{buildrpmrel}
-pushd /boot > /dev/null
+cd /boot > /dev/null
 if [ -L vmlinuz-$kernel_flavour ]; then
     if [ "$(readlink vmlinuz-$kernel_flavour)" = "vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}" ]; then
 	rm -f vmlinuz-$kernel_flavour
@@ -1289,7 +1290,7 @@ if [ -L initrd-$kernel_flavour.img ]; then
 	rm -f initrd-$kernel_flavour.img
     fi
 fi
-popd > /dev/null
+cd - > /dev/null
 %if %{with build_devel}
 if [ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build ]; then
     rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
@@ -1510,7 +1511,7 @@ rm -f %{target_source}/{.missing-syscalls.d,arch/.gitignore,firmware/.gitignore}
 rm -rf %{target_source}/.tmp_depmod/
 
 # more cleaning
-pushd %{target_source}
+cd %{target_source}
 # lots of gitignore files
 find -iname ".gitignore" -delete
 # clean tools tree
@@ -1518,7 +1519,7 @@ find -iname ".gitignore" -delete
 %smake -C tools/build clean
 %smake -C tools/build/feature clean
 rm -f .cache.mk
-popd
+cd -
 
 #endif %{with build_source}
 %endif
@@ -1542,7 +1543,7 @@ done
 
 # sniff, if we compressed all the modules, we change the stamp :(
 # we really need the depmod -ae here
-pushd %{target_modules}
+cd %{target_modules}
 for i in *; do
     /sbin/depmod -ae -b %{buildroot} -F %{target_boot}/System.map-$i $i
     echo $?
@@ -1551,11 +1552,11 @@ done
 for i in *; do
     pushd $i
     echo "Creating modules.description for $i"
-    modules=`find . -name "*.ko.[gx]z"`
+    modules=$(find . -name "*.ko.[gx]z")
     echo $modules | %kxargs /sbin/modinfo | perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
     popd
 done
-popd
+cd -
 
 # need to set extraversion to match srpm again to avoid rebuild
 sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
