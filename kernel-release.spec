@@ -834,7 +834,7 @@ sed -i -e '/saa7164/iobj-$(CONFIG_SAA716X_CORE) += saa716x/' drivers/media/pci/M
 %endif
 
 # make sure the kernel has the sublevel we know it has...
-LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
+LC_ALL=C sed -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 
 # Pull in some externally maintained modules
 %if %mdvver >= 3000000
@@ -945,7 +945,7 @@ PrepareKernel() {
     name=$1
     extension=$2
     config_dir=%{_sourcedir}
-    echo "Make config for kernel $extension"
+    printf '%s\n'  "Make config for kernel $extension"
     %{smake} -s mrproper
     CreateConfig %{target_arch} ${flavour}
     # make sure EXTRAVERSION says what we want it to say
@@ -955,7 +955,7 @@ PrepareKernel() {
 
 BuildKernel() {
     KernelVer=$1
-    echo "Building kernel $KernelVer"
+    printf '%s\n' "Building kernel $KernelVer"
 # (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
 %ifarch x86_64
 %if %{with clang}
@@ -1433,7 +1433,6 @@ CreateKernel server
 # %endif
 
 # set extraversion to match srpm to get nice version reported by the tools
-#LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 
 ############################################################
@@ -1544,20 +1543,20 @@ done
 
 # sniff, if we compressed all the modules, we change the stamp :(
 # we really need the depmod -ae here
-cd %{target_modules}
+pushd %{target_modules}
 for i in *; do
     /sbin/depmod -ae -b %{buildroot} -F %{target_boot}/System.map-"$i" "$i"
     echo $?
 done
 
 for i in *; do
-    cd "$i"
-    echo "Creating modules.description for $i"
+    pushd "$i"
+    printf '%s\n' "Creating modules.description for $i"
     modules=$(find . -name "*.ko.[gx]z")
     echo $modules | %kxargs /sbin/modinfo | perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
-    cd -
+    popd
 done
-cd -
+popd
 
 # need to set extraversion to match srpm again to avoid rebuild
 sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
