@@ -109,8 +109,8 @@
 %bcond_with build_cpupower
 %endif
 
-# compress modules with xz
-%bcond_without build_modxz
+# compress modules with zstd
+%bcond_without build_modzstd
 
 # ARM builds
 %ifarch %{armx}
@@ -391,7 +391,9 @@ very current hardware.
 # nvidia173 does not support this kernel
 
 Autoreqprov:	no
-
+%if %{with build_modzstd}
+BuildRequires:	zstd
+%endif
 BuildRequires:	bc
 BuildRequires:	flex
 BuildRequires:	bison
@@ -987,11 +989,11 @@ BuildKernel() {
     install -d %{temp_boot}
     install -m 644 System.map %{temp_boot}/System.map-$KernelVer
     install -m 644 .config %{temp_boot}/config-$KernelVer
-%if %{with build_modxz}
+%if %{with build_modzstd}
 %ifarch %{ix86} %{armx}
-    xz -5 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
+    zstd -15 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
 %else
-    xz -7 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
+    zstd -10 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
 %endif
 %else
     gzip -9 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.gz
@@ -1491,11 +1493,11 @@ rm -rf %{buildroot}
 cp -a %{temp_root} %{buildroot}
 
 # compressing modules
-%if %{with build_modxz}
+%if %{with build_modzstd}
 %ifarch %{ix86} %{armx}
-find %{target_modules} -name "*.ko" | %kxargs xz -5 -T0
+find %{target_modules} -name "*.ko" | %kxargs zstd -10 -q -T0
 %else
-find %{target_modules} -name "*.ko" | %kxargs xz -7 -T0
+find %{target_modules} -name "*.ko" | %kxargs zstd -15 -q -T0
 %endif
 %else
 find %{target_modules} -name "*.ko" | %kxargs gzip -9
@@ -1518,7 +1520,7 @@ done
 for i in *; do
     pushd $i
     printf '%s\n' "Creating modules.description for $i"
-    modules=`find . -name "*.ko.[gx]z"`
+    modules=$(find . -name "*.ko.[gx]z|zst")
     echo $modules | %kxargs /sbin/modinfo | perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
     popd
 done
