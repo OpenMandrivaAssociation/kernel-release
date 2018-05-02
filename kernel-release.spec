@@ -1,6 +1,9 @@
 # utils/cpuidle-info.c:193: error: undefined reference to 'cpufreq_cpu_exists'
 %define _disable_ld_no_undefined 1
 
+# (tpg) try to speed up things
+%global optflags %optflags -O3
+
 # While perf comes with python2 scripts
 %define _python_bytecompile_build 0
 
@@ -855,7 +858,7 @@ find drivers/media/tuners drivers/media/dvb-frontends -name "*.c" -o -name "*.h"
 %endif
 
 # make sure the kernel has the sublevel we know it has...
-LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
+LC_ALL=C sed -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 
 # Pull in some externally maintained modules
 %if %mdvver >= 3000000
@@ -954,7 +957,7 @@ PrepareKernel() {
     name=$1
     extension=$2
     config_dir=%{_sourcedir}
-    echo "Make config for kernel $extension"
+    printf '%s\n' "Make config for kernel $extension"
     %{smake} -s mrproper
     CreateConfig %{target_arch} ${flavour}
     # make sure EXTRAVERSION says what we want it to say
@@ -964,7 +967,7 @@ PrepareKernel() {
 
 BuildKernel() {
     KernelVer=$1
-    echo "Building kernel $KernelVer"
+    printf '%s\n' "Building kernel $KernelVer"
 # (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
 %ifarch x86_64
 %if %{with clang}
@@ -1354,15 +1357,15 @@ for i in arm arm64 i386 x86_64; do
 done
 if [ -s newconfigs ]; then
 	set +x
-	echo "New config options have been added - please update the *.config files."
-	echo "New config options you need to take care of:"
+	printf '%s\n' "New config options have been added - please update the *.config files."
+	printf '%s\n' "New config options you need to take care of:"
 	if [ -e newconfigs.common ]; then
-		echo "For common.config:"
+		printf '%s\n' "For common.config:"
 		cat newconfigs.common
 	fi
 	for i in arm arm64 i386 x86_64; do
 		[ -e newconfigs.${i}only ] || continue
-		echo "For $i-common.config:"
+		printf '%s\n' "For $i-common.config:"
 		cat newconfigs.${i}only
 	done
 	exit 1
@@ -1434,7 +1437,6 @@ CreateKernel server
 # endif
 
 # set extraversion to match srpm to get nice version reported by the tools
-#LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 
 ############################################################
@@ -1509,13 +1511,13 @@ done
 # we really need the depmod -ae here
 pushd %{target_modules}
 for i in *; do
-    /sbin/depmod -ae -b %{buildroot} -F %{target_boot}/System.map-$i $i
+    /sbin/depmod -ae -b %{buildroot} -F %{target_boot}/System.map-"$i" "$i"
     echo $?
 done
 
 for i in *; do
     pushd $i
-    echo "Creating modules.description for $i"
+    printf '%s\n' "Creating modules.description for $i"
     modules=`find . -name "*.ko.[gx]z"`
     echo $modules | %kxargs /sbin/modinfo | perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
     popd
