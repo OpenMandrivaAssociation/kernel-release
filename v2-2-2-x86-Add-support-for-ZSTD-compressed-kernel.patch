@@ -1,8 +1,7 @@
-diff --git a/Documentation/x86/boot.txt b/Documentation/x86/boot.txt
-index 5e9b826..7f5d1f9 100644
---- a/Documentation/x86/boot.txt
-+++ b/Documentation/x86/boot.txt
-@@ -666,9 +666,9 @@ Protocol:	2.08+
+diff -Naur linux-4.16/Documentation/x86/boot.txt linux-4.16.tpg/Documentation/x86/boot.txt
+--- linux-4.16/Documentation/x86/boot.txt	2018-04-01 21:20:27.000000000 +0000
++++ linux-4.16.tpg/Documentation/x86/boot.txt	2018-05-05 20:55:08.101036076 +0000
+@@ -666,9 +666,9 @@
    uncompressed data should be determined using the standard magic
    numbers.  The currently supported compression formats are gzip
    (magic numbers 1F 8B or 1F 9E), bzip2 (magic number 42 5A), LZMA
@@ -15,23 +14,21 @@ index 5e9b826..7f5d1f9 100644
  
  Field name:	payload_length
  Type:		read
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 971feac..e34e3e5 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -150,6 +150,7 @@ config X86
+diff -Naur linux-4.16/arch/x86/Kconfig linux-4.16.tpg/arch/x86/Kconfig
+--- linux-4.16/arch/x86/Kconfig	2018-04-01 21:20:27.000000000 +0000
++++ linux-4.16.tpg/arch/x86/Kconfig	2018-05-05 20:55:46.258056725 +0000
+@@ -155,6 +155,7 @@
  	select HAVE_KERNEL_LZMA
  	select HAVE_KERNEL_LZO
  	select HAVE_KERNEL_XZ
 +	select HAVE_KERNEL_ZSTD
  	select HAVE_KPROBES
  	select HAVE_KPROBES_ON_FTRACE
- 	select HAVE_KRETPROBES
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 8a95827..118a423 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -23,7 +23,7 @@ OBJECT_FILES_NON_STANDARD	:= y
+ 	select HAVE_FUNCTION_ERROR_INJECTION
+diff -Naur linux-4.16/arch/x86/boot/compressed/Makefile linux-4.16.tpg/arch/x86/boot/compressed/Makefile
+--- linux-4.16/arch/x86/boot/compressed/Makefile	2018-04-01 21:20:27.000000000 +0000
++++ linux-4.16.tpg/arch/x86/boot/compressed/Makefile	2018-05-05 20:57:19.610095160 +0000
+@@ -24,7 +24,7 @@
  KCOV_INSTRUMENT		:= n
  
  targets := vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin.bz2 vmlinux.bin.lzma \
@@ -40,7 +37,7 @@ index 8a95827..118a423 100644
  
  KBUILD_CFLAGS := -m$(BITS) -D__KERNEL__ -O2
  KBUILD_CFLAGS += -fno-strict-aliasing $(call cc-option, -fPIE, -fPIC)
-@@ -133,6 +133,8 @@ $(obj)/vmlinux.bin.lzo: $(vmlinux.bin.all-y) FORCE
+@@ -137,6 +137,8 @@
  	$(call if_changed,lzo)
  $(obj)/vmlinux.bin.lz4: $(vmlinux.bin.all-y) FORCE
  	$(call if_changed,lz4)
@@ -49,7 +46,7 @@ index 8a95827..118a423 100644
  
  suffix-$(CONFIG_KERNEL_GZIP)	:= gz
  suffix-$(CONFIG_KERNEL_BZIP2)	:= bz2
-@@ -140,6 +142,7 @@ suffix-$(CONFIG_KERNEL_LZMA)	:= lzma
+@@ -144,6 +146,7 @@
  suffix-$(CONFIG_KERNEL_XZ)	:= xz
  suffix-$(CONFIG_KERNEL_LZO) 	:= lzo
  suffix-$(CONFIG_KERNEL_LZ4) 	:= lz4
@@ -57,11 +54,10 @@ index 8a95827..118a423 100644
  
  quiet_cmd_mkpiggy = MKPIGGY $@
        cmd_mkpiggy = $(obj)/mkpiggy $< > $@ || ( rm -f $@ ; false )
-diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
-index c14217c..8140895 100644
---- a/arch/x86/boot/compressed/misc.c
-+++ b/arch/x86/boot/compressed/misc.c
-@@ -74,6 +74,10 @@ static int lines, cols;
+diff -Naur linux-4.16/arch/x86/boot/compressed/misc.c linux-4.16.tpg/arch/x86/boot/compressed/misc.c
+--- linux-4.16/arch/x86/boot/compressed/misc.c	2018-04-01 21:20:27.000000000 +0000
++++ linux-4.16.tpg/arch/x86/boot/compressed/misc.c	2018-05-05 20:57:55.999105985 +0000
+@@ -75,6 +75,10 @@
  #ifdef CONFIG_KERNEL_LZ4
  #include "../../../../lib/decompress_unlz4.c"
  #endif
@@ -72,11 +68,10 @@ index c14217c..8140895 100644
  /*
   * NOTE: When adding a new decompressor, please update the analysis in
   * ../header.S.
-diff --git a/arch/x86/boot/header.S b/arch/x86/boot/header.S
-index 1bb08ec..11b70e1 100644
---- a/arch/x86/boot/header.S
-+++ b/arch/x86/boot/header.S
-@@ -526,8 +526,14 @@ pref_address:		.quad LOAD_PHYSICAL_ADDR	# preferred load addr
+diff -Naur linux-4.16/arch/x86/boot/header.S linux-4.16.tpg/arch/x86/boot/header.S
+--- linux-4.16/arch/x86/boot/header.S	2018-04-01 21:20:27.000000000 +0000
++++ linux-4.16.tpg/arch/x86/boot/header.S	2018-05-05 20:59:56.498127616 +0000
+@@ -526,8 +526,14 @@
  # the size-dependent part now grows so fast.
  #
  # extra_bytes = (uncompressed_size >> 8) + 65536
@@ -92,11 +87,10 @@ index 1bb08ec..11b70e1 100644
  #if ZO_z_output_len > ZO_z_input_len
  # define ZO_z_extract_offset	(ZO_z_output_len + ZO_z_extra_bytes - \
  				 ZO_z_input_len)
-diff --git a/arch/x86/include/asm/boot.h b/arch/x86/include/asm/boot.h
-index abd06b1..dcfdd4e 100644
---- a/arch/x86/include/asm/boot.h
-+++ b/arch/x86/include/asm/boot.h
-@@ -23,9 +23,11 @@
+diff -Naur linux-4.16/arch/x86/include/asm/boot.h linux-4.16.tpg/arch/x86/include/asm/boot.h
+--- linux-4.16/arch/x86/include/asm/boot.h	2018-04-01 21:20:27.000000000 +0000
++++ linux-4.16.tpg/arch/x86/include/asm/boot.h	2018-05-05 21:02:11.289130418 +0000
+@@ -24,9 +24,11 @@
  # error "Invalid value for CONFIG_PHYSICAL_ALIGN"
  #endif
  
