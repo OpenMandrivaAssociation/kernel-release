@@ -2,7 +2,7 @@
 %define _disable_ld_no_undefined 1
 
 # (tpg) try to speed up things
-%global optflags %optflags -O3
+%global optflags %{optflags} -O3
 
 # While perf comes with python2 scripts
 %define _python_bytecompile_build 0
@@ -27,7 +27,7 @@
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
 %define rpmrel		1
-%define tar_ver   	%{kernelversion}.%{patchlevel}
+%define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
@@ -140,7 +140,7 @@
 	[ "$RPM_BUILD_NCPUS" -gt 1 ] && echo "-P $RPM_BUILD_NCPUS")
 
 # Sparc arch wants sparc64 kernels
-%define target_arch    %(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/')
+%define target_arch %(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/')
 
 #
 # SRC RPM description
@@ -247,32 +247,32 @@ Patch1031:	0001-Fix-for-compilation-with-clang.patch
 # Bootsplash system
 # https://lkml.org/lkml/2017/10/25/346
 # https://patchwork.kernel.org/patch/10172665/
-Patch100:      RFC-v3-01-13-bootsplash-Initial-implementation-showing-black-screen.patch
+Patch100:	RFC-v3-01-13-bootsplash-Initial-implementation-showing-black-screen.patch
 # https://patchwork.kernel.org/patch/10172669/
-Patch101:      RFC-v3-02-13-bootsplash-Add-file-reading-and-picture-rendering.patch
+Patch101:	RFC-v3-02-13-bootsplash-Add-file-reading-and-picture-rendering.patch
 # https://patchwork.kernel.org/patch/10172715/
-Patch102:      RFC-v3-03-13-bootsplash-Flush-framebuffer-after-drawing.patch
+Patch102:	RFC-v3-03-13-bootsplash-Flush-framebuffer-after-drawing.patch
 # https://patchwork.kernel.org/patch/10172699/
-Patch103:      RFC-v3-04-13-bootsplash-Add-corner-positioning.patch
+Patch103:	RFC-v3-04-13-bootsplash-Add-corner-positioning.patch
 # https://patchwork.kernel.org/patch/10172667/
-Patch104:      RFC-v3-05-13-bootsplash-Add-animation-support.patch
+Patch104:	RFC-v3-05-13-bootsplash-Add-animation-support.patch
 # https://patchwork.kernel.org/patch/10172605/, rebased
-Patch105:      RFC-v3-06-13-vt-Redraw-bootsplash-fully-on-console_unblank.patch
+Patch105:	RFC-v3-06-13-vt-Redraw-bootsplash-fully-on-console_unblank.patch
 # https://patchwork.kernel.org/patch/10172599/
-Patch106:      RFC-v3-07-13-vt-Add-keyboard-hook-to-disable-bootsplash.patch
+Patch106:	RFC-v3-07-13-vt-Add-keyboard-hook-to-disable-bootsplash.patch
 # https://patchwork.kernel.org/patch/10172603/
-Patch107:      RFC-v3-08-13-sysrq-Disable-bootsplash-on-SAK.patch
+Patch107:	RFC-v3-08-13-sysrq-Disable-bootsplash-on-SAK.patch
 # https://patchwork.kernel.org/patch/10172601/
-Patch108:      RFC-v3-09-13-fbcon-Disable-bootsplash-on-oops.patch
+Patch108:	RFC-v3-09-13-fbcon-Disable-bootsplash-on-oops.patch
 # https://patchwork.kernel.org/patch/10172663/
-Patch109:      RFC-v3-10-13-Documentation-Add-bootsplash-main-documentation.patch
+Patch109:	RFC-v3-10-13-Documentation-Add-bootsplash-main-documentation.patch
 # https://patchwork.kernel.org/patch/10172685/
-Patch110:      RFC-v3-11-13-bootsplash-sysfs-entries-to-load-and-unload-files.patch
+Patch110:	RFC-v3-11-13-bootsplash-sysfs-entries-to-load-and-unload-files.patch
 # https://patchwork.kernel.org/patch/10172597/
-Patch111:      RFC-v3-12-13-tools-bootsplash-Add-a-basic-splash-file-creation-tool.patch
+Patch111:	RFC-v3-12-13-tools-bootsplash-Add-a-basic-splash-file-creation-tool.patch
 # https://patchwork.kernel.org/patch/10172661/
 # Contains git binary patch -- needs to be applied with git apply instead of apply_patches
-Source112:      RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-file.patch
+Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-file.patch
 
 # Patches to VirtualBox and other external modules are
 # pulled in as Source: rather than Patch: because it's arch specific
