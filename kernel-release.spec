@@ -373,11 +373,10 @@ input and output, etc. \
 This version is a preview of an upcoming kernel version, and may be helpful if you are using \
 very current hardware.
 
-
 ### Global Requires/Provides
 # do not require dracut, please it bloats dockers and other minimal instllations
 # better solution needs to be figured out
-#define requires2	dracut >= 026
+%define requires2	dracut >= 047
 %define requires3	kmod >= 25
 %define requires4	sysfsutils >=  2.1.0-12
 %define requires5	kernel-firmware
