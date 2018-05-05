@@ -1116,9 +1116,9 @@ SaveDevel() {
 
 # Clean the scripts tree, and make sure everything is ok (sanity check)
 # running prepare+scripts (tree was already "prepared" in build)
-    pushd $TempDevelRoot >/dev/null
+    cd $TempDevelRoot >/dev/null
     %{smake} ARCH=%{target_arch} clean
-    popd >/dev/null
+    cd - >/dev/null
 
     rm -f $TempDevelRoot/.config.old
 
@@ -1231,9 +1231,9 @@ SaveDebug() {
     find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" | %kxargs -I '{}' objcopy --only-keep-debug '{}' '{}'.debug
     find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" | %kxargs -I '{}' sh -c 'cd `dirname {}`; objcopy --add-gnu-debuglink=`basename {}`.debug --strip-debug `basename {}`'
 
-    pushd %{temp_modules}
+    cd %{temp_modules}
     find %{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko.debug" > debug_module_list
-    popd
+    cd -
     cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%{_modulesdir}/\1|' >> $kernel_debug_files
     cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%exclude %{_modulesdir}/\1|' >> ../kernel_exclude_debug_files.$debug_flavour
     rm -f %{temp_modules}/debug_module_list
@@ -1247,7 +1247,7 @@ ker="vmlinuz"
 ### Create the kernel_files.*
 cat > $kernel_files <<EOF
 %{_bootdir}/System.map-%{kversion}-$kernel_flavour-%{buildrpmrel}
-%{_bootdir}/symvers-%{kversion}-$kernel_flavour-%{buildrpmrel}.*z
+%{_bootdir}/symvers-%{kversion}-$kernel_flavour-%{buildrpmrel}.[gxz]*
 %{_bootdir}/config-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %{_bootdir}/$ker-%{kversion}-$kernel_flavour-%{buildrpmrel}
 # device tree binary
@@ -1267,7 +1267,7 @@ EOF
 ### Create kernel Post script
 cat > $kernel_files-post <<EOF
 /usr/bin/kernel-install add %{kversion}-$kernel_flavour-%{buildrpmrel} /boot/vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}
-pushd /boot > /dev/null
+cd /boot > /dev/null
 if [ -L vmlinuz-$kernel_flavour ]; then
     rm -f vmlinuz-$kernel_flavour
 fi
@@ -1281,7 +1281,7 @@ if [ -e initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ]; then
     ln -sf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img initrd.img
 fi
 
-popd > /dev/null
+cd - > /dev/null
 %if %{with build_devel}
 # create kernel-devel symlinks if matching -devel- rpm is installed
 if [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
@@ -1309,7 +1309,7 @@ EOF
 ### Create kernel Preun script on the fly
 cat > $kernel_files-preun <<EOF
 /usr/bin/kernel-install remove %{kversion}-$kernel_flavour-%{buildrpmrel}
-pushd /boot > /dev/null
+cd /boot > /dev/null
 if [ -L vmlinuz-$kernel_flavour ]; then
     if [ "$(readlink vmlinuz-$kernel_flavour)" = "vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}" ]; then
 	rm -f vmlinuz-$kernel_flavour
@@ -1320,7 +1320,7 @@ if [ -L initrd-$kernel_flavour.img ]; then
 	rm -f initrd-$kernel_flavour.img
     fi
 fi
-popd > /dev/null
+cd - > /dev/null
 %if %{with build_devel}
 if [ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build ]; then
     rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
@@ -1622,7 +1622,7 @@ rm -f %{target_source}/{.missing-syscalls.d,arch/.gitignore,firmware/.gitignore}
 rm -rf %{target_source}/.tmp_depmod/
 
 # more cleaning
-pushd %{target_source}
+cd %{target_source}
 # lots of gitignore files
 find -iname ".gitignore" -delete
 # clean tools tree
@@ -1636,7 +1636,7 @@ find tools scripts -executable |while read r; do
 		rm -f $r
 	fi
 done
-popd
+cd -
 
 #endif %{with build_source}
 %endif
