@@ -110,7 +110,12 @@
 %endif
 
 # compress modules with zstd
+# (tpg) currently it supports only x86 arch
+%ifnarch %{armx}
 %bcond_without build_modzstd
+%else
+%bcond_without build_modxz
+%endif
 
 # ARM builds
 %ifarch %{armx}
@@ -118,7 +123,6 @@
 %bcond_without build_server
 %endif
 # End of user definitions
-
 
 # For the .nosrc.rpm
 %bcond_with build_nosrc
@@ -282,6 +286,12 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.16.patch
 
 Patch125:	0005-crypto-Add-zstd-support.patch
+%if %{with build_modzstd}
+# https://patchwork.kernel.org/patch/10003007/
+Patch126:	v2-1-2-lib-Add-support-for-ZSTD-compressed-kernel.patch
+# https://patchwork.kernel.org/patch/10003011/
+Patch127:	v2-2-2-x86-Add-support-for-ZSTD-compressed-kernel.patch
+%endif
 
 # https://bugs.freedesktop.org/show_bug.cgi?id=100446
 Patch130:	nouveau-pascal-backlight.patch
@@ -391,6 +401,10 @@ Autoreqprov:	no
 %if %{with build_modzstd}
 BuildRequires:	zstd
 %endif
+%if %{with build_modxz}
+BuildRequires:	xz
+%endif
+BuildRequires:	findutils
 BuildRequires:	bc
 BuildRequires:	flex
 BuildRequires:	bison
@@ -721,7 +735,7 @@ Version:	%{kversion}
 Release:	%{rpmrel}
 Summary:	The cpupower tools
 Group:		System/Kernel and hardware
-Requires(post): 	rpm-helper >= 0.24.0-3
+Requires(post):		rpm-helper >= 0.24.0-3
 Requires(preun):	rpm-helper >= 0.24.0-3
 Obsoletes:	cpufreq < 2.0-3
 Provides:	cpufreq = 2.0-3
@@ -938,12 +952,20 @@ CreateConfig() {
 	CLANG_EXTRAS=""
 %endif
 
+%if %{with build_modxz}
+sed -i -e "/^# CONFIG_KERNEL_XZ is not set/CONFIG_KERNEL_XZ=y/g" %{_sourcedir}/common.config
+%endif
+
+%if %{with build_modzstd}
+sed -i -e "/^# CONFIG_KERNEL_ZSTD is not set/CONFIG_KERNEL_ZSTD=y/g" %{_sourcedir}/common.config
+%endif
+
 	for i in common common-${type} ${arch}-common ${arch}-${type} $CLANG_EXTRAS; do
 		[ -e %{_sourcedir}/$i.config ] || continue
 		if [ -e .config ]; then
 			# Make sure the later configs override the former ones.
 			# More specific configs should be able to override generic ones no matter what.
-			NEWCONFIGS=`cat %{_sourcedir}/$i.config |grep -E '^(CONFIG_|# CONFIG_)' |sed -e 's,=.*,,;s,^# ,,;s, is not set,,'`
+			NEWCONFIGS=$(cat %{_sourcedir}/$i.config |grep -E '^(CONFIG_|# CONFIG_)' |sed -e 's,=.*,,;s,^# ,,;s, is not set,,')
 			for j in $NEWCONFIGS; do
 				sed -i -e "/^$j=.*/d;/^# $j is not set/d" .config
 			done
@@ -986,14 +1008,21 @@ BuildKernel() {
     install -d %{temp_boot}
     install -m 644 System.map %{temp_boot}/System.map-$KernelVer
     install -m 644 .config %{temp_boot}/config-$KernelVer
+
+%if %{with build_modxz}
+%ifarch %{ix86} %{armx}
+    xz -5 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
+%else
+    xz -7 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
+%endif
+%endif
+
 %if %{with build_modzstd}
 %ifarch %{ix86} %{armx}
     zstd -15 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
 %else
     zstd -10 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
 %endif
-%else
-    gzip -9 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.gz
 %endif
 
 %ifarch %{arm}
@@ -1490,14 +1519,20 @@ rm -rf %{buildroot}
 cp -a %{temp_root} %{buildroot}
 
 # compressing modules
+%if %{with build_modxz}
+%ifarch %{ix86} %{armx}
+find %{target_modules} -name "*.ko" | %kxargs xz -5 -T0
+%else
+find %{target_modules} -name "*.ko" | %kxargs xz -7 -T0
+%endif
+%endif
+
 %if %{with build_modzstd}
 %ifarch %{ix86} %{armx}
 find %{target_modules} -name "*.ko" | %kxargs zstd -10 -q -T0
 %else
 find %{target_modules} -name "*.ko" | %kxargs zstd -15 -q -T0
 %endif
-%else
-find %{target_modules} -name "*.ko" | %kxargs gzip -9
 %endif
 
 # We used to have a copy of PrepareKernel here
