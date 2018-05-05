@@ -952,11 +952,11 @@ CreateConfig() {
 %endif
 
 %if %{with build_modxz}
-sed -i -e "/^# CONFIG_KERNEL_XZ is not set/CONFIG_KERNEL_XZ=y/g" %{_sourcedir}/common.config
+sed -i -e "s/^# CONFIG_KERNEL_XZ is not set/CONFIG_KERNEL_XZ=y/g" %{_sourcedir}/common.config
 %endif
 
 %if %{with build_modzstd}
-sed -i -e "/^# CONFIG_KERNEL_ZSTD is not set/CONFIG_KERNEL_ZSTD=y/g" %{_sourcedir}/common.config
+sed -i -e "s/^# CONFIG_KERNEL_ZSTD is not set/CONFIG_KERNEL_ZSTD=y/g" %{_sourcedir}/common.config
 %endif
 
 	for i in common common-${type} ${arch}-common ${arch}-${type} $CLANG_EXTRAS; do
