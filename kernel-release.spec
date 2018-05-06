@@ -908,9 +908,9 @@ echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 %endif
 
 # get rid of unwanted files
-find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
+find . -name '*~' -o -name '*.orig' -o -name '*.append' -delete
 # wipe all .gitignore/.get_maintainer.ignore files
-find . -name "*.g*ignore" -exec rm {} \;
+find . -name "*.g*ignore" -delete
 
 # fix missing exec flag on file introduced in 4.14.10-rc1
 chmod 755 tools/objtool/sync-check.sh
@@ -932,7 +932,7 @@ export PYTHON=%{__python2}
 %define _kerneldir /usr/src/linux-%{kversion}-%{buildrpmrel}
 %define _bootdir /boot
 %define _modulesdir /lib/modules
-%define _efidir %{_bootdir}/efi/mandriva
+%define _efidir %{_bootdir}/efi/EFI/openmandriva
 
 # Directories definition needed for building
 %define temp_root %{build_dir}/temp-root
@@ -1261,7 +1261,7 @@ cat > $kernel_files <<EOF
 EOF
 
 %if %{with build_debug}
-    cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
+cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
 %endif
 
 ### Create kernel Post script
@@ -1552,7 +1552,7 @@ done
 for i in *; do
     pushd $i
     printf '%s\n' "Creating modules.description for $i"
-    modules=$(find . -name "*.ko.[gx]z|zst")
+    modules=$(find . -name "*.ko.[gxz]*[z|st]")
     echo $modules | %kxargs /sbin/modinfo | perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
     popd
 done
@@ -1612,8 +1612,8 @@ rm -f %{target_source}/*_files.* %{target_source}/README.kernel-sources
 # we remove all the source files that we don't ship
 # first architecture files
 for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
-	 mips nios2 openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
-	rm -rf %{target_source}/arch/$i
+    mips nios2 openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
+    rm -rf %{target_source}/arch/$i
 done
 
 # other misc files
@@ -1632,9 +1632,9 @@ find -iname ".gitignore" -delete
 rm -f .cache.mk
 # Drop script binaries that can be rebuilt
 find tools scripts -executable |while read r; do
-	if file $r |grep -q ELF; then
-		rm -f $r
-	fi
+    if file $r |grep -q ELF; then
+	rm -f $r
+    fi
 done
 cd -
 
