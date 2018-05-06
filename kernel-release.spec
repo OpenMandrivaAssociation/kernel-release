@@ -1019,9 +1019,9 @@ BuildKernel() {
 
 %if %{with build_modzstd}
 %ifarch %{ix86} %{armx}
-    zstd -15 -q -T0 --rm -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
+    zstd -15 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
 %else
-    zstd -10 -q -T0 --rm -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
+    zstd -10 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
 %endif
 %endif
 
