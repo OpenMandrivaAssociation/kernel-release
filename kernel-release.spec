@@ -1019,9 +1019,9 @@ BuildKernel() {
 
 %if %{with build_modzstd}
 %ifarch %{ix86} %{armx}
-    zstd -15 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
+    zstd -15 -q -T0 --rm -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
 %else
-    zstd -10 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
+    zstd -10 -q -T0 --rm -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
 %endif
 %endif
 
@@ -1529,9 +1529,9 @@ find %{target_modules} -name "*.ko" | %kxargs xz -7 -T0
 
 %if %{with build_modzstd}
 %ifarch %{ix86} %{armx}
-find %{target_modules} -name "*.ko" | %kxargs zstd -10 -q -T0
+find %{target_modules} -name "*.ko" | %kxargs zstd -10 -q -T0 --rm
 %else
-find %{target_modules} -name "*.ko" | %kxargs zstd -15 -q -T0
+find %{target_modules} -name "*.ko" | %kxargs zstd -15 -q -T0 --rm
 %endif
 %endif
 
