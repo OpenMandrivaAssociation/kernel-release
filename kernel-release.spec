@@ -1525,15 +1525,17 @@ find %{target_modules} -name "*.ko" | %kxargs xz -5 -T0
 %else
 find %{target_modules} -name "*.ko" | %kxargs xz -7 -T0
 %endif
+%else
+find %{target_modules} -name "*.ko" | %kxargs gzip -9
 %endif
 
-%if %{with build_modzstd}
-%ifarch %{ix86} %{armx}
-find %{target_modules} -name "*.ko" | %kxargs zstd -10 -q -T0 --rm
-%else
-find %{target_modules} -name "*.ko" | %kxargs zstd -15 -q -T0 --rm
-%endif
-%endif
+#if %{with build_modzstd}
+#ifarch %{ix86} %{armx}
+#find %{target_modules} -name "*.ko" | %kxargs zstd -10 -q -T0 --rm
+#else
+#find %{target_modules} -name "*.ko" | %kxargs zstd -15 -q -T0 --rm
+#endif
+#endif
 
 # We used to have a copy of PrepareKernel here
 # Now, we make sure that the thing in the linux dir is what we want it to be
