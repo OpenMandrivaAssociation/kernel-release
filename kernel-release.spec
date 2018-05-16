@@ -1,6 +1,9 @@
 # utils/cpuidle-info.c:193: error: undefined reference to 'cpufreq_cpu_exists'
 %define _disable_ld_no_undefined 1
 
+# (tpg) try to speed up things
+%global optflags %{optflags} -O3
+
 # While perf comes with python2 scripts
 %define _python_bytecompile_build 0
 
@@ -24,7 +27,7 @@
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
 %define rpmrel		1
-%define tar_ver   	%{kernelversion}.%{patchlevel}
+%define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
 
@@ -106,8 +109,13 @@
 %bcond_with build_cpupower
 %endif
 
-# compress modules with xz
+# compress modules with zstd
+# (tpg) currently it supports only x86 arch
+%ifnarch %{armx}
+%bcond_without build_modzstd
+%else
 %bcond_without build_modxz
+%endif
 
 # ARM builds
 %ifarch %{armx}
@@ -115,7 +123,6 @@
 %bcond_without build_server
 %endif
 # End of user definitions
-
 
 # For the .nosrc.rpm
 %bcond_with build_nosrc
@@ -137,7 +144,7 @@
 	[ "$RPM_BUILD_NCPUS" -gt 1 ] && echo "-P $RPM_BUILD_NCPUS")
 
 # Sparc arch wants sparc64 kernels
-%define target_arch    %(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/')
+%define target_arch %(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/')
 
 #
 # SRC RPM description
@@ -241,32 +248,32 @@ Patch1031:	0001-Fix-for-compilation-with-clang.patch
 # Bootsplash system
 # https://lkml.org/lkml/2017/10/25/346
 # https://patchwork.kernel.org/patch/10172665/
-Patch100:      RFC-v3-01-13-bootsplash-Initial-implementation-showing-black-screen.patch
+Patch100:	RFC-v3-01-13-bootsplash-Initial-implementation-showing-black-screen.patch
 # https://patchwork.kernel.org/patch/10172669/
-Patch101:      RFC-v3-02-13-bootsplash-Add-file-reading-and-picture-rendering.patch
+Patch101:	RFC-v3-02-13-bootsplash-Add-file-reading-and-picture-rendering.patch
 # https://patchwork.kernel.org/patch/10172715/
-Patch102:      RFC-v3-03-13-bootsplash-Flush-framebuffer-after-drawing.patch
+Patch102:	RFC-v3-03-13-bootsplash-Flush-framebuffer-after-drawing.patch
 # https://patchwork.kernel.org/patch/10172699/
-Patch103:      RFC-v3-04-13-bootsplash-Add-corner-positioning.patch
+Patch103:	RFC-v3-04-13-bootsplash-Add-corner-positioning.patch
 # https://patchwork.kernel.org/patch/10172667/
-Patch104:      RFC-v3-05-13-bootsplash-Add-animation-support.patch
+Patch104:	RFC-v3-05-13-bootsplash-Add-animation-support.patch
 # https://patchwork.kernel.org/patch/10172605/, rebased
-Patch105:      RFC-v3-06-13-vt-Redraw-bootsplash-fully-on-console_unblank.patch
+Patch105:	RFC-v3-06-13-vt-Redraw-bootsplash-fully-on-console_unblank.patch
 # https://patchwork.kernel.org/patch/10172599/
-Patch106:      RFC-v3-07-13-vt-Add-keyboard-hook-to-disable-bootsplash.patch
+Patch106:	RFC-v3-07-13-vt-Add-keyboard-hook-to-disable-bootsplash.patch
 # https://patchwork.kernel.org/patch/10172603/
-Patch107:      RFC-v3-08-13-sysrq-Disable-bootsplash-on-SAK.patch
+Patch107:	RFC-v3-08-13-sysrq-Disable-bootsplash-on-SAK.patch
 # https://patchwork.kernel.org/patch/10172601/
-Patch108:      RFC-v3-09-13-fbcon-Disable-bootsplash-on-oops.patch
+Patch108:	RFC-v3-09-13-fbcon-Disable-bootsplash-on-oops.patch
 # https://patchwork.kernel.org/patch/10172663/
-Patch109:      RFC-v3-10-13-Documentation-Add-bootsplash-main-documentation.patch
+Patch109:	RFC-v3-10-13-Documentation-Add-bootsplash-main-documentation.patch
 # https://patchwork.kernel.org/patch/10172685/
-Patch110:      RFC-v3-11-13-bootsplash-sysfs-entries-to-load-and-unload-files.patch
+Patch110:	RFC-v3-11-13-bootsplash-sysfs-entries-to-load-and-unload-files.patch
 # https://patchwork.kernel.org/patch/10172597/
-Patch111:      RFC-v3-12-13-tools-bootsplash-Add-a-basic-splash-file-creation-tool.patch
+Patch111:	RFC-v3-12-13-tools-bootsplash-Add-a-basic-splash-file-creation-tool.patch
 # https://patchwork.kernel.org/patch/10172661/
 # Contains git binary patch -- needs to be applied with git apply instead of apply_patches
-Source112:      RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-file.patch
+Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-file.patch
 
 # Patches to VirtualBox and other external modules are
 # pulled in as Source: rather than Patch: because it's arch specific
@@ -279,6 +286,12 @@ Source112:      RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-samp
 Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.16.patch
 
 Patch125:	0005-crypto-Add-zstd-support.patch
+%if %{with build_modzstd}
+# https://patchwork.kernel.org/patch/10003007/
+Patch126:	v2-1-2-lib-Add-support-for-ZSTD-compressed-kernel.patch
+# https://patchwork.kernel.org/patch/10003011/
+Patch127:	v2-2-2-x86-Add-support-for-ZSTD-compressed-kernel.patch
+%endif
 
 # https://bugs.freedesktop.org/show_bug.cgi?id=100446
 Patch130:	nouveau-pascal-backlight.patch
@@ -360,11 +373,10 @@ input and output, etc. \
 This version is a preview of an upcoming kernel version, and may be helpful if you are using \
 very current hardware.
 
-
 ### Global Requires/Provides
 # do not require dracut, please it bloats dockers and other minimal instllations
 # better solution needs to be figured out
-#define requires2	dracut >= 026
+%define requires2	dracut >= 047
 %define requires3	kmod >= 25
 %define requires4	sysfsutils >=  2.1.0-12
 %define requires5	kernel-firmware
@@ -385,7 +397,13 @@ very current hardware.
 # nvidia173 does not support this kernel
 
 Autoreqprov:	no
-
+%if %{with build_modzstd}
+BuildRequires:	zstd
+%endif
+%if %{with build_modxz}
+BuildRequires:	xz
+%endif
+BuildRequires:	findutils
 BuildRequires:	bc
 BuildRequires:	flex
 BuildRequires:	bison
@@ -716,7 +734,7 @@ Version:	%{kversion}
 Release:	%{rpmrel}
 Summary:	The cpupower tools
 Group:		System/Kernel and hardware
-Requires(post): 	rpm-helper >= 0.24.0-3
+Requires(post):		rpm-helper >= 0.24.0-3
 Requires(preun):	rpm-helper >= 0.24.0-3
 Obsoletes:	cpufreq < 2.0-3
 Provides:	cpufreq = 2.0-3
@@ -852,7 +870,7 @@ find drivers/media/tuners drivers/media/dvb-frontends -name "*.c" -o -name "*.h"
 %endif
 
 # make sure the kernel has the sublevel we know it has...
-LC_ALL=C perl -p -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
+LC_ALL=C sed -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 
 # Pull in some externally maintained modules
 %if %mdvver >= 3000000
@@ -890,9 +908,9 @@ echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 %endif
 
 # get rid of unwanted files
-find . -name '*~' -o -name '*.orig' -o -name '*.append' | %kxargs rm -f
+find . -name '*~' -o -name '*.orig' -o -name '*.append' -delete
 # wipe all .gitignore/.get_maintainer.ignore files
-find . -name "*.g*ignore" -exec rm {} \;
+find . -name "*.g*ignore" -delete
 
 # fix missing exec flag on file introduced in 4.14.10-rc1
 chmod 755 tools/objtool/sync-check.sh
@@ -914,7 +932,7 @@ export PYTHON=%{__python2}
 %define _kerneldir /usr/src/linux-%{kversion}-%{buildrpmrel}
 %define _bootdir /boot
 %define _modulesdir /lib/modules
-%define _efidir %{_bootdir}/efi/mandriva
+%define _efidir %{_bootdir}/efi/EFI/openmandriva
 
 # Directories definition needed for building
 %define temp_root %{build_dir}/temp-root
@@ -933,12 +951,21 @@ CreateConfig() {
 	CLANG_EXTRAS=""
 %endif
 
+%if %{with build_modxz}
+sed -i -e "s/^# CONFIG_KERNEL_XZ is not set/CONFIG_KERNEL_XZ=y/g" %{_sourcedir}/common.config
+%endif
+
+%if %{with build_modzstd}
+sed -i -e "s/^# CONFIG_KERNEL_ZSTD is not set/CONFIG_KERNEL_ZSTD=y/g" %{_sourcedir}/common.config
+sed -i -e "s/^# CONFIG_RD_ZSTD is not set/CONFIG_RD_ZSTD=y/g" %{_sourcedir}/common.config
+%endif
+
 	for i in common common-${type} ${arch}-common ${arch}-${type} $CLANG_EXTRAS; do
 		[ -e %{_sourcedir}/$i.config ] || continue
 		if [ -e .config ]; then
 			# Make sure the later configs override the former ones.
 			# More specific configs should be able to override generic ones no matter what.
-			NEWCONFIGS=`cat %{_sourcedir}/$i.config |grep -E '^(CONFIG_|# CONFIG_)' |sed -e 's,=.*,,;s,^# ,,;s, is not set,,'`
+			NEWCONFIGS=$(cat %{_sourcedir}/$i.config |grep -E '^(CONFIG_|# CONFIG_)' |sed -e 's,=.*,,;s,^# ,,;s, is not set,,')
 			for j in $NEWCONFIGS; do
 				sed -i -e "/^$j=.*/d;/^# $j is not set/d" .config
 			done
@@ -951,7 +978,7 @@ PrepareKernel() {
     name=$1
     extension=$2
     config_dir=%{_sourcedir}
-    echo "Make config for kernel $extension"
+    printf '%s\n' "Make config for kernel $extension"
     %{smake} -s mrproper
     CreateConfig %{target_arch} ${flavour}
     # make sure EXTRAVERSION says what we want it to say
@@ -961,7 +988,7 @@ PrepareKernel() {
 
 BuildKernel() {
     KernelVer=$1
-    echo "Building kernel $KernelVer"
+    printf '%s\n' "Building kernel $KernelVer"
 # (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
 %ifarch x86_64
 %if %{with clang}
@@ -981,14 +1008,21 @@ BuildKernel() {
     install -d %{temp_boot}
     install -m 644 System.map %{temp_boot}/System.map-$KernelVer
     install -m 644 .config %{temp_boot}/config-$KernelVer
+
 %if %{with build_modxz}
 %ifarch %{ix86} %{armx}
     xz -5 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
 %else
     xz -7 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
 %endif
+%endif
+
+%if %{with build_modzstd}
+%ifarch %{ix86} %{armx}
+    zstd -15 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
 %else
-    gzip -9 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.gz
+    zstd -10 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
+%endif
 %endif
 
 %ifarch %{arm}
@@ -1082,9 +1116,9 @@ SaveDevel() {
 
 # Clean the scripts tree, and make sure everything is ok (sanity check)
 # running prepare+scripts (tree was already "prepared" in build)
-    pushd $TempDevelRoot >/dev/null
+    cd $TempDevelRoot >/dev/null
     %{smake} ARCH=%{target_arch} clean
-    popd >/dev/null
+    cd - >/dev/null
 
     rm -f $TempDevelRoot/.config.old
 
@@ -1197,9 +1231,9 @@ SaveDebug() {
     find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" | %kxargs -I '{}' objcopy --only-keep-debug '{}' '{}'.debug
     find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" | %kxargs -I '{}' sh -c 'cd `dirname {}`; objcopy --add-gnu-debuglink=`basename {}`.debug --strip-debug `basename {}`'
 
-    pushd %{temp_modules}
+    cd %{temp_modules}
     find %{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko.debug" > debug_module_list
-    popd
+    cd -
     cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%{_modulesdir}/\1|' >> $kernel_debug_files
     cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%exclude %{_modulesdir}/\1|' >> ../kernel_exclude_debug_files.$debug_flavour
     rm -f %{temp_modules}/debug_module_list
@@ -1213,7 +1247,7 @@ ker="vmlinuz"
 ### Create the kernel_files.*
 cat > $kernel_files <<EOF
 %{_bootdir}/System.map-%{kversion}-$kernel_flavour-%{buildrpmrel}
-%{_bootdir}/symvers-%{kversion}-$kernel_flavour-%{buildrpmrel}.*z
+%{_bootdir}/symvers-%{kversion}-$kernel_flavour-%{buildrpmrel}.[gxz]*
 %{_bootdir}/config-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %{_bootdir}/$ker-%{kversion}-$kernel_flavour-%{buildrpmrel}
 # device tree binary
@@ -1227,13 +1261,13 @@ cat > $kernel_files <<EOF
 EOF
 
 %if %{with build_debug}
-    cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
+cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
 %endif
 
 ### Create kernel Post script
 cat > $kernel_files-post <<EOF
 /usr/bin/kernel-install add %{kversion}-$kernel_flavour-%{buildrpmrel} /boot/vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}
-pushd /boot > /dev/null
+cd /boot > /dev/null
 if [ -L vmlinuz-$kernel_flavour ]; then
     rm -f vmlinuz-$kernel_flavour
 fi
@@ -1247,7 +1281,7 @@ if [ -e initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ]; then
     ln -sf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img initrd.img
 fi
 
-popd > /dev/null
+cd - > /dev/null
 %if %{with build_devel}
 # create kernel-devel symlinks if matching -devel- rpm is installed
 if [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
@@ -1275,7 +1309,7 @@ EOF
 ### Create kernel Preun script on the fly
 cat > $kernel_files-preun <<EOF
 /usr/bin/kernel-install remove %{kversion}-$kernel_flavour-%{buildrpmrel}
-pushd /boot > /dev/null
+cd /boot > /dev/null
 if [ -L vmlinuz-$kernel_flavour ]; then
     if [ "$(readlink vmlinuz-$kernel_flavour)" = "vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}" ]; then
 	rm -f vmlinuz-$kernel_flavour
@@ -1286,7 +1320,7 @@ if [ -L initrd-$kernel_flavour.img ]; then
 	rm -f initrd-$kernel_flavour.img
     fi
 fi
-popd > /dev/null
+cd - > /dev/null
 %if %{with build_devel}
 if [ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build ]; then
     rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
@@ -1351,15 +1385,15 @@ for i in arm arm64 i386 x86_64; do
 done
 if [ -s newconfigs ]; then
 	set +x
-	echo "New config options have been added - please update the *.config files."
-	echo "New config options you need to take care of:"
+	printf '%s\n' "New config options have been added - please update the *.config files."
+	printf '%s\n' "New config options you need to take care of:"
 	if [ -e newconfigs.common ]; then
-		echo "For common.config:"
+		printf '%s\n' "For common.config:"
 		cat newconfigs.common
 	fi
 	for i in arm arm64 i386 x86_64; do
 		[ -e newconfigs.${i}only ] || continue
-		echo "For $i-common.config:"
+		printf '%s\n' "For $i-common.config:"
 		cat newconfigs.${i}only
 	done
 	exit 1
@@ -1431,7 +1465,6 @@ CreateKernel server
 # endif
 
 # set extraversion to match srpm to get nice version reported by the tools
-#LC_ALL=C perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{rpmrel}/" Makefile
 sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 
 ############################################################
@@ -1496,6 +1529,14 @@ find %{target_modules} -name "*.ko" | %kxargs xz -7 -T0
 find %{target_modules} -name "*.ko" | %kxargs gzip -9
 %endif
 
+#if %{with build_modzstd}
+#ifarch %{ix86} %{armx}
+#find %{target_modules} -name "*.ko" | %kxargs zstd -10 -q -T0 --rm
+#else
+#find %{target_modules} -name "*.ko" | %kxargs zstd -15 -q -T0 --rm
+#endif
+#endif
+
 # We used to have a copy of PrepareKernel here
 # Now, we make sure that the thing in the linux dir is what we want it to be
 for i in %{target_modules}/*; do
@@ -1506,14 +1547,14 @@ done
 # we really need the depmod -ae here
 pushd %{target_modules}
 for i in *; do
-    /sbin/depmod -ae -b %{buildroot} -F %{target_boot}/System.map-$i $i
+    /sbin/depmod -ae -b %{buildroot} -F %{target_boot}/System.map-"$i" "$i"
     echo $?
 done
 
 for i in *; do
     pushd $i
-    echo "Creating modules.description for $i"
-    modules=`find . -name "*.ko.[gx]z"`
+    printf '%s\n' "Creating modules.description for $i"
+    modules=$(find . -name "*.ko.[gxz]*[z|st]")
     echo $modules | %kxargs /sbin/modinfo | perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
     popd
 done
@@ -1573,8 +1614,8 @@ rm -f %{target_source}/*_files.* %{target_source}/README.kernel-sources
 # we remove all the source files that we don't ship
 # first architecture files
 for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
-	 mips nios2 openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
-	rm -rf %{target_source}/arch/$i
+    mips nios2 openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
+    rm -rf %{target_source}/arch/$i
 done
 
 # other misc files
@@ -1583,7 +1624,7 @@ rm -f %{target_source}/{.missing-syscalls.d,arch/.gitignore,firmware/.gitignore}
 rm -rf %{target_source}/.tmp_depmod/
 
 # more cleaning
-pushd %{target_source}
+cd %{target_source}
 # lots of gitignore files
 find -iname ".gitignore" -delete
 # clean tools tree
@@ -1593,11 +1634,11 @@ find -iname ".gitignore" -delete
 rm -f .cache.mk
 # Drop script binaries that can be rebuilt
 find tools scripts -executable |while read r; do
-	if file $r |grep -q ELF; then
-		rm -f $r
-	fi
+    if file $r |grep -q ELF; then
+	rm -f $r
+    fi
 done
-popd
+cd -
 
 #endif %{with build_source}
 %endif
