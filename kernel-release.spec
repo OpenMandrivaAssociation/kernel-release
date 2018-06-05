@@ -298,10 +298,6 @@ Patch130:	nouveau-pascal-backlight.patch
 
 ### Additional hardware support
 ### TV tuners:
-# Add support for Hauppauge HVR-1975 TV tuners, based on
-# https://s3.amazonaws.com/hauppauge/linux/hvr-9x5-19x5-22x5-kernel-3.19-2015-07-10-v2.patch.tar.xz
-# Taken from http://www.hauppauge.com/site/support/linux.html
-Patch140:	hauppauge-hvr-1975.patch
 # SAA716x DVB driver
 # git clone git@github.com:crazycat69/linux_media
 # cd linux_media
