@@ -1,43 +1,16 @@
-diff -Naur linux-4.16/Documentation/x86/boot.txt linux-4.16.tpg/Documentation/x86/boot.txt
---- linux-4.16/Documentation/x86/boot.txt	2018-04-01 21:20:27.000000000 +0000
-+++ linux-4.16.tpg/Documentation/x86/boot.txt	2018-05-05 20:55:08.101036076 +0000
-@@ -666,9 +666,9 @@
-   uncompressed data should be determined using the standard magic
-   numbers.  The currently supported compression formats are gzip
-   (magic numbers 1F 8B or 1F 9E), bzip2 (magic number 42 5A), LZMA
--  (magic number 5D 00), XZ (magic number FD 37), and LZ4 (magic number
--  02 21).  The uncompressed payload is currently always ELF (magic
--  number 7F 45 4C 46).
-+  (magic number 5D 00), XZ (magic number FD 37), LZ4 (magic number
-+  02 21) and ZSTD (magic number 28 B5). The uncompressed payload is
-+  currently always ELF (magic number 7F 45 4C 46).
- 
- Field name:	payload_length
- Type:		read
-diff -Naur linux-4.16/arch/x86/Kconfig linux-4.16.tpg/arch/x86/Kconfig
---- linux-4.16/arch/x86/Kconfig	2018-04-01 21:20:27.000000000 +0000
-+++ linux-4.16.tpg/arch/x86/Kconfig	2018-05-05 20:55:46.258056725 +0000
-@@ -155,6 +155,7 @@
- 	select HAVE_KERNEL_LZMA
- 	select HAVE_KERNEL_LZO
- 	select HAVE_KERNEL_XZ
-+	select HAVE_KERNEL_ZSTD
- 	select HAVE_KPROBES
- 	select HAVE_KPROBES_ON_FTRACE
- 	select HAVE_FUNCTION_ERROR_INJECTION
-diff -Naur linux-4.16/arch/x86/boot/compressed/Makefile linux-4.16.tpg/arch/x86/boot/compressed/Makefile
---- linux-4.16/arch/x86/boot/compressed/Makefile	2018-04-01 21:20:27.000000000 +0000
-+++ linux-4.16.tpg/arch/x86/boot/compressed/Makefile	2018-05-05 20:57:19.610095160 +0000
-@@ -24,7 +24,7 @@
+diff -up linux-4.17/arch/x86/boot/compressed/Makefile.0127~ linux-4.17/arch/x86/boot/compressed/Makefile
+--- linux-4.17/arch/x86/boot/compressed/Makefile.0127~	2018-06-03 23:15:21.000000000 +0200
++++ linux-4.17/arch/x86/boot/compressed/Makefile	2018-06-05 20:53:01.711474875 +0200
+@@ -24,7 +24,7 @@ OBJECT_FILES_NON_STANDARD	:= y
  KCOV_INSTRUMENT		:= n
  
  targets := vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin.bz2 vmlinux.bin.lzma \
 -	vmlinux.bin.xz vmlinux.bin.lzo vmlinux.bin.lz4
 +	vmlinux.bin.xz vmlinux.bin.lzo vmlinux.bin.lz4 vmlinux.bin.zst
  
- KBUILD_CFLAGS := -m$(BITS) -D__KERNEL__ -O2
+ KBUILD_CFLAGS := -m$(BITS) -O2
  KBUILD_CFLAGS += -fno-strict-aliasing $(call cc-option, -fPIE, -fPIC)
-@@ -137,6 +137,8 @@
+@@ -137,6 +137,8 @@ $(obj)/vmlinux.bin.lzo: $(vmlinux.bin.al
  	$(call if_changed,lzo)
  $(obj)/vmlinux.bin.lz4: $(vmlinux.bin.all-y) FORCE
  	$(call if_changed,lz4)
@@ -46,7 +19,7 @@ diff -Naur linux-4.16/arch/x86/boot/compressed/Makefile linux-4.16.tpg/arch/x86/
  
  suffix-$(CONFIG_KERNEL_GZIP)	:= gz
  suffix-$(CONFIG_KERNEL_BZIP2)	:= bz2
-@@ -144,6 +146,7 @@
+@@ -144,6 +146,7 @@ suffix-$(CONFIG_KERNEL_LZMA)	:= lzma
  suffix-$(CONFIG_KERNEL_XZ)	:= xz
  suffix-$(CONFIG_KERNEL_LZO) 	:= lzo
  suffix-$(CONFIG_KERNEL_LZ4) 	:= lz4
@@ -54,10 +27,10 @@ diff -Naur linux-4.16/arch/x86/boot/compressed/Makefile linux-4.16.tpg/arch/x86/
  
  quiet_cmd_mkpiggy = MKPIGGY $@
        cmd_mkpiggy = $(obj)/mkpiggy $< > $@ || ( rm -f $@ ; false )
-diff -Naur linux-4.16/arch/x86/boot/compressed/misc.c linux-4.16.tpg/arch/x86/boot/compressed/misc.c
---- linux-4.16/arch/x86/boot/compressed/misc.c	2018-04-01 21:20:27.000000000 +0000
-+++ linux-4.16.tpg/arch/x86/boot/compressed/misc.c	2018-05-05 20:57:55.999105985 +0000
-@@ -75,6 +75,10 @@
+diff -up linux-4.17/arch/x86/boot/compressed/misc.c.0127~ linux-4.17/arch/x86/boot/compressed/misc.c
+--- linux-4.17/arch/x86/boot/compressed/misc.c.0127~	2018-06-03 23:15:21.000000000 +0200
++++ linux-4.17/arch/x86/boot/compressed/misc.c	2018-06-05 20:48:46.972460921 +0200
+@@ -76,6 +76,10 @@ static int lines, cols;
  #ifdef CONFIG_KERNEL_LZ4
  #include "../../../../lib/decompress_unlz4.c"
  #endif
@@ -68,10 +41,10 @@ diff -Naur linux-4.16/arch/x86/boot/compressed/misc.c linux-4.16.tpg/arch/x86/bo
  /*
   * NOTE: When adding a new decompressor, please update the analysis in
   * ../header.S.
-diff -Naur linux-4.16/arch/x86/boot/header.S linux-4.16.tpg/arch/x86/boot/header.S
---- linux-4.16/arch/x86/boot/header.S	2018-04-01 21:20:27.000000000 +0000
-+++ linux-4.16.tpg/arch/x86/boot/header.S	2018-05-05 20:59:56.498127616 +0000
-@@ -526,8 +526,14 @@
+diff -up linux-4.17/arch/x86/boot/header.S.0127~ linux-4.17/arch/x86/boot/header.S
+--- linux-4.17/arch/x86/boot/header.S.0127~	2018-06-03 23:15:21.000000000 +0200
++++ linux-4.17/arch/x86/boot/header.S	2018-06-05 20:48:46.972460921 +0200
+@@ -526,8 +526,14 @@ pref_address:		.quad LOAD_PHYSICAL_ADDR
  # the size-dependent part now grows so fast.
  #
  # extra_bytes = (uncompressed_size >> 8) + 65536
@@ -87,9 +60,9 @@ diff -Naur linux-4.16/arch/x86/boot/header.S linux-4.16.tpg/arch/x86/boot/header
  #if ZO_z_output_len > ZO_z_input_len
  # define ZO_z_extract_offset	(ZO_z_output_len + ZO_z_extra_bytes - \
  				 ZO_z_input_len)
-diff -Naur linux-4.16/arch/x86/include/asm/boot.h linux-4.16.tpg/arch/x86/include/asm/boot.h
---- linux-4.16/arch/x86/include/asm/boot.h	2018-04-01 21:20:27.000000000 +0000
-+++ linux-4.16.tpg/arch/x86/include/asm/boot.h	2018-05-05 21:02:11.289130418 +0000
+diff -up linux-4.17/arch/x86/include/asm/boot.h.0127~ linux-4.17/arch/x86/include/asm/boot.h
+--- linux-4.17/arch/x86/include/asm/boot.h.0127~	2018-06-03 23:15:21.000000000 +0200
++++ linux-4.17/arch/x86/include/asm/boot.h	2018-06-05 20:48:46.972460921 +0200
 @@ -24,9 +24,11 @@
  # error "Invalid value for CONFIG_PHYSICAL_ALIGN"
  #endif
@@ -104,3 +77,30 @@ diff -Naur linux-4.16/arch/x86/include/asm/boot.h linux-4.16.tpg/arch/x86/includ
  # define BOOT_HEAP_SIZE		 0x10000
  #endif
  
+diff -up linux-4.17/arch/x86/Kconfig.0127~ linux-4.17/arch/x86/Kconfig
+--- linux-4.17/arch/x86/Kconfig.0127~	2018-06-03 23:15:21.000000000 +0200
++++ linux-4.17/arch/x86/Kconfig	2018-06-05 20:48:46.972460921 +0200
+@@ -157,6 +157,7 @@ config X86
+ 	select HAVE_KERNEL_LZMA
+ 	select HAVE_KERNEL_LZO
+ 	select HAVE_KERNEL_XZ
++	select HAVE_KERNEL_ZSTD
+ 	select HAVE_KPROBES
+ 	select HAVE_KPROBES_ON_FTRACE
+ 	select HAVE_FUNCTION_ERROR_INJECTION
+diff -up linux-4.17/Documentation/x86/boot.txt.0127~ linux-4.17/Documentation/x86/boot.txt
+--- linux-4.17/Documentation/x86/boot.txt.0127~	2018-06-03 23:15:21.000000000 +0200
++++ linux-4.17/Documentation/x86/boot.txt	2018-06-05 20:48:46.972460921 +0200
+@@ -666,9 +666,9 @@ Protocol:	2.08+
+   uncompressed data should be determined using the standard magic
+   numbers.  The currently supported compression formats are gzip
+   (magic numbers 1F 8B or 1F 9E), bzip2 (magic number 42 5A), LZMA
+-  (magic number 5D 00), XZ (magic number FD 37), and LZ4 (magic number
+-  02 21).  The uncompressed payload is currently always ELF (magic
+-  number 7F 45 4C 46).
++  (magic number 5D 00), XZ (magic number FD 37), LZ4 (magic number
++  02 21) and ZSTD (magic number 28 B5). The uncompressed payload is
++  currently always ELF (magic number 7F 45 4C 46).
+ 
+ Field name:	payload_length
+ Type:		read

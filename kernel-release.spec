@@ -11,8 +11,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	16
-%define sublevel	13
+%define patchlevel	17
+%define sublevel	0
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -247,7 +247,7 @@ Patch1031:	0001-Fix-for-compilation-with-clang.patch
 
 # Bootsplash system
 # https://lkml.org/lkml/2017/10/25/346
-# https://patchwork.kernel.org/patch/10172665/
+# https://patchwork.kernel.org/patch/10172665/, rebased
 Patch100:	RFC-v3-01-13-bootsplash-Initial-implementation-showing-black-screen.patch
 # https://patchwork.kernel.org/patch/10172669/
 Patch101:	RFC-v3-02-13-bootsplash-Add-file-reading-and-picture-rendering.patch
@@ -283,7 +283,7 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
 # Temporarily disabled for -rc releases until ported upstream
-Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.16.patch
+Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.17.patch
 
 Patch125:	0005-crypto-Add-zstd-support.patch
 %if %{with build_modzstd}
@@ -323,7 +323,6 @@ Patch146:	saa716x-4.15.patch
 #Patch201:	0002-binder-implement-namepsace-support-for-Android-binde.patch
 
 Patch250:	4.14-C11.patch
-Patch251:	https://raw.githubusercontent.com/frugalware/frugalware-current/master/source/base/kernel/0001-Make-it-possible-to-disable-SWIOTLB-code-on-admgpu-a.patch
 
 # VirtualBox shared folders support
 # https://patchwork.kernel.org/patch/10315707/
@@ -1389,12 +1388,12 @@ if [ -s newconfigs ]; then
 	printf '%s\n' "New config options you need to take care of:"
 	if [ -e newconfigs.common ]; then
 		printf '%s\n' "For common.config:"
-		cat newconfigs.common
+		sed -e 's/.*=n/# & is not set/;s,=n,,' newconfigs.common
 	fi
 	for i in arm arm64 i386 x86_64; do
 		[ -e newconfigs.${i}only ] || continue
 		printf '%s\n' "For $i-common.config:"
-		cat newconfigs.${i}only
+		sed -e 's/.*=n/# & is not set/;s,=n,,' newconfigs.${i}only
 	done
 	exit 1
 fi
