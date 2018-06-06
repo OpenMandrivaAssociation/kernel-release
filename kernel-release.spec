@@ -325,6 +325,7 @@ Patch250:	4.14-C11.patch
 # For newer versions, check
 # https://patchwork.kernel.org/project/LKML/list/?submitter=582
 Patch300:	v7-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.patch
+Patch301:	vbox-4.17.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
