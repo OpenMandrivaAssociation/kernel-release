@@ -12,7 +12,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	17
-%define sublevel	0
+%define sublevel	1
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -1650,6 +1650,7 @@ cd -
 %dir %{_kerneldir}/arch
 %dir %{_kerneldir}/include
 %dir %{_kerneldir}/certs
+%{_kerneldir}/.clang-format
 %{_kerneldir}/.cocciconfig
 %{_kerneldir}/Documentation
 %{_kerneldir}/arch/Kconfig
