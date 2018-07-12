@@ -12,8 +12,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	16
-%define sublevel	13
+%define patchlevel	17
+%define sublevel	5
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -210,6 +210,20 @@ Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch4:		linux-4.7-intel-dvi-duallink.patch
 Patch5:		linux-4.8.1-buildfix.patch
 
+# Kernels >= 4.17-rc1 trigger an instant reboot when built with gcc 8.1 and
+# compiler flags set in the kernel package.
+# git bisect shows the problematic commit being
+# 0a1756bd2897951c03c1cb671bdfd40729ac2177
+#
+# This patch reverts a few more commits because they build on top of it,
+# namely:
+# 0a1756bd2897951c03c1cb671bdfd40729ac2177
+# 194a9749c73d650c0b1dfdee04fb0bdf0a888ba8
+# 5c9b0b1c49881c680d4a56b9d9e03dfb3160fd4d
+# 589bb62be316401603453c7d2d3c60ad8b9c3cf3
+# 372fddf709041743a93e381556f4c41aad1e28f8
+Patch6:		revert-patches-causing-instant-reboot.patch
+
 %if %{with clang}
 # Patches to make it build with clang
 Patch1000:	0001-kbuild-LLVMLinux-Set-compiler-flags-for-clang.patch
@@ -248,7 +262,7 @@ Patch1031:	0001-Fix-for-compilation-with-clang.patch
 
 # Bootsplash system
 # https://lkml.org/lkml/2017/10/25/346
-# https://patchwork.kernel.org/patch/10172665/
+# https://patchwork.kernel.org/patch/10172665/, rebased
 Patch100:	RFC-v3-01-13-bootsplash-Initial-implementation-showing-black-screen.patch
 # https://patchwork.kernel.org/patch/10172669/
 Patch101:	RFC-v3-02-13-bootsplash-Add-file-reading-and-picture-rendering.patch
@@ -284,7 +298,7 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
 # Temporarily disabled for -rc releases until ported upstream
-Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.16.patch
+Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.17.patch
 
 Patch125:	0005-crypto-Add-zstd-support.patch
 %if %{with build_modzstd}
@@ -299,10 +313,6 @@ Patch130:	nouveau-pascal-backlight.patch
 
 ### Additional hardware support
 ### TV tuners:
-# Add support for Hauppauge HVR-1975 TV tuners, based on
-# https://s3.amazonaws.com/hauppauge/linux/hvr-9x5-19x5-22x5-kernel-3.19-2015-07-10-v2.patch.tar.xz
-# Taken from http://www.hauppauge.com/site/support/linux.html
-Patch140:	hauppauge-hvr-1975.patch
 # SAA716x DVB driver
 # git clone git@github.com:crazycat69/linux_media
 # cd linux_media
@@ -324,7 +334,6 @@ Patch146:	saa716x-4.15.patch
 #Patch201:	0002-binder-implement-namepsace-support-for-Android-binde.patch
 
 Patch250:	4.14-C11.patch
-Patch251:	https://raw.githubusercontent.com/frugalware/frugalware-current/master/source/base/kernel/0001-Make-it-possible-to-disable-SWIOTLB-code-on-admgpu-a.patch
 
 # VirtualBox shared folders support
 # https://patchwork.kernel.org/patch/10315707/
@@ -1111,7 +1120,7 @@ SaveDevel() {
     cp -fR tools/scripts/utilities.mak $TempDevelRoot/tools/scripts
 
     for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
-		 mips mn10300 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
+		 mips mn10300 nds32 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
 	rm -rf $TempDevelRoot/arch/$i
     done
 
@@ -1391,12 +1400,12 @@ if [ -s newconfigs ]; then
 	printf '%s\n' "New config options you need to take care of:"
 	if [ -e newconfigs.common ]; then
 		printf '%s\n' "For common.config:"
-		cat newconfigs.common
+		sed -e 's/.*=n/# & is not set/;s,=n,,' newconfigs.common
 	fi
 	for i in arm arm64 i386 x86_64; do
 		[ -e newconfigs.${i}only ] || continue
 		printf '%s\n' "For $i-common.config:"
-		cat newconfigs.${i}only
+		sed -e 's/.*=n/# & is not set/;s,=n,,' newconfigs.${i}only
 	done
 	exit 1
 fi
@@ -1654,7 +1663,7 @@ rm -f %{target_source}/*_files.* %{target_source}/README.kernel-sources
 # we remove all the source files that we don't ship
 # first architecture files
 for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
-    mips nios2 openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
+    mips nds32 nios2 openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
     rm -rf %{target_source}/arch/$i
 done
 
@@ -1695,6 +1704,7 @@ cd -
 %dir %{_kerneldir}/arch
 %dir %{_kerneldir}/include
 %dir %{_kerneldir}/certs
+%{_kerneldir}/.clang-format
 %{_kerneldir}/.cocciconfig
 %{_kerneldir}/Documentation
 %{_kerneldir}/arch/Kconfig
