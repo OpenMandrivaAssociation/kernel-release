@@ -422,6 +422,7 @@ BuildRequires:	gcc-plugin-devel >= 7.2.1_2017.11-3
 BuildRequires:	gcc-c++ >= 7.2.1_2017.11-3
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	diffutils
+BuildRequires:	hostname
 # For git apply
 BuildRequires:	git-core
 # For power tools
