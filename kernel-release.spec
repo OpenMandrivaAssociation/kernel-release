@@ -332,7 +332,7 @@ Patch146:	saa716x-4.15.patch
 # NOT YET
 #Patch201:	0002-binder-implement-namepsace-support-for-Android-binde.patch
 
-Patch250:	4.14-C11.patch
+#Patch250:	4.14-C11.patch
 
 # VirtualBox shared folders support
 # https://patchwork.kernel.org/patch/10315707/
@@ -1624,7 +1624,7 @@ install -d %{target_source}
 tar cf - . | tar xf - -C %{target_source}
 chmod -R a+rX %{target_source}
 
-rm %{target_source}/*.lang
+rm -f %{target_source}/*.lang
 
 # File lists aren't needed
 rm -f %{target_source}/*_files.* %{target_source}/README.kernel-sources
