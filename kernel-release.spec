@@ -85,7 +85,7 @@
 	done
 )
 
-%ifarch %{x86_64}
+%ifarch x86_64
 # BEGIN OF FLAVOURS
 %bcond_without build_desktop
 %bcond_without build_server
@@ -103,7 +103,7 @@
 %bcond_with build_perf
 %bcond_without build_x86_energy_perf_policy
 %bcond_without build_turbostat
-%ifarch %{ix86} %{x86_64}
+%ifarch %{ix86} x86_64
 %bcond_without build_cpupower
 %else
 # cpupower is currently x86 only
@@ -156,7 +156,7 @@ Version:	%{kversion}
 Release:	%{rpmrel}
 License:	GPLv2
 Group:		System/Kernel and hardware
-ExclusiveArch:	%{ix86} %{x86_64} %{armx}
+ExclusiveArch:	%{ix86} x86_64 %{armx}
 ExclusiveOS:	Linux
 URL:		http://www.kernel.org
 
@@ -430,7 +430,7 @@ BuildRequires:	git-core
 BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	pkgconfig(libkmod)
 
-%ifarch %{x86_64}
+%ifarch x86_64
 BuildRequires:	numa-devel
 %endif
 
@@ -477,7 +477,7 @@ Suggests:	microcode-intel
 # so end users don't have to install compilers (and worse,
 # get compiler error messages on failures)
 %if %mdvver >= 3000000
-%ifarch %{ix86} %{x86_64}
+%ifarch %{ix86} x86_64
 BuildRequires:	dkms-virtualbox >= 5.2.8-1
 BuildRequires:	dkms-vboxadditions >= 5.2.8-1
 %endif
@@ -533,7 +533,7 @@ Requires:	ncurses-devel				\
 Requires:	make					\
 Requires:	gcc >= 7.2.1_2017.11-3			\
 Requires:	perl					\
-%ifarch %{x86_64}					\
+%ifarch x86_64					\
 Requires:	pkgconfig(libelf)			\
 %endif							\
 Summary:	The kernel-devel files for %{kname}-%{1}-%{buildrel} \
@@ -890,7 +890,7 @@ LC_ALL=C sed -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 
 # Pull in some externally maintained modules
 %if %mdvver >= 3000000
-%ifarch %{ix86} %{x86_64}
+%ifarch %{ix86} x86_64
 # === VirtualBox guest additions ===
 # VBoxVideo is upstreamed -- let's fix it instead of copying the dkms driver
 # 800x600 is too small to be useful -- even calamares doesn't
@@ -1006,7 +1006,7 @@ BuildKernel() {
     KernelVer=$1
     printf '%s\n' "Building kernel $KernelVer"
 # (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
-%ifarch %{x86_64}
+%ifarch x86_64
 %if %{with clang}
     %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS -flto" LDFLAGS="$LDFLAGS -flto"
 %else
@@ -1089,7 +1089,7 @@ SaveDevel() {
     cp -fR arch/%{target_arch}/tools $TempDevelRoot/arch/%{target_arch}/
 %endif
 
-%ifarch %{ix86} %{x86_64}
+%ifarch %{ix86} x86_64
     cp -fR arch/x86/kernel/asm-offsets.{c,s} $TempDevelRoot/arch/x86/kernel/
     cp -fR arch/x86/kernel/asm-offsets_{32,64}.c $TempDevelRoot/arch/x86/kernel/
     cp -fR arch/x86/purgatory/* $TempDevelRoot/arch/x86/purgatory/
@@ -1502,7 +1502,7 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 
 %kmake -C tools/bootsplash LDFLAGS="%{optflags}"
 
-%ifarch %{ix86} %{x86_64}
+%ifarch %{ix86} x86_64
 %if %{with build_x86_energy_perf_policy}
 %kmake -C tools/power/x86/x86_energy_perf_policy CC=clang LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none"
 %endif
@@ -1645,7 +1645,7 @@ install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 mkdir -p %{buildroot}%{_bindir}/
 install -m755 tools/bootsplash/bootsplash-packer %{buildroot}%{_bindir}/
 
-%ifarch %{ix86} %{x86_64}
+%ifarch %{ix86} x86_64
 %if %{with build_x86_energy_perf_policy}
 mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
 %kmake -C tools/power/x86/x86_energy_perf_policy install DESTDIR="%{buildroot}"
@@ -1786,7 +1786,7 @@ cd -
 %if %{with build_perf}
 %files -n perf
 %{_bindir}/perf
-%ifarch %{x86_64}
+%ifarch x86_64
 %{_bindir}/perf-read-vdso32
 %endif
 %{_bindir}/trace
@@ -1817,7 +1817,7 @@ cd -
 %files -n bootsplash-packer
 %{_bindir}/bootsplash-packer
 
-%ifarch %{ix86} %{x86_64}
+%ifarch %{ix86} x86_64
 %if %{with build_x86_energy_perf_policy}
 %files -n x86_energy_perf_policy
 %{_bindir}/x86_energy_perf_policy
