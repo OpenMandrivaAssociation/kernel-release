@@ -26,7 +26,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -130,10 +130,10 @@
 ############################################################
 ### Linker start1 > Check point to build for omv or rosa ###
 ############################################################
-%define kmake ARCH=%{target_arch} %{make} LD="$LD" LDFLAGS="$LDFLAGS"
+%define kmake ARCH=%{target_arch} %{make} LD="$LD"
 # there are places where parallel make don't work
 # usually we use this
-%define smake make LD="$LD" LDFLAGS="$LDFLAGS"
+%define smake make LD="$LD"
 
 ###################################################
 ###  Linker end1 > Check point to build for omv ###
@@ -208,20 +208,6 @@ Patch2:		die-floppy-die.patch
 Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch4:		linux-4.7-intel-dvi-duallink.patch
 Patch5:		linux-4.8.1-buildfix.patch
-
-# Kernels >= 4.17-rc1 trigger an instant reboot when built with gcc 8.1 and
-# compiler flags set in the kernel package.
-# git bisect shows the problematic commit being
-# 0a1756bd2897951c03c1cb671bdfd40729ac2177
-#
-# This patch reverts a few more commits because they build on top of it,
-# namely:
-# 0a1756bd2897951c03c1cb671bdfd40729ac2177
-# 194a9749c73d650c0b1dfdee04fb0bdf0a888ba8
-# 5c9b0b1c49881c680d4a56b9d9e03dfb3160fd4d
-# 589bb62be316401603453c7d2d3c60ad8b9c3cf3
-# 372fddf709041743a93e381556f4c41aad1e28f8
-Patch6:		revert-patches-causing-instant-reboot.patch
 
 %if %{with clang}
 # Patches to make it build with clang
@@ -937,7 +923,6 @@ chmod 755 tools/objtool/sync-check.sh
 ############################################################
 # Make sure we don't use gold
 export LD="%{_target_platform}-ld.bfd"
-export LDFLAGS="--hash-style=sysv --build-id=none"
 export PYTHON=%{__python2}
 
 ############################################################
@@ -1007,15 +992,15 @@ BuildKernel() {
 # (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
 %ifarch %{x86_64}
 %if %{with clang}
-    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS -flto" LDFLAGS="$LDFLAGS -flto"
+    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS -flto"
 %else
-    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS -flto" LDFLAGS="$LDFLAGS -flto"
+    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS -flto"
 %endif
 %else
 %if %{with clang}
-    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS"
 %else
-    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS"
 %endif
 %endif
 
@@ -1488,7 +1473,7 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 ### Linker start3 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_perf}
-%{smake} -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%{__cc} PYTHON=%{__python2} WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
+%{smake} -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%{__cc} PYTHON=%{__python2} WERROR=0 LDFLAGS="%{optflags} -Wl,--hash-style=sysv -Wl,--build-id=none -flto" prefix=%{_prefix} all
 %{smake} -C tools/perf -s CC=%{__cc} prefix=%{_prefix} PYTHON=%{__python2} man
 %endif
 
@@ -1502,7 +1487,7 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 
 %ifarch %{ix86} %{x86_64}
 %if %{with build_x86_energy_perf_policy}
-%kmake -C tools/power/x86/x86_energy_perf_policy CC=clang LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none"
+%kmake -C tools/power/x86/x86_energy_perf_policy CC=clang LDFLAGS="%{optflags} -Wl,--hash-style=sysv -Wl,--build-id=none"
 %endif
 
 %if %{with build_turbostat}
