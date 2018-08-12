@@ -2,4 +2,4 @@ sources:
   linux-4.17.tar.sign: d5fbaecb9b485cec4133291499ae3d855618cd40
   linux-4.17.tar.xz: 82826f02dd6d5bae5ccb802cc319a605b65111dc
   saa716x-driver.tar.xz: f9b6ef1cd6f1f71f53d9a8aadfba2cf6b5c3d7b6
-  patch-4.17.12.xz: 7035a01d505fd42781c13725cd33e022990fdd72
+  patch-4.17.14.xz: 4eaf4a80afa2b27930946bcfb07bf599e1d1aa65
