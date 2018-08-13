@@ -988,7 +988,11 @@ PrepareKernel() {
     config_dir=%{_sourcedir}
     printf '%s\n' "Make config for kernel $extension"
     %{smake} -s mrproper
+%ifarch znver1
+    CreateConfig %{_target_cpu} ${flavour}
+%else
     CreateConfig %{target_arch} ${flavour}
+%endif
     # make sure EXTRAVERSION says what we want it to say
     sed -ri "s|^(EXTRAVERSION =).*|\1 -$extension|" Makefile
     %{smake} oldconfig
@@ -1380,15 +1384,15 @@ for a in arm arm64 i386 x86_64 znver1; do
 	CreateConfig $a desktop
 	export ARCH=$a
 	[ "$ARCH" = "znver1" ] && export ARCH=x86
-	make ARCH=$a listnewconfig |grep '^CONFIG' >newconfigs.$a || :
+	make ARCH=$ARCH listnewconfig |grep '^CONFIG' >newconfigs.$a || :
 done
 cat newconfigs.* >newconfigs
 cat newconfigs.arm |while read r; do
-	if grep -qE "^$r\$" newconfigs.arm64 && grep -qE "^$r\$" newconfigs.arm64 && grep -qE "^$r\$" newconfigs.i386 && grep -qE "^$r\$" newconfigs.x86_64; then
+	if grep -qE "^$r\$" newconfigs.arm64 && grep -qE "^$r\$" newconfigs.arm64 && grep -qE "^$r\$" newconfigs.i386 && grep -qE "^$r\$" newconfigs.x86_64 && grep -qE "^$r\$" newconfigs.znver1; then
 		echo $r >>newconfigs.common
 	fi
 done
-for i in arm arm64 i386 x86_64; do
+for i in arm arm64 i386 x86_64 znver1; do
 	cat newconfigs.$i |while read r; do
 		grep -qE "^$r\$" newconfigs.common || echo $r >>newconfigs.${i}only
 	done
@@ -1401,7 +1405,7 @@ if [ -s newconfigs ]; then
 		printf '%s\n' "For common.config:"
 		sed -e 's/.*=n/# & is not set/;s,=n,,' newconfigs.common
 	fi
-	for i in arm arm64 i386 x86_64; do
+	for i in arm arm64 i386 x86_64 znver1; do
 		[ -e newconfigs.${i}only ] || continue
 		printf '%s\n' "For $i-common.config:"
 		sed -e 's/.*=n/# & is not set/;s,=n,,' newconfigs.${i}only
