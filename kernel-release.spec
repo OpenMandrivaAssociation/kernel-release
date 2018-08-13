@@ -332,6 +332,9 @@ Patch150:	kernel-4.17-rc7-add-lima-driver.patch
 Patch300:	v7-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.patch
 Patch301:	vbox-4.18.patch
 
+# Better support for newer x86 processors
+Patch310:	https://raw.githubusercontent.com/graysky2/kernel_gcc_patch/master/enable_additional_cpu_optimizations_for_gcc_v8.1%2B_kernel_v4.13%2B.patch
+
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
 # being touched aren't in the tree at the time %%apply_patches
