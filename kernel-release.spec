@@ -11,9 +11,9 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	17
-%define sublevel	14
-%define relc		0
+%define patchlevel	18
+%define sublevel	0
+%define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
 
@@ -26,7 +26,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		2
+%define rpmrel		1
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -75,7 +75,7 @@
 %bcond_with cross_headers
 %endif
 
-%global cross_header_archs aarch64-linux armv7hnl-linux i686-linux x86_64-linux x32-linux riscv32-linux riscv64-linux aarch64-linuxmusl armv7hnl-linuxmusl i686-linuxmusl x86_64-linuxmusl x32-linuxmusl riscv32-linuxmusl riscv64-linuxmusl aarch64-android armv7l-android armv8l-android
+%global	cross_header_archs	aarch64-linux armv7hnl-linux i686-linux x86_64-linux x32-linux riscv32-linux riscv64-linux aarch64-linuxmusl armv7hnl-linuxmusl i686-linuxmusl x86_64-linuxmusl x32-linuxmusl riscv32-linuxmusl riscv64-linuxmusl aarch64-android armv7l-android armv8l-android
 %global long_cross_header_archs %(
 	for i in %{cross_header_archs}; do
 		CPU=$(echo $i |cut -d- -f1)
@@ -182,6 +182,7 @@ Source7:	x86_64-common.config
 Source10:	i386-common.config
 Source11:	arm64-common.config
 Source12:	arm-common.config
+Source13:	znver1-common.config
 # Files called $ARCH-$FLAVOR.config are merged as well,
 # currently there's no need to have specific overloads there.
 
@@ -282,10 +283,9 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 # (tpg) The Ultra Kernel Same Page Deduplication
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
-# Temporarily disabled for -rc releases until ported upstream
-Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.17.patch
+# Temporarily disabled until ported upstream
+#Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.17.patch
 
-Patch125:	0005-crypto-Add-zstd-support.patch
 %if %{with build_modzstd}
 # https://patchwork.kernel.org/patch/10003007/
 Patch126:	v2-1-2-lib-Add-support-for-ZSTD-compressed-kernel.patch
@@ -312,12 +312,17 @@ Patch144:	0124-Extend-FEC-enum.patch
 Patch145:	saa716x-driver-integration.patch
 Patch146:	saa716x-4.15.patch
 
+# Add LIMA driver for Mali 400/450
+# From https://gitlab.freedesktop.org/lima/linux.git
+Patch150:	kernel-4.17-rc7-add-lima-driver.patch
+
 # Anbox (http://anbox.io/) patches to Android IPC, rebased to 4.11
 # NOT YET
 #Patch200:	0001-ipc-namespace-a-generic-per-ipc-pointer-and-peripc_o.patch
 # NOT YET
 #Patch201:	0002-binder-implement-namepsace-support-for-Android-binde.patch
 
+# NOT YET
 #Patch250:	4.14-C11.patch
 
 # VirtualBox shared folders support
@@ -325,6 +330,7 @@ Patch146:	saa716x-4.15.patch
 # For newer versions, check
 # https://patchwork.kernel.org/project/LKML/list/?submitter=582
 Patch300:	v7-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.patch
+Patch301:	vbox-4.18.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -408,7 +414,6 @@ BuildRequires:	gcc-plugin-devel >= 7.2.1_2017.11-3
 BuildRequires:	gcc-c++ >= 7.2.1_2017.11-3
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	diffutils
-BuildRequires:	hostname
 # For git apply
 BuildRequires:	git-core
 # For power tools
@@ -1250,6 +1255,10 @@ cat > $kernel_files <<EOF
 %{_bootdir}/symvers-%{kversion}-$kernel_flavour-%{buildrpmrel}.[gxz]*
 %{_bootdir}/config-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %{_bootdir}/$ker-%{kversion}-$kernel_flavour-%{buildrpmrel}
+# device tree binary
+%ifarch %{armx}
+%{_bootdir}/dtb-%{kversion}-$kernel_flavour-%{buildrpmrel}
+%endif
 %dir %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/
 %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/kernel
 %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/modules.*
@@ -1364,8 +1373,10 @@ install -d %{temp_root}
 # DO it...
 ###
 # First of all, let's check for new config options...
-for a in arm arm64 i386 x86_64; do
+for a in arm arm64 i386 x86_64 znver1; do
 	CreateConfig $a desktop
+	export ARCH=$a
+	[ "$ARCH" = "znver1" ] && export ARCH=x86
 	make ARCH=$a listnewconfig |grep '^CONFIG' >newconfigs.$a || :
 done
 cat newconfigs.* >newconfigs
@@ -1469,7 +1480,7 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 ### Linker start3 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_perf}
-%{smake} -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%{__cc} PYTHON=%{__python2} WERROR=0 LDFLAGS="%{optflags} -Wl,--hash-style=sysv -Wl,--build-id=none -flto" prefix=%{_prefix} all
+%{smake} -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%{__cc} PYTHON=%{__python2} WERROR=0 prefix=%{_prefix} all
 %{smake} -C tools/perf -s CC=%{__cc} prefix=%{_prefix} PYTHON=%{__python2} man
 %endif
 
@@ -1483,7 +1494,7 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 
 %ifarch %{ix86} %{x86_64}
 %if %{with build_x86_energy_perf_policy}
-%kmake -C tools/power/x86/x86_energy_perf_policy CC=clang LDFLAGS="%{optflags} -Wl,--hash-style=sysv -Wl,--build-id=none"
+%kmake -C tools/power/x86/x86_energy_perf_policy CC=clang LDFLAGS="%{optflags} -Wl,--build-id=none"
 %endif
 
 %if %{with build_turbostat}
@@ -1583,7 +1594,7 @@ install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
 install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %endif
 
-mkdir -p %{buildroot}%{_bindir}/
+mkdir -p %{buildroot}%{_bindir}
 install -m755 tools/bootsplash/bootsplash-packer %{buildroot}%{_bindir}/
 
 %ifarch %{ix86} %{x86_64}
