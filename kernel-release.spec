@@ -1262,10 +1262,6 @@ cat > $kernel_files <<EOF
 %{_bootdir}/symvers-%{kversion}-$kernel_flavour-%{buildrpmrel}.[gxz]*
 %{_bootdir}/config-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %{_bootdir}/$ker-%{kversion}-$kernel_flavour-%{buildrpmrel}
-# device tree binary
-%ifarch %{armx}
-%{_bootdir}/dtb-%{kversion}-$kernel_flavour-%{buildrpmrel}
-%endif
 %dir %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/
 %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/kernel
 %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/modules.*
