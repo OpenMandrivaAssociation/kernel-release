@@ -12,7 +12,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	18
-%define sublevel	2
+%define sublevel	3
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -285,6 +285,9 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 # (tpg) sources can be found here https://github.com/dolohow/uksm
 # Temporarily disabled until ported upstream
 #Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.17.patch
+# Sometimes other people are ahead of upstream porting to new releases...
+Patch120:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-uksm/0001-uksm-4.18-initial-submission.patch
+Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-uksm/0002-uksm-4.18-rework-exit_mmap-locking.patch
 
 %if %{with build_modzstd}
 # https://patchwork.kernel.org/patch/10003007/
@@ -333,7 +336,18 @@ Patch300:	v7-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.patch
 Patch301:	vbox-4.18.patch
 
 # Better support for newer x86 processors
-Patch310:	https://raw.githubusercontent.com/graysky2/kernel_gcc_patch/master/enable_additional_cpu_optimizations_for_gcc_v8.1%2B_kernel_v4.13%2B.patch
+# Original patch:
+#Patch310:	https://raw.githubusercontent.com/graysky2/kernel_gcc_patch/master/enable_additional_cpu_optimizations_for_gcc_v8.1%2B_kernel_v4.13%2B.patch
+# More actively maintained for newer kernels
+Patch310:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/gcc-patch-backup-from-pf/0001-gcctunes-4.18-merge-graysky-s-patchset.patch
+
+# BFQ-MQ
+Patch320:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/bfq-sq-mq/4.18-bfq-sq-mq-v8r12-2K180817.patch
+
+# Assorted fixes
+Patch330:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-miscellaneous-v3/0001-Increase-timeout-in-lspcon_wait_mode.patch
+Patch331:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-fixes/0915-fixes-from-pfkernel.patch
+Patch332:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-fixes/0916-fixes-from-pfkernel.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
