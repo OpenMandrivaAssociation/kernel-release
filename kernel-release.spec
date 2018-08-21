@@ -26,7 +26,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -348,6 +348,8 @@ Patch320:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/bfq-sq-mq/
 Patch330:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-miscellaneous-v3/0001-Increase-timeout-in-lspcon_wait_mode.patch
 Patch331:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-fixes/0915-fixes-from-pfkernel.patch
 Patch332:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-fixes/0916-fixes-from-pfkernel.patch
+# Ported from https://marc.info/?l=linux-crypto-vger&m=153436754612783&q=raw
+Patch333:	workaround-udev-on-ryzen.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
