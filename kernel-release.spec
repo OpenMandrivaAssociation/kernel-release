@@ -12,7 +12,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	18
-%define sublevel	5
+%define sublevel	6
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -901,11 +901,23 @@ LC_ALL=C sed -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 %if %mdvver >= 3000000
 %ifarch %{ix86} %{x86_64}
 # === VirtualBox guest additions ===
-# VBoxVideo is upstreamed -- let's fix it instead of copying the dkms driver
+%define use_internal_vboxvideo 0
+%if ! 0%{use_internal_vboxvideo}
+# There is an in-kernel version of vboxvideo -- unfortunately
+# it doesn't seem to work properly with vbox just yet
+# Let's replace it with the one that comes with VB for now
+mv drivers/staging/vboxvideo/Kconfig vbvkc
+rm -rf drivers/staging/vboxvideo
+cp -a $(ls --sort=time -1d /usr/src/vboxadditions-*|head -n1)/vboxvideo drivers/staging
+mv vbvkc drivers/staging/vboxvideo/Kconfig
+sed -i -e 's,\$(KBUILD_EXTMOD),drivers/gpu/drm/vboxvideo,g' drivers/staging/vboxvideo/Makefile*
+sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/staging/vboxvideo/Makefile*
+%endif
+
 # 800x600 is too small to be useful -- even calamares doesn't
-# fit into that anymore
+# fit into that anymore (this fix is needed for both the in-kernel
+# version and the vbox version of the driver)
 sed -i -e 's|800, 600|1024, 768|g' drivers/staging/vboxvideo/vbox_mode.c
-# VBoxGuest is upstreamed -- no need to do anything for it
 # VirtualBox shared folders now come in through patch 300
 
 # === VirtualBox host modules ===
