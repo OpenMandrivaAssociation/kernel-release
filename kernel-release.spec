@@ -286,8 +286,8 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 # Temporarily disabled until ported upstream
 Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.18.patch
 # Sometimes other people are ahead of upstream porting to new releases...
-Patch120:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-uksm/0001-uksm-4.18-initial-submission.patch
-Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-uksm/0002-uksm-4.18-rework-exit_mmap-locking.patch
+#Patch120:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-uksm/0001-uksm-4.18-initial-submission.patch
+#Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-uksm/0002-uksm-4.18-rework-exit_mmap-locking.patch
 
 %if %{with build_modzstd}
 # https://patchwork.kernel.org/patch/10003007/
