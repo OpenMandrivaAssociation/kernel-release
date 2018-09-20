@@ -12,7 +12,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	18
-%define sublevel	6
+%define sublevel	9
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -345,7 +345,6 @@ Patch310:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/gcc-patch-
 Patch320:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/bfq-sq-mq/4.18-bfq-sq-mq-v8r12-2K180817.patch
 
 # Assorted fixes
-Patch330:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-miscellaneous-v3/0001-Increase-timeout-in-lspcon_wait_mode.patch
 Patch331:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-fixes/0915-fixes-from-pfkernel.patch
 Patch332:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-fixes/0916-fixes-from-pfkernel.patch
 # Ported from https://marc.info/?l=linux-crypto-vger&m=153436754612783&q=raw
