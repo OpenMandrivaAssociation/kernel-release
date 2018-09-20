@@ -1,17 +1,3 @@
-diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
-index a9e8633388f4..58c6efa9f9a9 100644
---- a/block/bfq-cgroup.c
-+++ b/block/bfq-cgroup.c
-@@ -913,7 +913,8 @@ static ssize_t bfq_io_set_weight(struct kernfs_open_file *of,
- 	if (ret)
- 		return ret;
- 
--	return bfq_io_set_weight_legacy(of_css(of), NULL, weight);
-+	ret = bfq_io_set_weight_legacy(of_css(of), NULL, weight);
-+	return ret ?: nbytes;
- }
- 
- #ifdef CONFIG_DEBUG_BLK_CGROUP
 diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
 index 41d9036b1822..653100fb719e 100644
 --- a/block/bfq-iosched.c
