@@ -26,7 +26,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		3
+%define rpmrel		4
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -109,13 +109,13 @@
 %bcond_with build_cpupower
 %endif
 
-# compress modules with zstd
-# (tpg) currently it supports only x86 arch
-%ifnarch %{armx}
+# (default) Enable support for Zstandard and compress modules with XZ
+# unfortunately kmod does not support Zstandard for now, so kernel modules
+# compressed with zstd will not bo loaded and system will fail
+# https://github.com/facebook/zstd/issues/1121
 %bcond_without build_modzstd
-%else
-%bcond_without build_modxz
-%endif
+# compress modules with XZ
+%bcond_with build_modxz
 
 # ARM builds
 %ifarch %{armx}
@@ -1060,7 +1060,7 @@ BuildKernel() {
 %ifarch %{ix86} %{armx}
     zstd -15 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
 %else
-    zstd -10 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
+    zstd -22 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
 %endif
 %endif
 
@@ -1565,14 +1565,25 @@ find %{target_modules} -name "*.ko" | %kxargs xz -5 -T0
 find %{target_modules} -name "*.ko" | %kxargs xz -7 -T0
 %endif
 %else
+### remove it 
+if %{with build_modzstd}
+%ifarch %{ix86} %{armx}
+find %{target_modules} -name "*.ko" | %kxargs xz -5 -T0
+%else
+find %{target_modules} -name "*.ko" | %kxargs xz -7 -T0
+%endif
+%else
+### remove it
 find %{target_modules} -name "*.ko" | %kxargs gzip -9
 %endif
+%endif
 
+# (tpg) enable it when kmod will support zstd compressed modules
 #if %{with build_modzstd}
 #ifarch %{ix86} %{armx}
-#find %{target_modules} -name "*.ko" | %kxargs zstd -10 -q -T0 --rm
-#else
 #find %{target_modules} -name "*.ko" | %kxargs zstd -15 -q -T0 --rm
+#else
+#find %{target_modules} -name "*.ko" | %kxargs zstd -22 -q -T0 --rm
 #endif
 #endif
 
