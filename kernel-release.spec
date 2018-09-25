@@ -1557,15 +1557,9 @@ install -m 644 %{SOURCE4} .
 rm -rf %{buildroot}
 cp -a %{temp_root} %{buildroot}
 
-# compressing modules
-%if %{with build_modxz}
-%ifarch %{ix86} %{armx}
-find %{target_modules} -name "*.ko" | %kxargs xz -5 -T0
-%else
-find %{target_modules} -name "*.ko" | %kxargs xz -7 -T0
-%endif
-%else
-if %{with build_modzstd}
+# compressing modules with XZ, even when Zstandard is used
+# (tpg) enable it when kmod will support Zstandard compressed modules
+%if %{with build_modxz} || %{with build_modzstd}
 %ifarch %{ix86} %{armx}
 find %{target_modules} -name "*.ko" | %kxargs xz -5 -T0
 %else
@@ -1574,16 +1568,6 @@ find %{target_modules} -name "*.ko" | %kxargs xz -7 -T0
 %else
 find %{target_modules} -name "*.ko" | %kxargs gzip -9
 %endif
-%endif
-
-# (tpg) enable it when kmod will support zstd compressed modules
-#if %{with build_modzstd}
-#ifarch %{ix86} %{armx}
-#find %{target_modules} -name "*.ko" | %kxargs zstd -15 -q -T0 --rm
-#else
-#find %{target_modules} -name "*.ko" | %kxargs zstd -22 -q -T0 --rm
-#endif
-#endif
 
 # We used to have a copy of PrepareKernel here
 # Now, we make sure that the thing in the linux dir is what we want it to be
