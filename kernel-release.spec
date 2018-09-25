@@ -1565,7 +1565,6 @@ find %{target_modules} -name "*.ko" | %kxargs xz -5 -T0
 find %{target_modules} -name "*.ko" | %kxargs xz -7 -T0
 %endif
 %else
-### remove it 
 if %{with build_modzstd}
 %ifarch %{ix86} %{armx}
 find %{target_modules} -name "*.ko" | %kxargs xz -5 -T0
@@ -1573,7 +1572,6 @@ find %{target_modules} -name "*.ko" | %kxargs xz -5 -T0
 find %{target_modules} -name "*.ko" | %kxargs xz -7 -T0
 %endif
 %else
-### remove it
 find %{target_modules} -name "*.ko" | %kxargs gzip -9
 %endif
 %endif
