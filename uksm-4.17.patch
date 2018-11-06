@@ -499,15 +499,6 @@ diff --git a/kernel/fork.c b/kernel/fork.c
 index a5d21c42a..d0b01220e 100644
 --- a/kernel/fork.c
 +++ b/kernel/fork.c
-@@ -447,7 +447,7 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
- 				goto fail_nomem;
- 			charge = len;
- 		}
--		tmp = kmem_cache_alloc(vm_area_cachep, GFP_KERNEL);
-+		tmp = kmem_cache_zalloc(vm_area_cachep, GFP_KERNEL);
- 		if (!tmp)
- 			goto fail_nomem;
- 		*tmp = *mpnt;
 @@ -506,7 +506,7 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
  		__vma_link_rb(mm, tmp, rb_link, rb_parent);
  		rb_link = &tmp->vm_rb.rb_right;
@@ -1179,7 +1170,7 @@ index fc41c0543..7a54be3d7 100644
  		fput(vma->vm_file);
  	mpol_put(vma_policy(vma));
 +	uksm_remove_vma(vma);
- 	kmem_cache_free(vm_area_cachep, vma);
+ 	vm_area_free(vma);
  	return next;
  }
 @@ -701,9 +703,16 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
@@ -1253,7 +1244,7 @@ index fc41c0543..7a54be3d7 100644
  		allow_write_access(file);
  free_vma:
 +	uksm_remove_vma(vma);
- 	kmem_cache_free(vm_area_cachep, vma);
+ 	vm_area_free(vma);
  unacct_error:
  	if (charged)
 @@ -2656,6 +2676,8 @@ int __split_vma(struct mm_struct *mm, struct vm_area_struct *vma,
