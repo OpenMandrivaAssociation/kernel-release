@@ -248,7 +248,7 @@ Patch1031:	0001-Fix-for-compilation-with-clang.patch
 
 # Bootsplash system
 # (tpg) disable it for now 2018-11-07
-% if 0
+%if 0
 # https://lkml.org/lkml/2017/10/25/346
 # https://patchwork.kernel.org/patch/10172665/, rebased
 Patch100:	RFC-v3-01-13-bootsplash-Initial-implementation-showing-black-screen.patch
