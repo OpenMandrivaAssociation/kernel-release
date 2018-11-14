@@ -319,9 +319,6 @@ Patch145:	saa716x-driver-integration.patch
 Patch146:	saa716x-4.15.patch
 Patch147:	saa716x-linux-4.19.patch
 
-# Add LIMA driver for Mali 400/450
-# From https://gitlab.freedesktop.org/lima/linux.git
-Patch150:	kernel-4.17-rc7-add-lima-driver.patch
 
 # Anbox (http://anbox.io/) patches to Android IPC, rebased to 4.11
 # NOT YET
