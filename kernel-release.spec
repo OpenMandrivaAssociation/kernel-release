@@ -342,9 +342,6 @@ Patch301:	vbox-4.18.patch
 # More actively maintained for newer kernels
 Patch310:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/gcc-patch-backup-from-pf/0001-gcctunes-4.18-merge-graysky-s-patchset.patch
 
-# BFQ-MQ
-Patch320:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/bfq-sq-mq/4.18-bfq-sq-mq-v8r12-2K180817.patch
-
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
 # being touched aren't in the tree at the time %%apply_patches
