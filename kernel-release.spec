@@ -366,8 +366,7 @@ Patch413:	0122-tweak-perfbias.patch
 Patch414:	0123-e1000e-increase-pause-and-refresh-time.patch
 Patch415:	0124-kernel-time-reduce-ntp-wakeups.patch
 Patch416:	0125-init-wait-for-partition-and-retry-scan.patch
-Patch417:	0501-zero-extra-registers.patch
-Patch418:	0502-locking-rwsem-spin-faster.patch
+Patch417:	0502-locking-rwsem-spin-faster.patch
 %endif
 
 # Defines for the things that are needed for all the kernels
