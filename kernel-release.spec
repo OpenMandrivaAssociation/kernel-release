@@ -351,28 +351,23 @@ Patch310:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/gcc-patch-
 # (tpg) some patches from ClearLinux
 Patch400:	0101-i8042-decrease-debug-message-level-to-info.patch
 Patch401:	0103-Increase-the-ext4-default-commit-age.patch
-Patch402:	0105-pci-pme-wakeups.patch
-Patch403:	0106-ksm-wakeups.patch
-Patch404:	0107-intel_idle-tweak-cpuidle-cstates.patch
-Patch405:	0109-init_task-faster-timerslack.patch
+Patch402:	0103-silence-rapl.patch
+Patch403:	0105-pci-pme-wakeups.patch
+Patch404:	0106-ksm-wakeups.patch
+Patch405:	0107-intel_idle-tweak-cpuidle-cstates.patch
 Patch406:	0110-fs-ext4-fsync-optimize-double-fsync-a-bunch.patch
-Patch407:	0111-overload-on-wakeup.patch
-# needs a rediff
-#Patch408:	0113-fix-initcall-timestamps.patch
-Patch409:	0114-smpboot-reuse-timer-calibration.patch
-Patch410:	0116-Initialize-ata-before-graphics.patch
-Patch411:	0117-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
-Patch412:	0119-e1000e-change-default-policy.patch
-Patch413:	0120-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
-Patch414:	0121-igb-no-runtime-pm-to-fix-reboot-oops.patch
-Patch415:	0122-tweak-perfbias.patch
-Patch416:	0123-e1000e-increase-pause-and-refresh-time.patch
-Patch417:	0124-kernel-time-reduce-ntp-wakeups.patch
-Patch418:	0125-init-wait-for-partition-and-retry-scan.patch
-Patch419:	0151-mm-Export-do_madvise.patch
-Patch420:	0152-x86-kvm-Notify-host-to-release-pages.patch
-Patch421:	0153-x86-Return-memory-from-guest-to-host-kernel.patch
-Patch422:	0154-sysctl-vm-Fine-grained-cache-shrinking.patch
+Patch407:	0114-smpboot-reuse-timer-calibration.patch
+Patch408:	0116-Initialize-ata-before-graphics.patch
+Patch409:	0117-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
+Patch410:	0119-e1000e-change-default-policy.patch
+Patch411:	0112-give-rdrand-some-credit.patch
+Patch412:	0120-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
+Patch413:	0122-tweak-perfbias.patch
+Patch414:	0123-e1000e-increase-pause-and-refresh-time.patch
+Patch415:	0124-kernel-time-reduce-ntp-wakeups.patch
+Patch416:	0125-init-wait-for-partition-and-retry-scan.patch
+Patch417:	0501-zero-extra-registers.patch
+Patch418:	0502-locking-rwsem-spin-faster.patch
 %endif
 
 # Defines for the things that are needed for all the kernels
@@ -871,7 +866,7 @@ done
 xzcat %{SOURCE90} |git apply - || git apply %{SOURCE90}
 rm -rf .git
 %endif
-%apply_patches
+%autopatch -p1
 git apply %{SOURCE112}
 
 # merge SAA716x DVB driver from extra tarball
@@ -1049,11 +1044,7 @@ BuildKernel() {
 %endif
 
 %if %{with build_modzstd}
-%ifarch %{ix86} %{armx}
     zstd -15 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
-%else
-    zstd -22 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
-%endif
 %endif
 
 %ifarch %{arm}
