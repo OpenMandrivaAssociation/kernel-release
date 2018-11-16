@@ -67,6 +67,7 @@
 %bcond_without build_devel
 %bcond_with build_debug
 %bcond_with clang
+%bcond_with bootsplash
 # (tpg) enable patches from ClearLinux
 %bcond_without clr
 %if %mdvver > 3000000
@@ -130,7 +131,7 @@
 ############################################################
 ### Linker start1 > Check point to build for omv or rosa ###
 ############################################################
-%define kmake ARCH=%{target_arch} %{make} LD="$LD"
+%define kmake ARCH=%{target_arch} %{make_build} LD="$LD"
 # there are places where parallel make don't work
 # usually we use this
 %define smake make LD="$LD"
@@ -248,7 +249,7 @@ Patch1031:	0001-Fix-for-compilation-with-clang.patch
 
 # Bootsplash system
 # (tpg) disable it for now 2018-11-07
-%if 0
+%if %{with bootsplash}
 # https://lkml.org/lkml/2017/10/25/346
 # https://patchwork.kernel.org/patch/10172665/, rebased
 Patch100:	RFC-v3-01-13-bootsplash-Initial-implementation-showing-black-screen.patch
@@ -866,7 +867,7 @@ xzcat %{SOURCE90} |git apply - || git apply %{SOURCE90}
 rm -rf .git
 %endif
 %autopatch -p1
-%if 0
+%if %{with bootsplash}
 git apply %{SOURCE112}
 %endif
 
@@ -1067,7 +1068,7 @@ BuildKernel() {
     %{smake} INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer INSTALL_MOD_STRIP=1 modules_install
 
 # headers
-    %{make} INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer headers_install
+    %{make_build} INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer headers_install
 
 %ifarch %{armx}
     %{smake} ARCH=%{target_arch} V=1 dtbs INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
@@ -1504,7 +1505,9 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%{optflags}"
 %endif
 
+%if %{with bootsplash}
 %kmake -C tools/bootsplash LDFLAGS="%{optflags}"
+%endif
 
 %ifarch %{ix86} %{x86_64}
 %if %{with build_x86_energy_perf_policy}
@@ -1591,7 +1594,7 @@ make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__p
 ### Linker start4 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_cpupower}
-%{make} -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{optflags}" install
+%{make_build} -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{optflags}" install
 
 rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
@@ -1601,8 +1604,10 @@ install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
 install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %endif
 
+%if %{with bootsplash}
 mkdir -p %{buildroot}%{_bindir}
 install -m755 tools/bootsplash/bootsplash-packer %{buildroot}%{_bindir}/
+%endif
 
 %ifarch %{ix86} %{x86_64}
 %if %{with build_x86_energy_perf_policy}
@@ -1773,8 +1778,10 @@ cd -
 %{_includedir}/cpufreq.h
 %endif
 
+%if %{with bootsplash}
 %files -n bootsplash-packer
 %{_bindir}/bootsplash-packer
+%endif
 
 %ifarch %{ix86} %{x86_64}
 %if %{with build_x86_energy_perf_policy}
