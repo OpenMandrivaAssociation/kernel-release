@@ -2,8 +2,8 @@ diff -up linux-4.17/drivers/video/console/Kconfig.0100~ linux-4.17/drivers/video
 --- linux-4.17/drivers/video/console/Kconfig.0100~	2018-06-05 20:45:52.041451339 +0200
 +++ linux-4.17/drivers/video/console/Kconfig	2018-06-05 20:47:02.391455193 +0200
 @@ -150,6 +150,30 @@ config FRAMEBUFFER_CONSOLE_ROTATION
-          such that other users of the framebuffer will remain normally
-          oriented.
+ 	  by the firmware in place, rather then replacing the contents with a
+ 	  black screen as soon as fbcon loads.
  
 +config BOOTSPLASH
 +	bool "Bootup splash screen"
