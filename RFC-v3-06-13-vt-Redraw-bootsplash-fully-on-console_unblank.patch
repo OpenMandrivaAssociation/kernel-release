@@ -1,9 +1,9 @@
 --- linux-4.14/drivers/tty/vt/vt.c.0105~	2018-01-22 22:13:28.229672901 +0100
 +++ linux-4.14/drivers/tty/vt/vt.c	2018-01-22 22:14:04.867704714 +0100
 @@ -104,6 +104,7 @@
- #include <linux/kdb.h>
  #include <linux/ctype.h>
  #include <linux/bsearch.h>
+ #include <linux/gcd.h>
 +#include <linux/bootsplash.h>
  
  #define MAX_NR_CON_DRIVER 16
