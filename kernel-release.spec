@@ -12,7 +12,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	19
-%define sublevel	2
+%define sublevel	3
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -67,7 +67,7 @@
 %bcond_without build_devel
 %bcond_with build_debug
 %bcond_with clang
-%bcond_with bootsplash
+%bcond_without bootsplash
 # (tpg) enable patches from ClearLinux
 %bcond_without clr
 %if %mdvver > 3000000
@@ -320,6 +320,7 @@ Patch145:	saa716x-driver-integration.patch
 Patch146:	saa716x-4.15.patch
 Patch147:	saa716x-linux-4.19.patch
 
+Patch148:	long-long.patch
 
 # Anbox (http://anbox.io/) patches to Android IPC, rebased to 4.11
 # NOT YET
@@ -866,7 +867,11 @@ done
 xzcat %{SOURCE90} |git apply - || git apply %{SOURCE90}
 rm -rf .git
 %endif
-%autopatch -p1
+%if %mdvver > 3000000
+%autopatch p1
+%else
+%apply_patches
+%endif
 %if %{with bootsplash}
 git apply %{SOURCE112}
 %endif
