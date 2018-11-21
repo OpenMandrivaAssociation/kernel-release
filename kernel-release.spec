@@ -12,9 +12,9 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	17
-%define sublevel	19
-%define relc		0
+%define patchlevel	19
+%define sublevel	3
+%define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
 
@@ -68,6 +68,7 @@
 %bcond_without build_devel
 %bcond_with build_debug
 %bcond_with clang
+%bcond_without bootsplash
 # (tpg) enable patches from ClearLinux
 %bcond_without clr
 %if %mdvver > 3000000
@@ -76,7 +77,7 @@
 %bcond_with cross_headers
 %endif
 
-%global cross_header_archs aarch64-linux armv7hnl-linux i686-linux x86_64-linux x32-linux riscv32-linux riscv64-linux aarch64-linuxmusl armv7hnl-linuxmusl i686-linuxmusl x86_64-linuxmusl x32-linuxmusl riscv32-linuxmusl riscv64-linuxmusl aarch64-android armv7l-android armv8l-android
+%global cross_header_archs	aarch64-linux armv7hnl-linux i686-linux x86_64-linux x32-linux riscv32-linux riscv64-linux aarch64-linuxmusl armv7hnl-linuxmusl i686-linuxmusl x86_64-linuxmusl x32-linuxmusl riscv32-linuxmusl riscv64-linuxmusl aarch64-android armv7l-android armv8l-android
 %global long_cross_header_archs %(
 	for i in %{cross_header_archs}; do
 		CPU=$(echo $i |cut -d- -f1)
@@ -110,13 +111,13 @@
 %bcond_with build_cpupower
 %endif
 
-# compress modules with zstd
-# (tpg) currently it supports only x86 arch
-%ifnarch %{armx}
+# (default) Enable support for Zstandard and compress modules with XZ
+# unfortunately kmod does not support Zstandard for now, so kernel modules
+# compressed with zstd will not bo loaded and system will fail
+# https://github.com/facebook/zstd/issues/1121
 %bcond_without build_modzstd
-%else
-%bcond_without build_modxz
-%endif
+# compress modules with XZ
+%bcond_with build_modxz
 
 # ARM builds
 %ifarch %{armx}
@@ -131,10 +132,10 @@
 ############################################################
 ### Linker start1 > Check point to build for omv or rosa ###
 ############################################################
-%define kmake ARCH=%{target_arch} %{make} LD="$LD" LDFLAGS="$LDFLAGS"
+%define kmake ARCH=%{target_arch} %{make_build} LD="$LD"
 # there are places where parallel make don't work
 # usually we use this
-%define smake make LD="$LD" LDFLAGS="$LDFLAGS"
+%define smake make LD="$LD"
 
 ###################################################
 ###  Linker end1 > Check point to build for omv ###
@@ -183,6 +184,7 @@ Source7:	x86_64-common.config
 Source10:	i386-common.config
 Source11:	arm64-common.config
 Source12:	arm-common.config
+Source13:	znver1-common.config
 # Files called $ARCH-$FLAVOR.config are merged as well,
 # currently there's no need to have specific overloads there.
 
@@ -207,22 +209,8 @@ Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
 %endif
 Patch2:		die-floppy-die.patch
 Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
-Patch4:		linux-4.7-intel-dvi-duallink.patch
-Patch5:		linux-4.8.1-buildfix.patch
-
-# Kernels >= 4.17-rc1 trigger an instant reboot when built with gcc 8.1 and
-# compiler flags set in the kernel package.
-# git bisect shows the problematic commit being
-# 0a1756bd2897951c03c1cb671bdfd40729ac2177
-#
-# This patch reverts a few more commits because they build on top of it,
-# namely:
-# 0a1756bd2897951c03c1cb671bdfd40729ac2177
-# 194a9749c73d650c0b1dfdee04fb0bdf0a888ba8
-# 5c9b0b1c49881c680d4a56b9d9e03dfb3160fd4d
-# 589bb62be316401603453c7d2d3c60ad8b9c3cf3
-# 372fddf709041743a93e381556f4c41aad1e28f8
-Patch6:		revert-patches-causing-instant-reboot.patch
+#Patch4:		linux-4.7-intel-dvi-duallink.patch
+#Patch5:		linux-4.8.1-buildfix.patch
 
 %if %{with clang}
 # Patches to make it build with clang
@@ -261,6 +249,8 @@ Patch1031:	0001-Fix-for-compilation-with-clang.patch
 %endif
 
 # Bootsplash system
+# (tpg) disable it for now 2018-11-07
+%if %{with bootsplash}
 # https://lkml.org/lkml/2017/10/25/346
 # https://patchwork.kernel.org/patch/10172665/, rebased
 Patch100:	RFC-v3-01-13-bootsplash-Initial-implementation-showing-black-screen.patch
@@ -289,6 +279,7 @@ Patch111:	RFC-v3-12-13-tools-bootsplash-Add-a-basic-splash-file-creation-tool.pa
 # https://patchwork.kernel.org/patch/10172661/
 # Contains git binary patch -- needs to be applied with git apply instead of apply_patches
 Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-file.patch
+%endif
 
 # Patches to VirtualBox and other external modules are
 # pulled in as Source: rather than Patch: because it's arch specific
@@ -297,10 +288,12 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 # (tpg) The Ultra Kernel Same Page Deduplication
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
-# Temporarily disabled for -rc releases until ported upstream
-Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.17.patch
+# Temporarily disabled until ported upstream
+Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.19.patch
+# Sometimes other people are ahead of upstream porting to new releases...
+#Patch120:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-uksm/0001-uksm-4.18-initial-submission.patch
+#Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-uksm/0002-uksm-4.18-rework-exit_mmap-locking.patch
 
-Patch125:	0005-crypto-Add-zstd-support.patch
 %if %{with build_modzstd}
 # https://patchwork.kernel.org/patch/10003007/
 Patch126:	v2-1-2-lib-Add-support-for-ZSTD-compressed-kernel.patch
@@ -326,6 +319,9 @@ Patch143:	0076-cx24117-Add-LNB-power-down-callback.-TBS6984-uses-pc.patch
 Patch144:	0124-Extend-FEC-enum.patch
 Patch145:	saa716x-driver-integration.patch
 Patch146:	saa716x-4.15.patch
+Patch147:	saa716x-linux-4.19.patch
+
+Patch148:	long-long.patch
 
 # Anbox (http://anbox.io/) patches to Android IPC, rebased to 4.11
 # NOT YET
@@ -333,6 +329,7 @@ Patch146:	saa716x-4.15.patch
 # NOT YET
 #Patch201:	0002-binder-implement-namepsace-support-for-Android-binde.patch
 
+# NOT YET
 #Patch250:	4.14-C11.patch
 
 # VirtualBox shared folders support
@@ -340,6 +337,13 @@ Patch146:	saa716x-4.15.patch
 # For newer versions, check
 # https://patchwork.kernel.org/project/LKML/list/?submitter=582
 Patch300:	v7-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.patch
+Patch301:	vbox-4.18.patch
+
+# Better support for newer x86 processors
+# Original patch:
+#Patch310:	https://raw.githubusercontent.com/graysky2/kernel_gcc_patch/master/enable_additional_cpu_optimizations_for_gcc_v8.1%2B_kernel_v4.13%2B.patch
+# More actively maintained for newer kernels
+Patch310:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/gcc-patch-backup-from-pf/0001-gcctunes-4.18-merge-graysky-s-patchset.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -350,28 +354,22 @@ Patch300:	v7-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.patch
 # (tpg) some patches from ClearLinux
 Patch400:	0101-i8042-decrease-debug-message-level-to-info.patch
 Patch401:	0103-Increase-the-ext4-default-commit-age.patch
-Patch402:	0105-pci-pme-wakeups.patch
-Patch403:	0106-ksm-wakeups.patch
-Patch404:	0107-intel_idle-tweak-cpuidle-cstates.patch
-Patch405:	0109-init_task-faster-timerslack.patch
+Patch402:	0103-silence-rapl.patch
+Patch403:	0105-pci-pme-wakeups.patch
+Patch404:	0106-ksm-wakeups.patch
+Patch405:	0107-intel_idle-tweak-cpuidle-cstates.patch
 Patch406:	0110-fs-ext4-fsync-optimize-double-fsync-a-bunch.patch
-Patch407:	0111-overload-on-wakeup.patch
-# needs a rediff
-#Patch408:	0113-fix-initcall-timestamps.patch
-Patch409:	0114-smpboot-reuse-timer-calibration.patch
-Patch410:	0116-Initialize-ata-before-graphics.patch
-Patch411:	0117-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
-Patch412:	0119-e1000e-change-default-policy.patch
-Patch413:	0120-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
-Patch414:	0121-igb-no-runtime-pm-to-fix-reboot-oops.patch
-Patch415:	0122-tweak-perfbias.patch
-Patch416:	0123-e1000e-increase-pause-and-refresh-time.patch
-Patch417:	0124-kernel-time-reduce-ntp-wakeups.patch
-Patch418:	0125-init-wait-for-partition-and-retry-scan.patch
-Patch419:	0151-mm-Export-do_madvise.patch
-Patch420:	0152-x86-kvm-Notify-host-to-release-pages.patch
-Patch421:	0153-x86-Return-memory-from-guest-to-host-kernel.patch
-Patch422:	0154-sysctl-vm-Fine-grained-cache-shrinking.patch
+Patch407:	0114-smpboot-reuse-timer-calibration.patch
+Patch408:	0116-Initialize-ata-before-graphics.patch
+Patch409:	0117-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
+Patch410:	0119-e1000e-change-default-policy.patch
+Patch411:	0112-give-rdrand-some-credit.patch
+Patch412:	0120-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
+Patch413:	0122-tweak-perfbias.patch
+Patch414:	0123-e1000e-increase-pause-and-refresh-time.patch
+Patch415:	0124-kernel-time-reduce-ntp-wakeups.patch
+Patch416:	0125-init-wait-for-partition-and-retry-scan.patch
+Patch417:	0502-locking-rwsem-spin-faster.patch
 %endif
 
 # Defines for the things that are needed for all the kernels
@@ -423,7 +421,6 @@ BuildRequires:	gcc-plugin-devel >= 7.2.1_2017.11-3
 BuildRequires:	gcc-c++ >= 7.2.1_2017.11-3
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	diffutils
-BuildRequires:	hostname
 # For git apply
 BuildRequires:	git-core
 # For power tools
@@ -871,8 +868,14 @@ done
 xzcat %{SOURCE90} |git apply - || git apply %{SOURCE90}
 rm -rf .git
 %endif
+%if %mdvver > 3000000
+%autopatch p1
+%else
 %apply_patches
+%endif
+%if %{with bootsplash}
 git apply %{SOURCE112}
+%endif
 
 # merge SAA716x DVB driver from extra tarball
 sed -i -e '/saa7164/isource "drivers/media/pci/saa716x/Kconfig"' drivers/media/pci/Kconfig
@@ -892,11 +895,23 @@ LC_ALL=C sed -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 %if %mdvver >= 3000000
 %ifarch %{ix86} x86_64
 # === VirtualBox guest additions ===
-# VBoxVideo is upstreamed -- let's fix it instead of copying the dkms driver
+%define use_internal_vboxvideo 0
+%if ! 0%{use_internal_vboxvideo}
+# There is an in-kernel version of vboxvideo -- unfortunately
+# it doesn't seem to work properly with vbox just yet
+# Let's replace it with the one that comes with VB for now
+mv drivers/staging/vboxvideo/Kconfig vbvkc
+rm -rf drivers/staging/vboxvideo
+cp -a $(ls --sort=time -1d /usr/src/vboxadditions-*|head -n1)/vboxvideo drivers/staging
+mv vbvkc drivers/staging/vboxvideo/Kconfig
+sed -i -e 's,\$(KBUILD_EXTMOD),drivers/gpu/drm/vboxvideo,g' drivers/staging/vboxvideo/Makefile*
+sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/staging/vboxvideo/Makefile*
+%endif
+
 # 800x600 is too small to be useful -- even calamares doesn't
-# fit into that anymore
+# fit into that anymore (this fix is needed for both the in-kernel
+# version and the vbox version of the driver)
 sed -i -e 's|800, 600|1024, 768|g' drivers/staging/vboxvideo/vbox_mode.c
-# VBoxGuest is upstreamed -- no need to do anything for it
 # VirtualBox shared folders now come in through patch 300
 
 # === VirtualBox host modules ===
@@ -938,7 +953,6 @@ chmod 755 tools/objtool/sync-check.sh
 ############################################################
 # Make sure we don't use gold
 export LD="%{_target_platform}-ld.bfd"
-export LDFLAGS="--hash-style=sysv --build-id=none"
 export PYTHON=%{__python2}
 
 ############################################################
@@ -996,7 +1010,11 @@ PrepareKernel() {
     config_dir=%{_sourcedir}
     printf '%s\n' "Make config for kernel $extension"
     %{smake} -s mrproper
+%ifarch znver1
+    CreateConfig %{_target_cpu} ${flavour}
+%else
     CreateConfig %{target_arch} ${flavour}
+%endif
     # make sure EXTRAVERSION says what we want it to say
     sed -ri "s|^(EXTRAVERSION =).*|\1 -$extension|" Makefile
     %{smake} oldconfig
@@ -1008,15 +1026,15 @@ BuildKernel() {
 # (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
 %ifarch x86_64
 %if %{with clang}
-    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS -flto" LDFLAGS="$LDFLAGS -flto"
+    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS -flto"
 %else
-    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS -flto" LDFLAGS="$LDFLAGS -flto"
+    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS -flto"
 %endif
 %else
 %if %{with clang}
-    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS"
 %else
-    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS"
 %endif
 %endif
 
@@ -1034,11 +1052,7 @@ BuildKernel() {
 %endif
 
 %if %{with build_modzstd}
-%ifarch %{ix86} %{armx}
     zstd -15 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
-%else
-    zstd -10 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
-%endif
 %endif
 
 %ifarch %{arm}
@@ -1060,7 +1074,7 @@ BuildKernel() {
     %{smake} INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer INSTALL_MOD_STRIP=1 modules_install
 
 # headers
-    %{make} INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer headers_install
+    %{make_build} INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer headers_install
 
 %ifarch %{armx}
     %{smake} ARCH=%{target_arch} V=1 dtbs INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
@@ -1266,10 +1280,6 @@ cat > $kernel_files <<EOF
 %{_bootdir}/symvers-%{kversion}-$kernel_flavour-%{buildrpmrel}.[gxz]*
 %{_bootdir}/config-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %{_bootdir}/$ker-%{kversion}-$kernel_flavour-%{buildrpmrel}
-# device tree binary
-%ifarch %{armx}
-%{_bootdir}/dtb-%{kversion}-$kernel_flavour-%{buildrpmrel}
-%endif
 %dir %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/
 %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/kernel
 %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/modules.*
@@ -1385,17 +1395,19 @@ install -d %{temp_root}
 # DO it...
 ###
 # First of all, let's check for new config options...
-for a in arm arm64 i386 x86_64; do
+for a in arm arm64 i386 x86_64 znver1; do
 	CreateConfig $a desktop
-	make ARCH=$a listnewconfig |grep '^CONFIG' >newconfigs.$a || :
+	export ARCH=$a
+	[ "$ARCH" = "znver1" ] && export ARCH=x86
+	make ARCH=$ARCH listnewconfig |grep '^CONFIG' >newconfigs.$a || :
 done
 cat newconfigs.* >newconfigs
 cat newconfigs.arm |while read r; do
-	if grep -qE "^$r\$" newconfigs.arm64 && grep -qE "^$r\$" newconfigs.arm64 && grep -qE "^$r\$" newconfigs.i386 && grep -qE "^$r\$" newconfigs.x86_64; then
+	if grep -qE "^$r\$" newconfigs.arm64 && grep -qE "^$r\$" newconfigs.arm64 && grep -qE "^$r\$" newconfigs.i386 && grep -qE "^$r\$" newconfigs.x86_64 && grep -qE "^$r\$" newconfigs.znver1; then
 		echo $r >>newconfigs.common
 	fi
 done
-for i in arm arm64 i386 x86_64; do
+for i in arm arm64 i386 x86_64 znver1; do
 	cat newconfigs.$i |while read r; do
 		grep -qE "^$r\$" newconfigs.common || echo $r >>newconfigs.${i}only
 	done
@@ -1408,7 +1420,7 @@ if [ -s newconfigs ]; then
 		printf '%s\n' "For common.config:"
 		sed -e 's/.*=n/# & is not set/;s,=n,,' newconfigs.common
 	fi
-	for i in arm arm64 i386 x86_64; do
+	for i in arm arm64 i386 x86_64 znver1; do
 		[ -e newconfigs.${i}only ] || continue
 		printf '%s\n' "For $i-common.config:"
 		sed -e 's/.*=n/# & is not set/;s,=n,,' newconfigs.${i}only
@@ -1490,7 +1502,7 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 ### Linker start3 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_perf}
-%{smake} -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%{__cc} PYTHON=%{__python2} WERROR=0 LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none" prefix=%{_prefix} all
+%{smake} -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%{__cc} PYTHON=%{__python2} WERROR=0 prefix=%{_prefix} all
 %{smake} -C tools/perf -s CC=%{__cc} prefix=%{_prefix} PYTHON=%{__python2} man
 %endif
 
@@ -1500,11 +1512,13 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%{optflags}"
 %endif
 
+%if %{with bootsplash}
 %kmake -C tools/bootsplash LDFLAGS="%{optflags}"
+%endif
 
 %ifarch %{ix86} x86_64
 %if %{with build_x86_energy_perf_policy}
-%kmake -C tools/power/x86/x86_energy_perf_policy CC=clang LDFLAGS="-Wl,--hash-style=sysv -Wl,--build-id=none"
+%kmake -C tools/power/x86/x86_energy_perf_policy CC=clang LDFLAGS="%{optflags} -Wl,--build-id=none"
 %endif
 
 %if %{with build_turbostat}
@@ -1537,46 +1551,9 @@ install -m 644 %{SOURCE4} .
 rm -rf %{buildroot}
 cp -a %{temp_root} %{buildroot}
 
-# Create directories infastructure
-%if %{with build_source}
-install -d %{target_source}
-tar cf - . | tar xf - -C %{target_source}
-chmod -R a+rX %{target_source}
-
-# File lists aren't needed
-rm -f %{target_source}/*_files.* %{target_source}/README.kernel-sources
-
-# we remove all the source files that we don't ship
-# first architecture files
-for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
-	 mips nios2 openrisc parisc powerpc riscv s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
-	rm -rf %{target_source}/arch/$i
-done
-%ifnarch %{arm}
-    rm -rf %{target_source}/include/kvm/arm*
-%endif
-
-# other misc files
-rm -f %{target_source}/{.config.old,.config.cmd,.gitignore,.lst,.mailmap,.gitattributes}
-rm -f %{target_source}/{.missing-syscalls.d,arch/.gitignore,firmware/.gitignore}
-rm -rf %{target_source}/.tmp_depmod/
-
-# more cleaning
-cd %{target_source}
-# lots of gitignore files
-find -iname ".gitignore" -delete
-# clean tools tree
-%smake -C tools clean
-%smake -C tools/build clean
-%smake -C tools/build/feature clean
-rm -f .cache.mk
-cd -
-
-#endif %{with build_source}
-%endif
-
-# compressing modules
-%if %{with build_modxz}
+# compressing modules with XZ, even when Zstandard is used
+# (tpg) enable it when kmod will support Zstandard compressed modules
+%if %{with build_modxz} || %{with build_modzstd}
 %ifarch %{ix86} %{armx}
 find %{target_modules} -name "*.ko" | %kxargs xz -5 -T0
 %else
@@ -1585,14 +1562,6 @@ find %{target_modules} -name "*.ko" | %kxargs xz -7 -T0
 %else
 find %{target_modules} -name "*.ko" | %kxargs gzip -9
 %endif
-
-#if %{with build_modzstd}
-#ifarch %{ix86} %{armx}
-#find %{target_modules} -name "*.ko" | %kxargs zstd -10 -q -T0 --rm
-#else
-#find %{target_modules} -name "*.ko" | %kxargs zstd -15 -q -T0 --rm
-#endif
-#endif
 
 # We used to have a copy of PrepareKernel here
 # Now, we make sure that the thing in the linux dir is what we want it to be
@@ -1632,7 +1601,7 @@ make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__p
 ### Linker start4 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_cpupower}
-%{make} -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{optflags}" install
+%{make_build} -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{optflags}" install
 
 rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
@@ -1642,8 +1611,10 @@ install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
 install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %endif
 
-mkdir -p %{buildroot}%{_bindir}/
+%if %{with bootsplash}
+mkdir -p %{buildroot}%{_bindir}
 install -m755 tools/bootsplash/bootsplash-packer %{buildroot}%{_bindir}/
+%endif
 
 %ifarch %{ix86} x86_64
 %if %{with build_x86_energy_perf_policy}
@@ -1814,8 +1785,10 @@ cd -
 %{_includedir}/cpufreq.h
 %endif
 
+%if %{with bootsplash}
 %files -n bootsplash-packer
 %{_bindir}/bootsplash-packer
+%endif
 
 %ifarch %{ix86} x86_64
 %if %{with build_x86_energy_perf_policy}
