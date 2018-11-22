@@ -1,0 +1,11 @@
+--- linux-4.19/drivers/gpu/drm/i915/i915_gem_gtt.c.orig	2018-11-21 21:37:05.290569035 +0000
++++ linux-4.19/drivers/gpu/drm/i915/i915_gem_gtt.c	2018-11-21 21:37:13.197568529 +0000
+@@ -1769,7 +1769,7 @@
+ 				continue;
+ 
+ 			seq_printf(m, "\t\t(%03d, %04d) %08llx: ",
+-				   pde, pte,
++				   pde, pte, (long long)
+ 				   (pde * GEN6_PTES + pte) * PAGE_SIZE);
+ 			for (i = 0; i < 4; i++) {
+ 				if (vaddr[pte + i] != scratch_pte)
