@@ -206,8 +206,7 @@ Source90:	https://fossies.org/linux/kernel/v%{kernelversion}.%{patchlevel}/patch
 Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
 %endif
 %endif
-# rediff it ?
-#Patch2:		die-floppy-die.patch
+Patch2:		die-floppy-die.patch
 Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 #Patch4:		linux-4.7-intel-dvi-duallink.patch
 #Patch5:		linux-4.8.1-buildfix.patch
@@ -869,7 +868,7 @@ xzcat %{SOURCE90} |git apply - || git apply %{SOURCE90}
 rm -rf .git
 %endif
 %if %mdvver > 3000000
-%autopatch p1
+%autopatch -p1
 %else
 %apply_patches
 %endif
