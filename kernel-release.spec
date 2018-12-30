@@ -11,8 +11,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	4
-%define patchlevel	19
-%define sublevel	12
+%define patchlevel	20
+%define sublevel	0
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -288,10 +288,9 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
 # Temporarily disabled until ported upstream
-Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.19.patch
+#Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.19.patch
 # Sometimes other people are ahead of upstream porting to new releases...
-#Patch120:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-uksm/0001-uksm-4.18-initial-submission.patch
-#Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/pf-uksm/0002-uksm-4.18-rework-exit_mmap-locking.patch
+Patch120:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/4.20/pf-uksm/0001-uksm-4.20-initial-submission.patch
 
 %if %{with build_modzstd}
 # https://patchwork.kernel.org/patch/10003007/
@@ -322,11 +321,7 @@ Patch147:	saa716x-linux-4.19.patch
 
 Patch148:	long-long.patch
 
-# Anbox (http://anbox.io/) patches to Android IPC, rebased to 4.11
-# NOT YET
-#Patch200:	0001-ipc-namespace-a-generic-per-ipc-pointer-and-peripc_o.patch
-# NOT YET
-#Patch201:	0002-binder-implement-namepsace-support-for-Android-binde.patch
+Patch150:	https://gitweb.frugalware.org/wip_kernel/raw/master/source/base/kernel/ath10k-drop-WARN_ON-added-in-cd93b83ad927b2c7979e0add0343ace59328b461.patch
 
 # NOT YET
 #Patch250:	4.14-C11.patch
@@ -334,7 +329,7 @@ Patch148:	long-long.patch
 # VirtualBox shared folders support
 # https://patchwork.kernel.org/patch/10315707/
 # For newer versions, check
-# https://patchwork.kernel.org/project/LKML/list/?submitter=582
+# https://patchwork.kernel.org/project/linux-fsdevel/list/?submitter=582
 Patch300:	v7-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.patch
 Patch301:	vbox-4.18.patch
 
@@ -343,6 +338,18 @@ Patch301:	vbox-4.18.patch
 #Patch310:	https://raw.githubusercontent.com/graysky2/kernel_gcc_patch/master/enable_additional_cpu_optimizations_for_gcc_v8.1%2B_kernel_v4.13%2B.patch
 # More actively maintained for newer kernels
 Patch310:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/gcc-patch-backup-from-pf/0001-gcctunes-4.18-merge-graysky-s-patchset.patch
+
+# Assorted fixes
+## Intel Core2Duo got always unstable tsc , with changes in 4.18
+## some models cannot boot anymore , they are stuck in a endless loop.
+## see: https://lkml.org/lkml/2018/8/30/341
+##      https://bugzilla.kernel.org/show_bug.cgi?id=200957
+## patch is an backport from : https://lkml.org/lkml/2018/9/3/253
+Patch330:	https://raw.githubusercontent.com/frugalware/frugalware-current/71a887a9f309345f966c4d09c920642a62efb66f/source/base/kernel/fix-C2D-CPUs-booting.patch
+
+# Modular binder and ashmem -- let's try to make anbox happy
+Patch340:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
+Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -474,8 +481,8 @@ Suggests:	microcode-intel
 # get compiler error messages on failures)
 %if %mdvver >= 3000000
 %ifarch %{ix86} %{x86_64}
-BuildRequires:	dkms-virtualbox >= 5.2.8-1
-BuildRequires:	dkms-vboxadditions >= 5.2.8-1
+BuildRequires:	virtualbox-kernel-module-sources
+BuildRequires:	virtualbox-guest-kernel-module-sources
 %endif
 %endif
 
@@ -1138,7 +1145,7 @@ SaveDevel() {
     cp -fR tools/objtool/* $TempDevelRoot/tools/objtool
     cp -fR tools/scripts/utilities.mak $TempDevelRoot/tools/scripts
 
-    for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
+    for i in alpha arc avr32 blackfin c6x cris csky frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
 		 mips mn10300 nds32 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
 	rm -rf $TempDevelRoot/arch/$i
     done
@@ -1640,7 +1647,7 @@ rm -f %{target_source}/*_files.* %{target_source}/README.kernel-sources
 
 # we remove all the source files that we don't ship
 # first architecture files
-for i in alpha arc avr32 blackfin c6x cris frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
+for i in alpha arc avr32 blackfin c6x cris csky frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
     mips nds32 nios2 openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
     rm -rf %{target_source}/arch/$i
 done
