@@ -26,7 +26,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -45,7 +45,7 @@
 # fakerel and fakever never change, they are used to fool
 # rpm/urpmi/smart
 %define fakever		1
-%define fakerel		%mkrel 1
+%define fakerel		1
 
 # version defines
 %define kversion	%{kernelversion}.%{patchlevel}.%{sublevel}
@@ -1008,6 +1008,8 @@ sed -i -e "s/^# CONFIG_RD_ZSTD is not set/CONFIG_RD_ZSTD=y/g" %{_sourcedir}/comm
 		fi
 		cat %{_sourcedir}/$i.config >>.config
 	done
+	sed -i -e '/CONFIG_BUILD_SALT/d' .config
+	echo "CONFIG_BUILD_SALT=\"$(echo $arch-$type-%{EVRD}|sha1sum -)\"" >>.config
 }
 
 PrepareKernel() {
