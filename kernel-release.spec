@@ -322,6 +322,7 @@ Patch147:	saa716x-linux-4.19.patch
 Patch148:	long-long.patch
 
 Patch150:	https://gitweb.frugalware.org/wip_kernel/raw/master/source/base/kernel/ath10k-drop-WARN_ON-added-in-cd93b83ad927b2c7979e0add0343ace59328b461.patch
+Patch151:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/drop_ancient-and-wrong-msg.patch
 
 # NOT YET
 #Patch250:	4.14-C11.patch
