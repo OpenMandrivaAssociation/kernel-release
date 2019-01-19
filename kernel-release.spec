@@ -1009,7 +1009,7 @@ sed -i -e "s/^# CONFIG_RD_ZSTD is not set/CONFIG_RD_ZSTD=y/g" %{_sourcedir}/comm
 		cat %{_sourcedir}/$i.config >>.config
 	done
 	sed -i -e '/CONFIG_BUILD_SALT/d' .config
-	echo "CONFIG_BUILD_SALT=\"$(echo $arch-$type-%{EVRD}|sha1sum -)\"" >>.config
+	echo "CONFIG_BUILD_SALT=\"$(echo $arch-$type-%{EVRD}|sha1sum)\"" >>.config
 }
 
 PrepareKernel() {
