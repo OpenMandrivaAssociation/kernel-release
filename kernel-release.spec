@@ -12,7 +12,7 @@
 # compose tar.xz name and release
 %define kernelversion	4
 %define patchlevel	20
-%define sublevel	3
+%define sublevel	4
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
