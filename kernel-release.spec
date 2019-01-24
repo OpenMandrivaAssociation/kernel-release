@@ -7,6 +7,12 @@
 # While perf comes with python2 scripts
 %define _python_bytecompile_build 0
 
+# (crazy) , well that new way of doing buil-id symlinks
+# does not seems to work, see:
+# https://issues.openmandriva.org/show_bug.cgi?id=2400
+# let us try *old* way for kernel package(s)
+%global _build_id_links alldebug
+
 # IMPORTANT
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
@@ -26,7 +32,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
 %else
-%define rpmrel		2
+%define rpmrel		3
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
