@@ -1341,10 +1341,10 @@ done
 rm -rf vmlinuz-{server,desktop} initrd0.img initrd-{server,desktop}
 
 # (crazy) remove at least one <hash>/foo_bar ?
-mid=$(cat /etc/machine-id)
-if [ -n "$mid" ]; then
-	rm -rf "$mid"
-fi
+#mid=$(cat /etc/machine-id)
+#if [ -n "$mid" ]; then
+#	rm -rf "$mid"
+#fi
 
 # run update-grub2 again
 /usr/sbin/update-grub2
