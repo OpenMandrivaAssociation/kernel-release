@@ -525,6 +525,10 @@ Conflicts:	%kconflicts4 %kconflicts5		\
 Provides:	should-restart = system			\
 Suggests:	crda					\
 Suggests:	iw					\
+%ifarch %{ix86} %{x86_64}				\
+Requires:	grub2 >= 2.02-26			\
+Requires(post):	grub2 >= 2.02-26			\
+%endif							\
 %ifnarch %armx						\
 Suggests:	cpupower				\
 Suggests:	microcode-intel				\
