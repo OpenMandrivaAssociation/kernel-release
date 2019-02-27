@@ -521,15 +521,14 @@ Conflicts:	%{kname}-%{1}-latest <= %{kversion}-%{rpmrel}	\
 Obsoletes:	%{kname}-%{1}-latest <= %{kversion}-%{rpmrel}	\
 Provides:	installonlypkg(kernel)			\
 Provides:	should-restart = system			\
-Suggests:	crda					\
-Suggests:	iw					\
+Recommends:	iw					\
 %ifarch %{ix86} %{x86_64}				\
 Requires:	grub2 >= 2.02-27			\
 Requires(post):	grub2 >= 2.02-27			\
 %endif							\
 %ifnarch %armx						\
-Suggests:	cpupower				\
-Suggests:	microcode-intel				\
+Recommends:	cpupower				\
+Recommends:	microcode-intel				\
 Suggests:	dracut >= 047				\
 %endif							\
 %ifarch %{ix86}						\
