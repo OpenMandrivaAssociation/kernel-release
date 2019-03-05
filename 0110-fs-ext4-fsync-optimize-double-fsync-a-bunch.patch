@@ -1,7 +1,7 @@
-diff -up linux-4.20/block/bio.c.36~ linux-4.20/block/bio.c
---- linux-4.20/block/bio.c.36~	2018-12-24 00:55:59.000000000 +0100
-+++ linux-4.20/block/bio.c	2018-12-24 14:40:09.872351871 +0100
-@@ -933,6 +933,25 @@ int submit_bio_wait(struct bio *bio)
+diff -up linux-5.0/block/bio.c.46~ linux-5.0/block/bio.c
+--- linux-5.0/block/bio.c.46~	2019-03-04 00:21:29.000000000 +0100
++++ linux-5.0/block/bio.c	2019-03-04 15:30:10.414564548 +0100
+@@ -932,6 +932,25 @@ int submit_bio_wait(struct bio *bio)
  }
  EXPORT_SYMBOL(submit_bio_wait);
  
@@ -27,10 +27,10 @@ diff -up linux-4.20/block/bio.c.36~ linux-4.20/block/bio.c
  /**
   * bio_advance - increment/complete a bio by some number of bytes
   * @bio:	bio to advance
-diff -up linux-4.20/block/blk-flush.c.36~ linux-4.20/block/blk-flush.c
---- linux-4.20/block/blk-flush.c.36~	2018-12-24 14:40:09.872351871 +0100
-+++ linux-4.20/block/blk-flush.c	2018-12-24 14:41:33.780475104 +0100
-@@ -565,6 +565,46 @@ int blkdev_issue_flush(struct block_devi
+diff -up linux-5.0/block/blk-flush.c.46~ linux-5.0/block/blk-flush.c
+--- linux-5.0/block/blk-flush.c.46~	2019-03-04 15:30:10.414564548 +0100
++++ linux-5.0/block/blk-flush.c	2019-03-04 15:35:24.796414601 +0100
+@@ -462,6 +462,46 @@ int blkdev_issue_flush(struct block_devi
  }
  EXPORT_SYMBOL(blkdev_issue_flush);
  
@@ -77,9 +77,9 @@ diff -up linux-4.20/block/blk-flush.c.36~ linux-4.20/block/blk-flush.c
  struct blk_flush_queue *blk_alloc_flush_queue(struct request_queue *q,
  		int node, int cmd_size, gfp_t flags)
  {
-diff -up linux-4.20/fs/ext4/fsync.c.36~ linux-4.20/fs/ext4/fsync.c
---- linux-4.20/fs/ext4/fsync.c.36~	2018-12-24 00:55:59.000000000 +0100
-+++ linux-4.20/fs/ext4/fsync.c	2018-12-24 14:40:09.872351871 +0100
+diff -up linux-5.0/fs/ext4/fsync.c.46~ linux-5.0/fs/ext4/fsync.c
+--- linux-5.0/fs/ext4/fsync.c.46~	2019-03-04 00:21:29.000000000 +0100
++++ linux-5.0/fs/ext4/fsync.c	2019-03-04 15:30:10.414564548 +0100
 @@ -154,7 +154,11 @@ int ext4_sync_file(struct file *file, lo
  	ret = jbd2_complete_transaction(journal, commit_tid);
  	if (needs_barrier) {
@@ -93,9 +93,9 @@ diff -up linux-4.20/fs/ext4/fsync.c.36~ linux-4.20/fs/ext4/fsync.c
  		if (!ret)
  			ret = err;
  	}
-diff -up linux-4.20/include/linux/bio.h.36~ linux-4.20/include/linux/bio.h
---- linux-4.20/include/linux/bio.h.36~	2018-12-24 00:55:59.000000000 +0100
-+++ linux-4.20/include/linux/bio.h	2018-12-24 14:40:09.872351871 +0100
+diff -up linux-5.0/include/linux/bio.h.46~ linux-5.0/include/linux/bio.h
+--- linux-5.0/include/linux/bio.h.46~	2019-03-04 00:21:29.000000000 +0100
++++ linux-5.0/include/linux/bio.h	2019-03-04 15:30:10.415564563 +0100
 @@ -418,6 +418,7 @@ struct request_queue;
  extern int bio_phys_segments(struct request_queue *, struct bio *);
  
@@ -104,10 +104,10 @@ diff -up linux-4.20/include/linux/bio.h.36~ linux-4.20/include/linux/bio.h
  extern void bio_advance(struct bio *, unsigned);
  
  extern void bio_init(struct bio *bio, struct bio_vec *table,
-diff -up linux-4.20/include/linux/blkdev.h.36~ linux-4.20/include/linux/blkdev.h
---- linux-4.20/include/linux/blkdev.h.36~	2018-12-24 00:55:59.000000000 +0100
-+++ linux-4.20/include/linux/blkdev.h	2018-12-24 14:40:09.872351871 +0100
-@@ -1384,6 +1384,7 @@ static inline struct request *blk_map_qu
+diff -up linux-5.0/include/linux/blkdev.h.46~ linux-5.0/include/linux/blkdev.h
+--- linux-5.0/include/linux/blkdev.h.46~	2019-03-04 00:21:29.000000000 +0100
++++ linux-5.0/include/linux/blkdev.h	2019-03-04 15:34:45.385809877 +0100
+@@ -1167,6 +1167,7 @@ static inline bool blk_needs_flush_plug(
  }
  
  extern int blkdev_issue_flush(struct block_device *, gfp_t, sector_t *);
@@ -115,14 +115,13 @@ diff -up linux-4.20/include/linux/blkdev.h.36~ linux-4.20/include/linux/blkdev.h
  extern int blkdev_issue_write_same(struct block_device *bdev, sector_t sector,
  		sector_t nr_sects, gfp_t gfp_mask, struct page *page);
  
-@@ -1980,6 +1981,10 @@ static inline int blkdev_issue_flush(str
+@@ -1763,6 +1764,9 @@ static inline int blkdev_issue_flush(str
  	return 0;
  }
  
 +static inline void blkdev_issue_flush_nowait(struct block_device *bdev, gfp_t gfp_mask)
 +{
 +}
-+
  #endif /* CONFIG_BLOCK */
  
- #endif
+ static inline void blk_wake_io_task(struct task_struct *waiter)
