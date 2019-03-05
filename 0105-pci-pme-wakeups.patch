@@ -1,6 +1,6 @@
-diff -up linux-4.20/drivers/misc/vmw_balloon.c.33~ linux-4.20/drivers/misc/vmw_balloon.c
---- linux-4.20/drivers/misc/vmw_balloon.c.33~	2018-12-24 14:35:58.168980706 +0100
-+++ linux-4.20/drivers/misc/vmw_balloon.c	2018-12-24 14:39:46.097033560 +0100
+diff -up linux-5.0/drivers/misc/vmw_balloon.c.44~ linux-5.0/drivers/misc/vmw_balloon.c
+--- linux-5.0/drivers/misc/vmw_balloon.c.44~	2019-03-04 15:27:09.759740794 +0100
++++ linux-5.0/drivers/misc/vmw_balloon.c	2019-03-04 15:28:04.324597379 +0100
 @@ -1363,7 +1363,7 @@ static void vmballoon_work(struct work_s
  	 * stopped while the system transitions to/from sleep/hibernation.
  	 */
@@ -10,9 +10,9 @@ diff -up linux-4.20/drivers/misc/vmw_balloon.c.33~ linux-4.20/drivers/misc/vmw_b
  
  }
  
-diff -up linux-4.20/drivers/pci/pci.c.33~ linux-4.20/drivers/pci/pci.c
---- linux-4.20/drivers/pci/pci.c.33~	2018-12-24 00:55:59.000000000 +0100
-+++ linux-4.20/drivers/pci/pci.c	2018-12-24 14:35:58.169980720 +0100
+diff -up linux-5.0/drivers/pci/pci.c.44~ linux-5.0/drivers/pci/pci.c
+--- linux-5.0/drivers/pci/pci.c.44~	2019-03-04 00:21:29.000000000 +0100
++++ linux-5.0/drivers/pci/pci.c	2019-03-04 15:27:09.759740794 +0100
 @@ -61,7 +61,7 @@ struct pci_pme_device {
  	struct pci_dev *dev;
  };
