@@ -2,7 +2,7 @@
 %define _disable_ld_no_undefined 1
 
 # (tpg) try to speed up things
-%global optflags %{optflags} -O3
+%global optflags %{optflags} -Ofast
 
 # While perf comes with python2 scripts
 %define _python_bytecompile_build 0
@@ -16,9 +16,9 @@
 # IMPORTANT
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
-%define kernelversion	4
-%define patchlevel	20
-%define sublevel	13
+%define kernelversion	5
+%define patchlevel	0
+%define sublevel	0
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -30,7 +30,7 @@
 # This is the place where you set release version %{version}-1omv2015
 %if 0%{relc}
 %define rpmrel		0.rc%{relc}.1
-%define tar_ver   	%{kernelversion}.%(expr %{patchlevel} - 1)
+%define tar_ver   	%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
 %define rpmrel		1
 %define tar_ver		%{kernelversion}.%{patchlevel}
@@ -115,9 +115,16 @@
 # unfortunately kmod does not support Zstandard for now, so kernel modules
 # compressed with zstd will not bo loaded and system will fail
 # https://github.com/facebook/zstd/issues/1121
+# Currently only supported on x86
+%ifarch %{ix86} %{x86_64}
 %bcond_without build_modzstd
 # compress modules with XZ
 %bcond_with build_modxz
+%else
+%bcond_with build_modzstd
+# compress modules with XZ
+%bcond_without build_modxz
+%endif
 
 # ARM builds
 %ifarch %{armx}
@@ -166,8 +173,12 @@ URL:		http://www.kernel.org
 # Sources
 #
 ### This is for full SRC RPM
+%if 0%{relc}
+Source0:	https://git.kernel.org/torvalds/t/linux-%{tar_ver}.tar.gz
+%else
 Source0:	http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.xz
 Source1:	http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_ver}.tar.sign
+%endif
 ### This is for stripped SRC RPM
 %if %{with build_nosrc}
 NoSource:	0
@@ -197,20 +208,15 @@ Source51:	cpupower.config
 # (-stable patch, -rc, ...)
 # Added as a Source rather that Patch because it needs to be
 # applied with "git apply" -- may contain binary patches.
-%if 0%{relc}
-#Source90:	https://git.kernel.org/torvalds/p/v%{kernelversion}.%{patchlevel}-rc%{relc}/v%{tar_ver}
-# Preferrable because it's already compressed (and therefore
-# much less of a pain for filestore) when it's available...
-Source90:	https://fossies.org/linux/kernel/v%{kernelversion}.%{patchlevel}/patch_v%{previous}_%{kernelversion}.%{patchlevel}-rc%{relc}.xz
-%else
 %if 0%{sublevel}
 Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
 %endif
-%endif
 Patch2:		die-floppy-die.patch
 Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
-#Patch4:		linux-4.7-intel-dvi-duallink.patch
-#Patch5:		linux-4.8.1-buildfix.patch
+Patch4:		linux-4.7-intel-dvi-duallink.patch
+Patch5:		linux-4.8.1-buildfix.patch
+# https://bugzilla.kernel.org/show_bug.cgi?id=202621
+Patch6:                linux-5.0-rc7-fix-speakers-on-acer-predator-helios-500.patch
 
 %if %{with clang}
 # Patches to make it build with clang
@@ -284,14 +290,18 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 # Patches to VirtualBox and other external modules are
 # pulled in as Source: rather than Patch: because it's arch specific
 # and can't be applied by %%apply_patches
+Source115:	vbox-kernel-5.0.patch
 
 # (tpg) The Ultra Kernel Same Page Deduplication
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
-# Temporarily disabled until ported upstream
 #Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.19.patch
 # Sometimes other people are ahead of upstream porting to new releases...
-Patch120:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/4.20/pf-uksm/0001-uksm-4.20-initial-submission.patch
+Patch120:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.0/pf-uksm/0001-uksm-5.0-initial-submission.patch
+Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/5.0/pf-uksm-fixes/0001-uksm-5.0-adopt-new-MMU-notifiers-API.patch
+
+Patch122:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.0/pf-fixes/0915-fixes-from-pfkernel.patch
+Patch123:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.0/pf-miscellaneous/0002-exec-Fix-mem-leak-in-kernel_read_file.patch
 
 %if %{with build_modzstd}
 # https://patchwork.kernel.org/patch/10003007/
@@ -300,8 +310,11 @@ Patch126:	v2-1-2-lib-Add-support-for-ZSTD-compressed-kernel.patch
 Patch127:	v2-2-2-x86-Add-support-for-ZSTD-compressed-kernel.patch
 %endif
 
-# https://bugs.freedesktop.org/show_bug.cgi?id=100446
-Patch130:	nouveau-pascal-backlight.patch
+Patch131:	long-long.patch
+
+Patch132:	https://gitweb.frugalware.org/wip_kernel/raw/master/source/base/kernel/ath10k-drop-WARN_ON-added-in-cd93b83ad927b2c7979e0add0343ace59328b461.patch
+Patch133:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/drop_ancient-and-wrong-msg.patch
+
 
 ### Additional hardware support
 ### TV tuners:
@@ -320,10 +333,10 @@ Patch145:	saa716x-driver-integration.patch
 Patch146:	saa716x-4.15.patch
 Patch147:	saa716x-linux-4.19.patch
 
-Patch148:	long-long.patch
-
-Patch150:	https://gitweb.frugalware.org/wip_kernel/raw/master/source/base/kernel/ath10k-drop-WARN_ON-added-in-cd93b83ad927b2c7979e0add0343ace59328b461.patch
-Patch151:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/drop_ancient-and-wrong-msg.patch
+# Lima driver for ARM Mali graphics chips
+# Generated from https://gitlab.freedesktop.org/lima/linux.git
+# using git diff v5.0-rc8..lima/lima-5.0-rc8-2
+Patch160:	kernel-5.0-rc8-lima.patch
 
 # NOT YET
 #Patch250:	4.14-C11.patch
@@ -360,14 +373,18 @@ Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/d
 
 %if %{with clr}
 # (tpg) some patches from ClearLinux
+# https://github.com/clearlinux-pkgs/linux/
 Patch400:	0101-i8042-decrease-debug-message-level-to-info.patch
 Patch401:	0103-Increase-the-ext4-default-commit-age.patch
 Patch402:	0103-silence-rapl.patch
 Patch403:	0105-pci-pme-wakeups.patch
-Patch404:	0106-ksm-wakeups.patch
+# Incompatible with UKSM
+#Patch404:	0106-ksm-wakeups.patch
 Patch405:	0107-intel_idle-tweak-cpuidle-cstates.patch
 Patch406:	0110-fs-ext4-fsync-optimize-double-fsync-a-bunch.patch
-Patch407:	0114-smpboot-reuse-timer-calibration.patch
+# Not necessarily a good idea -- not all CPU cores are
+# guaranteed to be the same (e.g. big.LITTLE)
+#Patch407:	0114-smpboot-reuse-timer-calibration.patch
 Patch408:	0116-Initialize-ata-before-graphics.patch
 Patch409:	0117-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
 Patch410:	0119-e1000e-change-default-policy.patch
@@ -838,7 +855,8 @@ done
 #
 %prep
 %setup -q -n linux-%{tar_ver} -a 140
-%if 0%{relc} || 0%{sublevel}
+cp %{S:6} %{S:7} %{S:8} %{S:9} %{S:10} %{S:11} %{S:12} %{S:13} kernel/configs/
+%if 0%{sublevel}
 [ -e .git ] || git init
 xzcat %{SOURCE90} |git apply - || git apply %{SOURCE90}
 rm -rf .git
@@ -910,6 +928,7 @@ cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxpci drivers/pci/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefile*
 sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
+git apply %{SOURCE115}
 %endif
 %endif
 
@@ -957,28 +976,39 @@ CreateConfig() {
 %endif
 
 %if %{with build_modxz}
-sed -i -e "s/^# CONFIG_KERNEL_XZ is not set/CONFIG_KERNEL_XZ=y/g" %{_sourcedir}/common.config
+sed -i -e "s/^# CONFIG_KERNEL_XZ is not set/CONFIG_KERNEL_XZ=y/g" kernel/configs/common.config
 %endif
 
 %if %{with build_modzstd}
-sed -i -e "s/^# CONFIG_KERNEL_ZSTD is not set/CONFIG_KERNEL_ZSTD=y/g" %{_sourcedir}/common.config
-sed -i -e "s/^# CONFIG_RD_ZSTD is not set/CONFIG_RD_ZSTD=y/g" %{_sourcedir}/common.config
+sed -i -e "s/^# CONFIG_KERNEL_ZSTD is not set/CONFIG_KERNEL_ZSTD=y/g" kernel/configs/common.config
+sed -i -e "s/^# CONFIG_RD_ZSTD is not set/CONFIG_RD_ZSTD=y/g" kernel/configs/common.config
 %endif
 
+	case ${arch} in
+	i?86|znver1_32)
+		CONFIGS=i386_defconfig
+		;;
+	x86_64|znver1)
+		CONFIGS=x86_64_defconfig
+		;;
+	*)
+		CONFIGS=defconfig
+		;;
+	esac
+
 	for i in common common-${type} ${arch}-common ${arch}-${type} $CLANG_EXTRAS; do
-		[ -e %{_sourcedir}/$i.config ] || continue
-		if [ -e .config ]; then
-			# Make sure the later configs override the former ones.
-			# More specific configs should be able to override generic ones no matter what.
-			NEWCONFIGS=$(cat %{_sourcedir}/$i.config |grep -E '^(CONFIG_|# CONFIG_)' |sed -e 's,=.*,,;s,^# ,,;s, is not set,,')
-			for j in $NEWCONFIGS; do
-				sed -i -e "/^$j=.*/d;/^# $j is not set/d" .config
-			done
-		fi
-		cat %{_sourcedir}/$i.config >>.config
+		[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
 	done
-	sed -i -e '/CONFIG_BUILD_SALT/d' .config
-	echo "CONFIG_BUILD_SALT=\"$(echo $arch-$type-%{EVRD}|sha1sum|awk '{ print $1; }')\"" >>.config
+	if [ "$arch" = "znver1" ]; then
+		# We need to build with ARCH=x86_64 rather than ARCH=znver1
+		# and pull in both x86_64 and znver1 configs, with the latter
+		# coming last so it can override the former
+		CONFIGS="${CONFIGS/znver1.config/x86_64.config znver1.config}"
+		arch=x86
+	fi
+
+	make ARCH="${arch}" $CONFIGS
+	scripts/config --set-val BUILD_SALT \"$(echo "$arch-$type-%{EVRD}"|sha1sum|awk '{ print $1; }')\"
 }
 
 PrepareKernel() {
@@ -994,7 +1024,6 @@ PrepareKernel() {
 %endif
     # make sure EXTRAVERSION says what we want it to say
     sed -ri "s|^(EXTRAVERSION =).*|\1 -$extension|" Makefile
-    %{smake} oldconfig
 }
 
 BuildKernel() {
@@ -1029,7 +1058,11 @@ BuildKernel() {
 %endif
 
 %if %{with build_modzstd}
+%ifarch %{ix86} %{armx}
     zstd -15 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
+%else
+    zstd -10 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
+%endif
 %endif
 
 %ifarch %{arm}
@@ -1421,41 +1454,6 @@ install -d %{temp_root}
 ###
 # DO it...
 ###
-# First of all, let's check for new config options...
-for a in arm arm64 i386 x86_64 znver1; do
-	CreateConfig $a desktop
-	export ARCH=$a
-	[ "$ARCH" = "znver1" ] && export ARCH=x86
-	make ARCH=$ARCH listnewconfig |grep '^CONFIG' >newconfigs.$a || :
-done
-cat newconfigs.* >newconfigs
-cat newconfigs.arm |while read r; do
-	if grep -qE "^$r\$" newconfigs.arm64 && grep -qE "^$r\$" newconfigs.arm64 && grep -qE "^$r\$" newconfigs.i386 && grep -qE "^$r\$" newconfigs.x86_64 && grep -qE "^$r\$" newconfigs.znver1; then
-		echo $r >>newconfigs.common
-	fi
-done
-for i in arm arm64 i386 x86_64 znver1; do
-	cat newconfigs.$i |while read r; do
-		grep -qE "^$r\$" newconfigs.common || echo $r >>newconfigs.${i}only
-	done
-done
-if [ -s newconfigs ]; then
-	set +x
-	printf '%s\n' "New config options have been added - please update the *.config files."
-	printf '%s\n' "New config options you need to take care of:"
-	if [ -e newconfigs.common ]; then
-		printf '%s\n' "For common.config:"
-		sed -e 's/.*=n/# & is not set/;s,=n,,' newconfigs.common
-	fi
-	for i in arm arm64 i386 x86_64 znver1; do
-		[ -e newconfigs.${i}only ] || continue
-		printf '%s\n' "For $i-common.config:"
-		sed -e 's/.*=n/# & is not set/;s,=n,,' newconfigs.${i}only
-	done
-	exit 1
-fi
-rm -f newconfigs*
-
 # Build the configs for every arch we care about
 # that way, we can be sure all *.config files have the right additions
 for a in arm arm64 i386 x86_64 znver1; do
@@ -1463,7 +1461,6 @@ for a in arm arm64 i386 x86_64 znver1; do
 		CreateConfig $a $t
 		export ARCH=$a
 		[ "$ARCH" = "znver1" ] && export ARCH=x86
-		make oldconfig
 %if %{with cross_headers}
 		if [ "$t" = "desktop" ]; then
 			# While we have a kernel configured for it, let's package
@@ -1803,6 +1800,7 @@ cd -
 %{_libdir}/libcpupower.so.0.0.1
 %{_unitdir}/cpupower.service
 %{_mandir}/man[1-8]/cpupower*
+%{_datadir}/bash-completion/completions/cpupower
 %config(noreplace) %{_sysconfdir}/sysconfig/cpupower
 
 %files -n cpupower-devel
