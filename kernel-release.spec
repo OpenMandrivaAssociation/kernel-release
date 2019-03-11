@@ -18,7 +18,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	0
-%define sublevel	0
+%define sublevel	1
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -209,7 +209,7 @@ Source51:	cpupower.config
 # Added as a Source rather that Patch because it needs to be
 # applied with "git apply" -- may contain binary patches.
 %if 0%{sublevel}
-Source90:	https://cdn.kernel.org/pub/linux/kernel/v4.x/patch-%{version}.xz
+Source90:	https://cdn.kernel.org/pub/linux/kernel/v%(echo %{version}|cut -d. -f1).x/patch-%{version}.xz
 %endif
 Patch2:		die-floppy-die.patch
 Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
@@ -301,7 +301,6 @@ Patch120:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.0/
 Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/5.0/pf-uksm-fixes/0001-uksm-5.0-adopt-new-MMU-notifiers-API.patch
 
 Patch122:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.0/pf-fixes/0915-fixes-from-pfkernel.patch
-Patch123:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.0/pf-miscellaneous/0002-exec-Fix-mem-leak-in-kernel_read_file.patch
 
 %if %{with build_modzstd}
 # https://patchwork.kernel.org/patch/10003007/
