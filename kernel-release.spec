@@ -334,8 +334,8 @@ Patch147:	saa716x-linux-4.19.patch
 
 # Lima driver for ARM Mali graphics chips
 # Generated from https://gitlab.freedesktop.org/lima/linux.git
-# using git diff v5.0-rc8..lima/lima-5.0-rc8-2
-Patch160:	kernel-5.0-rc8-lima.patch
+# using git diff v5.0..lima/lima-5.0
+Patch160:	kernel-5.0-lima.patch
 
 # NOT YET
 #Patch250:	4.14-C11.patch
