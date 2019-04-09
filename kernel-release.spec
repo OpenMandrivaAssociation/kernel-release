@@ -18,7 +18,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	0
-%define sublevel	6
+%define sublevel	7
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -215,8 +215,6 @@ Patch2:		die-floppy-die.patch
 Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch4:		linux-4.7-intel-dvi-duallink.patch
 Patch5:		linux-4.8.1-buildfix.patch
-# https://bugzilla.kernel.org/show_bug.cgi?id=202621
-Patch6:                linux-5.0-rc7-fix-speakers-on-acer-predator-helios-500.patch
 
 %if %{with clang}
 # Patches to make it build with clang
@@ -299,8 +297,6 @@ Source115:	vbox-kernel-5.0.patch
 # Sometimes other people are ahead of upstream porting to new releases...
 Patch120:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.0/pf-uksm/0001-uksm-5.0-initial-submission.patch
 Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/5.0/pf-uksm-fixes/0001-uksm-5.0-adopt-new-MMU-notifiers-API.patch
-
-Patch122:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.0/pf-fixes/0915-fixes-from-pfkernel.patch
 
 %if %{with build_modzstd}
 # https://patchwork.kernel.org/patch/10003007/
