@@ -2,4 +2,4 @@ sources:
   linux-5.0.tar.sign: 977bd24c941d5ca71b98eecc94770f7093fff079
   linux-5.0.tar.xz: 3a7bc3cdd77d71b18b96ca0d92e57ef9bded3757
   saa716x-driver.tar.xz: f9b6ef1cd6f1f71f53d9a8aadfba2cf6b5c3d7b6
-  patch-5.0.6.xz: 9ff4e011a55d3e31dfc13d83c554f52d9228a434
+  patch-5.0.7.xz: 38b31884dd4a36e6bb708b2cf793ecfba724dc3d
