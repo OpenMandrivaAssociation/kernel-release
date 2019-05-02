@@ -18,7 +18,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	0
-%define sublevel	10
+%define sublevel	11
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -396,6 +396,9 @@ Patch417:	0502-locking-rwsem-spin-faster.patch
 # Not even sure what Vendor that one is .. However it seems be one of the ones random doing that
 # like some Toshibas and some Samsung ones , so disable APST for this one..
 Patch800: Unknow-SSD-HFM128GDHTNG-8310B-QUIRK_NO_APST.patch
+
+# Fix build with gcc 9.x
+Patch801: linux-5.0-gcc9.patch
 
 # Defines for the things that are needed for all the kernels
 #
