@@ -164,7 +164,7 @@ Version:	%{kversion}
 Release:	%{rpmrel}
 License:	GPLv2
 Group:		System/Kernel and hardware
-ExclusiveArch:	%{ix86} %{x86_64} %{armx}
+ExclusiveArch:	%{ix86} %{x86_64} %{armx} %{riscv}
 ExclusiveOS:	Linux
 URL:		http://www.kernel.org
 
