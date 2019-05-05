@@ -18,7 +18,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	0
-%define sublevel	12
+%define sublevel	13
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -307,7 +307,6 @@ Patch127:	v2-2-2-x86-Add-support-for-ZSTD-compressed-kernel.patch
 
 Patch131:	long-long.patch
 
-Patch132:	https://gitweb.frugalware.org/wip_kernel/raw/master/source/base/kernel/ath10k-drop-WARN_ON-added-in-cd93b83ad927b2c7979e0add0343ace59328b461.patch
 Patch133:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/drop_ancient-and-wrong-msg.patch
 
 
