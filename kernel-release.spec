@@ -17,8 +17,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	0
-%define sublevel	13
+%define patchlevel	1
+%define sublevel	0
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -288,15 +288,14 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 # Patches to VirtualBox and other external modules are
 # pulled in as Source: rather than Patch: because it's arch specific
 # and can't be applied by %%apply_patches
-Source115:	vbox-kernel-5.0.patch
 
 # (tpg) The Ultra Kernel Same Page Deduplication
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
 #Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.19.patch
 # Sometimes other people are ahead of upstream porting to new releases...
-Patch120:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.0/pf-uksm/0001-uksm-5.0-initial-submission.patch
-Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/5.0/pf-uksm-fixes/0001-uksm-5.0-adopt-new-MMU-notifiers-API.patch
+Patch120:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf/0001-uksm-5.1-initial-submission.patch
+Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf-fix/0001-uksm-5.1-apply-52d1e606ee733.patch
 
 %if %{with build_modzstd}
 # https://patchwork.kernel.org/patch/10003007/
@@ -304,8 +303,6 @@ Patch126:	v2-1-2-lib-Add-support-for-ZSTD-compressed-kernel.patch
 # https://patchwork.kernel.org/patch/10003011/
 Patch127:	v2-2-2-x86-Add-support-for-ZSTD-compressed-kernel.patch
 %endif
-
-Patch131:	long-long.patch
 
 Patch133:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/drop_ancient-and-wrong-msg.patch
 
@@ -329,24 +326,24 @@ Patch147:	saa716x-linux-4.19.patch
 
 # Lima driver for ARM Mali graphics chips
 # Generated from https://gitlab.freedesktop.org/lima/linux.git
-# using git diff v5.0..lima/lima-5.0
-Patch160:	kernel-5.0-lima.patch
+# using git diff v5.1..lima/lima-5.1
+# Currently no patch necessary
 
 # NOT YET
 #Patch250:	4.14-C11.patch
 
 # VirtualBox shared folders support
-# https://patchwork.kernel.org/patch/10315707/
+# https://patchwork.kernel.org/patch/10906949/
 # For newer versions, check
 # https://patchwork.kernel.org/project/linux-fsdevel/list/?submitter=582
-Patch300:	v7-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.patch
-Patch301:	vbox-4.18.patch
+Patch300:	v10-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.diff
 
 # Better support for newer x86 processors
 # Original patch:
 #Patch310:	https://raw.githubusercontent.com/graysky2/kernel_gcc_patch/master/enable_additional_cpu_optimizations_for_gcc_v8.1%2B_kernel_v4.13%2B.patch
 # More actively maintained for newer kernels
-Patch310:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/gcc-patch-backup-from-pf/0001-gcctunes-4.18-merge-graysky-s-patchset.patch
+Patch310:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/cpu-patches/0001-cpu-5.1-merge-graysky-s-patchset.patch
+Patch311:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/cpu-patches/0002-cpu-5.1-add-a-CONFIG-option-that-sets-O3.patch
 
 # Assorted fixes
 ## Intel Core2Duo got always unstable tsc , with changes in 4.18
@@ -355,6 +352,8 @@ Patch310:	https://github.com/sirlucjan/kernel-patches/raw/master/4.18/gcc-patch-
 ##      https://bugzilla.kernel.org/show_bug.cgi?id=200957
 ## patch is an backport from : https://lkml.org/lkml/2018/9/3/253
 Patch330:	https://raw.githubusercontent.com/frugalware/frugalware-current/71a887a9f309345f966c4d09c920642a62efb66f/source/base/kernel/fix-C2D-CPUs-booting.patch
+Patch331:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/cpu-patches-v2/0001-nfp-make-friends-with-O3.patch
+Patch332:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/loop-patches/0001-loop-Better-discard-for-block-devices.patch
 
 # Modular binder and ashmem -- let's try to make anbox happy
 Patch340:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
@@ -395,9 +394,6 @@ Patch417:	0502-locking-rwsem-spin-faster.patch
 # Not even sure what Vendor that one is .. However it seems be one of the ones random doing that
 # like some Toshibas and some Samsung ones , so disable APST for this one..
 Patch800: Unknow-SSD-HFM128GDHTNG-8310B-QUIRK_NO_APST.patch
-
-# Fix build with gcc 9.x
-Patch801: linux-5.0-gcc9.patch
 
 # Defines for the things that are needed for all the kernels
 #
@@ -926,7 +922,6 @@ cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxpci drivers/pci/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefile*
 sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
-git apply %{SOURCE115}
 %endif
 %endif
 
@@ -1181,7 +1176,6 @@ $DevelRoot/crypto
 # here
 $DevelRoot/certs
 $DevelRoot/drivers
-$DevelRoot/firmware
 $DevelRoot/fs
 $DevelRoot/include/acpi
 $DevelRoot/include/asm-generic
@@ -1718,7 +1712,6 @@ cd -
 %{_kerneldir}/block
 %{_kerneldir}/crypto
 %{_kerneldir}/drivers
-%{_kerneldir}/firmware
 %{_kerneldir}/fs
 %{_kerneldir}/certs/*
 %{_kerneldir}/include/acpi
