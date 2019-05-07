@@ -1,8 +1,8 @@
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 8a1dbb9260a4..587997bd6bd5 100644
+index 533f78b840af..5d19c0b61b6c 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -14856,6 +14856,12 @@ F:	include/linux/vbox_utils.h
+@@ -16598,6 +16598,12 @@ F:	include/linux/vbox_utils.h
  F:	include/uapi/linux/vbox*.h
  F:	drivers/virt/vboxguest/
  
@@ -16,35 +16,35 @@ index 8a1dbb9260a4..587997bd6bd5 100644
  M:	Stephen Chandler Paul <thatslyude@gmail.com>
  S:	Maintained
 diff --git a/fs/Kconfig b/fs/Kconfig
-index bc821a86d965..ec7baaf9cf8f 100644
+index 3e6d3101f3ff..695ddbb1958c 100644
 --- a/fs/Kconfig
 +++ b/fs/Kconfig
-@@ -251,6 +251,7 @@ source "fs/pstore/Kconfig"
+@@ -261,6 +261,7 @@ source "fs/romfs/Kconfig"
+ source "fs/pstore/Kconfig"
  source "fs/sysv/Kconfig"
  source "fs/ufs/Kconfig"
- source "fs/exofs/Kconfig"
 +source "fs/vboxsf/Kconfig"
  
  endif # MISC_FILESYSTEMS
  
 diff --git a/fs/Makefile b/fs/Makefile
-index add789ea270a..bf230c9d305b 100644
+index 427fec226fae..abc67831d531 100644
 --- a/fs/Makefile
 +++ b/fs/Makefile
-@@ -128,3 +128,4 @@ obj-y				+= exofs/ # Multiple modules
+@@ -129,3 +129,4 @@ obj-$(CONFIG_F2FS_FS)		+= f2fs/
  obj-$(CONFIG_CEPH_FS)		+= ceph/
  obj-$(CONFIG_PSTORE)		+= pstore/
  obj-$(CONFIG_EFIVAR_FS)		+= efivarfs/
 +obj-$(CONFIG_VBOXSF_FS)		+= vboxsf/
 diff --git a/fs/vboxsf/Kconfig b/fs/vboxsf/Kconfig
 new file mode 100644
-index 000000000000..b034698121ea
+index 000000000000..b84586ae08b3
 --- /dev/null
 +++ b/fs/vboxsf/Kconfig
 @@ -0,0 +1,10 @@
 +config VBOXSF_FS
 +	tristate "VirtualBox guest shared folder (vboxsf) support"
-+	depends on VBOXGUEST
++	depends on X86 && VBOXGUEST
 +	select NLS
 +	help
 +	  VirtualBox hosts can share folders with guests, this driver
@@ -63,15 +63,15 @@ index 000000000000..fcbd488f9eec
 +vboxsf-objs := dir.o file.o utils.o vboxsf_wrappers.o super.o
 diff --git a/fs/vboxsf/dir.c b/fs/vboxsf/dir.c
 new file mode 100644
-index 000000000000..3d1e46079820
+index 000000000000..bc8a8f711a0b
 --- /dev/null
 +++ b/fs/vboxsf/dir.c
-@@ -0,0 +1,574 @@
-+// SPDX-License-Identifier: GPL-2.0
+@@ -0,0 +1,538 @@
++// SPDX-License-Identifier: MIT
 +/*
 + * VirtualBox Guest Shared Folders support: Directory inode and file operations
 + *
-+ * Copyright (C) 2006-2016 Oracle Corporation
++ * Copyright (C) 2006-2018 Oracle Corporation
 + */
 +
 +#include <linux/namei.h>
@@ -183,25 +183,29 @@ index 000000000000..3d1e46079820
 + * @d_name	Buffer in which to return element name
 + * @d_type	Buffer in which to return element file-type
 + */
-+static int sf_getdent(struct file *dir, char d_name[NAME_MAX], int *d_type)
++static int sf_getdent(struct file *dir, loff_t pos,
++		      char d_name[NAME_MAX], int *d_type)
 +{
 +	struct sf_glob_info *sf_g = GET_GLOB_INFO(file_inode(dir)->i_sb);
 +	struct sf_dir_info *sf_d = dir->private_data;
-+	struct list_head *pos;
-+	loff_t cur = 0;
++	struct shfl_dirinfo *info;
++	struct sf_dir_buf *b;
++	loff_t i, cur = 0;
 +
-+	list_for_each(pos, &sf_d->info_list) {
-+		struct shfl_dirinfo *info;
-+		struct sf_dir_buf *b;
-+		loff_t i;
-+
-+		b = list_entry(pos, struct sf_dir_buf, head);
-+		if (dir->f_pos >= cur + b->entries) {
++	list_for_each_entry(b, &sf_d->info_list, head) {
++		if (pos >= cur + b->entries) {
 +			cur += b->entries;
 +			continue;
 +		}
 +
-+		for (i = 0, info = b->buf; i < dir->f_pos - cur; ++i) {
++		/*
++		 * Note the sf_dir_info objects we are iterating over here
++		 * are variable sized, so the info pointer may end up being
++		 * unaligned. This is how we get the data from the host.
++		 * Since vboxsf is only supported on x86 machines this is not
++		 * a problem.
++		 */
++		for (i = 0, info = b->buf; i < pos - cur; ++i) {
 +			size_t size;
 +
 +			size = offsetof(struct shfl_dirinfo, name.string) +
@@ -253,18 +257,11 @@ index 000000000000..3d1e46079820
 +		char d_name[NAME_MAX];
 +		int d_type = DT_UNKNOWN;
 +
-+		err = sf_getdent(dir, d_name, &d_type);
-+		switch (err) {
-+		case 1:
-+			return 0;
-+
-+		case 0:
-+			break;
-+
-+		case -1:
-+		default:
++		err = sf_getdent(dir, ctx->pos, d_name, &d_type);
++		if (unlikely(err)) { /* EOF or an error */
++			if (err == 1)
++				return 0;
 +			/* skip erroneous entry and proceed */
-+			dir->f_pos += 1;
 +			ctx->pos += 1;
 +			continue;
 +		}
@@ -283,7 +280,6 @@ index 000000000000..3d1e46079820
 +		if (!dir_emit(ctx, d_name, strlen(d_name), fake_ino, d_type))
 +			return 0;
 +
-+		dir->f_pos += 1;
 +		ctx->pos += 1;
 +	}
 +}
@@ -311,7 +307,7 @@ index 000000000000..3d1e46079820
 +		return vboxsf_stat_dentry(dentry, NULL) == -ENOENT;
 +}
 +
-+static const struct dentry_operations sf_dentry_ops = {
++const struct dentry_operations vboxsf_dentry_ops = {
 +	.d_revalidate = sf_dentry_revalidate
 +};
 +
@@ -332,39 +328,23 @@ index 000000000000..3d1e46079820
 +static struct dentry *sf_lookup(struct inode *parent, struct dentry *dentry,
 +				unsigned int flags)
 +{
++	struct sf_glob_info *sf_g = GET_GLOB_INFO(parent->i_sb);
 +	struct shfl_fsobjinfo fsinfo;
-+	struct sf_inode_info *sf_i;
-+	struct sf_glob_info *sf_g;
 +	struct inode *inode;
-+	ino_t ino;
 +	int err;
 +
-+	sf_g = GET_GLOB_INFO(parent->i_sb);
-+	sf_i = GET_INODE_INFO(parent);
++	dentry->d_time = jiffies;
 +
 +	err = vboxsf_stat_dentry(dentry, &fsinfo);
 +	if (err) {
-+		if (err != -ENOENT)
-+			return ERR_PTR(err);
-+		/*
-+		 * -ENOENT: add NULL inode to dentry so it later can
-+		 * be created via call to create/mkdir/open
-+		 */
-+		inode = NULL;
++		inode = (err == -ENOENT) ? NULL : ERR_PTR(err);
 +	} else {
-+		ino = iunique(parent->i_sb, 1);
-+		inode = iget_locked(parent->i_sb, ino);
-+		if (!inode)
-+			return ERR_PTR(-ENOMEM);
-+
-+		vboxsf_init_inode(sf_g, inode, &fsinfo);
-+		unlock_new_inode(inode);
++		inode = vboxsf_new_inode(parent->i_sb);
++		if (!IS_ERR(inode))
++			vboxsf_init_inode(sf_g, inode, &fsinfo);
 +	}
 +
-+	dentry->d_time = jiffies;
-+	d_set_d_op(dentry, &sf_dentry_ops);
-+	d_add(dentry, inode);
-+	return NULL;
++	return d_splice_alias(inode, dentry);
 +}
 +
 +/**
@@ -375,32 +355,24 @@ index 000000000000..3d1e46079820
 + * @parent	inode entry of the directory
 + * @dentry	directory cache entry
 + * @info	file information
-+ * @handle	handle
 + */
 +static int sf_instantiate(struct inode *parent, struct dentry *dentry,
-+			  struct shfl_fsobjinfo *info, u64 handle)
++			  struct shfl_fsobjinfo *info)
 +{
 +	struct sf_glob_info *sf_g = GET_GLOB_INFO(parent->i_sb);
 +	struct sf_inode_info *sf_i;
 +	struct inode *inode;
-+	ino_t ino;
 +
-+	ino = iunique(parent->i_sb, 1);
-+	inode = iget_locked(parent->i_sb, ino);
-+	if (!inode) {
-+		if (handle != SHFL_HANDLE_NIL)
-+			vboxsf_close(sf_g->root, handle);
-+		return -ENOMEM;
-+	}
++	inode = vboxsf_new_inode(parent->i_sb);
++	if (IS_ERR(inode))
++		return PTR_ERR(inode);
 +
 +	sf_i = GET_INODE_INFO(inode);
 +	/* the host may have given us different attr then requested */
 +	sf_i->force_restat = 1;
-+	sf_i->handle = handle;
 +	vboxsf_init_inode(sf_g, inode, info);
 +
 +	d_instantiate(dentry, inode);
-+	unlock_new_inode(inode);
 +
 +	return 0;
 +}
@@ -438,22 +410,15 @@ index 000000000000..3d1e46079820
 +	if (params.result != SHFL_FILE_CREATED)
 +		return -EPERM;
 +
-+	if (is_dir) {
-+		vboxsf_close(sf_g->root, params.handle);
-+		params.handle = SHFL_HANDLE_NIL;
-+	}
++	vboxsf_close(sf_g->root, params.handle);
 +
-+	err = sf_instantiate(parent, dentry, &params.info, params.handle);
++	err = sf_instantiate(parent, dentry, &params.info);
 +	if (err)
 +		return err;
 +
 +	/* parent directory access/change time changed */
 +	sf_parent_i->force_restat = 1;
 +
-+	/*
-+	 * We leave the handle open. We assume that the same file is opened
-+	 * with sf_reg_open() and later closed with sf_reg_close().
-+	 */
 +	return 0;
 +}
 +
@@ -501,7 +466,7 @@ index 000000000000..3d1e46079820
 +	int err;
 +
 +	flags = is_dir ? SHFL_REMOVE_DIR : SHFL_REMOVE_FILE;
-+	if (inode && (inode->i_mode & S_IFLNK) == S_IFLNK)
++	if ((inode->i_mode & S_IFLNK) == S_IFLNK)
 +		flags |= SHFL_REMOVE_SYMLINK;
 +
 +	path = vboxsf_path_from_dentry(sf_g, dentry);
@@ -564,9 +529,6 @@ index 000000000000..3d1e46079820
 +	if (flags)
 +		return -EINVAL;
 +
-+	if (sf_g != GET_GLOB_INFO(new_parent->i_sb))
-+		return -EINVAL;
-+
 +	old_path = vboxsf_path_from_dentry(sf_g, old_dentry);
 +	if (IS_ERR(old_path))
 +		return PTR_ERR(old_path);
@@ -618,10 +580,12 @@ index 000000000000..3d1e46079820
 +	err = vboxsf_symlink(sf_g->root, path, ssymname, &info);
 +	kfree(ssymname);
 +	__putname(path);
-+	if (err)
-+		return err;
++	if (err) {
++		/* -EROFS means symlinks are note support -> -EPERM */
++		return (err == -EROFS) ? -EPERM : err;
++	}
 +
-+	err = sf_instantiate(parent, dentry, &info, SHFL_HANDLE_NIL);
++	err = sf_instantiate(parent, dentry, &info);
 +	if (err)
 +		return err;
 +
@@ -643,19 +607,31 @@ index 000000000000..3d1e46079820
 +};
 diff --git a/fs/vboxsf/file.c b/fs/vboxsf/file.c
 new file mode 100644
-index 000000000000..ed78a6e8a1b0
+index 000000000000..60fa7ef6d797
 --- /dev/null
 +++ b/fs/vboxsf/file.c
-@@ -0,0 +1,367 @@
-+// SPDX-License-Identifier: GPL-2.0
+@@ -0,0 +1,452 @@
++// SPDX-License-Identifier: MIT
 +/*
 + * VirtualBox Guest Shared Folders support: Regular file inode and file ops.
 + *
-+ * Copyright (C) 2006-2016 Oracle Corporation
++ * Copyright (C) 2006-2018 Oracle Corporation
 + */
 +
++#include <linux/mm.h>
++#include <linux/page-flags.h>
++#include <linux/pagemap.h>
++#include <linux/highmem.h>
 +#include <linux/sizes.h>
 +#include "vfsmod.h"
++
++struct sf_handle {
++	u64 handle;
++	u32 root;
++	u32 access_flags;
++	struct kref refcount;
++	struct list_head head;
++};
 +
 +/**
 + * Read from a regular file.
@@ -665,11 +641,10 @@ index 000000000000..ed78a6e8a1b0
 + * @size	length of the buffer
 + * @off		offset within the file
 + */
-+static ssize_t sf_reg_read(struct file *file, char *buf, size_t size,
++static ssize_t sf_reg_read(struct file *file, char __user *buf, size_t size,
 +			   loff_t *off)
 +{
-+	struct sf_glob_info *sf_g = GET_GLOB_INFO(file_inode(file)->i_sb);
-+	struct sf_reg_info *sf_r = file->private_data;
++	struct sf_handle *sf_handle = file->private_data;
 +	u64 pos = *off;
 +	u32 nread;
 +	int err;
@@ -682,7 +657,8 @@ index 000000000000..ed78a6e8a1b0
 +	else
 +		nread = size;
 +
-+	err = vboxsf_read(sf_g->root, sf_r->handle, pos, &nread, buf, true);
++	err = vboxsf_read(sf_handle->root, sf_handle->handle, pos, &nread,
++			  (uintptr_t)buf, true);
 +	if (err)
 +		return err;
 +
@@ -698,22 +674,20 @@ index 000000000000..ed78a6e8a1b0
 + * @size	length of the buffer
 + * @off		offset within the file
 + */
-+static ssize_t sf_reg_write(struct file *file, const char *buf, size_t size,
-+			    loff_t *off)
++static ssize_t sf_reg_write(struct file *file, const char __user *buf,
++			    size_t size, loff_t *off)
 +{
 +	struct inode *inode = file_inode(file);
 +	struct sf_inode_info *sf_i = GET_INODE_INFO(inode);
-+	struct sf_glob_info *sf_g = GET_GLOB_INFO(inode->i_sb);
-+	struct sf_reg_info *sf_r = file->private_data;
++	struct sf_handle *sf_handle = file->private_data;
 +	u32 nwritten;
 +	u64 pos;
 +	int err;
 +
-+	pos = *off;
-+	if (file->f_flags & O_APPEND) {
-+		pos = inode->i_size;
-+		*off = pos;
-+	}
++	if (file->f_flags & O_APPEND)
++		pos = i_size_read(inode);
++	else
++		pos = *off;
 +
 +	if (!size)
 +		return 0;
@@ -728,20 +702,22 @@ index 000000000000..ed78a6e8a1b0
 +	if (err)
 +		return err;
 +
-+	err = vboxsf_write(sf_g->root, sf_r->handle, pos, &nwritten, buf, true);
++	err = vboxsf_write(sf_handle->root, sf_handle->handle, pos, &nwritten,
++			   (uintptr_t)buf, true);
 +	if (err)
 +		return err;
 +
-+	*off += nwritten;
-+	if (*off > inode->i_size)
-+		i_size_write(inode, *off);
++	if (pos + nwritten > i_size_read(inode))
++		i_size_write(inode, pos + nwritten);
 +
 +	/* Invalidate page-cache so that mmap using apps see the changes too */
 +	invalidate_mapping_pages(inode->i_mapping, pos >> PAGE_SHIFT,
-+				 *off >> PAGE_SHIFT);
++				 (pos + nwritten) >> PAGE_SHIFT);
 +
 +	/* mtime changed */
 +	sf_i->force_restat = 1;
++
++	*off = pos + nwritten;
 +	return nwritten;
 +}
 +
@@ -755,21 +731,13 @@ index 000000000000..ed78a6e8a1b0
 +{
 +	struct sf_inode_info *sf_i = GET_INODE_INFO(inode);
 +	struct shfl_createparms params = {};
-+	struct sf_reg_info *sf_r;
++	struct sf_handle *sf_handle;
++	u32 access_flags = 0;
 +	int err;
 +
-+	sf_r = kmalloc(sizeof(*sf_r), GFP_KERNEL);
-+	if (!sf_r)
++	sf_handle = kmalloc(sizeof(*sf_handle), GFP_KERNEL);
++	if (!sf_handle)
 +		return -ENOMEM;
-+
-+	/* Already open? */
-+	if (sf_i->handle != SHFL_HANDLE_NIL) {
-+		sf_r->handle = sf_i->handle;
-+		sf_i->handle = SHFL_HANDLE_NIL;
-+		sf_i->file = file;
-+		file->private_data = sf_r;
-+		return 0;
-+	}
 +
 +	/*
 +	 * We check the value of params.handle afterwards to find out if
@@ -798,15 +766,15 @@ index 000000000000..ed78a6e8a1b0
 +
 +	switch (file->f_flags & O_ACCMODE) {
 +	case O_RDONLY:
-+		params.create_flags |= SHFL_CF_ACCESS_READ;
++		access_flags |= SHFL_CF_ACCESS_READ;
 +		break;
 +
 +	case O_WRONLY:
-+		params.create_flags |= SHFL_CF_ACCESS_WRITE;
++		access_flags |= SHFL_CF_ACCESS_WRITE;
 +		break;
 +
 +	case O_RDWR:
-+		params.create_flags |= SHFL_CF_ACCESS_READWRITE;
++		access_flags |= SHFL_CF_ACCESS_READWRITE;
 +		break;
 +
 +	default:
@@ -814,24 +782,43 @@ index 000000000000..ed78a6e8a1b0
 +	}
 +
 +	if (file->f_flags & O_APPEND)
-+		params.create_flags |= SHFL_CF_ACCESS_APPEND;
++		access_flags |= SHFL_CF_ACCESS_APPEND;
 +
++	params.create_flags |= access_flags;
 +	params.info.attr.mode = inode->i_mode;
 +
 +	err = vboxsf_create_at_dentry(file_dentry(file), &params);
 +	if (err == 0 && params.handle == SHFL_HANDLE_NIL)
 +		err = (params.result == SHFL_FILE_EXISTS) ? -EEXIST : -ENOENT;
 +	if (err) {
-+		kfree(sf_r);
++		kfree(sf_handle);
 +		return err;
 +	}
 +
 +	/* the host may have given us different attr then requested */
 +	sf_i->force_restat = 1;
-+	sf_r->handle = params.handle;
-+	sf_i->file = file;
-+	file->private_data = sf_r;
++
++	/* init our handle struct and add it to the inode's handles list */
++	sf_handle->handle = params.handle;
++	sf_handle->root = GET_GLOB_INFO(inode->i_sb)->root;
++	sf_handle->access_flags = access_flags;
++	kref_init(&sf_handle->refcount);
++
++	mutex_lock(&sf_i->handle_list_mutex);
++	list_add(&sf_handle->head, &sf_i->handle_list);
++	mutex_unlock(&sf_i->handle_list_mutex);
++
++	file->private_data = sf_handle;
 +	return 0;
++}
++
++static void sf_handle_release(struct kref *refcount)
++{
++	struct sf_handle *sf_handle = container_of(refcount, struct sf_handle,
++						   refcount);
++
++	vboxsf_close(sf_handle->root, sf_handle->handle);
++	kfree(sf_handle);
 +}
 +
 +/**
@@ -842,22 +829,59 @@ index 000000000000..ed78a6e8a1b0
 + */
 +static int sf_reg_release(struct inode *inode, struct file *file)
 +{
-+	struct sf_reg_info *sf_r;
-+	struct sf_glob_info *sf_g;
 +	struct sf_inode_info *sf_i = GET_INODE_INFO(inode);
-+
-+	sf_g = GET_GLOB_INFO(inode->i_sb);
-+	sf_r = file->private_data;
++	struct sf_handle *sf_handle = file->private_data;
 +
 +	filemap_write_and_wait(inode->i_mapping);
 +
-+	vboxsf_close(sf_g->root, sf_r->handle);
++	mutex_lock(&sf_i->handle_list_mutex);
++	list_del(&sf_handle->head);
++	mutex_unlock(&sf_i->handle_list_mutex);
 +
-+	kfree(sf_r);
-+	sf_i->file = NULL;
-+	sf_i->handle = SHFL_HANDLE_NIL;
++	kref_put(&sf_handle->refcount, sf_handle_release);
 +	file->private_data = NULL;
 +	return 0;
++}
++
++/*
++ * Write back dirty pages now, because there may not be any suitable
++ * open files later
++ */
++static void sf_vma_close(struct vm_area_struct *vma)
++{
++	filemap_write_and_wait(vma->vm_file->f_mapping);
++}
++
++static vm_fault_t sf_page_mkwrite(struct vm_fault *vmf)
++{
++	struct page *page = vmf->page;
++	struct inode *inode = file_inode(vmf->vma->vm_file);
++
++	lock_page(page);
++	if (page->mapping != inode->i_mapping) {
++		unlock_page(page);
++		return VM_FAULT_NOPAGE;
++	}
++
++	return VM_FAULT_LOCKED;
++}
++
++static const struct vm_operations_struct sf_file_vm_ops = {
++	.close		= sf_vma_close,
++	.fault		= filemap_fault,
++	.map_pages	= filemap_map_pages,
++	.page_mkwrite	= sf_page_mkwrite,
++};
++
++static int sf_reg_mmap(struct file *file, struct vm_area_struct *vma)
++{
++	int err;
++
++	err = generic_file_mmap(file, vma);
++	if (!err)
++		vma->vm_ops = &sf_file_vm_ops;
++
++	return err;
 +}
 +
 +const struct file_operations vboxsf_reg_fops = {
@@ -865,7 +889,7 @@ index 000000000000..ed78a6e8a1b0
 +	.open = sf_reg_open,
 +	.write = sf_reg_write,
 +	.release = sf_reg_release,
-+	.mmap = generic_file_mmap,
++	.mmap = sf_reg_mmap,
 +	.splice_read = generic_file_splice_read,
 +	.read_iter = generic_file_read_iter,
 +	.write_iter = generic_file_write_iter,
@@ -880,8 +904,7 @@ index 000000000000..ed78a6e8a1b0
 +
 +static int sf_readpage(struct file *file, struct page *page)
 +{
-+	struct sf_glob_info *sf_g = GET_GLOB_INFO(file_inode(file)->i_sb);
-+	struct sf_reg_info *sf_r = file->private_data;
++	struct sf_handle *sf_handle = file->private_data;
 +	loff_t off = page_offset(page);
 +	u32 nread = PAGE_SIZE;
 +	u8 *buf;
@@ -889,7 +912,8 @@ index 000000000000..ed78a6e8a1b0
 +
 +	buf = kmap(page);
 +
-+	err = vboxsf_read(sf_g->root, sf_r->handle, off, &nread, buf, false);
++	err = vboxsf_read(sf_handle->root, sf_handle->handle, off, &nread,
++			  (uintptr_t)buf, false);
 +	if (err == 0) {
 +		memset(&buf[nread], 0, PAGE_SIZE - nread);
 +		flush_dcache_page(page);
@@ -903,12 +927,29 @@ index 000000000000..ed78a6e8a1b0
 +	return err;
 +}
 +
++static struct sf_handle *sf_get_writeable_handle(struct sf_inode_info *sf_i)
++{
++	struct sf_handle *h, *sf_handle = NULL;
++
++	mutex_lock(&sf_i->handle_list_mutex);
++	list_for_each_entry(h, &sf_i->handle_list, head) {
++		if (h->access_flags == SHFL_CF_ACCESS_WRITE ||
++		    h->access_flags == SHFL_CF_ACCESS_READWRITE) {
++			kref_get(&h->refcount);
++			sf_handle = h;
++			break;
++		}
++	}
++	mutex_unlock(&sf_i->handle_list_mutex);
++
++	return sf_handle;
++}
++
 +static int sf_writepage(struct page *page, struct writeback_control *wbc)
 +{
 +	struct inode *inode = page->mapping->host;
-+	struct sf_glob_info *sf_g = GET_GLOB_INFO(inode->i_sb);
 +	struct sf_inode_info *sf_i = GET_INODE_INFO(inode);
-+	struct sf_reg_info *sf_r = sf_i->file->private_data;
++	struct sf_handle *sf_handle;
 +	loff_t off = page_offset(page);
 +	loff_t size = i_size_read(inode);
 +	u32 nwrite = PAGE_SIZE;
@@ -918,9 +959,16 @@ index 000000000000..ed78a6e8a1b0
 +	if (off + PAGE_SIZE > size)
 +		nwrite = size & ~PAGE_MASK;
 +
++	sf_handle = sf_get_writeable_handle(sf_i);
++	if (!sf_handle)
++		return -EBADF;
++
 +	buf = kmap(page);
-+	err = vboxsf_write(sf_g->root, sf_r->handle, off, &nwrite, buf, false);
++	err = vboxsf_write(sf_handle->root, sf_handle->handle, off, &nwrite,
++			   (uintptr_t)buf, false);
 +	kunmap(page);
++
++	kref_put(&sf_handle->refcount, sf_handle_release);
 +
 +	if (err == 0) {
 +		ClearPageError(page);
@@ -934,25 +982,26 @@ index 000000000000..ed78a6e8a1b0
 +	return err;
 +}
 +
-+int sf_write_end(struct file *file, struct address_space *mapping, loff_t pos,
-+		 unsigned int len, unsigned int copied, struct page *page,
-+		 void *fsdata)
++static int sf_write_end(struct file *file, struct address_space *mapping,
++			loff_t pos, unsigned int len, unsigned int copied,
++			struct page *page, void *fsdata)
 +{
 +	struct inode *inode = mapping->host;
-+	struct sf_glob_info *sf_g = GET_GLOB_INFO(inode->i_sb);
-+	struct sf_reg_info *sf_r = file->private_data;
++	struct sf_handle *sf_handle = file->private_data;
 +	unsigned int from = pos & ~PAGE_MASK;
 +	u32 nwritten = len;
 +	u8 *buf;
 +	int err;
 +
 +	buf = kmap(page);
-+	err = vboxsf_write(sf_g->root, sf_r->handle, pos, &nwritten,
-+			   buf + from, false);
++	err = vboxsf_write(sf_handle->root, sf_handle->handle, pos, &nwritten,
++			   (uintptr_t)buf + from, false);
 +	kunmap(page);
 +
-+	if (err)
++	if (err) {
++		nwritten = 0;
 +		goto out;
++	}
 +
 +	/* mtime changed */
 +	GET_INODE_INFO(inode)->force_restat = 1;
@@ -968,7 +1017,7 @@ index 000000000000..ed78a6e8a1b0
 +	unlock_page(page);
 +	put_page(page);
 +
-+	return err;
++	return nwritten;
 +}
 +
 +const struct address_space_operations vboxsf_reg_aops = {
@@ -1016,15 +1065,15 @@ index 000000000000..ed78a6e8a1b0
 +};
 diff --git a/fs/vboxsf/shfl_hostintf.h b/fs/vboxsf/shfl_hostintf.h
 new file mode 100644
-index 000000000000..8666a5347a0b
+index 000000000000..9553994f4997
 --- /dev/null
 +++ b/fs/vboxsf/shfl_hostintf.h
 @@ -0,0 +1,919 @@
-+/* SPDX-License-Identifier: (GPL-2.0 OR CDDL-1.0) */
++/* SPDX-License-Identifier: MIT */
 +/*
 + * VirtualBox Shared Folders: host interface definition.
 + *
-+ * Copyright (C) 2006-2016 Oracle Corporation
++ * Copyright (C) 2006-2018 Oracle Corporation
 + */
 +
 +#ifndef SHFL_HOSTINTF_H
@@ -1108,7 +1157,7 @@ index 000000000000..8666a5347a0b
 +
 +	/** UTF-8 or UTF-16 string. Nul terminated. */
 +	union {
-+		u8 utf8[1];
++		u8 utf8[2];
 +		u16 utf16[1];
 +		u16 ucs2[1]; /* misnomer, use utf16. */
 +	} string;
@@ -1941,11 +1990,11 @@ index 000000000000..8666a5347a0b
 +#endif
 diff --git a/fs/vboxsf/super.c b/fs/vboxsf/super.c
 new file mode 100644
-index 000000000000..62d7ca4aa7e6
+index 000000000000..8d7d7819ea64
 --- /dev/null
 +++ b/fs/vboxsf/super.c
-@@ -0,0 +1,442 @@
-+// SPDX-License-Identifier: GPL-2.0
+@@ -0,0 +1,491 @@
++// SPDX-License-Identifier: MIT
 +/*
 + * VirtualBox Guest Shared Folders support: Virtual File System.
 + *
@@ -1954,9 +2003,10 @@ index 000000000000..62d7ca4aa7e6
 + * Superblock reading
 + * Few utility functions
 + *
-+ * Copyright (C) 2006-2016 Oracle Corporation
++ * Copyright (C) 2006-2018 Oracle Corporation
 + */
 +
++#include <linux/idr.h>
 +#include <linux/magic.h>
 +#include <linux/module.h>
 +#include <linux/nls.h>
@@ -1964,6 +2014,8 @@ index 000000000000..62d7ca4aa7e6
 +#include <linux/statfs.h>
 +#include <linux/vbox_utils.h>
 +#include "vfsmod.h"
++
++#define VBOXSF_SUPER_MAGIC 0x786f4256 /* 'VBox' little endian */
 +
 +#define VBSF_MOUNT_SIGNATURE_BYTE_0 ('\000')
 +#define VBSF_MOUNT_SIGNATURE_BYTE_1 ('\377')
@@ -1980,7 +2032,10 @@ index 000000000000..62d7ca4aa7e6
 +	char *options;
 +};
 +
-+static struct super_operations sf_super_ops; /* forward declaration */
++static DEFINE_IDA(vboxsf_bdi_ida);
++static DEFINE_MUTEX(vboxsf_setup_mutex);
++static bool vboxsf_setup_done;
++static struct super_operations vboxsf_super_ops; /* forward declaration */
 +static struct kmem_cache *sf_inode_cachep;
 +
 +static char * const vboxsf_default_nls = CONFIG_NLS_DEFAULT;
@@ -2095,12 +2150,13 @@ index 000000000000..62d7ca4aa7e6
 +	size_t size;
 +	int err;
 +
-+	if (flags & MS_REMOUNT)
-+		return -EINVAL;
-+
 +	sf_g = kzalloc(sizeof(*sf_g), GFP_KERNEL);
 +	if (!sf_g)
 +		return -ENOMEM;
++
++	idr_init(&sf_g->ino_idr);
++	spin_lock_init(&sf_g->ino_idr_lock);
++	sf_g->next_generation = 1;
 +
 +	/* Turn dev_name into a shfl_string */
 +	size = strlen(args->dev_name) + 1;
@@ -2114,6 +2170,7 @@ index 000000000000..62d7ca4aa7e6
 +	/* ~0 means use whatever the host gives as mode info */
 +	sf_g->dmode = ~0;
 +	sf_g->fmode = ~0;
++	sf_g->bdi_id = -1;
 +
 +	err = vboxsf_parse_options(sf_g, args->options);
 +	if (err)
@@ -2132,26 +2189,37 @@ index 000000000000..62d7ca4aa7e6
 +		}
 +	}
 +
-+	err = super_setup_bdi_name(sb, "vboxsf-%s", args->dev_name);
++	sf_g->bdi_id = ida_simple_get(&vboxsf_bdi_ida, 0, 0, GFP_KERNEL);
++	if (sf_g->bdi_id < 0) {
++		err = sf_g->bdi_id;
++		goto fail_free;
++	}
++
++	err = super_setup_bdi_name(sb, "vboxsf-%s.%d", args->dev_name,
++				   sf_g->bdi_id);
 +	if (err)
 +		goto fail_free;
 +
 +	err = vboxsf_map_folder(sf_g->name, &sf_g->root);
-+	if (err)
-+		goto fail_put_bdi;
++	if (err) {
++		vbg_err("vboxsf: Host rejected mount of '%s' with error %d\n",
++			args->dev_name, err);
++		goto fail_free;
++	}
 +
 +	root_path.length = 1;
 +	root_path.size = 2;
-+	strlcpy(root_path.string.utf8, "/",
-+		sizeof(root_path) - SHFLSTRING_HEADER_SIZE);
++	root_path.string.utf8[0] = '/';
++	root_path.string.utf8[1] = 0;
 +	err = vboxsf_stat(sf_g, &root_path, &sf_g->root_info);
 +	if (err)
 +		goto fail_unmap;
 +
-+	sb->s_magic = 0xface;
++	sb->s_magic = VBOXSF_SUPER_MAGIC;
 +	sb->s_blocksize = 1024;
 +	sb->s_maxbytes = MAX_LFS_FILESIZE;
-+	sb->s_op = &sf_super_ops;
++	sb->s_op = &vboxsf_super_ops;
++	sb->s_d_op = &vboxsf_dentry_ops;
 +
 +	iroot = iget_locked(sb, 0);
 +	if (!iroot) {
@@ -2173,9 +2241,9 @@ index 000000000000..62d7ca4aa7e6
 +
 +fail_unmap:
 +	vboxsf_unmap_folder(sf_g->root);
-+fail_put_bdi:
-+	bdi_put(sb->s_bdi);
 +fail_free:
++	if (sf_g->bdi_id >= 0)
++		ida_simple_remove(&vboxsf_bdi_ida, sf_g->bdi_id);
 +	if (sf_g->nls)
 +		unload_nls(sf_g->nls);
 +	if (sf_g->nls_name != vboxsf_default_nls)
@@ -2189,6 +2257,7 @@ index 000000000000..62d7ca4aa7e6
 +{
 +	struct sf_inode_info *sf_i = (struct sf_inode_info *)data;
 +
++	mutex_init(&sf_i->handle_list_mutex);
 +	inode_init_once(&sf_i->vfs_inode);
 +}
 +
@@ -2201,8 +2270,7 @@ index 000000000000..62d7ca4aa7e6
 +		return NULL;
 +
 +	sf_i->force_restat = 0;
-+	sf_i->file = NULL;
-+	sf_i->handle = SHFL_HANDLE_NIL;
++	INIT_LIST_HEAD(&sf_i->handle_list);
 +
 +	return &sf_i->vfs_inode;
 +}
@@ -2210,7 +2278,11 @@ index 000000000000..62d7ca4aa7e6
 +static void sf_i_callback(struct rcu_head *head)
 +{
 +	struct inode *inode = container_of(head, struct inode, i_rcu);
++	struct sf_glob_info *sf_g = GET_GLOB_INFO(inode->i_sb);
 +
++	spin_lock(&sf_g->ino_idr_lock);
++	idr_remove(&sf_g->ino_idr, inode->i_ino);
++	spin_unlock(&sf_g->ino_idr_lock);
 +	kmem_cache_free(sf_inode_cachep, GET_INODE_INFO(inode));
 +}
 +
@@ -2229,6 +2301,9 @@ index 000000000000..62d7ca4aa7e6
 +
 +	generic_shutdown_super(sb);
 +	vboxsf_unmap_folder(sf_g->root);
++	idr_destroy(&sf_g->ino_idr);
++	if (sf_g->bdi_id >= 0)
++		ida_simple_remove(&vboxsf_bdi_ida, sf_g->bdi_id);
 +	if (sf_g->nls)
 +		unload_nls(sf_g->nls);
 +	if (sf_g->nls_name != vboxsf_default_nls)
@@ -2252,7 +2327,7 @@ index 000000000000..62d7ca4aa7e6
 +	if (err)
 +		return err;
 +
-+	stat->f_type = NFS_SUPER_MAGIC;	/* XXX vboxsf type? */
++	stat->f_type = VBOXSF_SUPER_MAGIC;
 +	stat->f_bsize = SHFLVolumeInfo.bytes_per_allocation_unit;
 +
 +	do_div(SHFLVolumeInfo.total_allocation_bytes,
@@ -2269,7 +2344,7 @@ index 000000000000..62d7ca4aa7e6
 +	 * Don't return 0 here since the guest may then think that it is not
 +	 * possible to create any more files.
 +	 */
-+	stat->f_ffree = 1000;
++	stat->f_ffree = 1000000;
 +	stat->f_fsid.val[0] = 0;
 +	stat->f_fsid.val[1] = 0;
 +	stat->f_namelen = 255;
@@ -2296,7 +2371,7 @@ index 000000000000..62d7ca4aa7e6
 +	return 0;
 +}
 +
-+static struct super_operations sf_super_ops = {
++static struct super_operations vboxsf_super_ops = {
 +	.alloc_inode	= sf_alloc_inode,
 +	.destroy_inode	= sf_destroy_inode,
 +	.put_super	= sf_put_super,
@@ -2304,47 +2379,31 @@ index 000000000000..62d7ca4aa7e6
 +	.remount_fs	= sf_remount_fs
 +};
 +
-+static struct dentry *sf_mount(struct file_system_type *fs_type, int flags,
-+			       const char *dev_name, void *data)
-+{
-+	struct fill_super_args args = {
-+		.dev_name = dev_name,
-+		.options = data,
-+	};
-+
-+	return mount_nodev(fs_type, flags, &args, sf_fill_super);
-+}
-+
-+static struct file_system_type vboxsf_fs_type = {
-+	.owner = THIS_MODULE,
-+	.name = "vboxsf",
-+	.mount = sf_mount,
-+	.kill_sb = kill_anon_super
-+};
-+
-+/* Module initialization/finalization handlers */
-+static int __init init(void)
++static int vboxsf_setup(void)
 +{
 +	int err;
++
++	mutex_lock(&vboxsf_setup_mutex);
++
++	if (vboxsf_setup_done)
++		goto success;
 +
 +	sf_inode_cachep = kmem_cache_create("vboxsf_inode_cache",
 +					     sizeof(struct sf_inode_info),
 +					     0, (SLAB_RECLAIM_ACCOUNT|
 +						SLAB_MEM_SPREAD|SLAB_ACCOUNT),
 +					     sf_inode_init_once);
-+	if (sf_inode_cachep == NULL)
-+		return -ENOMEM;
-+
-+	err = register_filesystem(&vboxsf_fs_type);
-+	if (err)
-+		return err;
++	if (sf_inode_cachep == NULL) {
++		err = -ENOMEM;
++		goto fail_nomem;
++	}
 +
 +	err = vboxsf_connect();
 +	if (err) {
 +		vbg_err("vboxsf: err %d connecting to guest PCI-device\n", err);
 +		vbg_err("vboxsf: make sure you are inside a VirtualBox VM\n");
 +		vbg_err("vboxsf: and check dmesg for vboxguest errors\n");
-+		goto fail_unregisterfs;
++		goto fail_free_cache;
 +	}
 +
 +	err = vboxsf_set_utf8();
@@ -2359,29 +2418,68 @@ index 000000000000..62d7ca4aa7e6
 +			vbg_warn("vboxsf: Unable to show symlinks: %d\n", err);
 +	}
 +
++	vboxsf_setup_done = true;
++success:
++	mutex_unlock(&vboxsf_setup_mutex);
 +	return 0;
 +
 +fail_disconnect:
 +	vboxsf_disconnect();
-+fail_unregisterfs:
-+	unregister_filesystem(&vboxsf_fs_type);
++fail_free_cache:
++	kmem_cache_destroy(sf_inode_cachep);
++fail_nomem:
++	mutex_unlock(&vboxsf_setup_mutex);
 +	return err;
 +}
 +
-+static void __exit fini(void)
++static struct dentry *sf_mount(struct file_system_type *fs_type, int flags,
++			       const char *dev_name, void *data)
 +{
-+	vboxsf_disconnect();
-+	unregister_filesystem(&vboxsf_fs_type);
-+	/*
-+	 * Make sure all delayed rcu free inodes are flushed before we
-+	 * destroy cache.
-+	 */
-+	rcu_barrier();
-+	kmem_cache_destroy(sf_inode_cachep);
++	struct fill_super_args args = {
++		.dev_name = dev_name,
++		.options = data,
++	};
++	int err;
++
++	err = vboxsf_setup();
++	if (err)
++		return ERR_PTR(err);
++
++	return mount_nodev(fs_type, flags, &args, sf_fill_super);
 +}
 +
-+module_init(init);
-+module_exit(fini);
++static struct file_system_type vboxsf_fs_type = {
++	.owner = THIS_MODULE,
++	.name = "vboxsf",
++	.mount = sf_mount,
++	.kill_sb = kill_anon_super
++};
++
++/* Module initialization/finalization handlers */
++static int __init vboxsf_init(void)
++{
++	return register_filesystem(&vboxsf_fs_type);
++}
++
++static void __exit vboxsf_fini(void)
++{
++	unregister_filesystem(&vboxsf_fs_type);
++
++	mutex_lock(&vboxsf_setup_mutex);
++	if (vboxsf_setup_done) {
++		vboxsf_disconnect();
++		/*
++		 * Make sure all delayed rcu free inodes are flushed
++		 * before we destroy the cache.
++		 */
++		rcu_barrier();
++		kmem_cache_destroy(sf_inode_cachep);
++	}
++	mutex_unlock(&vboxsf_setup_mutex);
++}
++
++module_init(vboxsf_init);
++module_exit(vboxsf_fini);
 +
 +MODULE_DESCRIPTION("Oracle VM VirtualBox Module for Host File System Access");
 +MODULE_AUTHOR("Oracle Corporation");
@@ -2389,16 +2487,16 @@ index 000000000000..62d7ca4aa7e6
 +MODULE_ALIAS_FS("vboxsf");
 diff --git a/fs/vboxsf/utils.c b/fs/vboxsf/utils.c
 new file mode 100644
-index 000000000000..c4bbc8ec0074
+index 000000000000..224523d0fa58
 --- /dev/null
 +++ b/fs/vboxsf/utils.c
-@@ -0,0 +1,520 @@
-+// SPDX-License-Identifier: GPL-2.0
+@@ -0,0 +1,563 @@
++// SPDX-License-Identifier: MIT
 +/*
 + * VirtualBox Guest Shared Folders support: Utility functions.
 + * Mainly conversion from/to VirtualBox/Linux data structures.
 + *
-+ * Copyright (C) 2006-2016 Oracle Corporation
++ * Copyright (C) 2006-2018 Oracle Corporation
 + */
 +
 +#include <linux/namei.h>
@@ -2406,6 +2504,37 @@ index 000000000000..c4bbc8ec0074
 +#include <linux/sizes.h>
 +#include <linux/vfs.h>
 +#include "vfsmod.h"
++
++struct inode *vboxsf_new_inode(struct super_block *sb)
++{
++	struct sf_glob_info *sf_g = GET_GLOB_INFO(sb);
++	struct inode *inode;
++	int cursor, ret;
++	u32 gen;
++
++	inode = new_inode(sb);
++	if (!inode)
++		return ERR_PTR(-ENOMEM);
++
++	idr_preload(GFP_KERNEL);
++	spin_lock(&sf_g->ino_idr_lock);
++	cursor = idr_get_cursor(&sf_g->ino_idr);
++	ret = idr_alloc_cyclic(&sf_g->ino_idr, inode, 1, 0, GFP_ATOMIC);
++	if (ret >= 0 && ret < cursor)
++		sf_g->next_generation++;
++	gen = sf_g->next_generation;
++	spin_unlock(&sf_g->ino_idr_lock);
++	idr_preload_end();
++
++	if (ret < 0) {
++		iput(inode);
++		return ERR_PTR(ret);
++	}
++
++	inode->i_ino = ret;
++	inode->i_generation = gen;
++	return inode;
++}
 +
 +/* set [inode] attributes based on [info], uid/gid based on [sf_g] */
 +void vboxsf_init_inode(struct sf_glob_info *sf_g, struct inode *inode,
@@ -2473,11 +2602,11 @@ index 000000000000..c4bbc8ec0074
 +	do_div(allocated, 512);
 +	inode->i_blocks = allocated;
 +
-+	inode->i_atime = ns_to_timespec(
++	inode->i_atime = ns_to_timespec64(
 +				 info->access_time.ns_relative_to_unix_epoch);
-+	inode->i_ctime = ns_to_timespec(
++	inode->i_ctime = ns_to_timespec64(
 +				 info->change_time.ns_relative_to_unix_epoch);
-+	inode->i_mtime = ns_to_timespec(
++	inode->i_mtime = ns_to_timespec64(
 +			   info->modification_time.ns_relative_to_unix_epoch);
 +}
 +
@@ -2540,7 +2669,7 @@ index 000000000000..c4bbc8ec0074
 +	struct sf_glob_info *sf_g = GET_GLOB_INFO(dentry->d_sb);
 +	struct sf_inode_info *sf_i;
 +	struct shfl_fsobjinfo info;
-+	struct timespec prev_mtime;
++	struct timespec64 prev_mtime;
 +	struct inode *inode;
 +	int err;
 +
@@ -2568,7 +2697,7 @@ index 000000000000..c4bbc8ec0074
 +	 * host side we need to invalidate the page-cache for it.  Note this
 +	 * also gets triggered by our own writes, this is unavoidable.
 +	 */
-+	if (timespec_compare(&inode->i_mtime, &prev_mtime) > 0)
++	if (timespec64_compare(&inode->i_mtime, &prev_mtime) > 0)
 +		invalidate_mapping_pages(inode->i_mapping, 0, -1);
 +
 +	return 0;
@@ -2579,8 +2708,19 @@ index 000000000000..c4bbc8ec0074
 +{
 +	int err;
 +	struct dentry *dentry = path->dentry;
++	struct inode *inode = d_inode(dentry);
++	struct sf_inode_info *sf_i = GET_INODE_INFO(inode);
 +
-+	err = vboxsf_inode_revalidate(dentry);
++	switch (flags & AT_STATX_SYNC_TYPE) {
++	case AT_STATX_DONT_SYNC:
++		err = 0;
++		break;
++	case AT_STATX_FORCE_SYNC:
++		sf_i->force_restat = 1;
++		/* fall-through */
++	default:
++		err = vboxsf_inode_revalidate(dentry);
++	}
 +	if (err)
 +		return err;
 +
@@ -2636,11 +2776,11 @@ index 000000000000..c4bbc8ec0074
 +
 +		if (iattr->ia_valid & ATTR_ATIME)
 +			info.access_time.ns_relative_to_unix_epoch =
-+					    timespec_to_ns(&iattr->ia_atime);
++					    timespec64_to_ns(&iattr->ia_atime);
 +
 +		if (iattr->ia_valid & ATTR_MTIME)
 +			info.modification_time.ns_relative_to_unix_epoch =
-+					    timespec_to_ns(&iattr->ia_mtime);
++					    timespec64_to_ns(&iattr->ia_mtime);
 +
 +		/*
 +		 * Ignore ctime (inode change time) as it can't be set
@@ -2780,7 +2920,8 @@ index 000000000000..c4bbc8ec0074
 +
 +		out = name;
 +		out_len = 0;
-+		out_bound_len = name_bound_len;
++		/* Reserve space for terminating 0 */
++		out_bound_len = name_bound_len - 1;
 +
 +		while (in_bound_len) {
 +			int nb;
@@ -2915,15 +3056,15 @@ index 000000000000..c4bbc8ec0074
 +}
 diff --git a/fs/vboxsf/vboxsf_wrappers.c b/fs/vboxsf/vboxsf_wrappers.c
 new file mode 100644
-index 000000000000..22fdb2f3186e
+index 000000000000..9c827220c92b
 --- /dev/null
 +++ b/fs/vboxsf/vboxsf_wrappers.c
-@@ -0,0 +1,370 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR CDDL-1.0)
+@@ -0,0 +1,375 @@
++// SPDX-License-Identifier: MIT
 +/*
 + * Wrapper functions for the shfl host calls.
 + *
-+ * Copyright (C) 2006-2016 Oracle Corporation
++ * Copyright (C) 2006-2018 Oracle Corporation
 + */
 +
 +#include <linux/mm.h>
@@ -2931,6 +3072,10 @@ index 000000000000..22fdb2f3186e
 +#include <linux/vbox_err.h>
 +#include <linux/vbox_utils.h>
 +#include "vfsmod.h"
++
++#define SHFL_REQUEST \
++	(VMMDEV_REQUESTOR_KERNEL | VMMDEV_REQUESTOR_USR_DRV_OTHER | \
++	 VMMDEV_REQUESTOR_CON_DONT_KNOW | VMMDEV_REQUESTOR_TRUST_NOT_GIVEN)
 +
 +static u32 vboxsf_client_id;
 +
@@ -2947,7 +3092,8 @@ index 000000000000..22fdb2f3186e
 +	if (IS_ERR(gdev))
 +		return -ENODEV;	/* No guest-device */
 +
-+	err = vbg_hgcm_connect(gdev, &loc, &vboxsf_client_id, &vbox_status);
++	err = vbg_hgcm_connect(gdev, SHFL_REQUEST, &loc,
++			       &vboxsf_client_id, &vbox_status);
 +	vbg_put_gdev(gdev);
 +
 +	return err ? err : vbg_status_code_to_errno(vbox_status);
@@ -2962,7 +3108,7 @@ index 000000000000..22fdb2f3186e
 +	if (IS_ERR(gdev))
 +		return;   /* guest-device is gone, already disconnected */
 +
-+	vbg_hgcm_disconnect(gdev, vboxsf_client_id, &vbox_status);
++	vbg_hgcm_disconnect(gdev, SHFL_REQUEST, vboxsf_client_id, &vbox_status);
 +	vbg_put_gdev(gdev);
 +}
 +
@@ -2975,8 +3121,8 @@ index 000000000000..22fdb2f3186e
 +	if (IS_ERR(gdev))
 +		return -ESHUTDOWN; /* guest-dev removed underneath us */
 +
-+	err = vbg_hgcm_call(gdev, vboxsf_client_id, function, U32_MAX,
-+			    parms, parm_count, &vbox_status);
++	err = vbg_hgcm_call(gdev, SHFL_REQUEST, vboxsf_client_id, function,
++			    U32_MAX, parms, parm_count, &vbox_status);
 +	vbg_put_gdev(gdev);
 +
 +	if (err < 0)
@@ -3111,7 +3257,7 @@ index 000000000000..22fdb2f3186e
 +}
 +
 +int vboxsf_read(u32 root, u64 handle, u64 offset,
-+		u32 *buf_len, u8 *buf, bool user)
++		u32 *buf_len, uintptr_t buf, bool user)
 +{
 +	struct shfl_read parms;
 +	int err;
@@ -3130,7 +3276,7 @@ index 000000000000..22fdb2f3186e
 +	else
 +		parms.buffer.type = VMMDEV_HGCM_PARM_TYPE_LINADDR_KERNEL_OUT;
 +	parms.buffer.u.pointer.size = *buf_len;
-+	parms.buffer.u.pointer.u.linear_addr = (uintptr_t)buf;
++	parms.buffer.u.pointer.u.linear_addr = buf;
 +
 +	err = vboxsf_call(SHFL_FN_READ, &parms, SHFL_CPARMS_READ, NULL);
 +
@@ -3139,7 +3285,7 @@ index 000000000000..22fdb2f3186e
 +}
 +
 +int vboxsf_write(u32 root, u64 handle, u64 offset,
-+		 u32 *buf_len, const u8 *buf, bool user)
++		 u32 *buf_len, uintptr_t buf, bool user)
 +{
 +	struct shfl_write parms;
 +	int err;
@@ -3158,7 +3304,7 @@ index 000000000000..22fdb2f3186e
 +	else
 +		parms.buffer.type = VMMDEV_HGCM_PARM_TYPE_LINADDR_KERNEL_IN;
 +	parms.buffer.u.pointer.size = *buf_len;
-+	parms.buffer.u.pointer.u.linear_addr = (uintptr_t)buf;
++	parms.buffer.u.pointer.u.linear_addr = buf;
 +
 +	err = vboxsf_call(SHFL_FN_WRITE, &parms, SHFL_CPARMS_WRITE, NULL);
 +
@@ -3291,21 +3437,22 @@ index 000000000000..22fdb2f3186e
 +}
 diff --git a/fs/vboxsf/vfsmod.h b/fs/vboxsf/vfsmod.h
 new file mode 100644
-index 000000000000..20efcb77232d
+index 000000000000..d7615c00cdd9
 --- /dev/null
 +++ b/fs/vboxsf/vfsmod.h
-@@ -0,0 +1,133 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
+@@ -0,0 +1,132 @@
++/* SPDX-License-Identifier: MIT */
 +/*
 + * VirtualBox Guest Shared Folders support: module header.
 + *
-+ * Copyright (C) 2006-2016 Oracle Corporation
++ * Copyright (C) 2006-2018 Oracle Corporation
 + */
 +
 +#ifndef VFSMOD_H
 +#define VFSMOD_H
 +
 +#include <linux/backing-dev.h>
++#include <linux/idr.h>
 +#include <linux/version.h>
 +#include "shfl_hostintf.h"
 +
@@ -3319,8 +3466,11 @@ index 000000000000..20efcb77232d
 +/* per-shared folder information */
 +struct sf_glob_info {
 +	struct shfl_fsobjinfo root_info;
-+	struct nls_table *nls;
++	struct idr ino_idr;
++	spinlock_t ino_idr_lock;
++	u32 next_generation;
 +	u32 root;
++	struct nls_table *nls;
 +	/* mount options */
 +	struct shfl_string *name;
 +	char *nls_name;
@@ -3331,19 +3481,16 @@ index 000000000000..20efcb77232d
 +	int fmode;
 +	int dmask;
 +	int fmask;
++	int bdi_id;
 +};
 +
 +/* per-inode information */
 +struct sf_inode_info {
 +	/* some information was changed, update data on next revalidate */
 +	int force_restat;
-+	/* file structure, only valid between open() and release() */
-+	struct file *file;
-+	/*
-+	 * handle valid if a file was created with sf_create_aux until it
-+	 * will be opened with sf_reg_open()
-+	 */
-+	u64 handle;
++	/* list of open handles for this inode + lock protecting it */
++	struct list_head handle_list;
++	struct mutex handle_list_mutex;
 +	/* The VFS inode struct */
 +	struct inode vfs_inode;
 +};
@@ -3360,10 +3507,6 @@ index 000000000000..20efcb77232d
 +	struct list_head head;
 +};
 +
-+struct sf_reg_info {
-+	u64 handle;
-+};
-+
 +/* globals */
 +extern const struct inode_operations vboxsf_dir_iops;
 +extern const struct inode_operations vboxsf_lnk_iops;
@@ -3371,8 +3514,10 @@ index 000000000000..20efcb77232d
 +extern const struct file_operations vboxsf_dir_fops;
 +extern const struct file_operations vboxsf_reg_fops;
 +extern const struct address_space_operations vboxsf_reg_aops;
++extern const struct dentry_operations vboxsf_dentry_ops;
 +
 +/* from utils.c */
++struct inode *vboxsf_new_inode(struct super_block *sb);
 +void vboxsf_init_inode(struct sf_glob_info *sf_g, struct inode *inode,
 +		       const struct shfl_fsobjinfo *info);
 +int vboxsf_create_at_dentry(struct dentry *dentry,
@@ -3406,9 +3551,9 @@ index 000000000000..20efcb77232d
 +		  struct shfl_string *dest_path, u32 flags);
 +
 +int vboxsf_read(u32 root, u64 handle, u64 offset,
-+		u32 *buf_len, u8 *buf, bool user);
++		u32 *buf_len, uintptr_t buf, bool user);
 +int vboxsf_write(u32 root, u64 handle, u64 offset,
-+		 u32 *buf_len, const u8 *buf, bool user);
++		 u32 *buf_len, uintptr_t buf, bool user);
 +
 +int vboxsf_dirinfo(u32 root, u64 handle,
 +		   struct shfl_string *parsed_path, u32 flags, u32 index,
