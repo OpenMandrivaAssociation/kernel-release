@@ -394,6 +394,9 @@ Patch417:	0502-locking-rwsem-spin-faster.patch
 # Not even sure what Vendor that one is .. However it seems be one of the ones random doing that
 # like some Toshibas and some Samsung ones , so disable APST for this one..
 Patch800: Unknow-SSD-HFM128GDHTNG-8310B-QUIRK_NO_APST.patch
+# Restore ACPI loglevels to sane values
+Patch801: https://gitweb.frugalware.org/wip_kernel/raw/86234abea5e625043153f6b8295642fd9f42bff0/source/base/kernel/acpi-use-kern_warning_even_when_error.patch
+Patch802: https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e18613151cc81b4c0cf6e22/source/base/kernel/fix-acpi_dbg_level.patch
 
 # Defines for the things that are needed for all the kernels
 #
