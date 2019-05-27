@@ -1301,7 +1301,9 @@ cat > $kernel_files-post <<EOF
 # create initrd/grub.cfg for installed kernel first.
 
 /sbin/depmod -a %{kversion}-$kernel_flavour-%{buildrpmrel}
-/usr/bin/dracut -f --kver %{kversion}-$kernel_flavour-%{buildrpmrel}
+if [ -x /usr/bin/dracut ]; then
+	/usr/bin/dracut -f --kver %{kversion}-$kernel_flavour-%{buildrpmrel}
+fi
 
 # try rebuild all other initrd's , however that may take a while with lots
 # kernels installed
@@ -1318,7 +1320,9 @@ do
 		continue
 	fi
 	/sbin/depmod -a "$i"
-	/usr/bin/dracut -f --kver "$i"
+	if [ -x /usr/bin/dracut ]; then
+		/usr/bin/dracut -f --kver "$i"
+	fi
 done
 
 ## cleanup some werid symlinks we never used anyway
