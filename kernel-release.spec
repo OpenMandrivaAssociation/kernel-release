@@ -200,8 +200,9 @@ Source13:	znver1-common.config
 # currently there's no need to have specific overloads there.
 
 # config and systemd service file from fedora
-Source50:	cpupower.service
-Source51:	cpupower.config
+Source50:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/cpupower.service
+Source51:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/cpupower.config
+Source52:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/cpupower.sh
 
 # Patches
 # Numbers 0 to 9 are reserved for upstream patches
@@ -1629,9 +1630,10 @@ make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__p
 rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
 chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
-mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
+mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig %{buildroot}%{_sbindir}
 install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
 install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
+install -m755 %{SOURCE52} %{buildroot}%{_sbindir}/cpupower.sh
 %endif
 
 %if %{with bootsplash}
@@ -1794,6 +1796,7 @@ cd -
 %if %{with build_cpupower}
 %files -n cpupower -f cpupower.lang
 %{_bindir}/cpupower
+%{_sbindir}/cpupower.sh
 %{_libdir}/libcpupower.so.0
 %{_libdir}/libcpupower.so.0.0.1
 %{_unitdir}/cpupower.service
