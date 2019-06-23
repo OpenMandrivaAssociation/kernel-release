@@ -522,8 +522,8 @@ diff --git a/lib/Makefile b/lib/Makefile
 index 423876446..972791097 100644
 --- a/lib/Makefile
 +++ b/lib/Makefile
-@@ -18,7 +18,7 @@ KCOV_INSTRUMENT_debugobjects.o := n
- KCOV_INSTRUMENT_dynamic_debug.o := n
+@@ -29,7 +29,7 @@
+ endif
  
  lib-y := ctype.o string.o vsprintf.o cmdline.o \
 -	 rbtree.o radix-tree.o timerqueue.o\
