@@ -17,8 +17,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	1
-%define sublevel	17
+%define patchlevel	2
+%define sublevel	0
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -200,9 +200,8 @@ Source13:	znver1-common.config
 # currently there's no need to have specific overloads there.
 
 # config and systemd service file from fedora
-Source50:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/cpupower.service
-Source51:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/cpupower.config
-Source52:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/cpupower.sh
+Source50:	cpupower.service
+Source51:	cpupower.config
 
 # Patches
 # Numbers 0 to 9 are reserved for upstream patches
@@ -295,8 +294,9 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 # (tpg) sources can be found here https://github.com/dolohow/uksm
 #Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.19.patch
 # Sometimes other people are ahead of upstream porting to new releases...
-Patch120:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf/0001-uksm-5.1-initial-submission.patch
-Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf-fix/0001-uksm-5.1-apply-52d1e606ee733.patch
+# No UKSM for 5.2-rc yet...
+#Patch120:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf/0001-uksm-5.1-initial-submission.patch
+#Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf-fix/0001-uksm-5.1-apply-52d1e606ee733.patch
 
 %if %{with build_modzstd}
 # https://patchwork.kernel.org/patch/10003007/
@@ -353,7 +353,6 @@ Patch311:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/cpu-patches
 ##      https://bugzilla.kernel.org/show_bug.cgi?id=200957
 ## patch is an backport from : https://lkml.org/lkml/2018/9/3/253
 Patch330:	https://raw.githubusercontent.com/frugalware/frugalware-current/71a887a9f309345f966c4d09c920642a62efb66f/source/base/kernel/fix-C2D-CPUs-booting.patch
-Patch331:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/cpu-patches-v2/0001-nfp-make-friends-with-O3.patch
 Patch332:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/loop-patches/0001-loop-Better-discard-for-block-devices.patch
 
 # Modular binder and ashmem -- let's try to make anbox happy
@@ -384,7 +383,6 @@ Patch409:	0117-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
 Patch410:	0119-e1000e-change-default-policy.patch
 Patch411:	0112-give-rdrand-some-credit.patch
 Patch412:	0120-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
-Patch413:	0122-tweak-perfbias.patch
 Patch414:	0123-e1000e-increase-pause-and-refresh-time.patch
 Patch415:	0124-kernel-time-reduce-ntp-wakeups.patch
 Patch416:	0125-init-wait-for-partition-and-retry-scan.patch
@@ -891,10 +889,25 @@ LC_ALL=C sed -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 # There is an in-kernel version of vboxvideo -- unfortunately
 # it doesn't seem to work properly with vbox just yet
 # Let's replace it with the one that comes with VB for now
-mv drivers/staging/vboxvideo/Kconfig vbvkc
 rm -rf drivers/staging/vboxvideo
 cp -a $(ls --sort=time -1d /usr/src/vboxadditions-*|head -n1)/vboxvideo drivers/staging
-mv vbvkc drivers/staging/vboxvideo/Kconfig
+cat >drivers/staging/vboxvideo/Kconfig <<'EOF'
+config DRM_VBOXVIDEO
+	tristate "Virtual Box Graphics Card"
+	depends on DRM && X86 && PCI
+	select DRM_KMS_HELPER
+	select DRM_TTM
+	select GENERIC_ALLOCATOR
+	help
+	  This is a KMS driver for the virtual Graphics Card used in
+	  Virtual Box virtual machines.
+
+	  Although it is possible to build this driver built-in to the
+	  kernel, it is advised to build it as a module, so that it can
+	  be updated independently of the kernel. Select M to build this
+	  driver as a module and add support for these devices via drm/kms
+	  interfaces.
+EOF
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/gpu/drm/vboxvideo,g' drivers/staging/vboxvideo/Makefile*
 sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/staging/vboxvideo/Makefile*
 %endif
@@ -1302,9 +1315,7 @@ cat > $kernel_files-post <<EOF
 # create initrd/grub.cfg for installed kernel first.
 
 /sbin/depmod -a %{kversion}-$kernel_flavour-%{buildrpmrel}
-if [ -x /usr/bin/dracut ]; then
-	/usr/bin/dracut -f --kver %{kversion}-$kernel_flavour-%{buildrpmrel}
-fi
+/usr/bin/dracut -f --kver %{kversion}-$kernel_flavour-%{buildrpmrel}
 
 # try rebuild all other initrd's , however that may take a while with lots
 # kernels installed
@@ -1321,9 +1332,7 @@ do
 		continue
 	fi
 	/sbin/depmod -a "$i"
-	if [ -x /usr/bin/dracut ]; then
-		/usr/bin/dracut -f --kver "$i"
-	fi
+	/usr/bin/dracut -f --kver "$i"
 done
 
 ## cleanup some werid symlinks we never used anyway
@@ -1630,10 +1639,9 @@ make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__p
 rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
 chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
-mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig %{buildroot}%{_sbindir}
+mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
 install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
 install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
-install -m755 %{SOURCE52} %{buildroot}%{_sbindir}/cpupower.sh
 %endif
 
 %if %{with bootsplash}
@@ -1796,7 +1804,6 @@ cd -
 %if %{with build_cpupower}
 %files -n cpupower -f cpupower.lang
 %{_bindir}/cpupower
-%{_sbindir}/cpupower.sh
 %{_libdir}/libcpupower.so.0
 %{_libdir}/libcpupower.so.0.0.1
 %{_unitdir}/cpupower.service
