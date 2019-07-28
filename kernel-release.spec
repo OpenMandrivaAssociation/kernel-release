@@ -292,11 +292,12 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 # (tpg) The Ultra Kernel Same Page Deduplication
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
-#Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/uksm-4.19.patch
+#Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.0.patch
 # Sometimes other people are ahead of upstream porting to new releases...
 # No UKSM for 5.2-rc yet...
 #Patch120:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf/0001-uksm-5.1-initial-submission.patch
 #Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf-fix/0001-uksm-5.1-apply-52d1e606ee733.patch
+Patch120:	https://raw.githubusercontent.com/Szpadel/fedora-uksm/master/0002-Add-UKSM.patch
 
 %if %{with build_modzstd}
 # https://patchwork.kernel.org/patch/10003007/
