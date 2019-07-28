@@ -68,7 +68,7 @@
 %bcond_without build_devel
 %bcond_with build_debug
 %bcond_with clang
-%bcond_without bootsplash
+%bcond_with bootsplash
 # (tpg) enable patches from ClearLinux
 %bcond_without clr
 %if %mdvver > 3000000
