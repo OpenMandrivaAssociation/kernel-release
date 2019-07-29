@@ -1,7 +1,7 @@
-From 7fef93015ff1776d08119ef3d057a9e9433954a9 Mon Sep 17 00:00:00 2001
+From a8dce2e58d9a2fd82e33c233ec77cb45663d3ac4 Mon Sep 17 00:00:00 2001
 From: Oleksandr Natalenko <oleksandr@natalenko.name>
 Date: Sun, 17 Mar 2019 23:11:31 +0100
-Subject: [PATCH] cpu-5.1: add a CONFIG option that sets -O3
+Subject: [PATCH 2/2] cpu-5.2: add a CONFIG option that sets -O3
 
 Derived from zen-kernel.
 
@@ -12,10 +12,10 @@ Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
  2 files changed, 12 insertions(+)
 
 diff --git a/Makefile b/Makefile
-index 26c92f892d24..e92ab4851e1b 100644
+index 3e4868a6498b..b9220e99f1f0 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -683,8 +683,12 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, address-of-packed-member)
+@@ -697,8 +697,12 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, address-of-packed-member)
  ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
  KBUILD_CFLAGS	+= -Os
  else
@@ -29,10 +29,10 @@ index 26c92f892d24..e92ab4851e1b 100644
  ifdef CONFIG_CC_DISABLE_WARN_MAYBE_UNINITIALIZED
  KBUILD_CFLAGS   += -Wno-maybe-uninitialized
 diff --git a/init/Kconfig b/init/Kconfig
-index 4592bf7997c0..0e3e8e1ab2e1 100644
+index 0e2344389501..3bdb6279a909 100644
 --- a/init/Kconfig
 +++ b/init/Kconfig
-@@ -1128,6 +1128,14 @@ config CC_OPTIMIZE_FOR_PERFORMANCE
+@@ -1137,6 +1137,14 @@ config CC_OPTIMIZE_FOR_PERFORMANCE
  	  with the "-O2" compiler flag for best performance and most
  	  helpful compile-time warnings.
  
@@ -48,5 +48,5 @@ index 4592bf7997c0..0e3e8e1ab2e1 100644
  	bool "Optimize for size"
  	imply CC_DISABLE_WARN_MAYBE_UNINITIALIZED  # avoid false positives
 -- 
-2.21.0.777.g83232e3864
+2.22.0.214.g8dca754b1e
 
