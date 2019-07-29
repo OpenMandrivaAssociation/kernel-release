@@ -344,8 +344,8 @@ Patch300:	v10-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.diff
 # Original patch:
 #Patch310:	https://raw.githubusercontent.com/graysky2/kernel_gcc_patch/master/enable_additional_cpu_optimizations_for_gcc_v8.1%2B_kernel_v4.13%2B.patch
 # More actively maintained for newer kernels
-Patch310:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/cpu-patches/0001-cpu-5.1-merge-graysky-s-patchset.patch
-Patch311:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/cpu-patches/0002-cpu-5.1-add-a-CONFIG-option-that-sets-O3.patch
+Patch310:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0001-cpu-5.2-merge-graysky-s-patchset.patch
+Patch311:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0002-cpu-5.2-add-a-CONFIG-option-that-sets-O3.patch
 
 # Assorted fixes
 ## Intel Core2Duo got always unstable tsc , with changes in 4.18
@@ -354,11 +354,12 @@ Patch311:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/cpu-patches
 ##      https://bugzilla.kernel.org/show_bug.cgi?id=200957
 ## patch is an backport from : https://lkml.org/lkml/2018/9/3/253
 Patch330:	https://raw.githubusercontent.com/frugalware/frugalware-current/71a887a9f309345f966c4d09c920642a62efb66f/source/base/kernel/fix-C2D-CPUs-booting.patch
-Patch332:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/loop-patches/0001-loop-Better-discard-for-block-devices.patch
+Patch332:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/loop-patches/0001-loop-Better-discard-for-block-devices.patch
+Patch333:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/iouring-patches/0001-io_uring-restructure-io_-read-write-control-flow.patch
 
 # Modular binder and ashmem -- let's try to make anbox happy
-#Patch340:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
-#Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
+Patch340:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
+Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -378,7 +379,9 @@ Patch405:	0107-intel_idle-tweak-cpuidle-cstates.patch
 Patch406:	0110-fs-ext4-fsync-optimize-double-fsync-a-bunch.patch
 # Not necessarily a good idea -- not all CPU cores are
 # guaranteed to be the same (e.g. big.LITTLE)
-#Patch407:	0114-smpboot-reuse-timer-calibration.patch
+%ifarch %{ix86} %{x86_64}
+Patch407:	0114-smpboot-reuse-timer-calibration.patch
+%endif
 Patch408:	0116-Initialize-ata-before-graphics.patch
 Patch409:	0117-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
 Patch410:	0119-e1000e-change-default-policy.patch
