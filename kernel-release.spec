@@ -357,8 +357,8 @@ Patch330:	https://raw.githubusercontent.com/frugalware/frugalware-current/71a887
 Patch332:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/loop-patches/0001-loop-Better-discard-for-block-devices.patch
 
 # Modular binder and ashmem -- let's try to make anbox happy
-Patch340:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
-Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
+#Patch340:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
+#Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
