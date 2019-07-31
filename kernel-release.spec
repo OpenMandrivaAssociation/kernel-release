@@ -18,7 +18,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	2
-%define sublevel	4
+%define sublevel	5
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -32,7 +32,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		2
+%define rpmrel		1
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -346,6 +346,7 @@ Patch310:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patche
 Patch311:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0002-cpu-5.2-add-a-CONFIG-option-that-sets-O3.patch
 
 # Assorted fixes
+Patch320:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.2/cve-patches-for-5.2.5/0001-cve-patches.patch
 ## Intel Core2Duo got always unstable tsc , with changes in 4.18
 ## some models cannot boot anymore , they are stuck in a endless loop.
 ## see: https://lkml.org/lkml/2018/8/30/341
@@ -356,14 +357,8 @@ Patch332:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/loop-patch
 Patch333:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/iouring-patches/0001-io_uring-restructure-io_-read-write-control-flow.patch
 
 # Modular binder and ashmem -- let's try to make anbox happy
-#Kernel: arch/x86/boot/bzImage is ready  (#1)
-#MODPOST 4672 modules
-#BUILDSTDERR: ERROR: "can_nice" [drivers/android/binder_linux.ko] undefined!
-#BUILDSTDERR: make[1]: *** [scripts/Makefile.modpost:91: __modpost] Error 1
-#BUILDSTDERR: make: *** [Makefile:1293: modules] Error 2
-#BUILDSTDERR: error: Bad exit status from /var/tmp/rpm-tmp.f81bLd (%build)
-#Patch340:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
-#Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
+Patch340:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
+Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -406,6 +401,8 @@ Patch801:	https://gitweb.frugalware.org/wip_kernel/raw/86234abea5e625043153f6b82
 Patch802:	https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e18613151cc81b4c0cf6e22/source/base/kernel/fix-acpi_dbg_level.patch
 # (tpg) enable MuQSS CPU scheduler
 Patch803:	http://ck.kolivas.org/patches/muqss/5.0/5.2/0001-MultiQueue-Skiplist-Scheduler-version-0.193.patch
+# (bero) And make it compatible with modular binder
+Patch804:	MuQSS-export-can_nice-for-binder.patch
 
 # Defines for the things that are needed for all the kernels
 #
@@ -1787,6 +1784,7 @@ cd -
 %{_kerneldir}/MAINTAINERS
 %{_kerneldir}/Makefile
 %{_kerneldir}/README
+%{_kerneldir}/uksm.txt
 %endif
 
 %if %{with build_doc}
