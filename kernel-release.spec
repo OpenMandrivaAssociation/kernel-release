@@ -307,7 +307,6 @@ Patch127:	v2-2-2-x86-Add-support-for-ZSTD-compressed-kernel.patch
 
 Patch133:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/drop_ancient-and-wrong-msg.patch
 
-
 ### Additional hardware support
 ### TV tuners:
 # SAA716x DVB driver
@@ -357,8 +356,12 @@ Patch332:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/loop-patch
 Patch333:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/iouring-patches/0001-io_uring-restructure-io_-read-write-control-flow.patch
 
 # Modular binder and ashmem -- let's try to make anbox happy
-Patch340:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
-Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
+# Kernel: arch/x86/boot/bzImage is ready  (#1)
+# MODPOST 4672 modules
+# BUILDSTDERR: ERROR: "can_nice" [drivers/android/binder_linux.ko] undefined
+# BUILDSTDERR: scripts/Makefile.modpost:91: __modpost] Error 1
+#Patch340:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
+#Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
