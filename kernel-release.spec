@@ -356,12 +356,10 @@ Patch332:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/loop-patch
 Patch333:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/iouring-patches/0001-io_uring-restructure-io_-read-write-control-flow.patch
 
 # Modular binder and ashmem -- let's try to make anbox happy
-#Kernel: arch/x86/boot/bzImage is ready  (#1)
-#MODPOST 4672 modules
-#BUILDSTDERR: ERROR: "can_nice" [drivers/android/binder_linux.ko] undefined!
-#BUILDSTDERR: make[1]: *** [scripts/Makefile.modpost:91: __modpost] Error 1
-#BUILDSTDERR: make: *** [Makefile:1293: modules] Error 2
-#BUILDSTDERR: error: Bad exit status from /var/tmp/rpm-tmp.f81bLd (%build)
+# Kernel: arch/x86/boot/bzImage is ready  (#1)
+# MODPOST 4672 modules
+# BUILDSTDERR: ERROR: "can_nice" [drivers/android/binder_linux.ko] undefined
+# BUILDSTDERR: scripts/Makefile.modpost:91: __modpost] Error 1
 #Patch340:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
 #Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
 
