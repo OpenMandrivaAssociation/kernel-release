@@ -1691,6 +1691,7 @@ done
 rm -f %{target_source}/{.config.old,.config.cmd,.gitignore,.lst,.mailmap,.gitattributes}
 rm -f %{target_source}/{.missing-syscalls.d,arch/.gitignore,firmware/.gitignore}
 rm -rf %{target_source}/.tmp_depmod/
+rm -rf %{buildroot}/usr/src/linux-*/uksm.txt
 
 # more cleaning
 cd %{target_source}
