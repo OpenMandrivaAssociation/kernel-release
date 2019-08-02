@@ -1785,7 +1785,6 @@ cd -
 %{_kerneldir}/MAINTAINERS
 %{_kerneldir}/Makefile
 %{_kerneldir}/README
-%{_kerneldir}/uksm.txt
 %endif
 
 %if %{with build_doc}
