@@ -806,8 +806,6 @@ Epoch:		1
 # (tpg) fix bug https://issues.openmandriva.org/show_bug.cgi?id=1580
 Provides:	kernel-headers = 1:%{kverrel}
 Obsoletes:	kernel-headers < 1:%{kverrel}
-# we don't need the kernel binary in chroot
-#Requires:	%{kname} = %{kverrel}
 %rename linux-userspace-headers
 
 %description headers
