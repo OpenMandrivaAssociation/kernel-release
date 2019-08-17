@@ -32,7 +32,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -351,8 +351,6 @@ Patch320:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.2/
 ## some models cannot boot anymore , they are stuck in a endless loop.
 ## see: https://lkml.org/lkml/2018/8/30/341
 ##      https://bugzilla.kernel.org/show_bug.cgi?id=200957
-## patch is an backport from : https://lkml.org/lkml/2018/9/3/253
-Patch330:	https://raw.githubusercontent.com/frugalware/frugalware-current/71a887a9f309345f966c4d09c920642a62efb66f/source/base/kernel/fix-C2D-CPUs-booting.patch
 Patch332:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/loop-patches/0001-loop-Better-discard-for-block-devices.patch
 Patch333:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/iouring-patches/0001-io_uring-restructure-io_-read-write-control-flow.patch
 
