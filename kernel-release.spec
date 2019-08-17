@@ -1,4 +1,7 @@
 # utils/cpuidle-info.c:193: error: undefined reference to 'cpufreq_cpu_exists'
+# investigate aarch64
+%define _binaries_in_noarch_packages_terminate_build   0
+#end
 %define _disable_ld_no_undefined 1
 
 # (tpg) try to speed up things
