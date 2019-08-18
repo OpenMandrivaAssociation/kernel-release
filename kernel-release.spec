@@ -1312,6 +1312,10 @@ cat > $kernel_files <<EOF
 %dir %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/
 %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/kernel
 %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/modules.*
+# device tree binary
+%ifarch %{armx}
+%{_bootdir}/dtb-%{kversion}-$kernel_flavour-%{buildrpmrel}
+%endif
 %doc README.kernel-sources
 EOF
 
