@@ -5,7 +5,7 @@
 %define _disable_ld_no_undefined 1
 
 # (tpg) try to speed up things
-%global optflags %{optflags} -O3
+%global optflags %{optflags} -Ofast
 
 # While perf comes with python2 scripts
 %define _python_bytecompile_build 0
@@ -35,7 +35,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		2
+%define rpmrel		3
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -67,7 +67,11 @@
 
 # Build defines
 %bcond_with build_doc
+%ifarch %{ix86} %{x86_64}
 %bcond_without uksm
+%else
+%bcond_with uksm
+%endif
 %bcond_without build_source
 %bcond_without build_devel
 %bcond_with build_debug
@@ -1104,7 +1108,7 @@ BuildKernel() {
     %{smake} INSTALL_MOD_PATH=%{temp_root} KERNELRELEASE=$KernelVer INSTALL_MOD_STRIP=1 modules_install
 
 # headers
-    %{make_build} INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer headers_install
+    %{make_build} INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer ARCH=%{target_arch} SRCARCH=%{target_arch} headers_install
 
 %ifarch %{armx}
     %{smake} ARCH=%{target_arch} V=1 dtbs INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
