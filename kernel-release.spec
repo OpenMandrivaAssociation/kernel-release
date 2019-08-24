@@ -139,6 +139,12 @@
 %bcond_with build_desktop
 %bcond_without build_server
 %endif
+
+# RISC-V
+%ifarch %{riscv}
+%bcond_without build_desktop
+%bcond_with build_server
+%endif
 # End of user definitions
 
 # For the .nosrc.rpm
