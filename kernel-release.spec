@@ -5,7 +5,7 @@
 %define _disable_ld_no_undefined 1
 
 # (tpg) try to speed up things
-%global optflags %{optflags} -Ofast
+%global optflags %{optflags} -O3
 
 # While perf comes with python2 scripts
 %define _python_bytecompile_build 0
@@ -21,7 +21,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	2
-%define sublevel	9
+%define sublevel	10
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -35,7 +35,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		3
+%define rpmrel		1
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
