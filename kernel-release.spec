@@ -411,6 +411,7 @@ Patch417:	0502-locking-rwsem-spin-faster.patch
 # (crazy) see: https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
 # Not even sure what Vendor that one is .. However it seems be one of the ones random doing that
 # like some Toshibas and some Samsung ones , so disable APST for this one..
+# Seems to be a M.2 SSD SKhynix..
 Patch800:	Unknow-SSD-HFM128GDHTNG-8310B-QUIRK_NO_APST.patch
 # Restore ACPI loglevels to sane values
 Patch801:	https://gitweb.frugalware.org/wip_kernel/raw/86234abea5e625043153f6b8295642fd9f42bff0/source/base/kernel/acpi-use-kern_warning_even_when_error.patch
@@ -419,6 +420,8 @@ Patch802:	https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e1861315
 Patch803:	http://ck.kolivas.org/patches/muqss/5.0/5.2/0001-MultiQueue-Skiplist-Scheduler-version-0.193.patch
 # (bero) And make it compatible with modular binder
 Patch804:	MuQSS-export-can_nice-for-binder.patch
+# (crazy) XPG 8200 Pro NVME 512GB ( pending upstream for 5.4 )
+Patch805:    Fix-booting-with-ADATA-XPG-SX8200-Pro-512GB.patch
 
 # Defines for the things that are needed for all the kernels
 #
