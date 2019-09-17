@@ -20,8 +20,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	2
-%define sublevel	14
+%define patchlevel	3
+%define sublevel	0
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -309,7 +309,7 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 # (tpg) sources can be found here https://github.com/dolohow/uksm
 %if %{with uksm}
 # brokes armx builds
-Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.2.patch
+#Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.2.patch
 # Sometimes other people are ahead of upstream porting to new releases...
 # No UKSM for 5.2-rc yet...
 #Patch120:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf/0001-uksm-5.1-initial-submission.patch
@@ -355,6 +355,7 @@ Patch147:	saa716x-linux-4.19.patch
 # For newer versions, check
 # https://patchwork.kernel.org/project/linux-fsdevel/list/?submitter=582
 Patch300:	v10-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.diff
+Source300:	virtualbox-kernel-5.3.patch
 
 # Better support for newer x86 processors
 # Original patch:
@@ -364,13 +365,15 @@ Patch310:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patche
 Patch311:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0002-cpu-5.2-add-a-CONFIG-option-that-sets-O3.patch
 
 # Assorted fixes
-Patch320:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.2/cve-patches-for-5.2.5/0001-cve-patches.patch
+Patch329:	http://homebox.tk/fix-amdgpu-resume-black-screen.patch
+Patch330:	amdgpu-suspendresume.patch
+# https://cgit.freedesktop.org/~agd5f/linux/patch/?id=b59953fdf2252a140cd6fab9ab5fe42ea07f0182
+Patch331:	c3a3e94fd468be6cefa0a444b6f13a273d9be5b9..b59953fdf2252a140cd6fab9ab5fe42ea07f0182.patch
 ## Intel Core2Duo got always unstable tsc , with changes in 4.18
 ## some models cannot boot anymore , they are stuck in a endless loop.
 ## see: https://lkml.org/lkml/2018/8/30/341
 ##      https://bugzilla.kernel.org/show_bug.cgi?id=200957
 Patch332:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/loop-patches/0001-loop-Better-discard-for-block-devices.patch
-Patch333:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/iouring-patches/0001-io_uring-restructure-io_-read-write-control-flow.patch
 
 # Modular binder and ashmem -- let's try to make anbox happy
 Patch340:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
@@ -386,7 +389,6 @@ Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/d
 # https://github.com/clearlinux-pkgs/linux/
 Patch400:	0101-i8042-decrease-debug-message-level-to-info.patch
 Patch401:	0103-Increase-the-ext4-default-commit-age.patch
-Patch402:	0103-silence-rapl.patch
 Patch403:	0105-pci-pme-wakeups.patch
 # Incompatible with UKSM
 #Patch404:	0106-ksm-wakeups.patch
@@ -398,14 +400,11 @@ Patch406:	0110-fs-ext4-fsync-optimize-double-fsync-a-bunch.patch
 Patch407:	0114-smpboot-reuse-timer-calibration.patch
 %endif
 Patch408:	0116-Initialize-ata-before-graphics.patch
-Patch409:	0117-reduce-e1000e-boot-time-by-tightening-sleep-ranges.patch
 Patch410:	0119-e1000e-change-default-policy.patch
 Patch411:	0112-give-rdrand-some-credit.patch
 Patch412:	0120-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
-Patch414:	0123-e1000e-increase-pause-and-refresh-time.patch
 Patch415:	0124-kernel-time-reduce-ntp-wakeups.patch
 Patch416:	0125-init-wait-for-partition-and-retry-scan.patch
-Patch417:	0502-locking-rwsem-spin-faster.patch
 %endif
 
 # (crazy) see: https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
@@ -417,9 +416,10 @@ Patch800:	Unknow-SSD-HFM128GDHTNG-8310B-QUIRK_NO_APST.patch
 Patch801:	https://gitweb.frugalware.org/wip_kernel/raw/86234abea5e625043153f6b8295642fd9f42bff0/source/base/kernel/acpi-use-kern_warning_even_when_error.patch
 Patch802:	https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e18613151cc81b4c0cf6e22/source/base/kernel/fix-acpi_dbg_level.patch
 # (tpg) enable MuQSS CPU scheduler
-Patch803:	http://ck.kolivas.org/patches/muqss/5.0/5.2/0001-MultiQueue-Skiplist-Scheduler-version-0.193.patch
+# FIXME re-enable when ported to 5.3
+#Patch803:	http://ck.kolivas.org/patches/muqss/5.0/5.2/0001-MultiQueue-Skiplist-Scheduler-version-0.193.patch
 # (bero) And make it compatible with modular binder
-Patch804:	MuQSS-export-can_nice-for-binder.patch
+#Patch804:	MuQSS-export-can_nice-for-binder.patch
 # (crazy) XPG 8200 Pro NVME 512GB ( pending upstream for 5.4 )
 Patch805:    Fix-booting-with-ADATA-XPG-SX8200-Pro-512GB.patch
 
@@ -963,6 +963,7 @@ cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxpci drivers/pci/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefile*
 sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
+patch -p1 -z .300a~ -b <%{S:300}
 %endif
 %endif
 
@@ -1218,6 +1219,7 @@ $DevelRoot/crypto
 $DevelRoot/certs
 $DevelRoot/drivers
 $DevelRoot/fs
+$DevelRoot/include/Kbuild
 $DevelRoot/include/acpi
 $DevelRoot/include/asm-generic
 $DevelRoot/include/clocksource
@@ -1231,7 +1233,6 @@ $DevelRoot/include/kvm
 $DevelRoot/include/linux
 $DevelRoot/include/math-emu
 $DevelRoot/include/media
-$DevelRoot/include/memory
 $DevelRoot/include/misc
 $DevelRoot/include/net
 $DevelRoot/include/pcmcia
@@ -1243,6 +1244,7 @@ $DevelRoot/include/sound
 $DevelRoot/include/target
 $DevelRoot/include/trace
 $DevelRoot/include/uapi
+$DevelRoot/include/vdso
 $DevelRoot/include/video
 $DevelRoot/include/xen
 $DevelRoot/init
@@ -1760,6 +1762,7 @@ cd -
 %{_kerneldir}/drivers
 %{_kerneldir}/fs
 %{_kerneldir}/certs/*
+%{_kerneldir}/include/Kbuild
 %{_kerneldir}/include/acpi
 %{_kerneldir}/include/asm-generic
 %{_kerneldir}/include/clocksource
@@ -1771,7 +1774,6 @@ cd -
 %{_kerneldir}/include/linux
 %{_kerneldir}/include/math-emu
 %{_kerneldir}/include/media
-%{_kerneldir}/include/memory
 %{_kerneldir}/include/misc
 %{_kerneldir}/include/net
 %{_kerneldir}/include/pcmcia
@@ -1783,6 +1785,7 @@ cd -
 %{_kerneldir}/include/target
 %{_kerneldir}/include/trace
 %{_kerneldir}/include/uapi
+%{_kerneldir}/include/vdso
 %{_kerneldir}/include/video
 %{_kerneldir}/include/xen
 %{_kerneldir}/init
