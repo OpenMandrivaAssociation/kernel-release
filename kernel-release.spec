@@ -35,7 +35,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -422,6 +422,10 @@ Patch802:	https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e1861315
 #Patch804:	MuQSS-export-can_nice-for-binder.patch
 # (crazy) XPG 8200 Pro NVME 512GB ( pending upstream for 5.4 )
 Patch805:    Fix-booting-with-ADATA-XPG-SX8200-Pro-512GB.patch
+# ( crazy ) fix k10temp sensors for Ryzen 3000 ( ZEN2 ) , may get in as patch
+# in some 5.3.X but will be there for sure in 5.4
+Patch806:	 k10temp-R3000-1.patch
+Patch807:    k10temp-R3000-2.patch
 
 # Defines for the things that are needed for all the kernels
 #
