@@ -428,6 +428,12 @@ Patch806:	 k10temp-R3000-1.patch
 Patch807:    k10temp-R3000-2.patch
 # (crazy) need to know what function() breaks on nvme failures
 Patch809:    nvme-pci-more-info.patch
+# ( crazy ) this one is adding be_silent mod parameter to acer-wmi
+# When a Unknow function is detected ( aka new ACPI interface not yet impelmeted etc )
+# a message is printed in dmesg each time you use this , eg press some key , plug / unplug AC.
+# Folks reported these upstream can load the model with be_silent=1 to stop the dmesg flood,
+# until is implemented / fixed.
+Patch810:  acer-wmi-silence-unknow-functions-messages.patch
 
 # Defines for the things that are needed for all the kernels
 #
