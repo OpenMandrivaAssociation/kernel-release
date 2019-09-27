@@ -433,7 +433,7 @@ Patch809:    nvme-pci-more-info.patch
 # a message is printed in dmesg each time you use this , eg press some key , plug / unplug AC.
 # Folks reported these upstream can load the model with be_silent=1 to stop the dmesg flood,
 # until is implemented / fixed.
-Patch810:  acer-wmi-silence-unknow-functions-messages.patch
+#Patch810:  acer-wmi-silence-unknow-functions-messages.patch
 
 # Defines for the things that are needed for all the kernels
 #
