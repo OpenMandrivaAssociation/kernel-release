@@ -426,6 +426,8 @@ Patch805:    Fix-booting-with-ADATA-XPG-SX8200-Pro-512GB.patch
 # in some 5.3.X but will be there for sure in 5.4
 Patch806:	 k10temp-R3000-1.patch
 Patch807:    k10temp-R3000-2.patch
+# (crazy) need to know what function() breaks on nvme failures
+Patch809:    nvme-pci-more-info.patch
 
 # Defines for the things that are needed for all the kernels
 #
