@@ -21,7 +21,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	3
-%define sublevel	1
+%define sublevel	4
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -35,7 +35,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		4
+%define rpmrel		1
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -365,10 +365,6 @@ Patch310:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patche
 Patch311:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0002-cpu-5.2-add-a-CONFIG-option-that-sets-O3.patch
 
 # Assorted fixes
-Patch329:	http://homebox.tk/fix-amdgpu-resume-black-screen.patch
-Patch330:	amdgpu-suspendresume.patch
-# https://cgit.freedesktop.org/~agd5f/linux/patch/?id=b59953fdf2252a140cd6fab9ab5fe42ea07f0182
-Patch331:	c3a3e94fd468be6cefa0a444b6f13a273d9be5b9..b59953fdf2252a140cd6fab9ab5fe42ea07f0182.patch
 ## Intel Core2Duo got always unstable tsc , with changes in 4.18
 ## some models cannot boot anymore , they are stuck in a endless loop.
 ## see: https://lkml.org/lkml/2018/8/30/341
@@ -422,10 +418,6 @@ Patch802:	https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e1861315
 #Patch804:	MuQSS-export-can_nice-for-binder.patch
 # (crazy) XPG 8200 Pro NVME 512GB ( pending upstream for 5.4 )
 Patch805:    Fix-booting-with-ADATA-XPG-SX8200-Pro-512GB.patch
-# ( crazy ) fix k10temp sensors for Ryzen 3000 ( ZEN2 ) , may get in as patch
-# in some 5.3.X but will be there for sure in 5.4
-Patch806:	 k10temp-R3000-1.patch
-Patch807:    k10temp-R3000-2.patch
 # (crazy) need to know what function() breaks on nvme failures
 Patch809:    nvme-pci-more-info.patch
 # ( crazy ) this one is adding be_silent mod parameter to acer-wmi
