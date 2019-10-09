@@ -564,7 +564,6 @@ Conflicts:	%{kname}-%{1}-latest <= %{kversion}-%{rpmrel}	\
 Obsoletes:	%{kname}-%{1}-latest <= %{kversion}-%{rpmrel}	\
 Provides:	installonlypkg(kernel)			\
 Provides:	should-restart = system			\
-Obsoletes:	crda                                    \
 Recommends:	iw					\
 %ifarch %{ix86} %{x86_64}				\
 Requires:	grub2 >= 2.02-27			\
