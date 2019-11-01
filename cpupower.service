@@ -3,10 +3,11 @@ Description=Configure CPU power related settings
 After=syslog.target
 
 [Service]
-ExecStart=/usr/sbin/cpupower.sh
 Type=oneshot
-StandardOutput=syslog
 RemainAfterExit=yes
+EnvironmentFile=/etc/sysconfig/cpupower
+ExecStart=/usr/bin/cpupower $CPUPOWER_START_OPTS
+ExecStop=/usr/bin/cpupower $CPUPOWER_STOP_OPTS
 
 [Install]
 WantedBy=multi-user.target

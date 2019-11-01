@@ -1,7 +1,7 @@
-From c6e983640fdf502a705174154c71e9372ea08fb2 Mon Sep 17 00:00:00 2001
+From 520f8400d206459c9dcedba70dac8d8c43f50a88 Mon Sep 17 00:00:00 2001
 From: Oleksandr Natalenko <oleksandr@natalenko.name>
 Date: Sat, 1 Dec 2018 14:14:37 +0100
-Subject: [PATCH] cpu-5.1: merge graysky's patchset
+Subject: [PATCH 1/2] cpu-5.2: merge graysky's patchset
 
 Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 ---
@@ -363,7 +363,7 @@ index 6adce15268bd..f8612b07d32f 100644
  config X86_MINIMUM_CPU_FAMILY
  	int
 diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index a587805c6687..550973f69db8 100644
+index 56e748a7679f..29eb64851528 100644
 --- a/arch/x86/Makefile
 +++ b/arch/x86/Makefile
 @@ -118,13 +118,46 @@ else
@@ -524,5 +524,5 @@ index 7948a17febb4..44b776297dc3 100644
  #define MODULE_PROC_FAMILY "ELAN "
  #elif defined CONFIG_MCRUSOE
 -- 
-2.21.0.777.g83232e3864
+2.22.0.214.g8dca754b1e
 
