@@ -1,4 +1,4 @@
-From cb21c524812a75f4bb681ab0aca2bf7c2ba54626 Mon Sep 17 00:00:00 2001
+From 8291be1c7e5bba2d55f8df4f440fa2fb6fb01cc8 Mon Sep 17 00:00:00 2001
 From: Evan Green <evgreen@chromium.org>
 Date: Mon, 4 Mar 2019 18:35:28 +0200
 Subject: [PATCH] loop: Better discard for block devices
@@ -33,7 +33,6 @@ avoiding this error in the logs.
 I can also confirm that this fixes test block/003 in the blktests, when
 running blktests on a loop device backed by a block device.
 
-
 Changes in v2:
 - Unnested error if statement (Bart)
 
@@ -49,10 +48,10 @@ Evan Green (2):
  1 file changed, 48 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index bf1c61cab8eb..e1edd004298a 100644
+index f11b7dc16..976159e29 100644
 --- a/drivers/block/loop.c
 +++ b/drivers/block/loop.c
-@@ -417,19 +417,14 @@ static int lo_read_transfer(struct loop_device *lo, struct request *rq,
+@@ -425,19 +425,14 @@ static int lo_read_transfer(struct loop_device *lo, struct request *rq,
  	return ret;
  }
  
@@ -76,7 +75,7 @@ index bf1c61cab8eb..e1edd004298a 100644
  		ret = -EOPNOTSUPP;
  		goto out;
  	}
-@@ -458,7 +453,9 @@ static void lo_complete_rq(struct request *rq)
+@@ -466,7 +461,9 @@ static void lo_complete_rq(struct request *rq)
  
  	if (!cmd->use_aio || cmd->ret < 0 || cmd->ret == blk_rq_bytes(rq) ||
  	    req_op(rq) != REQ_OP_READ) {
@@ -87,7 +86,7 @@ index bf1c61cab8eb..e1edd004298a 100644
  			ret = BLK_STS_IOERR;
  		goto end_io;
  	}
-@@ -597,8 +594,13 @@ static int do_req_filebacked(struct loop_device *lo, struct request *rq)
+@@ -605,8 +602,13 @@ static int do_req_filebacked(struct loop_device *lo, struct request *rq)
  	case REQ_OP_FLUSH:
  		return lo_req_flush(lo, rq);
  	case REQ_OP_DISCARD:
@@ -102,7 +101,7 @@ index bf1c61cab8eb..e1edd004298a 100644
  	case REQ_OP_WRITE:
  		if (lo->transfer)
  			return lo_write_transfer(lo, rq, pos);
-@@ -852,6 +854,25 @@ static void loop_config_discard(struct loop_device *lo)
+@@ -860,6 +862,25 @@ static void loop_config_discard(struct loop_device *lo)
  	struct file *file = lo->lo_backing_file;
  	struct inode *inode = file->f_mapping->host;
  	struct request_queue *q = lo->lo_queue;
@@ -128,7 +127,7 @@ index bf1c61cab8eb..e1edd004298a 100644
  
  	/*
  	 * We use punch hole to reclaim the free space used by the
-@@ -859,22 +880,24 @@ static void loop_config_discard(struct loop_device *lo)
+@@ -867,22 +888,24 @@ static void loop_config_discard(struct loop_device *lo)
  	 * encryption is enabled, because it may give an attacker
  	 * useful information.
  	 */
@@ -163,7 +162,7 @@ index bf1c61cab8eb..e1edd004298a 100644
  }
  
  static void loop_unprepare_queue(struct loop_device *lo)
-@@ -1892,7 +1915,10 @@ static void loop_handle_cmd(struct loop_cmd *cmd)
+@@ -1935,7 +1958,10 @@ static void loop_handle_cmd(struct loop_cmd *cmd)
   failed:
  	/* complete non-aio request */
  	if (!cmd->use_aio || ret) {
@@ -176,5 +175,5 @@ index bf1c61cab8eb..e1edd004298a 100644
  	}
  }
 -- 
-2.21.0.777.g83232e3864
+2.22.0.214.g8dca754b1e
 
