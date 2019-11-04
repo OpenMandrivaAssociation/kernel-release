@@ -1,20 +1,24 @@
---- linux-5.3/drivers/nvme/host/core.c.34~	2019-11-02 01:16:02.234724316 +0100
-+++ linux-5.3/drivers/nvme/host/core.c	2019-11-02 01:18:29.542906143 +0100
-@@ -2354,7 +2354,16 @@ static const struct nvme_core_quirk_entr
- 		.vid = 0x2646,
- 		.fr = "E8FK11.T",
- 		.quirks = NVME_QUIRK_SIMPLE_SUSPEND,
--	}
-+	},
-+	{
-+		/* https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
-+		 * Unknown SSD ... Maybe ADATA/Hynix (a similar mn from ADTA
-+		 * but vid seems to be Hynix)
-+		 */
-+		.vid = 0x1c5c,
-+		.mn = "HFM128GDHTNG-8310B",
-+		.quirks = NVME_QUIRK_NO_APST,
-+        }
- };
- 
+diff -up linux-5.3.8/drivers/nvme/host/core.c linux-5.3.8/drivers/nvme/host/core.c-angry
+--- linux-5.3.8/drivers/nvme/host/core.c        2019-10-29 09:22:48.000000000 +0100
++++ linux-5.3.8/drivers/nvme/host/core.c-angry  2019-11-04 16:55:18.230183272 +0100
+@@ -2354,9 +2354,17 @@ static const struct nvme_core_quirk_entr
+                .vid = 0x2646,
+                .fr = "E8FK11.T",
+                .quirks = NVME_QUIRK_SIMPLE_SUSPEND,
+-       }
+-};
+-
++       },
++       {
++               /* https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
++                * Unknown SSD ... Maybe ADATA/Hynix (a similar mn from ADTA
++                * but vid seems to be Hynix)
++                */
++               .vid = 0x1c5c,
++               .mn = "HFM128GDHTNG-8310B",
++               .quirks = NVME_QUIRK_NO_APST,
++       }
++ };
  /* match is null-terminated but idstr is space-padded. */
+ static bool string_matches(const char *idstr, const char *match, size_t len)
+ {
