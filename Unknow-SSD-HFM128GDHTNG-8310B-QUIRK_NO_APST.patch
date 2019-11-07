@@ -1,19 +1,19 @@
-diff -up linux-5.3.9/drivers/nvme/host/core.c linux-5.3.9/drivers/nvme/host/core.c-angry
---- linux-5.3.9/drivers/nvme/host/core.c        2019-11-06 13:09:35.000000000 +0100
-+++ linux-5.3.9/drivers/nvme/host/core.c-angry  2019-11-06 22:08:07.352373228 +0100
-@@ -2272,6 +2272,15 @@ static const struct nvme_core_quirk_entr
-                .quirks = NVME_QUIRK_SIMPLE_SUSPEND,
-        },
-        {
-+               /* https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
-+                * Unknown SSD ... Maybe ADATA/Hynix (a similar mn from ADTA
-+                * but vid seems to be Hynix)
-+                */
-+               .vid = 0x1c5c,
-+               .mn = "HFM128GDHTNG-8310B",
-+               .quirks = NVME_QUIRK_NO_APST,
-+       },
-+       {
-                /*
-                 * This Kingston E8FK11.T firmware version has no interrupt
-                 * after resume with actions related to suspend to idle
+diff -up linux-5.3/drivers/nvme/host/core.c.34~ linux-5.3/drivers/nvme/host/core.c
+--- linux-5.3/drivers/nvme/host/core.c.34~	2019-11-06 23:34:41.296307805 +0100
++++ linux-5.3/drivers/nvme/host/core.c	2019-11-06 23:45:56.515453791 +0100
+@@ -2280,6 +2280,15 @@ static const struct nvme_core_quirk_entr
+ 		.vid = 0x2646,
+ 		.fr = "E8FK11.T",
+ 		.quirks = NVME_QUIRK_SIMPLE_SUSPEND,
++	},
++        {
++		/* https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
++		 * Unknown SSD ... Maybe ADATA/Hynix (a similar mn from ADTA
++		 * but vid seems to be Hynix)
++		 */
++		.vid = 0x1c5c,
++		.mn = "HFM128GDHTNG-8310B",
++		.quirks = NVME_QUIRK_NO_APST,
+ 	}
+ };
+ 
