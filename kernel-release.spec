@@ -20,8 +20,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	3
-%define sublevel	12
+%define patchlevel	4
+%define sublevel	1
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -341,6 +341,7 @@ Patch144:	0124-Extend-FEC-enum.patch
 Patch145:	saa716x-driver-integration.patch
 Patch146:	saa716x-4.15.patch
 Patch147:	saa716x-linux-4.19.patch
+Patch148:	saa716x-5.4.patch
 
 # Lima driver for ARM Mali graphics chips
 # Generated from https://gitlab.freedesktop.org/lima/linux.git
@@ -354,7 +355,7 @@ Patch147:	saa716x-linux-4.19.patch
 # https://patchwork.kernel.org/patch/10906949/
 # For newer versions, check
 # https://patchwork.kernel.org/project/linux-fsdevel/list/?submitter=582
-Patch300:	v10-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.diff
+Patch300:	v15-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.diff
 Source300:	virtualbox-kernel-5.3.patch
 
 # Better support for newer x86 processors
@@ -362,7 +363,6 @@ Source300:	virtualbox-kernel-5.3.patch
 #Patch310:	https://raw.githubusercontent.com/graysky2/kernel_gcc_patch/master/enable_additional_cpu_optimizations_for_gcc_v8.1%2B_kernel_v4.13%2B.patch
 # More actively maintained for newer kernels
 Patch310:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0001-cpu-5.2-merge-graysky-s-patchset.patch
-Patch311:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0002-cpu-5.2-add-a-CONFIG-option-that-sets-O3.patch
 
 # Assorted fixes
 ## Intel Core2Duo got always unstable tsc , with changes in 4.18
@@ -965,7 +965,7 @@ cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxpci drivers/pci/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefile*
 sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
-patch -p1 -z .300a~ -b <%{S:300}
+#patch -p1 -z .300a~ -b <%{S:300}
 %endif
 %endif
 
