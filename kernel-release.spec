@@ -1268,7 +1268,6 @@ $DevelRoot/Kconfig
 $DevelRoot/Makefile
 $DevelRoot/Module.symvers
 $DevelRoot/arch/Kconfig
-%doc README.kernel-sources
 EOF
 
 ### Create -devel Post script on the fly
@@ -1334,7 +1333,6 @@ cat > $kernel_files <<EOF
 %ifarch %{armx}
 %{_bootdir}/dtb-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %endif
-%doc README.kernel-sources
 EOF
 
 %if %{with build_debug}
@@ -1745,7 +1743,6 @@ cd -
 
 %if %{with build_source}
 %files -n %{kname}-source
-%doc README.kernel-sources
 %dir %{_kerneldir}
 %dir %{_kerneldir}/arch
 %dir %{_kerneldir}/include
