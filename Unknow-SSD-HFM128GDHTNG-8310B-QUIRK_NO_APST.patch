@@ -1,9 +1,9 @@
-diff -up linux-5.3/drivers/nvme/host/core.c.34~ linux-5.3/drivers/nvme/host/core.c
---- linux-5.3/drivers/nvme/host/core.c.34~	2019-11-06 23:34:41.296307805 +0100
-+++ linux-5.3/drivers/nvme/host/core.c	2019-11-06 23:45:56.515453791 +0100
-@@ -2280,6 +2280,15 @@ static const struct nvme_core_quirk_entr
- 		.vid = 0x2646,
- 		.fr = "E8FK11.T",
+diff -up linux-5.4/drivers/nvme/host/core.c.35~ linux-5.4/drivers/nvme/host/core.c
+--- linux-5.4/drivers/nvme/host/core.c.35~	2019-12-18 20:23:29.167152525 +0100
++++ linux-5.4/drivers/nvme/host/core.c	2019-12-18 20:34:05.573121649 +0100
+@@ -2406,6 +2406,15 @@ static const struct nvme_core_quirk_entr
+ 		.vid = 0x14a4,
+ 		.fr = "22301111",
  		.quirks = NVME_QUIRK_SIMPLE_SUSPEND,
 +	},
 +        {
