@@ -424,6 +424,7 @@ Patch809:	nvme-pci-more-info.patch
 # Folks reported these upstream can load the model with be_silent=1 to stop the dmesg flood,
 # until is implemented / fixed.
 #Patch810:  acer-wmi-silence-unknow-functions-messages.patch
+Patch810:	linux-5.4.5-fix-build.patch
 
 # Defines for the things that are needed for all the kernels
 #
