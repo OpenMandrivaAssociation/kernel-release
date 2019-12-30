@@ -887,7 +887,7 @@ rm -rf .git
 %if %mdvver > 3000000
 %autopatch -p1
 %else
-%apply_patches
+%autopatch -p1
 %endif
 %if %{with bootsplash}
 git apply %{SOURCE112}
