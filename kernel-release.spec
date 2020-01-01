@@ -21,7 +21,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	4
-%define sublevel	6
+%define sublevel	7
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -230,6 +230,10 @@ Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch4:		linux-4.7-intel-dvi-duallink.patch
 Patch5:		linux-4.8.1-buildfix.patch
 Patch6:		linux-5.2.9-riscv-compile.patch
+# Work around rpm dependency generator screaming about
+# error: Illegal char ']' (0x5d) in: 1.2.1[50983]_custom
+# caused by aacraid versioning ("1.2.1[50983]-custom")
+Patch7:		aacraid-dont-freak-out-dependency-generator.patch
 
 %if %{with clang}
 # Patches to make it build with clang
@@ -365,11 +369,6 @@ Source300:	virtualbox-kernel-5.3.patch
 Patch310:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0001-cpu-5.2-merge-graysky-s-patchset.patch
 
 # Assorted fixes
-## Intel Core2Duo got always unstable tsc , with changes in 4.18
-## some models cannot boot anymore , they are stuck in a endless loop.
-## see: https://lkml.org/lkml/2018/8/30/341
-##      https://bugzilla.kernel.org/show_bug.cgi?id=200957
-Patch332:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/loop-patches/0001-loop-Better-discard-for-block-devices.patch
 
 # Modular binder and ashmem -- let's try to make anbox happy
 Patch340:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
