@@ -20,8 +20,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	3
-%define sublevel	7
+%define patchlevel	4
+%define sublevel	11
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -230,6 +230,10 @@ Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch4:		linux-4.7-intel-dvi-duallink.patch
 Patch5:		linux-4.8.1-buildfix.patch
 Patch6:		linux-5.2.9-riscv-compile.patch
+# Work around rpm dependency generator screaming about
+# error: Illegal char ']' (0x5d) in: 1.2.1[50983]_custom
+# caused by aacraid versioning ("1.2.1[50983]-custom")
+Patch7:		aacraid-dont-freak-out-dependency-generator.patch
 
 %if %{with clang}
 # Patches to make it build with clang
@@ -296,20 +300,20 @@ Patch110:	RFC-v3-11-13-bootsplash-sysfs-entries-to-load-and-unload-files.patch
 # https://patchwork.kernel.org/patch/10172597/
 Patch111:	RFC-v3-12-13-tools-bootsplash-Add-a-basic-splash-file-creation-tool.patch
 # https://patchwork.kernel.org/patch/10172661/
-# Contains git binary patch -- needs to be applied with git apply instead of apply_patches
+# Contains git binary patch -- needs to be applied with git apply instead of autopatch -p1
 Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-file.patch
 %endif
 
 # Patches to VirtualBox and other external modules are
 # pulled in as Source: rather than Patch: because it's arch specific
-# and can't be applied by %%apply_patches
+# and can't be applied by %%autopatch -p1
 
 # (tpg) The Ultra Kernel Same Page Deduplication
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
 %if %{with uksm}
 # brokes armx builds
-#Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.2.patch
+Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.4.patch
 # Sometimes other people are ahead of upstream porting to new releases...
 # No UKSM for 5.2-rc yet...
 #Patch120:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf/0001-uksm-5.1-initial-submission.patch
@@ -341,6 +345,7 @@ Patch144:	0124-Extend-FEC-enum.patch
 Patch145:	saa716x-driver-integration.patch
 Patch146:	saa716x-4.15.patch
 Patch147:	saa716x-linux-4.19.patch
+Patch148:	saa716x-5.4.patch
 
 # Lima driver for ARM Mali graphics chips
 # Generated from https://gitlab.freedesktop.org/lima/linux.git
@@ -354,22 +359,17 @@ Patch147:	saa716x-linux-4.19.patch
 # https://patchwork.kernel.org/patch/10906949/
 # For newer versions, check
 # https://patchwork.kernel.org/project/linux-fsdevel/list/?submitter=582
-Patch300:	v10-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.diff
+Patch300:	v15-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.diff
 Source300:	virtualbox-kernel-5.3.patch
+Source301:	vbox-6.1-fix-build-on-znver1-hosts.patch
 
 # Better support for newer x86 processors
 # Original patch:
 #Patch310:	https://raw.githubusercontent.com/graysky2/kernel_gcc_patch/master/enable_additional_cpu_optimizations_for_gcc_v8.1%2B_kernel_v4.13%2B.patch
 # More actively maintained for newer kernels
 Patch310:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0001-cpu-5.2-merge-graysky-s-patchset.patch
-Patch311:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0002-cpu-5.2-add-a-CONFIG-option-that-sets-O3.patch
 
 # Assorted fixes
-## Intel Core2Duo got always unstable tsc , with changes in 4.18
-## some models cannot boot anymore , they are stuck in a endless loop.
-## see: https://lkml.org/lkml/2018/8/30/341
-##      https://bugzilla.kernel.org/show_bug.cgi?id=200957
-Patch332:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/loop-patches/0001-loop-Better-discard-for-block-devices.patch
 
 # Modular binder and ashmem -- let's try to make anbox happy
 Patch340:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
@@ -377,7 +377,7 @@ Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/d
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
-# being touched aren't in the tree at the time %%apply_patches
+# being touched aren't in the tree at the time %%autopatch -p1
 # runs...
 
 %if %{with clr}
@@ -413,19 +413,18 @@ Patch801:	https://gitweb.frugalware.org/wip_kernel/raw/86234abea5e625043153f6b82
 Patch802:	https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e18613151cc81b4c0cf6e22/source/base/kernel/fix-acpi_dbg_level.patch
 # (tpg) enable MuQSS CPU scheduler
 # FIXME re-enable when ported to 5.3
-#Patch803:	http://ck.kolivas.org/patches/muqss/5.0/5.2/0001-MultiQueue-Skiplist-Scheduler-version-0.193.patch
+Patch803:	http://ck.kolivas.org/patches/muqss/5.0/5.4/0001-MultiQueue-Skiplist-Scheduler-v0.196.patch
 # (bero) And make it compatible with modular binder
-#Patch804:	MuQSS-export-can_nice-for-binder.patch
-# (crazy) XPG 8200 Pro NVME 512GB ( pending upstream for 5.4 )
-Patch805:    Fix-booting-with-ADATA-XPG-SX8200-Pro-512GB.patch
+Patch804:	MuQSS-export-can_nice-for-binder.patch
 # (crazy) need to know what function() breaks on nvme failures
-Patch809:    nvme-pci-more-info.patch
+Patch809:	nvme-pci-more-info.patch
 # ( crazy ) this one is adding be_silent mod parameter to acer-wmi
 # When a Unknow function is detected ( aka new ACPI interface not yet impelmeted etc )
 # a message is printed in dmesg each time you use this , eg press some key , plug / unplug AC.
 # Folks reported these upstream can load the model with be_silent=1 to stop the dmesg flood,
 # until is implemented / fixed.
 #Patch810:  acer-wmi-silence-unknow-functions-messages.patch
+Patch810:	linux-5.4.5-fix-build.patch
 
 # Defines for the things that are needed for all the kernels
 #
@@ -530,7 +529,7 @@ Suggests:	microcode-intel
 # so end users don't have to install compilers (and worse,
 # get compiler error messages on failures)
 %if %mdvver >= 3000000
-%ifarch %{ix86} %{x86_64}
+%ifarch %{x86_64}
 BuildRequires:	virtualbox-kernel-module-sources
 BuildRequires:	virtualbox-guest-kernel-module-sources
 %endif
@@ -888,7 +887,7 @@ rm -rf .git
 %if %mdvver > 3000000
 %autopatch -p1
 %else
-%apply_patches
+%autopatch -p1
 %endif
 %if %{with bootsplash}
 git apply %{SOURCE112}
@@ -910,7 +909,7 @@ LC_ALL=C sed -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 
 # Pull in some externally maintained modules
 %if %mdvver >= 3000000
-%ifarch %{ix86} %{x86_64}
+%ifarch %{x86_64}
 # === VirtualBox guest additions ===
 %define use_internal_vboxvideo 0
 %if ! 0%{use_internal_vboxvideo}
@@ -967,7 +966,8 @@ cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxpci drivers/pci/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefile*
 sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
-patch -p1 -z .300a~ -b <%{S:300}
+#patch -p1 -z .300a~ -b <%{S:300}
+patch -p1 -z .301a~ -b <%{S:301}
 %endif
 %endif
 
@@ -1270,7 +1270,6 @@ $DevelRoot/Kconfig
 $DevelRoot/Makefile
 $DevelRoot/Module.symvers
 $DevelRoot/arch/Kconfig
-%doc README.kernel-sources
 EOF
 
 ### Create -devel Post script on the fly
@@ -1336,7 +1335,6 @@ cat > $kernel_files <<EOF
 %ifarch %{armx}
 %{_bootdir}/dtb-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %endif
-%doc README.kernel-sources
 EOF
 
 %if %{with build_debug}
@@ -1747,7 +1745,6 @@ cd -
 
 %if %{with build_source}
 %files -n %{kname}-source
-%doc README.kernel-sources
 %dir %{_kerneldir}
 %dir %{_kerneldir}/arch
 %dir %{_kerneldir}/include
