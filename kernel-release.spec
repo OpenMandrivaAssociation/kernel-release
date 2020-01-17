@@ -21,7 +21,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	4
-%define sublevel	12
+%define sublevel	13
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -35,7 +35,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		3
+%define rpmrel		1
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
