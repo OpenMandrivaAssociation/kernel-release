@@ -7,9 +7,6 @@
 # (tpg) try to speed up things
 %global optflags %{optflags} -O3
 
-# While perf comes with python2 scripts
-%define _python_bytecompile_build 0
-
 # (crazy) , well that new way of doing buil-id symlinks
 # does not seems to work, see:
 # https://issues.openmandriva.org/show_bug.cgi?id=2400
@@ -514,7 +511,7 @@ BuildRequires:	pkgconfig(libnewt)
 BuildRequires:	perl-devel
 # BuildRequires:	perl(ExtUtils::Embed)
 BuildRequires:	pkgconfig(gtk+-2.0)
-BuildRequires:	pkgconfig(python2)
+BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(zlib)
 %endif
 
@@ -986,7 +983,6 @@ chmod 755 tools/objtool/sync-check.sh
 ############################################################
 # Make sure we don't use gold
 export LD="%{_target_platform}-ld.bfd"
-export PYTHON=%{__python2}
 
 ############################################################
 ###  Linker end2 > Check point to build for omv or rosa ###
@@ -1567,8 +1563,8 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 ### Linker start3 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_perf}
-%{smake} -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%{__cc} PYTHON=%{__python2} WERROR=0 prefix=%{_prefix} all
-%{smake} -C tools/perf -s CC=%{__cc} prefix=%{_prefix} PYTHON=%{__python2} man
+%{smake} -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%{__cc} WERROR=0 prefix=%{_prefix} all
+%{smake} -C tools/perf -s CC=%{__cc} prefix=%{_prefix} man
 %endif
 
 %if %{with build_cpupower}
@@ -1656,10 +1652,10 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 %if %{with build_perf}
 
 # perf tool binary and supporting scripts/binaries
-make -C tools/perf -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__python2} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
+make -C tools/perf -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
 
 # perf man pages (note: implicit rpm magic compresses them later)
-make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__python2} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
+make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
 %endif
 
 ############################################################
