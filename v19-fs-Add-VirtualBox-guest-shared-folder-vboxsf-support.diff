@@ -1,8 +1,8 @@
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 30a5b4028d2f..4e79065e181f 100644
+index 02d5278a4c9a..90302540b12d 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -17339,6 +17339,12 @@ F:	include/linux/vbox_utils.h
+@@ -17591,6 +17591,12 @@ F:	include/linux/vbox_utils.h
  F:	include/uapi/linux/vbox*.h
  F:	drivers/virt/vboxguest/
  
@@ -16,7 +16,7 @@ index 30a5b4028d2f..4e79065e181f 100644
  M:	Stephen Chandler Paul <thatslyude@gmail.com>
  S:	Maintained
 diff --git a/fs/Kconfig b/fs/Kconfig
-index 2501e6f1f965..f11f0b04094c 100644
+index 7b623e9fc1b0..8493a3f0c4b1 100644
 --- a/fs/Kconfig
 +++ b/fs/Kconfig
 @@ -264,6 +264,7 @@ source "fs/pstore/Kconfig"
@@ -28,10 +28,10 @@ index 2501e6f1f965..f11f0b04094c 100644
  endif # MISC_FILESYSTEMS
  
 diff --git a/fs/Makefile b/fs/Makefile
-index 14231b4cf383..aecbb088be47 100644
+index 1148c555c4d3..b807cbff3790 100644
 --- a/fs/Makefile
 +++ b/fs/Makefile
-@@ -132,3 +132,4 @@ obj-$(CONFIG_CEPH_FS)		+= ceph/
+@@ -133,3 +133,4 @@ obj-$(CONFIG_CEPH_FS)		+= ceph/
  obj-$(CONFIG_PSTORE)		+= pstore/
  obj-$(CONFIG_EFIVAR_FS)		+= efivarfs/
  obj-$(CONFIG_EROFS_FS)		+= erofs/
@@ -65,10 +65,10 @@ index 000000000000..9e4328e79623
 +vboxsf-y := dir.o file.o utils.o vboxsf_wrappers.o super.o
 diff --git a/fs/vboxsf/dir.c b/fs/vboxsf/dir.c
 new file mode 100644
-index 000000000000..23739488c01d
+index 000000000000..dd147b490982
 --- /dev/null
 +++ b/fs/vboxsf/dir.c
-@@ -0,0 +1,418 @@
+@@ -0,0 +1,427 @@
 +// SPDX-License-Identifier: MIT
 +/*
 + * VirtualBox Guest Shared Folders support: Directory inode and file operations
@@ -172,7 +172,7 @@ index 000000000000..23739488c01d
 +	unsigned int d_type;
 +	loff_t i, cur = 0;
 +	ino_t fake_ino;
-+	size_t size;
++	void *end;
 +	int err;
 +
 +	list_for_each_entry(b, &sf_d->info_list, head) {
@@ -190,10 +190,16 @@ index 000000000000..23739488c01d
 +		 * a problem.
 +		 */
 +		for (i = 0, info = b->buf; i < ctx->pos - cur; i++) {
-+			size = offsetof(struct shfl_dirinfo, name.string) +
-+			       info->name.size;
-+			info = (struct shfl_dirinfo *)((uintptr_t)info + size);
++			end = &info->name.string.utf8[info->name.size];
++			/* Only happens if the host gives us corrupt data */
++			if (WARN_ON(end > (b->buf + b->used)))
++				return false;
++			info = end;
 +		}
++
++		end = &info->name.string.utf8[info->name.size];
++		if (WARN_ON(end > (b->buf + b->used)))
++			return false;
 +
 +		/* Info now points to the right entry, emit it. */
 +		d_type = vboxsf_get_d_type(info->info.attr.mode);
@@ -233,10 +239,13 @@ index 000000000000..23739488c01d
 +
 +static int vboxsf_dir_iterate(struct file *dir, struct dir_context *ctx)
 +{
-+	bool keep_iterating;
++	bool emitted;
 +
-+	for (keep_iterating = true; keep_iterating; ctx->pos += 1)
-+		keep_iterating = vboxsf_dir_emit(dir, ctx);
++	do {
++		emitted = vboxsf_dir_emit(dir, ctx);
++		if (emitted)
++			ctx->pos += 1;
++	} while (emitted);
 +
 +	return 0;
 +}
@@ -368,7 +377,7 @@ index 000000000000..23739488c01d
 +	struct vboxsf_inode *sf_parent_i = VBOXSF_I(parent);
 +	struct inode *inode = d_inode(dentry);
 +	struct shfl_string *path;
-+	uint32_t flags;
++	u32 flags;
 +	int err;
 +
 +	if (S_ISDIR(inode->i_mode))
@@ -489,10 +498,10 @@ index 000000000000..23739488c01d
 +};
 diff --git a/fs/vboxsf/file.c b/fs/vboxsf/file.c
 new file mode 100644
-index 000000000000..4b61ccf83fca
+index 000000000000..c4ab5996d97a
 --- /dev/null
 +++ b/fs/vboxsf/file.c
-@@ -0,0 +1,370 @@
+@@ -0,0 +1,379 @@
 +// SPDX-License-Identifier: MIT
 +/*
 + * VirtualBox Guest Shared Folders support: Regular file inode and file ops.
@@ -793,6 +802,10 @@ index 000000000000..4b61ccf83fca
 +	u8 *buf;
 +	int err;
 +
++	/* zero the stale part of the page if we did a short copy */
++	if (!PageUptodate(page) && copied < len)
++		zero_user(page, from + copied, len - copied);
++
 +	buf = kmap(page);
 +	err = vboxsf_write(sf_handle->root, sf_handle->handle,
 +			   pos, &nwritten, buf + from);
@@ -820,6 +833,11 @@ index 000000000000..4b61ccf83fca
 +	return nwritten;
 +}
 +
++/*
++ * Note simple_write_begin does not read the page from disk on partial writes
++ * this is ok since vboxsf_write_end only writes the written parts of the
++ * page and it does not call SetPageUptodate for partial writes.
++ */
 +const struct address_space_operations vboxsf_reg_aops = {
 +	.readpage = vboxsf_readpage,
 +	.writepage = vboxsf_writepage,
@@ -841,7 +859,7 @@ index 000000000000..4b61ccf83fca
 +
 +	path = vboxsf_path_from_dentry(sbi, dentry);
 +	if (IS_ERR(path))
-+		return (char *)path;
++		return ERR_CAST(path);
 +
 +	link = kzalloc(PATH_MAX, GFP_KERNEL);
 +	if (!link) {
@@ -865,7 +883,7 @@ index 000000000000..4b61ccf83fca
 +};
 diff --git a/fs/vboxsf/shfl_hostintf.h b/fs/vboxsf/shfl_hostintf.h
 new file mode 100644
-index 000000000000..01522166a863
+index 000000000000..aca829062c12
 --- /dev/null
 +++ b/fs/vboxsf/shfl_hostintf.h
 @@ -0,0 +1,901 @@
@@ -915,7 +933,7 @@ index 000000000000..01522166a863
 +	SHFL_FN_MAP_FOLDER = 17,	/* Map folder */
 +	SHFL_FN_READLINK = 18,		/* Read symlink dest (as of VBox 4.0) */
 +	SHFL_FN_SYMLINK = 19,		/* Create symlink (as of VBox 4.0) */
-+	SHFL_FN_SET_SYMLINKS = 20,	/* Ask host to show symlinks (as of 4.0) */
++	SHFL_FN_SET_SYMLINKS = 20,	/* Ask host to show symlinks (4.0+) */
 +};
 +
 +/* Root handles for a mapping are of type u32, Root handles are unique. */
@@ -1772,10 +1790,10 @@ index 000000000000..01522166a863
 +#endif
 diff --git a/fs/vboxsf/super.c b/fs/vboxsf/super.c
 new file mode 100644
-index 000000000000..f53d5ce823c4
+index 000000000000..b14ecd2948f4
 --- /dev/null
 +++ b/fs/vboxsf/super.c
-@@ -0,0 +1,493 @@
+@@ -0,0 +1,497 @@
 +// SPDX-License-Identifier: MIT
 +/*
 + * VirtualBox Guest Shared Folders support: Virtual File System.
@@ -1851,7 +1869,7 @@ index 000000000000..f53d5ce823c4
 +
 +	switch (opt) {
 +	case opt_nls:
-+		if (fc->purpose != FS_CONTEXT_FOR_MOUNT) {
++		if (ctx->nls_name || fc->purpose != FS_CONTEXT_FOR_MOUNT) {
 +			vbg_err("vboxsf: Cannot reconfigure nls option\n");
 +			return -EINVAL;
 +		}
@@ -1954,8 +1972,10 @@ index 000000000000..f53d5ce823c4
 +	/* Turn source into a shfl_string and map the folder */
 +	size = strlen(fc->source) + 1;
 +	folder_name = kmalloc(SHFLSTRING_HEADER_SIZE + size, GFP_KERNEL);
-+	if (!folder_name)
++	if (!folder_name) {
++		err = -ENOMEM;
 +		goto fail_free;
++	}
 +	folder_name->size = size;
 +	folder_name->length = size - 1;
 +	strlcpy(folder_name->string.utf8, fc->source, size);
@@ -2053,6 +2073,12 @@ index 000000000000..f53d5ce823c4
 +		ida_simple_remove(&vboxsf_bdi_ida, sbi->bdi_id);
 +	if (sbi->nls)
 +		unload_nls(sbi->nls);
++
++	/*
++	 * vboxsf_free_inode uses the idr, make sure all delayed rcu free
++	 * inodes are flushed.
++	 */
++	rcu_barrier();
 +	idr_destroy(&sbi->ino_idr);
 +	kfree(sbi);
 +}
@@ -2060,29 +2086,29 @@ index 000000000000..f53d5ce823c4
 +static int vboxsf_statfs(struct dentry *dentry, struct kstatfs *stat)
 +{
 +	struct super_block *sb = dentry->d_sb;
-+	struct shfl_volinfo SHFLVolumeInfo;
++	struct shfl_volinfo shfl_volinfo;
 +	struct vboxsf_sbi *sbi;
 +	u32 buf_len;
 +	int err;
 +
 +	sbi = VBOXSF_SBI(sb);
-+	buf_len = sizeof(SHFLVolumeInfo);
++	buf_len = sizeof(shfl_volinfo);
 +	err = vboxsf_fsinfo(sbi->root, 0, SHFL_INFO_GET | SHFL_INFO_VOLUME,
-+			    &buf_len, &SHFLVolumeInfo);
++			    &buf_len, &shfl_volinfo);
 +	if (err)
 +		return err;
 +
 +	stat->f_type = VBOXSF_SUPER_MAGIC;
-+	stat->f_bsize = SHFLVolumeInfo.bytes_per_allocation_unit;
++	stat->f_bsize = shfl_volinfo.bytes_per_allocation_unit;
 +
-+	do_div(SHFLVolumeInfo.total_allocation_bytes,
-+	       SHFLVolumeInfo.bytes_per_allocation_unit);
-+	stat->f_blocks = SHFLVolumeInfo.total_allocation_bytes;
++	do_div(shfl_volinfo.total_allocation_bytes,
++	       shfl_volinfo.bytes_per_allocation_unit);
++	stat->f_blocks = shfl_volinfo.total_allocation_bytes;
 +
-+	do_div(SHFLVolumeInfo.available_allocation_bytes,
-+	       SHFLVolumeInfo.bytes_per_allocation_unit);
-+	stat->f_bfree  = SHFLVolumeInfo.available_allocation_bytes;
-+	stat->f_bavail = SHFLVolumeInfo.available_allocation_bytes;
++	do_div(shfl_volinfo.available_allocation_bytes,
++	       shfl_volinfo.bytes_per_allocation_unit);
++	stat->f_bfree  = shfl_volinfo.available_allocation_bytes;
++	stat->f_bavail = shfl_volinfo.available_allocation_bytes;
 +
 +	stat->f_files = 1000;
 +	/*
@@ -2118,7 +2144,7 @@ index 000000000000..f53d5ce823c4
 +				  (SLAB_RECLAIM_ACCOUNT | SLAB_MEM_SPREAD |
 +				   SLAB_ACCOUNT),
 +				  vboxsf_inode_init_once);
-+	if (vboxsf_inode_cachep == NULL) {
++	if (!vboxsf_inode_cachep) {
 +		err = -ENOMEM;
 +		goto fail_nomem;
 +	}
@@ -2157,7 +2183,7 @@ index 000000000000..f53d5ce823c4
 +	return err;
 +}
 +
-+int vboxsf_parse_monolithic(struct fs_context *fc, void *data)
++static int vboxsf_parse_monolithic(struct fs_context *fc, void *data)
 +{
 +	char *options = data;
 +
@@ -2180,18 +2206,14 @@ index 000000000000..f53d5ce823c4
 +	if (err)
 +		return err;
 +
-+	return vfs_get_super(fc, vfs_get_independent_super, vboxsf_fill_super);
++	return get_tree_nodev(fc, vboxsf_fill_super);
 +}
 +
 +static int vboxsf_reconfigure(struct fs_context *fc)
 +{
 +	struct vboxsf_sbi *sbi = VBOXSF_SBI(fc->root->d_sb);
 +	struct vboxsf_fs_context *ctx = fc->fs_private;
-+	struct inode *iroot;
-+
-+	iroot = ilookup(fc->root->d_sb, 0);
-+	if (!iroot)
-+		return -ENOENT;
++	struct inode *iroot = fc->root->d_sb->s_root->d_inode;
 +
 +	/* Apply changed options to the root inode */
 +	sbi->o = ctx->o;
@@ -2271,10 +2293,10 @@ index 000000000000..f53d5ce823c4
 +MODULE_ALIAS_FS("vboxsf");
 diff --git a/fs/vboxsf/utils.c b/fs/vboxsf/utils.c
 new file mode 100644
-index 000000000000..191a6c485d27
+index 000000000000..96bd160da48b
 --- /dev/null
 +++ b/fs/vboxsf/utils.c
-@@ -0,0 +1,550 @@
+@@ -0,0 +1,551 @@
 +// SPDX-License-Identifier: MIT
 +/*
 + * VirtualBox Guest Shared Folders support: Utility functions.
@@ -2451,7 +2473,7 @@ index 000000000000..191a6c485d27
 +
 +int vboxsf_inode_revalidate(struct dentry *dentry)
 +{
-+	struct vboxsf_sbi *sbi = VBOXSF_SBI(dentry->d_sb);
++	struct vboxsf_sbi *sbi;
 +	struct vboxsf_inode *sf_i;
 +	struct shfl_fsobjinfo info;
 +	struct timespec64 prev_mtime;
@@ -2464,6 +2486,7 @@ index 000000000000..191a6c485d27
 +	inode = d_inode(dentry);
 +	prev_mtime = inode->i_mtime;
 +	sf_i = VBOXSF_I(inode);
++	sbi = VBOXSF_SBI(dentry->d_sb);
 +	if (!sf_i->force_restat) {
 +		if (time_before(jiffies, dentry->d_time + sbi->o.ttl))
 +			return 0;
@@ -2519,7 +2542,7 @@ index 000000000000..191a6c485d27
 +	struct vboxsf_sbi *sbi = VBOXSF_SBI(dentry->d_sb);
 +	struct shfl_createparms params = {};
 +	struct shfl_fsobjinfo info = {};
-+	uint32_t buf_len;
++	u32 buf_len;
 +	int err;
 +
 +	params.handle = SHFL_HANDLE_NIL;
@@ -2574,8 +2597,8 @@ index 000000000000..191a6c485d27
 +
 +		buf_len = sizeof(info);
 +		err = vboxsf_fsinfo(sbi->root, params.handle,
-+				   SHFL_INFO_SET | SHFL_INFO_FILE, &buf_len,
-+				   &info);
++				    SHFL_INFO_SET | SHFL_INFO_FILE, &buf_len,
++				    &info);
 +		if (err) {
 +			vboxsf_close(sbi->root, params.handle);
 +			return err;
@@ -2592,8 +2615,8 @@ index 000000000000..191a6c485d27
 +		info.size = iattr->ia_size;
 +		buf_len = sizeof(info);
 +		err = vboxsf_fsinfo(sbi->root, params.handle,
-+				   SHFL_INFO_SET | SHFL_INFO_SIZE, &buf_len,
-+				   &info);
++				    SHFL_INFO_SET | SHFL_INFO_SIZE, &buf_len,
++				    &info);
 +		if (err) {
 +			vboxsf_close(sbi->root, params.handle);
 +			return err;
@@ -2634,7 +2657,7 @@ index 000000000000..191a6c485d27
 +	path = dentry_path_raw(dentry, buf, PATH_MAX);
 +	if (IS_ERR(path)) {
 +		__putname(buf);
-+		return (struct shfl_string *)path;
++		return ERR_CAST(path);
 +	}
 +	path_len = strlen(path);
 +
@@ -3204,7 +3227,7 @@ index 000000000000..bfc78a097dae
 +}
 diff --git a/fs/vboxsf/vfsmod.h b/fs/vboxsf/vfsmod.h
 new file mode 100644
-index 000000000000..ae3cd0bd7460
+index 000000000000..18f95b00fc33
 --- /dev/null
 +++ b/fs/vboxsf/vfsmod.h
 @@ -0,0 +1,137 @@
@@ -3220,7 +3243,6 @@ index 000000000000..ae3cd0bd7460
 +
 +#include <linux/backing-dev.h>
 +#include <linux/idr.h>
-+#include <linux/version.h>
 +#include "shfl_hostintf.h"
 +
 +#define DIR_BUFFER_SIZE SZ_16K
@@ -3251,7 +3273,7 @@ index 000000000000..ae3cd0bd7460
 +	struct vboxsf_options o;
 +	struct shfl_fsobjinfo root_info;
 +	struct idr ino_idr;
-+	spinlock_t ino_idr_lock;
++	spinlock_t ino_idr_lock; /* This protects ino_idr */
 +	struct nls_table *nls;
 +	u32 next_generation;
 +	u32 root;
@@ -3264,6 +3286,7 @@ index 000000000000..ae3cd0bd7460
 +	int force_restat;
 +	/* list of open handles for this inode + lock protecting it */
 +	struct list_head handle_list;
++	/* This mutex protects handle_list accesses */
 +	struct mutex handle_list_mutex;
 +	/* The VFS inode struct */
 +	struct inode vfs_inode;

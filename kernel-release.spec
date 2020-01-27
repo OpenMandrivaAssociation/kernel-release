@@ -354,7 +354,7 @@ Patch148:	saa716x-5.4.patch
 # https://patchwork.kernel.org/patch/10906949/
 # For newer versions, check
 # https://patchwork.kernel.org/project/linux-fsdevel/list/?submitter=582
-Patch300:	v15-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.diff
+Patch300:	v19-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.diff
 Source300:	virtualbox-kernel-5.3.patch
 Source301:	vbox-6.1-fix-build-on-znver1-hosts.patch
 
@@ -1216,7 +1216,6 @@ $DevelRoot/crypto
 $DevelRoot/certs
 $DevelRoot/drivers
 $DevelRoot/fs
-$DevelRoot/include/Kbuild
 $DevelRoot/include/acpi
 $DevelRoot/include/asm-generic
 $DevelRoot/include/clocksource
@@ -1226,6 +1225,7 @@ $DevelRoot/include/drm
 $DevelRoot/include/dt-bindings
 $DevelRoot/include/generated
 $DevelRoot/include/keys
+$DevelRoot/include/kunit
 $DevelRoot/include/kvm
 $DevelRoot/include/linux
 $DevelRoot/include/math-emu
@@ -1756,7 +1756,6 @@ cd -
 %{_kerneldir}/drivers
 %{_kerneldir}/fs
 %{_kerneldir}/certs/*
-%{_kerneldir}/include/Kbuild
 %{_kerneldir}/include/acpi
 %{_kerneldir}/include/asm-generic
 %{_kerneldir}/include/clocksource
@@ -1764,6 +1763,7 @@ cd -
 %{_kerneldir}/include/drm
 %{_kerneldir}/include/dt-bindings
 %{_kerneldir}/include/keys
+%{_kerneldir}/include/kunit
 %{_kerneldir}/include/kvm
 %{_kerneldir}/include/linux
 %{_kerneldir}/include/math-emu
