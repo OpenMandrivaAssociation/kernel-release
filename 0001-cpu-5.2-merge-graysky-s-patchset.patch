@@ -1,21 +1,68 @@
-From 520f8400d206459c9dcedba70dac8d8c43f50a88 Mon Sep 17 00:00:00 2001
-From: Oleksandr Natalenko <oleksandr@natalenko.name>
-Date: Sat, 1 Dec 2018 14:14:37 +0100
-Subject: [PATCH 1/2] cpu-5.2: merge graysky's patchset
-
-Signed-off-by: Oleksandr Natalenko <oleksandr@natalenko.name>
----
- arch/x86/Kconfig.cpu          | 249 ++++++++++++++++++++++++++++++----
- arch/x86/Makefile             |  39 +++++-
- arch/x86/Makefile_32.cpu      |  26 +++-
- arch/x86/include/asm/module.h |  44 ++++++
- 4 files changed, 323 insertions(+), 35 deletions(-)
-
-diff --git a/arch/x86/Kconfig.cpu b/arch/x86/Kconfig.cpu
-index 6adce15268bd..f8612b07d32f 100644
---- a/arch/x86/Kconfig.cpu
-+++ b/arch/x86/Kconfig.cpu
-@@ -116,6 +116,7 @@ config MPENTIUMM
+diff -up linux-5.5-rc1/arch/x86/include/asm/module.h.17~ linux-5.5-rc1/arch/x86/include/asm/module.h
+--- linux-5.5-rc1/arch/x86/include/asm/module.h.17~	2019-12-08 23:57:55.000000000 +0100
++++ linux-5.5-rc1/arch/x86/include/asm/module.h	2019-12-10 17:00:36.851313621 +0100
+@@ -27,6 +27,30 @@ struct mod_arch_specific {
+ #define MODULE_PROC_FAMILY "586MMX "
+ #elif defined CONFIG_MCORE2
+ #define MODULE_PROC_FAMILY "CORE2 "
++#elif defined CONFIG_MNATIVE
++#define MODULE_PROC_FAMILY "NATIVE "
++#elif defined CONFIG_MNEHALEM
++#define MODULE_PROC_FAMILY "NEHALEM "
++#elif defined CONFIG_MWESTMERE
++#define MODULE_PROC_FAMILY "WESTMERE "
++#elif defined CONFIG_MSILVERMONT
++#define MODULE_PROC_FAMILY "SILVERMONT "
++#elif defined CONFIG_MSANDYBRIDGE
++#define MODULE_PROC_FAMILY "SANDYBRIDGE "
++#elif defined CONFIG_MIVYBRIDGE
++#define MODULE_PROC_FAMILY "IVYBRIDGE "
++#elif defined CONFIG_MHASWELL
++#define MODULE_PROC_FAMILY "HASWELL "
++#elif defined CONFIG_MBROADWELL
++#define MODULE_PROC_FAMILY "BROADWELL "
++#elif defined CONFIG_MSKYLAKE
++#define MODULE_PROC_FAMILY "SKYLAKE "
++#elif defined CONFIG_MSKYLAKEX
++#define MODULE_PROC_FAMILY "SKYLAKEX "
++#elif defined CONFIG_MCANNONLAKE
++#define MODULE_PROC_FAMILY "CANNONLAKE "
++#elif defined CONFIG_MICELAKE
++#define MODULE_PROC_FAMILY "ICELAKE "
+ #elif defined CONFIG_MATOM
+ #define MODULE_PROC_FAMILY "ATOM "
+ #elif defined CONFIG_M686
+@@ -45,6 +69,26 @@ struct mod_arch_specific {
+ #define MODULE_PROC_FAMILY "K7 "
+ #elif defined CONFIG_MK8
+ #define MODULE_PROC_FAMILY "K8 "
++#elif defined CONFIG_MK8SSE3
++#define MODULE_PROC_FAMILY "K8SSE3 "
++#elif defined CONFIG_MK10
++#define MODULE_PROC_FAMILY "K10 "
++#elif defined CONFIG_MBARCELONA
++#define MODULE_PROC_FAMILY "BARCELONA "
++#elif defined CONFIG_MBOBCAT
++#define MODULE_PROC_FAMILY "BOBCAT "
++#elif defined CONFIG_MBULLDOZER
++#define MODULE_PROC_FAMILY "BULLDOZER "
++#elif defined CONFIG_MPILEDRIVER
++#define MODULE_PROC_FAMILY "PILEDRIVER "
++#elif defined CONFIG_MSTEAMROLLER
++#define MODULE_PROC_FAMILY "STEAMROLLER "
++#elif defined CONFIG_MJAGUAR
++#define MODULE_PROC_FAMILY "JAGUAR "
++#elif defined CONFIG_MEXCAVATOR
++#define MODULE_PROC_FAMILY "EXCAVATOR "
++#elif defined CONFIG_MZEN
++#define MODULE_PROC_FAMILY "ZEN "
+ #elif defined CONFIG_MELAN
+ #define MODULE_PROC_FAMILY "ELAN "
+ #elif defined CONFIG_MCRUSOE
+diff -up linux-5.5-rc1/arch/x86/Kconfig.cpu.17~ linux-5.5-rc1/arch/x86/Kconfig.cpu
+--- linux-5.5-rc1/arch/x86/Kconfig.cpu.17~	2019-12-08 23:57:55.000000000 +0100
++++ linux-5.5-rc1/arch/x86/Kconfig.cpu	2019-12-10 17:02:11.581317798 +0100
+@@ -123,6 +123,7 @@ config MPENTIUMM
  config MPENTIUM4
  	bool "Pentium-4/Celeron(P4-based)/Pentium-4 M/older Xeon"
  	depends on X86_32
@@ -23,7 +70,7 @@ index 6adce15268bd..f8612b07d32f 100644
  	---help---
  	  Select this for Intel Pentium 4 chips.  This includes the
  	  Pentium 4, Pentium D, P4-based Celeron and Xeon, and
-@@ -148,9 +149,8 @@ config MPENTIUM4
+@@ -155,9 +156,8 @@ config MPENTIUM4
  		-Paxville
  		-Dempsey
  
@@ -34,7 +81,7 @@ index 6adce15268bd..f8612b07d32f 100644
  	depends on X86_32
  	---help---
  	  Select this for an AMD K6-family processor.  Enables use of
-@@ -158,7 +158,7 @@ config MK6
+@@ -165,7 +165,7 @@ config MK6
  	  flags to GCC.
  
  config MK7
@@ -43,7 +90,7 @@ index 6adce15268bd..f8612b07d32f 100644
  	depends on X86_32
  	---help---
  	  Select this for an AMD Athlon K7-family processor.  Enables use of
-@@ -166,12 +166,83 @@ config MK7
+@@ -173,12 +173,83 @@ config MK7
  	  flags to GCC.
  
  config MK8
@@ -128,7 +175,7 @@ index 6adce15268bd..f8612b07d32f 100644
  config MCRUSOE
  	bool "Crusoe"
  	depends on X86_32
-@@ -253,6 +324,7 @@ config MVIAC7
+@@ -260,6 +331,7 @@ config MVIAC7
  
  config MPSC
  	bool "Intel P4 / older Netburst based Xeon"
@@ -136,7 +183,7 @@ index 6adce15268bd..f8612b07d32f 100644
  	depends on X86_64
  	---help---
  	  Optimize for Intel Pentium 4, Pentium D and older Nocona/Dempsey
-@@ -262,8 +334,19 @@ config MPSC
+@@ -269,8 +341,19 @@ config MPSC
  	  using the cpu family field
  	  in /proc/cpuinfo. Family 15 is an older Xeon, Family 6 a newer one.
  
@@ -157,7 +204,7 @@ index 6adce15268bd..f8612b07d32f 100644
  	---help---
  
  	  Select this for Intel Core 2 and newer Core 2 Xeons (Xeon 51xx and
-@@ -271,14 +354,106 @@ config MCORE2
+@@ -278,14 +361,106 @@ config MCORE2
  	  family in /proc/cpuinfo. Newer ones have 6 and older ones 15
  	  (not a typo)
  
@@ -270,7 +317,7 @@ index 6adce15268bd..f8612b07d32f 100644
  
  config GENERIC_CPU
  	bool "Generic-x86-64"
-@@ -287,6 +462,19 @@ config GENERIC_CPU
+@@ -294,6 +469,19 @@ config GENERIC_CPU
  	  Generic x86-64 CPU.
  	  Run equally well on all x86-64 CPUs.
  
@@ -290,16 +337,16 @@ index 6adce15268bd..f8612b07d32f 100644
  endchoice
  
  config X86_GENERIC
-@@ -311,7 +499,7 @@ config X86_INTERNODE_CACHE_SHIFT
+@@ -318,7 +506,7 @@ config X86_INTERNODE_CACHE_SHIFT
  config X86_L1_CACHE_SHIFT
  	int
  	default "7" if MPENTIUM4 || MPSC
 -	default "6" if MK7 || MK8 || MPENTIUMM || MCORE2 || MATOM || MVIAC7 || X86_GENERIC || GENERIC_CPU
 +	default "6" if MK7 || MK8 || MK8SSE3 || MK10 || MBARCELONA || MBOBCAT || MBULLDOZER || MPILEDRIVER || MSTEAMROLLER || MEXCAVATOR || MZEN || MJAGUAR || MPENTIUMM || MCORE2 || MNEHALEM || MWESTMERE || MSILVERMONT || MSANDYBRIDGE || MIVYBRIDGE || MHASWELL || MBROADWELL || MSKYLAKE || MSKYLAKEX || MCANNONLAKE || MICELAKE || MNATIVE || MATOM || MVIAC7 || X86_GENERIC || GENERIC_CPU
- 	default "4" if MELAN || M486 || MGEODEGX1
+ 	default "4" if MELAN || M486SX || M486 || MGEODEGX1
  	default "5" if MWINCHIP3D || MWINCHIPC6 || MCRUSOE || MEFFICEON || MCYRIXIII || MK6 || MPENTIUMIII || MPENTIUMII || M686 || M586MMX || M586TSC || M586 || MVIAC3_2 || MGEODE_LX
  
-@@ -329,35 +517,36 @@ config X86_ALIGNMENT_16
+@@ -336,35 +524,36 @@ config X86_ALIGNMENT_16
  
  config X86_INTEL_USERCOPY
  	def_bool y
@@ -353,7 +400,7 @@ index 6adce15268bd..f8612b07d32f 100644
  
  config X86_CMPXCHG64
  	def_bool y
-@@ -367,7 +556,7 @@ config X86_CMPXCHG64
+@@ -374,7 +563,7 @@ config X86_CMPXCHG64
  # generates cmov.
  config X86_CMOV
  	def_bool y
@@ -362,11 +409,10 @@ index 6adce15268bd..f8612b07d32f 100644
  
  config X86_MINIMUM_CPU_FAMILY
  	int
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 56e748a7679f..29eb64851528 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -118,13 +118,46 @@ else
+diff -up linux-5.5-rc1/arch/x86/Makefile.17~ linux-5.5-rc1/arch/x86/Makefile
+--- linux-5.5-rc1/arch/x86/Makefile.17~	2019-12-08 23:57:55.000000000 +0100
++++ linux-5.5-rc1/arch/x86/Makefile	2019-12-10 17:00:36.851313621 +0100
+@@ -119,13 +119,46 @@ else
  	KBUILD_CFLAGS += $(call cc-option,-mskip-rax-setup)
  
          # FIXME - should be integrated in Makefile.cpu (Makefile_32.cpu)
@@ -416,11 +462,10 @@ index 56e748a7679f..29eb64851528 100644
          cflags-$(CONFIG_GENERIC_CPU) += $(call cc-option,-mtune=generic)
          KBUILD_CFLAGS += $(cflags-y)
  
-diff --git a/arch/x86/Makefile_32.cpu b/arch/x86/Makefile_32.cpu
-index 1f5faf8606b4..14a6d19995cc 100644
---- a/arch/x86/Makefile_32.cpu
-+++ b/arch/x86/Makefile_32.cpu
-@@ -23,7 +23,18 @@ cflags-$(CONFIG_MK6)		+= -march=k6
+diff -up linux-5.5-rc1/arch/x86/Makefile_32.cpu.17~ linux-5.5-rc1/arch/x86/Makefile_32.cpu
+--- linux-5.5-rc1/arch/x86/Makefile_32.cpu.17~	2019-12-08 23:57:55.000000000 +0100
++++ linux-5.5-rc1/arch/x86/Makefile_32.cpu	2019-12-10 17:00:36.851313621 +0100
+@@ -24,7 +24,18 @@ cflags-$(CONFIG_MK6)		+= -march=k6
  # Please note, that patches that add -march=athlon-xp and friends are pointless.
  # They make zero difference whatsosever to performance at this time.
  cflags-$(CONFIG_MK7)		+= -march=athlon
@@ -439,7 +484,7 @@ index 1f5faf8606b4..14a6d19995cc 100644
  cflags-$(CONFIG_MCRUSOE)	+= -march=i686 -falign-functions=0 -falign-jumps=0 -falign-loops=0
  cflags-$(CONFIG_MEFFICEON)	+= -march=i686 $(call tune,pentium3) -falign-functions=0 -falign-jumps=0 -falign-loops=0
  cflags-$(CONFIG_MWINCHIPC6)	+= $(call cc-option,-march=winchip-c6,-march=i586)
-@@ -32,8 +43,19 @@ cflags-$(CONFIG_MCYRIXIII)	+= $(call cc-option,-march=c3,-march=i486) -falign-fu
+@@ -33,8 +44,19 @@ cflags-$(CONFIG_MCYRIXIII)	+= $(call cc-
  cflags-$(CONFIG_MVIAC3_2)	+= $(call cc-option,-march=c3-2,-march=i686)
  cflags-$(CONFIG_MVIAC7)		+= -march=i686
  cflags-$(CONFIG_MCORE2)		+= -march=i686 $(call tune,core2)
@@ -461,68 +506,3 @@ index 1f5faf8606b4..14a6d19995cc 100644
  
  # AMD Elan support
  cflags-$(CONFIG_MELAN)		+= -march=i486
-diff --git a/arch/x86/include/asm/module.h b/arch/x86/include/asm/module.h
-index 7948a17febb4..44b776297dc3 100644
---- a/arch/x86/include/asm/module.h
-+++ b/arch/x86/include/asm/module.h
-@@ -25,6 +25,30 @@ struct mod_arch_specific {
- #define MODULE_PROC_FAMILY "586MMX "
- #elif defined CONFIG_MCORE2
- #define MODULE_PROC_FAMILY "CORE2 "
-+#elif defined CONFIG_MNATIVE
-+#define MODULE_PROC_FAMILY "NATIVE "
-+#elif defined CONFIG_MNEHALEM
-+#define MODULE_PROC_FAMILY "NEHALEM "
-+#elif defined CONFIG_MWESTMERE
-+#define MODULE_PROC_FAMILY "WESTMERE "
-+#elif defined CONFIG_MSILVERMONT
-+#define MODULE_PROC_FAMILY "SILVERMONT "
-+#elif defined CONFIG_MSANDYBRIDGE
-+#define MODULE_PROC_FAMILY "SANDYBRIDGE "
-+#elif defined CONFIG_MIVYBRIDGE
-+#define MODULE_PROC_FAMILY "IVYBRIDGE "
-+#elif defined CONFIG_MHASWELL
-+#define MODULE_PROC_FAMILY "HASWELL "
-+#elif defined CONFIG_MBROADWELL
-+#define MODULE_PROC_FAMILY "BROADWELL "
-+#elif defined CONFIG_MSKYLAKE
-+#define MODULE_PROC_FAMILY "SKYLAKE "
-+#elif defined CONFIG_MSKYLAKEX
-+#define MODULE_PROC_FAMILY "SKYLAKEX "
-+#elif defined CONFIG_MCANNONLAKE
-+#define MODULE_PROC_FAMILY "CANNONLAKE "
-+#elif defined CONFIG_MICELAKE
-+#define MODULE_PROC_FAMILY "ICELAKE "
- #elif defined CONFIG_MATOM
- #define MODULE_PROC_FAMILY "ATOM "
- #elif defined CONFIG_M686
-@@ -43,6 +67,26 @@ struct mod_arch_specific {
- #define MODULE_PROC_FAMILY "K7 "
- #elif defined CONFIG_MK8
- #define MODULE_PROC_FAMILY "K8 "
-+#elif defined CONFIG_MK8SSE3
-+#define MODULE_PROC_FAMILY "K8SSE3 "
-+#elif defined CONFIG_MK10
-+#define MODULE_PROC_FAMILY "K10 "
-+#elif defined CONFIG_MBARCELONA
-+#define MODULE_PROC_FAMILY "BARCELONA "
-+#elif defined CONFIG_MBOBCAT
-+#define MODULE_PROC_FAMILY "BOBCAT "
-+#elif defined CONFIG_MBULLDOZER
-+#define MODULE_PROC_FAMILY "BULLDOZER "
-+#elif defined CONFIG_MPILEDRIVER
-+#define MODULE_PROC_FAMILY "PILEDRIVER "
-+#elif defined CONFIG_MSTEAMROLLER
-+#define MODULE_PROC_FAMILY "STEAMROLLER "
-+#elif defined CONFIG_MJAGUAR
-+#define MODULE_PROC_FAMILY "JAGUAR "
-+#elif defined CONFIG_MEXCAVATOR
-+#define MODULE_PROC_FAMILY "EXCAVATOR "
-+#elif defined CONFIG_MZEN
-+#define MODULE_PROC_FAMILY "ZEN "
- #elif defined CONFIG_MELAN
- #define MODULE_PROC_FAMILY "ELAN "
- #elif defined CONFIG_MCRUSOE
--- 
-2.22.0.214.g8dca754b1e
-
