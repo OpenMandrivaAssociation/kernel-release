@@ -17,8 +17,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	4
-%define sublevel	14
+%define patchlevel	5
+%define sublevel	0
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -65,7 +65,7 @@
 # Build defines
 %bcond_with build_doc
 %ifarch %{ix86} %{x86_64}
-%bcond_without uksm
+%bcond_with uksm
 %else
 %bcond_with uksm
 %endif
@@ -312,7 +312,7 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 # brokes armx builds
 Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.4.patch
 # Sometimes other people are ahead of upstream porting to new releases...
-# No UKSM for 5.2-rc yet...
+# No UKSM for 5.5 yet... :/
 #Patch120:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf/0001-uksm-5.1-initial-submission.patch
 #Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf-fix/0001-uksm-5.1-apply-52d1e606ee733.patch
 %endif
@@ -323,8 +323,6 @@ Patch126:	v2-1-2-lib-Add-support-for-ZSTD-compressed-kernel.patch
 # https://patchwork.kernel.org/patch/10003011/
 Patch127:	v2-2-2-x86-Add-support-for-ZSTD-compressed-kernel.patch
 %endif
-
-Patch133:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/drop_ancient-and-wrong-msg.patch
 
 ### Additional hardware support
 ### TV tuners:
@@ -386,7 +384,6 @@ Patch403:	0105-pci-pme-wakeups.patch
 # Incompatible with UKSM
 #Patch404:	0106-ksm-wakeups.patch
 Patch405:	0107-intel_idle-tweak-cpuidle-cstates.patch
-Patch406:	0110-fs-ext4-fsync-optimize-double-fsync-a-bunch.patch
 # Not necessarily a good idea -- not all CPU cores are
 # guaranteed to be the same (e.g. big.LITTLE)
 %ifarch %{ix86} %{x86_64}
