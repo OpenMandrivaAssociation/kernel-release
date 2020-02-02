@@ -7,9 +7,6 @@
 # (tpg) try to speed up things
 %global optflags %{optflags} -O3
 
-# While perf comes with python2 scripts
-%define _python_bytecompile_build 0
-
 # (crazy) , well that new way of doing buil-id symlinks
 # does not seems to work, see:
 # https://issues.openmandriva.org/show_bug.cgi?id=2400
@@ -20,8 +17,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	4
-%define sublevel	13
+%define patchlevel	5
+%define sublevel	1
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -68,7 +65,7 @@
 # Build defines
 %bcond_with build_doc
 %ifarch %{ix86} %{x86_64}
-%bcond_without uksm
+%bcond_with uksm
 %else
 %bcond_with uksm
 %endif
@@ -315,7 +312,7 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 # brokes armx builds
 Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.4.patch
 # Sometimes other people are ahead of upstream porting to new releases...
-# No UKSM for 5.2-rc yet...
+# No UKSM for 5.5 yet... :/
 #Patch120:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf/0001-uksm-5.1-initial-submission.patch
 #Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf-fix/0001-uksm-5.1-apply-52d1e606ee733.patch
 %endif
@@ -326,8 +323,6 @@ Patch126:	v2-1-2-lib-Add-support-for-ZSTD-compressed-kernel.patch
 # https://patchwork.kernel.org/patch/10003011/
 Patch127:	v2-2-2-x86-Add-support-for-ZSTD-compressed-kernel.patch
 %endif
-
-Patch133:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/drop_ancient-and-wrong-msg.patch
 
 ### Additional hardware support
 ### TV tuners:
@@ -359,7 +354,7 @@ Patch148:	saa716x-5.4.patch
 # https://patchwork.kernel.org/patch/10906949/
 # For newer versions, check
 # https://patchwork.kernel.org/project/linux-fsdevel/list/?submitter=582
-Patch300:	v15-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.diff
+Patch300:	v19-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.diff
 Source300:	virtualbox-kernel-5.3.patch
 Source301:	vbox-6.1-fix-build-on-znver1-hosts.patch
 
@@ -389,7 +384,6 @@ Patch403:	0105-pci-pme-wakeups.patch
 # Incompatible with UKSM
 #Patch404:	0106-ksm-wakeups.patch
 Patch405:	0107-intel_idle-tweak-cpuidle-cstates.patch
-Patch406:	0110-fs-ext4-fsync-optimize-double-fsync-a-bunch.patch
 # Not necessarily a good idea -- not all CPU cores are
 # guaranteed to be the same (e.g. big.LITTLE)
 %ifarch %{ix86} %{x86_64}
@@ -514,7 +508,7 @@ BuildRequires:	pkgconfig(libnewt)
 BuildRequires:	perl-devel
 # BuildRequires:	perl(ExtUtils::Embed)
 BuildRequires:	pkgconfig(gtk+-2.0)
-BuildRequires:	pkgconfig(python2)
+BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(zlib)
 %endif
 
@@ -986,7 +980,6 @@ chmod 755 tools/objtool/sync-check.sh
 ############################################################
 # Make sure we don't use gold
 export LD="%{_target_platform}-ld.bfd"
-export PYTHON=%{__python2}
 
 ############################################################
 ###  Linker end2 > Check point to build for omv or rosa ###
@@ -1223,7 +1216,6 @@ $DevelRoot/crypto
 $DevelRoot/certs
 $DevelRoot/drivers
 $DevelRoot/fs
-$DevelRoot/include/Kbuild
 $DevelRoot/include/acpi
 $DevelRoot/include/asm-generic
 $DevelRoot/include/clocksource
@@ -1233,6 +1225,7 @@ $DevelRoot/include/drm
 $DevelRoot/include/dt-bindings
 $DevelRoot/include/generated
 $DevelRoot/include/keys
+$DevelRoot/include/kunit
 $DevelRoot/include/kvm
 $DevelRoot/include/linux
 $DevelRoot/include/math-emu
@@ -1567,8 +1560,8 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 ### Linker start3 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_perf}
-%{smake} -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%{__cc} PYTHON=%{__python2} WERROR=0 prefix=%{_prefix} all
-%{smake} -C tools/perf -s CC=%{__cc} prefix=%{_prefix} PYTHON=%{__python2} man
+%{smake} -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%{__cc} WERROR=0 prefix=%{_prefix} all
+%{smake} -C tools/perf -s CC=%{__cc} prefix=%{_prefix} man
 %endif
 
 %if %{with build_cpupower}
@@ -1656,10 +1649,10 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 %if %{with build_perf}
 
 # perf tool binary and supporting scripts/binaries
-make -C tools/perf -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__python2} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
+make -C tools/perf -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
 
 # perf man pages (note: implicit rpm magic compresses them later)
-make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 PYTHON=%{__python2} HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
+make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
 %endif
 
 ############################################################
@@ -1763,7 +1756,6 @@ cd -
 %{_kerneldir}/drivers
 %{_kerneldir}/fs
 %{_kerneldir}/certs/*
-%{_kerneldir}/include/Kbuild
 %{_kerneldir}/include/acpi
 %{_kerneldir}/include/asm-generic
 %{_kerneldir}/include/clocksource
@@ -1771,6 +1763,7 @@ cd -
 %{_kerneldir}/include/drm
 %{_kerneldir}/include/dt-bindings
 %{_kerneldir}/include/keys
+%{_kerneldir}/include/kunit
 %{_kerneldir}/include/kvm
 %{_kerneldir}/include/linux
 %{_kerneldir}/include/math-emu
