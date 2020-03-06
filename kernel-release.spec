@@ -380,7 +380,7 @@ Patch802:	https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e1861315
 # FIXME re-enable when ported to 5.3
 #Patch803:	http://ck.kolivas.org/patches/muqss/5.0/5.4/0001-MultiQueue-Skiplist-Scheduler-v0.196.patch
 # (bero) And make it compatible with modular binder
-Patch804:	MuQSS-export-can_nice-for-binder.patch
+#Patch804:	MuQSS-export-can_nice-for-binder.patch
 # (crazy) need to know what function() breaks on nvme failures
 Patch809:	nvme-pci-more-info.patch
 # ( crazy ) this one is adding be_silent mod parameter to acer-wmi
