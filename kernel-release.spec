@@ -18,7 +18,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	5
-%define sublevel	4
+%define sublevel	9
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -225,48 +225,11 @@ Source90:	https://cdn.kernel.org/pub/linux/kernel/v%(echo %{version}|cut -d. -f1
 Patch2:		die-floppy-die.patch
 Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch4:		linux-4.7-intel-dvi-duallink.patch
-Patch5:		linux-4.8.1-buildfix.patch
 Patch6:		linux-5.2.9-riscv-compile.patch
 # Work around rpm dependency generator screaming about
 # error: Illegal char ']' (0x5d) in: 1.2.1[50983]_custom
 # caused by aacraid versioning ("1.2.1[50983]-custom")
 Patch7:		aacraid-dont-freak-out-dependency-generator.patch
-
-%if %{with clang}
-# Patches to make it build with clang
-Patch1000:	0001-kbuild-LLVMLinux-Set-compiler-flags-for-clang.patch
-Patch1001:	0002-fs-LLVMLinux-Remove-warning-from-COMPATIBLE_IOCTL.patch
-Patch1002:	0003-kbuild-LLVMLinux-Add-support-for-generating-LLVM-bit.patch
-Patch1003:	0004-kbuild-LLVMLinux-Make-asm-offset-generation-work-wit.patch
-Patch1004:	0005-md-sysfs-LLVMLinux-Remove-nested-function-from-bcach.patch
-Patch1005:	0006-apparmor-LLVMLinux-Remove-VLAIS.patch
-Patch1006:	0007-exofs-LLVMLinux-Remove-VLAIS-from-exofs-FIXME-Check-.patch
-Patch1007:	0008-md-raid10-LLVMLinux-Remove-VLAIS-from-raid10-driver.patch
-Patch1008:	0009-fs-nfs-LLVMLinux-Remove-VLAIS-from-nfs.patch
-Patch1009:	0010-net-wimax-i2400-LLVMLinux-Remove-VLAIS-from-wimax-i2.patch
-Patch1010:	0011-Kbuild-LLVMLinux-Use-Oz-instead-of-Os-when-using-cla.patch
-Patch1011:	0012-WORKAROUND-x86-boot-LLVMLinux-Work-around-clang-PR39.patch
-Patch1012:	0013-DO-NOT-UPSTREAM-xen-LLVMLinux-Remove-VLAIS-from-xen-.patch
-Patch1013:	0014-DO-NOT-UPSTREAM-arm-LLVMLinux-Provide-__aeabi_-symbo.patch
-Patch1014:	0015-DO-NOT-UPSTREAM-arm-firmware-LLVMLinux-replace-naked.patch
-Patch1015:	0016-arm-LLVMLinux-Remove-unreachable-from-naked-function.patch
-Patch1016:	0017-MIPS-LLVMLinux-Fix-a-cast-to-type-not-present-in-uni.patch
-Patch1017:	0018-MIPS-LLVMLinux-Fix-an-inline-asm-input-output-type-m.patch
-Patch1018:	0019-MIPS-LLVMLinux-Silence-variable-self-assignment-warn.patch
-Patch1019:	0020-MIPS-LLVMLinux-Silence-unicode-warnings-when-preproc.patch
-Patch1020:	0021-Don-t-use-attributes-error-and-warning-with-clang.patch
-Patch1021:	0022-Fix-undefined-references-to-acpi_idle_driver-on-aarc.patch
-Patch1022:	0023-HACK-firmware-LLVMLinux-fix-EFI-libstub-with-clang.patch
-Patch1023:	0024-aarch64-crypto-LLVMLinux-Fix-inline-assembly-for-cla.patch
-Patch1024:	0025-aarch64-LLVMLinux-Make-spin_lock_prefetch-asm-code-c.patch
-Patch1025:	0026-LLVMLinux-Don-t-use-attribute-externally_visible-whe.patch
-Patch1026:	0027-x86-crypto-LLVMLinux-Fix-building-x86_64-AES-extensi.patch
-Patch1027:	0028-x86-LLVMLinux-Qualify-mul-as-mulq-to-make-clang-happ.patch
-Patch1028:	0029-kbuild-LLVMLinux-Add-Werror-to-cc-option-in-order-to.patch
-Patch1029:	0030-x86-kbuild-LLVMLinux-Check-for-compiler-support-of-f.patch
-#Patch1030:	0031-x86-cmpxchg-break.patch
-Patch1031:	0001-Fix-for-compilation-with-clang.patch
-%endif
 
 # Bootsplash system
 # (tpg) disable it for now 2018-11-07
@@ -342,6 +305,14 @@ Patch146:	saa716x-4.15.patch
 Patch147:	saa716x-linux-4.19.patch
 Patch148:	saa716x-5.4.patch
 
+# Additional WiFi drivers taken from the Endless kernel
+# git clone https://github.com/endlessm/linux.git
+# cd linux
+# tar cf extra-wifi-drivers-`date +%Y%m%d`.tar drivers/net/wireless/rtl8*
+# zstd -19 extra-wifi-drivers*.tar
+Source200:      extra-wifi-drivers-20200301.tar.zst
+Patch201:       extra-wifi-drivers-compile.patch
+
 # Lima driver for ARM Mali graphics chips
 # Generated from https://gitlab.freedesktop.org/lima/linux.git
 # using git diff v5.1..lima/lima-5.1
@@ -407,9 +378,9 @@ Patch801:	https://gitweb.frugalware.org/wip_kernel/raw/86234abea5e625043153f6b82
 Patch802:	https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e18613151cc81b4c0cf6e22/source/base/kernel/fix-acpi_dbg_level.patch
 # (tpg) enable MuQSS CPU scheduler
 # FIXME re-enable when ported to 5.3
-Patch803:	http://ck.kolivas.org/patches/muqss/5.0/5.4/0001-MultiQueue-Skiplist-Scheduler-v0.196.patch
+#Patch803:	http://ck.kolivas.org/patches/muqss/5.0/5.4/0001-MultiQueue-Skiplist-Scheduler-v0.196.patch
 # (bero) And make it compatible with modular binder
-Patch804:	MuQSS-export-can_nice-for-binder.patch
+#Patch804:	MuQSS-export-can_nice-for-binder.patch
 # (crazy) need to know what function() breaks on nvme failures
 Patch809:	nvme-pci-more-info.patch
 # ( crazy ) this one is adding be_silent mod parameter to acer-wmi
@@ -419,7 +390,6 @@ Patch809:	nvme-pci-more-info.patch
 # until is implemented / fixed.
 #Patch810:  acer-wmi-silence-unknow-functions-messages.patch
 Patch810:	linux-5.4.5-fix-build.patch
-Patch811:	https://lore.kernel.org/lkml/CAMe9rOrtj-Hrr6tmSrwg_V9bawXXB2WjsSedL=aCaaH-=ZSKsA@mail.gmail.com/2-0001-x86-Don-t-declare-__force_order-in-kaslr_64.c.patch
 Patch812:	linux-5.5-corsair-strafe-quirks.patch
 Patch813:	cpupower-gcc10.patch
 
@@ -468,9 +438,9 @@ BuildRequires:	flex
 BuildRequires:	bison
 BuildRequires:	binutils
 BuildRequires:	hostname
-BuildRequires:	gcc >= 7.2.1_2017.11-3
-BuildRequires:	gcc-plugin-devel >= 7.2.1_2017.11-3
-BuildRequires:	gcc-c++ >= 7.2.1_2017.11-3
+BuildRequires:	gcc9.2
+BuildRequires:	gcc9.2-c++
+BuildRequires:	%{_lib}gcc9.2-devel
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	diffutils
 # For git apply
@@ -874,7 +844,7 @@ done
 # End packages - here begins build stage
 #
 %prep
-%setup -q -n linux-%{tar_ver} -a 140
+%setup -q -n linux-%{tar_ver} -a 140 -a 200
 cp %{S:6} %{S:7} %{S:8} %{S:9} %{S:10} %{S:11} %{S:12} %{S:13} kernel/configs/
 %if 0%{sublevel}
 [ -e .git ] || git init
@@ -894,6 +864,14 @@ git apply %{SOURCE112}
 sed -i -e '/saa7164/isource "drivers/media/pci/saa716x/Kconfig"' drivers/media/pci/Kconfig
 sed -i -e '/saa7164/iobj-$(CONFIG_SAA716X_CORE) += saa716x/' drivers/media/pci/Makefile
 find drivers/media/tuners drivers/media/dvb-frontends -name "*.c" -o -name "*.h" |xargs sed -i -e 's,"dvb_frontend.h",<media/dvb_frontend.h>,g'
+
+# Merge RTL8723DE and RTL8821CE drivers
+cd drivers/net/wireless
+sed -i -e '/quantenna\/Kconfig/asource "drivers/net/wireless/rtl8821ce/Kconfig' Kconfig
+sed -i -e '/quantenna\/Kconfig/asource "drivers/net/wireless/rtl8723de/Kconfig' Kconfig
+sed -i -e '/QUANTENNA/aobj-$(CONFIG_RTL8821CE) += rtl8821ce/' Makefile
+sed -i -e '/QUANTENNA/aobj-$(CONFIG_RTL8723DE) += rtl8723de/' Makefile
+cd -
 
 %if %{with build_debug}
 %define debug --debug
@@ -1069,13 +1047,13 @@ BuildKernel() {
 %if %{with clang}
     %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS -flto"
 %else
-    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS -flto"
+    %kmake all CC=gcc9.2 CXX=g++9.2 CFLAGS="$CFLAGS"
 %endif
 %else
 %if %{with clang}
     %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS"
 %else
-    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS"
+    %kmake all CC=gcc9.2 CXX=g++9.2 CFLAGS="$CFLAGS"
 %endif
 %endif
 
@@ -1183,6 +1161,10 @@ SaveDevel() {
     cp -fR tools/lib/subcmd/* $TempDevelRoot/tools/lib/subcmd
     cp -fR tools/objtool/* $TempDevelRoot/tools/objtool
     cp -fR tools/scripts/utilities.mak $TempDevelRoot/tools/scripts
+
+# Make clean fails on the include statements in the Makefiles - and the drivers aren't relevant for -devel
+    rm -rf $TempDevelRoot/drivers/net/wireless/rtl8*
+    sed -i -e '/rtl8.*/d' $TempDevelRoot/drivers/net/wireless/{Makefile,Kconfig}
 
     for i in alpha arc avr32 blackfin c6x cris csky frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
 		 mips mn10300 nds32 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
@@ -1570,16 +1552,16 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 %if %{with build_cpupower}
 # make sure version-gen.sh is executable.
 chmod +x tools/power/cpupower/utils/version-gen.sh
-%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%{optflags}"
+%kmake -C tools/power/cpupower CPUFREQ_BENCH=false
 %endif
 
 %if %{with bootsplash}
-%kmake -C tools/bootsplash LDFLAGS="%{optflags}"
+%kmake -C tools/bootsplash
 %endif
 
 %ifarch %{ix86} %{x86_64}
 %if %{with build_x86_energy_perf_policy}
-%kmake -C tools/power/x86/x86_energy_perf_policy CC=clang LDFLAGS="%{optflags} -Wl,--build-id=none"
+%kmake -C tools/power/x86/x86_energy_perf_policy CC=clang LDFLAGS="-Wl,--build-id=none"
 %endif
 
 %if %{with build_turbostat}
@@ -1662,7 +1644,7 @@ make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_D
 ### Linker start4 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_cpupower}
-%{make_build} -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{optflags}" install
+%{make_build} -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} install
 
 rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
