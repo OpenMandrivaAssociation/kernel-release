@@ -120,7 +120,6 @@
 # unfortunately kmod does not support Zstandard for now, so kernel modules
 # compressed with zstd will not bo loaded and system will fail
 # https://github.com/facebook/zstd/issues/1121
-# Currently only supported on x86
 %ifarch %{ix86} %{x86_64}
 %bcond_without build_modzstd
 # compress modules with XZ
