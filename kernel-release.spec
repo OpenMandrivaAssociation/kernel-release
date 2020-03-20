@@ -18,7 +18,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	5
-%define sublevel	9
+%define sublevel	10
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -32,7 +32,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver   	%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -120,7 +120,6 @@
 # unfortunately kmod does not support Zstandard for now, so kernel modules
 # compressed with zstd will not bo loaded and system will fail
 # https://github.com/facebook/zstd/issues/1121
-# Currently only supported on x86
 %ifarch %{ix86} %{x86_64}
 %bcond_without build_modzstd
 # compress modules with XZ
@@ -392,6 +391,7 @@ Patch809:	nvme-pci-more-info.patch
 Patch810:	linux-5.4.5-fix-build.patch
 Patch812:	linux-5.5-corsair-strafe-quirks.patch
 Patch813:	cpupower-gcc10.patch
+Patch814:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
 
 # Defines for the things that are needed for all the kernels
 #
@@ -438,9 +438,8 @@ BuildRequires:	flex
 BuildRequires:	bison
 BuildRequires:	binutils
 BuildRequires:	hostname
-BuildRequires:	gcc9.2
-BuildRequires:	gcc9.2-c++
-BuildRequires:	%{_lib}gcc9.2-devel
+BuildRequires:	gcc
+BuildRequires:	gcc-c++
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	diffutils
 # For git apply
@@ -1047,13 +1046,13 @@ BuildKernel() {
 %if %{with clang}
     %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS -flto"
 %else
-    %kmake all CC=gcc9.2 CXX=g++9.2 CFLAGS="$CFLAGS"
+    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS"
 %endif
 %else
 %if %{with clang}
     %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS"
 %else
-    %kmake all CC=gcc9.2 CXX=g++9.2 CFLAGS="$CFLAGS"
+    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS"
 %endif
 %endif
 
