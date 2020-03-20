@@ -281,10 +281,9 @@ Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.4.pa
 
 %if %{with build_modzstd}
 # https://patchwork.kernel.org/patch/10003007/
+Patch126:	v2-1-2-lib-Add-support-for-ZSTD-compressed-kernel.patch3
 # https://patchwork.kernel.org/patch/10003011/
-# (TPG) latest comes from https://lore.kernel.org/lkml/20200316143018.1366-1-oss@malat.biz/
-Patch126:	PATCH-v2-1-2-lib-add-support-for-ZSTD-compressed-kernel.patch
-Patch127:	PATCH-v2-2-2-x86-Enable-support-for-ZSTD-compressed-kernel.patch
+Patch127:	v2-2-2-x86-Add-support-for-ZSTD-compressed-kernel.patch
 %endif
 
 ### Additional hardware support
