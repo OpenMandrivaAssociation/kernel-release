@@ -281,7 +281,7 @@ Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.4.pa
 
 %if %{with build_modzstd}
 # https://patchwork.kernel.org/patch/10003007/
-Patch126:	v2-1-2-lib-Add-support-for-ZSTD-compressed-kernel.patch3
+Patch126:	v2-1-2-lib-Add-support-for-ZSTD-compressed-kernel.patch
 # https://patchwork.kernel.org/patch/10003011/
 Patch127:	v2-2-2-x86-Add-support-for-ZSTD-compressed-kernel.patch
 %endif
