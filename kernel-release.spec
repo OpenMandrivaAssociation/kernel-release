@@ -24,7 +24,7 @@
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
 
 %define buildrel	%{kversion}-%{buildrpmrel}
-%define rpmtag	%{disttag}
+%define rpmtag		%{disttag}
 
 # IMPORTANT
 # This is the place where you set release version %{version}-1omv2015
@@ -32,7 +32,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -609,7 +609,6 @@ needs debugging info from the kernel, this package may help. \
 							\
 %post -n %{kname}-%{1} -f kernel_files.%{1}-post 	\
 %posttrans -n %{kname}-%{1} -f kernel_files.%{1}-posttrans \
-%preun -n %{kname}-%{1} -f kernel_files.%{1}-preun 	\
 %postun -n %{kname}-%{1} -f kernel_files.%{1}-postun 	\
 							\
 %if %{with build_devel}					\
@@ -1410,7 +1409,7 @@ if [ -x /usr/sbin/dkms_autoinstaller ] && [ -d /usr/src/linux-%{kversion}-$kerne
     /usr/sbin/dkms_autoinstaller start %{kversion}-$kernel_flavour-%{buildrpmrel}
 fi
 
-if [ -x %{_sbindir}/dkms ] && [ -e %{_unitdir}/dkms.service -a -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
+if [ -x %{_sbindir}/dkms ] && [ -e %{_unitdir}/dkms.service ] && [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
     /bin/systemctl --quiet restart dkms.service
     /bin/systemctl --quiet try-restart fedora-loadmodules.service
     %{_sbindir}/dkms autoinstall --verbose --kernelver %{kversion}-$kernel_flavour-%{buildrpmrel}
@@ -1418,10 +1417,10 @@ fi
 
 EOF
 
-### Create kernel Preun script on the fly
-cat > $kernel_files-preun <<EOF
+### Create kernel Postun script on the fly
+cat > $kernel_files-postun <<EOF
 
-rm -rf /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/modules.{alias{,.bin},builtin.bin,dep{,.bin},devname,softdep,symbols{,.bin}}
+rm -rf /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/modules.{alias{,.bin},builtin.bin,dep{,.bin},devname,softdep,symbols{,.bin}} ||:
 cd /boot > /dev/null
 
 if [ -e vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
@@ -1449,6 +1448,15 @@ fi
 #fi
 
 cd - > /dev/null
+
+rm -rf /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel} >/dev/null
+if [ -d /var/lib/dkms ]; then
+    rm -f /var/lib/dkms/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
+    rm -rf /var/lib/dkms/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
+    rm -f /var/lib/dkms-binary/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
+    rm -rf /var/lib/dkms-binary/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
+fi
+
 %if %{with build_devel}
 if [ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build ]; then
     rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
@@ -1458,18 +1466,6 @@ if [ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source ]; then
 fi
 %endif
 exit 0
-EOF
-
-### Create kernel Postun script on the fly
-cat > $kernel_files-postun <<EOF
-rm -f /boot/initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img
-rm -rf /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel} >/dev/null
-if [ -d /var/lib/dkms ]; then
-    rm -f /var/lib/dkms/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
-    rm -rf /var/lib/dkms/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
-    rm -f /var/lib/dkms-binary/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
-    rm -rf /var/lib/dkms-binary/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
-fi
 EOF
 }
 
