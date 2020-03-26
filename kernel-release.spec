@@ -30,7 +30,7 @@
 # This is the place where you set release version %{version}-1omv2015
 %if 0%{relc}
 %define rpmrel		0.rc%{relc}.1
-%define tar_ver   	%{kernelversion}.%{patchlevel}-rc%{relc}
+%define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
 %define rpmrel		1
 %define tar_ver		%{kernelversion}.%{patchlevel}
@@ -423,6 +423,7 @@ very current hardware.
 %define kconflicts3	dkms-nvidia-current < 325.15-1
 %define kconflicts4	dkms-nvidia-long-lived < 319.49-1
 %define kconflicts5	dkms-nvidia304 < 304.108-1
+%define kconflicts6	fuse-exfat < 1.3.0-6
 # nvidia173 does not support this kernel
 
 Autoreqprov:	no
@@ -524,7 +525,7 @@ Requires(pre):	%requires3 %requires4			\
 Requires:	%requires5				\
 Obsoletes:	%kobsoletes1 %kobsoletes2 %kobsoletes3	\
 Conflicts:	%kconflicts1 %kconflicts2 %kconflicts3	\
-Conflicts:	%kconflicts4 %kconflicts5		\
+Conflicts:	%kconflicts4 %kconflicts5 %kconflicts6	\
 Conflicts:	%{kname}-%{1}-latest <= %{kversion}-%{rpmrel}	\
 Obsoletes:	%{kname}-%{1}-latest <= %{kversion}-%{rpmrel}	\
 Provides:	installonlypkg(kernel)			\
@@ -1324,31 +1325,31 @@ cat > $kernel_files-post <<EOF
 # create initrd/grub.cfg for installed kernel first.
 
 /sbin/depmod -a %{kversion}-$kernel_flavour-%{buildrpmrel}
-/usr/bin/dracut -f --kver %{kversion}-$kernel_flavour-%{buildrpmrel}
+[ -x /sbin/dracut] && /sbin/dracut -f --kver %{kversion}-$kernel_flavour-%{buildrpmrel}
 
 # try rebuild all other initrd's , however that may take a while with lots
 # kernels installed
 cd /boot > /dev/null
 
-for i in $(ls vmlinuz-[0-9]*| sed 's/.*vmlinuz-//g')
+for v in $(ls vmlinuz-[0-9]*| sed 's/.*vmlinuz-//g')
 do
-	if [[ vmlinuz-$i =~ vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} ]]; then
+	if [[ vmlinuz-$v =~ vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} ]]; then
 		# we just create this
 		continue
 	fi
-	if [[ -e "initrd-$i.img" ]]; then
+	if [ -e "initrd-$v.img" ]; then
 		## if exist ignore
 		continue
 	fi
-	/sbin/depmod -a "$i"
-	/usr/bin/dracut -f --kver "$i"
+	/sbin/depmod -a "$v"
+	[ -x /sbin/dracut ] && /sbin/dracut -f --kver "$v"
 done
 
 ## cleanup some werid symlinks we never used anyway
 rm -rf vmlinuz-{server,desktop} initrd0.img initrd-{server,desktop}
 
 # run update-grub2
-/usr/sbin/update-grub2
+[ -x /usr/sbin/update-grub2 ] && /usr/sbin/update-grub2
 
 # (crazy) only half the story , need grub patches , OM scripts ( including ARM ) removed suport for systemd-boot
 # and so on .. we hit a limit here with lots kernels installed.
@@ -1383,11 +1384,11 @@ EOF
 
 ### Create kernel Posttrans script
 cat > $kernel_files-posttrans <<EOF
-if [ -x /usr/sbin/dkms_autoinstaller -a -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
+if [ -x /usr/sbin/dkms_autoinstaller ] && [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
     /usr/sbin/dkms_autoinstaller start %{kversion}-$kernel_flavour-%{buildrpmrel}
 fi
 
-if [ -x %{_sbindir}/dkms -a -e %{_unitdir}/dkms.service -a -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
+if [ -x %{_sbindir}/dkms ] && [ -e %{_unitdir}/dkms.service -a -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
     /bin/systemctl --quiet restart dkms.service
     /bin/systemctl --quiet try-restart fedora-loadmodules.service
     %{_sbindir}/dkms autoinstall --verbose --kernelver %{kversion}-$kernel_flavour-%{buildrpmrel}
@@ -1406,7 +1407,7 @@ if [ -e vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
 fi
 
 if [ -e initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ]; then
-        rm -rf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img
+	rm -rf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img
 fi
 
 
