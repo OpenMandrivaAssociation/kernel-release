@@ -784,6 +784,34 @@ Group:		System/Kernel and hardware
 Tool to report processor frequency and idle statistics.
 %endif
 
+%define bpf_major 0
+%define libbpf %mklibname bpf %{bpf_major}
+%define libbpfdevel %mklibname bpf -d
+
+%package -n bpftool
+Summary:	Inspection and simple manipulation of eBPF programs and maps
+Group:		System/Kernel and hardware
+
+%description -n bpftool
+This package contains the bpftool, which allows inspection and simple
+manipulation of eBPF programs and maps.
+
+%package -n %{libbpf}
+Summary:	The bpf library from kernel source
+Group:		System/Libraries
+
+%description -n %{libbpf}
+This package contains the kernel source bpf library.
+
+%package -n %{libbpfdevel}
+Summary:	Developement files for the bpf library from kernel source
+Group:		Development/Kernel
+Requires:	%{libbpf} = %{EVRD}
+
+%description -n %{libbpfdevel}
+This package includes libraries and header files needed for development
+of applications which use bpf library from kernel sour
+
 %package headers
 Version:	%{kversion}
 Release:	%{rpmrel}
@@ -1569,6 +1597,9 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %endif
 %endif
 
+%kmake -C tools/bpf/bpftool CC=clang
+%kmake -C tools/lib/bpf CC=clang
+
 ############################################################
 ###  Linker end3 > Check point to build for omv or rosa  ###
 ############################################################
@@ -1669,6 +1700,10 @@ mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
 %kmake -C tools/power/x86/turbostat install DESTDIR="%{buildroot}"
 %endif
 %endif
+
+# install bpftool and libbpf
+%kmake -C tools/bpf/bpftool DESTDIR=%{buildroot} prefix=%{_prefix} bash_compdir=%{_sysconfdir}/bash_completion.d/ mandir=%{_mandir} install
+%kmake -C tools/lib/bpf DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir} install install_headers
 
 # Create directories infastructure
 %if %{with build_source}
@@ -1845,3 +1880,18 @@ cd -
 %{_mandir}/man8/turbostat.8*
 %endif
 %endif
+
+%files -n bpftool
+%{_sbindir}/bpftool
+%{_sysconfdir}/bash_completion.d/bpftool
+%{_mandir}/man?/bpf*.*
+
+%files -n %{libbpf}
+%{_libdir}/libbpf.so.%{bpf_major}*
+
+%files -n %{libbpfdevel}
+%{_libdir}/libbpf.a
+%{_libdir}/libbpf.so
+%{_libdir}/pkgconfig/*.pc
+%dir %{_includedir}/bpf
+%{_includedir}/bpf/*.h
