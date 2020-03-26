@@ -1010,12 +1010,6 @@ CreateConfig() {
 	type="$2"
 	rm -f .config
 
-%if %{with clang}
-	CLANG_EXTRAS=clang-workarounds
-%else
-	CLANG_EXTRAS=""
-%endif
-
 %if %{with build_modxz}
 sed -i -e "s/^# CONFIG_KERNEL_XZ is not set/CONFIG_KERNEL_XZ=y/g" kernel/configs/common.config
 %endif
@@ -1037,7 +1031,7 @@ sed -i -e "s/^# CONFIG_RD_ZSTD is not set/CONFIG_RD_ZSTD=y/g" kernel/configs/com
 		;;
 	esac
 
-	for i in common common-${type} ${arch}-common ${arch}-${type} $CLANG_EXTRAS; do
+	for i in common common-${type} ${arch}-common ${arch}-${type}; do
 		[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
 	done
 	if [ "$arch" = "znver1" ]; then
