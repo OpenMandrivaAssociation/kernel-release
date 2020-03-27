@@ -1876,7 +1876,7 @@ cd -
 %files -n bpftool
 %{_sbindir}/bpftool
 %{_sysconfdir}/bash_completion.d/bpftool
-%{_mandir}/man?/bpf*.*
+%{_mandir}/man*/bpf*.*
 
 %files -n %{libbpf}
 %{_libdir}/libbpf.so.%{bpf_major}*
