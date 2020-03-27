@@ -1695,7 +1695,7 @@ mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
 
 # install bpftool and libbpf
 %make_install -C tools/bpf/bpftool install DESTDIR=%{buildroot} prefix=%{_prefix} bash_compdir=%{_sysconfdir}/bash_completion.d/ mandir=%{_mandir}
-kmake_install -C tools/lib/bpf  install install_headers DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir}
+%make_install -C tools/lib/bpf  install install_headers DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir}
 
 # Create directories infastructure
 %if %{with build_source}
