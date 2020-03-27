@@ -32,7 +32,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		2
+%define rpmrel		3
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -1348,13 +1348,13 @@ cat > $kernel_files-post <<EOF
 # create initrd/grub.cfg for installed kernel first.
 
 /sbin/depmod -a %{kversion}-$kernel_flavour-%{buildrpmrel}
-[ -x /sbin/dracut] && /sbin/dracut -f --kver %{kversion}-$kernel_flavour-%{buildrpmrel}
+[ -x /sbin/dracut ] && /sbin/dracut -f --kver %{kversion}-$kernel_flavour-%{buildrpmrel}
 
 # try rebuild all other initrd's , however that may take a while with lots
 # kernels installed
 cd /boot > /dev/null
 
-for v in $(ls vmlinuz-[0-9]*| sed 's/.*vmlinuz-//g')
+for v in "$(ls vmlinuz-[0-9]*| sed 's/.*vmlinuz-//g')"
 do
 	if [[ vmlinuz-$v =~ vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} ]]; then
 		# we just create this
