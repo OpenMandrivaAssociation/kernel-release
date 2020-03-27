@@ -483,6 +483,8 @@ BuildRequires:	perl-devel
 BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(zlib)
+# (tpg) needed for bfd
+BuildRequires:	binutils-devel
 %endif
 
 %ifarch %{arm}
@@ -1655,17 +1657,17 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 %if %{with build_perf}
 
 # perf tool binary and supporting scripts/binaries
-make -C tools/perf -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
+make -C tools/perf -s CC=%{__cc} DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
 
 # perf man pages (note: implicit rpm magic compresses them later)
-make -C tools/perf  -s CC=%{__cc} V=1 DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
+make -C tools/perf  -s CC=%{__cc} DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
 %endif
 
 ############################################################
 ### Linker start4 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_cpupower}
-%{make_build} -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} install
+%make_install -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} install
 
 rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
@@ -1683,17 +1685,17 @@ install -m755 tools/bootsplash/bootsplash-packer %{buildroot}%{_bindir}/
 %ifarch %{ix86} %{x86_64}
 %if %{with build_x86_energy_perf_policy}
 mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
-%kmake -C tools/power/x86/x86_energy_perf_policy install DESTDIR="%{buildroot}"
+%make_install -C tools/power/x86/x86_energy_perf_policy install DESTDIR="%{buildroot}"
 %endif
 %if %{with build_turbostat}
 mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
-%kmake -C tools/power/x86/turbostat install DESTDIR="%{buildroot}"
+%make_install -C tools/power/x86/turbostat install DESTDIR="%{buildroot}"
 %endif
 %endif
 
 # install bpftool and libbpf
-%kmake -C tools/bpf/bpftool DESTDIR=%{buildroot} prefix=%{_prefix} bash_compdir=%{_sysconfdir}/bash_completion.d/ mandir=%{_mandir} install
-%kmake -C tools/lib/bpf DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir} install install_headers
+%make_install -C tools/bpf/bpftool install DESTDIR=%{buildroot} prefix=%{_prefix} bash_compdir=%{_sysconfdir}/bash_completion.d/ mandir=%{_mandir}
+kmake_install -C tools/lib/bpf  install install_headers DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir}
 
 # Create directories infastructure
 %if %{with build_source}
