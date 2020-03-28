@@ -4,8 +4,8 @@
 #end
 %define _disable_ld_no_undefined 1
 
-# (tpg) try to speed up things
-%global optflags %{optflags} -O3
+## STOP: Adding weird and unsupported upstream kernel C/LD flags of any sort
+## yes , including ftlo . O3 and whatever else
 
 # (crazy) , well that new way of doing buil-id symlinks
 # does not seems to work, see:
@@ -1034,7 +1034,7 @@ BuildKernel() {
 # (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
 %ifarch %{x86_64}
 %if %{with clang}
-    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS -flto"
+    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS"
 %else
     %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS"
 %endif
