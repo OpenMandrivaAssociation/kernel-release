@@ -1298,14 +1298,13 @@ cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
 ### Create kernel Post script
 cat > $kernel_files-post <<EOF
 
-# create initrd/grub.cfg for installed kernel first.
-/sbin/depmod -a %{kversion}-$kernel_flavour-%{buildrpmrel}
-
 %if %{with dracut_all_initrd}
 [ -x /sbin/dracut ] && /sbin/dracut -f --regenerate-all
-%else
-[ -x /sbin/dracut ] && /sbin/dracut -f --kver %{kversion}-$kernel_flavour-%{buildrpmrel}
 %endif
+
+/sbin/depmod -a %{kversion}-$kernel_flavour-%{buildrpmrel}
+[ -x /sbin/dracut ] && /sbin/dracut -f --kver %{kversion}-$kernel_flavour-%{buildrpmrel}
+
 
 ## cleanup some werid symlinks we never used anyway
 rm -rf vmlinuz-{server,desktop} initrd0.img initrd-{server,desktop}
