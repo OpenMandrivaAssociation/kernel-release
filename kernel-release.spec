@@ -73,7 +73,6 @@
 %bcond_without build_devel
 %bcond_with build_debug
 %bcond_with clang
-%bcond_with bootsplash
 # (tpg) enable patches from ClearLinux
 %bcond_without clr
 %if %mdvver > 3000000
@@ -229,39 +228,6 @@ Patch6:		linux-5.2.9-riscv-compile.patch
 # error: Illegal char ']' (0x5d) in: 1.2.1[50983]_custom
 # caused by aacraid versioning ("1.2.1[50983]-custom")
 Patch7:		aacraid-dont-freak-out-dependency-generator.patch
-
-# Bootsplash system
-# (tpg) disable it for now 2018-11-07
-%if %{with bootsplash}
-# https://lkml.org/lkml/2017/10/25/346
-# https://patchwork.kernel.org/patch/10172665/, rebased
-Patch100:	RFC-v3-01-13-bootsplash-Initial-implementation-showing-black-screen.patch
-# https://patchwork.kernel.org/patch/10172669/
-Patch101:	RFC-v3-02-13-bootsplash-Add-file-reading-and-picture-rendering.patch
-# https://patchwork.kernel.org/patch/10172715/
-Patch102:	RFC-v3-03-13-bootsplash-Flush-framebuffer-after-drawing.patch
-# https://patchwork.kernel.org/patch/10172699/
-Patch103:	RFC-v3-04-13-bootsplash-Add-corner-positioning.patch
-# https://patchwork.kernel.org/patch/10172667/
-Patch104:	RFC-v3-05-13-bootsplash-Add-animation-support.patch
-# https://patchwork.kernel.org/patch/10172605/, rebased
-Patch105:	RFC-v3-06-13-vt-Redraw-bootsplash-fully-on-console_unblank.patch
-# https://patchwork.kernel.org/patch/10172599/
-Patch106:	RFC-v3-07-13-vt-Add-keyboard-hook-to-disable-bootsplash.patch
-# https://patchwork.kernel.org/patch/10172603/
-Patch107:	RFC-v3-08-13-sysrq-Disable-bootsplash-on-SAK.patch
-# https://patchwork.kernel.org/patch/10172601/
-Patch108:	RFC-v3-09-13-fbcon-Disable-bootsplash-on-oops.patch
-# https://patchwork.kernel.org/patch/10172663/
-Patch109:	RFC-v3-10-13-Documentation-Add-bootsplash-main-documentation.patch
-# https://patchwork.kernel.org/patch/10172685/
-Patch110:	RFC-v3-11-13-bootsplash-sysfs-entries-to-load-and-unload-files.patch
-# https://patchwork.kernel.org/patch/10172597/
-Patch111:	RFC-v3-12-13-tools-bootsplash-Add-a-basic-splash-file-creation-tool.patch
-# https://patchwork.kernel.org/patch/10172661/
-# Contains git binary patch -- needs to be applied with git apply instead of autopatch -p1
-Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-file.patch
-%endif
 
 # Patches to VirtualBox and other external modules are
 # pulled in as Source: rather than Patch: because it's arch specific
