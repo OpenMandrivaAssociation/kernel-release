@@ -239,10 +239,6 @@ Patch7:		aacraid-dont-freak-out-dependency-generator.patch
 %if %{with uksm}
 # brokes armx builds
 Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.4.patch
-# Sometimes other people are ahead of upstream porting to new releases...
-# No UKSM for 5.5 yet... :/
-#Patch120:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf/0001-uksm-5.1-initial-submission.patch
-#Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf-fix/0001-uksm-5.1-apply-52d1e606ee733.patch
 %endif
 
 %if %{with build_modzstd}
@@ -282,9 +278,6 @@ Patch201:       extra-wifi-drivers-compile.patch
 # Generated from https://gitlab.freedesktop.org/lima/linux.git
 # using git diff v5.1..lima/lima-5.1
 # Currently no patch necessary
-
-# NOT YET
-#Patch250:	4.14-C11.patch
 
 # VirtualBox shared folders support
 # https://patchwork.kernel.org/patch/10906949/
@@ -341,11 +334,6 @@ Patch800:	Unknow-SSD-HFM128GDHTNG-8310B-QUIRK_NO_APST.patch
 # Restore ACPI loglevels to sane values
 Patch801:	https://gitweb.frugalware.org/wip_kernel/raw/86234abea5e625043153f6b8295642fd9f42bff0/source/base/kernel/acpi-use-kern_warning_even_when_error.patch
 Patch802:	https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e18613151cc81b4c0cf6e22/source/base/kernel/fix-acpi_dbg_level.patch
-# (tpg) enable MuQSS CPU scheduler
-# FIXME re-enable when ported to 5.3
-#Patch803:	http://ck.kolivas.org/patches/muqss/5.0/5.4/0001-MultiQueue-Skiplist-Scheduler-v0.196.patch
-# (bero) And make it compatible with modular binder
-#Patch804:	MuQSS-export-can_nice-for-binder.patch
 # (crazy) need to know what function() breaks on nvme failures
 Patch809:	nvme-pci-more-info.patch
 # ( crazy ) this one is adding be_silent mod parameter to acer-wmi
@@ -438,14 +426,10 @@ BuildRequires:	asciidoc
 BuildRequires:	pkgconfig(audit)
 BuildRequires:	binutils-devel
 BuildRequires:	bison
-# BuildRequires:	docbook-style-xsl
 BuildRequires:	flex
-# BuildRequires:	gettext
-# BuildRequires:	gtk2-devel
 BuildRequires:	pkgconfig(libunwind)
 BuildRequires:	pkgconfig(libnewt)
 BuildRequires:	perl-devel
-# BuildRequires:	perl(ExtUtils::Embed)
 BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(zlib)
@@ -1140,9 +1124,6 @@ SaveDevel() {
 # Needed for external dvb tree (#41418)
     cp -fR drivers/media/dvb-frontends/lgdt330x.h $TempDevelRoot/drivers/media/dvb-frontends/
 
-# add acpica header files, needed for fglrx build
-    cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
-
 # orc unwinder needs theese
     cp -fR tools/build/Build{,.include} $TempDevelRoot/tools/build
     cp -fR tools/build/fixdep.c $TempDevelRoot/tools/build
@@ -1340,26 +1321,6 @@ rm -rf vmlinuz-{server,desktop} initrd0.img initrd-{server,desktop}
 # run update-grub2
 [ -x /usr/sbin/update-grub2 ] && /usr/sbin/update-grub2
 
-# (crazy) only half the story , need grub patches , OM scripts ( including ARM ) removed suport for systemd-boot
-# and so on .. we hit a limit here with lots kernels installed.
-# also half of that is not used bc missing grub part support. Also we produce ofc broken symlinks and ducplicate
-# 'wath-should-be-machine-id' too. I cannot see why we need that anyway.
-
-#/usr/bin/kernel-install add %{kversion}-$kernel_flavour-%{buildrpmrel} /boot/vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}
-#cd /boot > /dev/null
-#if [ -L vmlinuz-$kernel_flavour ]; then
-#    rm -f vmlinuz-$kernel_flavour
-#fi
-#ln -sf vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} vmlinuz-$kernel_flavour
-#if [ -L initrd-$kernel_flavour.img ]; then
-#    rm -f initrd-$kernel_flavour.img
-#fi
-#ln -sf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img initrd-$kernel_flavour.img
-#if [ -e initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ]; then
-#    ln -sf vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} vmlinuz
-#    ln -sf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img initrd.img
-#fi
-
 cd - > /dev/null
 %if %{with build_devel}
 # create kernel-devel symlinks if matching -devel- rpm is installed
@@ -1399,21 +1360,6 @@ if [ -e initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ]; then
 	rm -rf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img
 fi
 
-
-#/usr/bin/kernel-install remove %{kversion}-$kernel_flavour-%{buildrpmrel}
-#cd /boot > /dev/null
-## (crazy) we dont use ( nor have support in grub to look ) for initrd-fooname or vmlinuz-fooname
-## so that never worked anyway.
-#if [ -L vmlinuz-$kernel_flavour ]; then
-#    if [ "$(readlink vmlinuz-$kernel_flavour)" = "vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}" ]; then
-#	rm -f vmlinuz-$kernel_flavour
-#    fi
-#fi
-#if [ -L initrd-$kernel_flavour.img ]; then
-#    if [ "$(readlink initrd-$kernel_flavour.img)" = "initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img" ]; then
-#	rm -f initrd-$kernel_flavour.img
-#    fi
-#fi
 
 cd - > /dev/null
 
