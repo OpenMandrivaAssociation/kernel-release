@@ -73,6 +73,12 @@
 %bcond_without build_devel
 %bcond_with build_debug
 %bcond_with clang
+## enabled it runs dracut -f --regenerate-all
+## we *should* enable that, is bc we keep or can keep lots
+## kernel around and the initrd is created using sys libs, sys configs,
+## *systemd* service & apps etc. IOW, a old initrd may have old files, libs, etc
+## changed since last rebuild and may result in either broken boot, or very hard to debug bugs.
+%bcond_with dracut_all_initrd
 # (tpg) enable patches from ClearLinux
 %bcond_without clr
 %if %mdvver > 3000000
@@ -1293,27 +1299,13 @@ cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
 cat > $kernel_files-post <<EOF
 
 # create initrd/grub.cfg for installed kernel first.
-
 /sbin/depmod -a %{kversion}-$kernel_flavour-%{buildrpmrel}
+
+%if %{with dracut_all_initrd}
+[ -x /sbin/dracut ] && /sbin/dracut -f --regenerate-all
+%else
 [ -x /sbin/dracut ] && /sbin/dracut -f --kver %{kversion}-$kernel_flavour-%{buildrpmrel}
-
-# try rebuild all other initrd's , however that may take a while with lots
-# kernels installed
-cd /boot > /dev/null
-
-for v in "$(ls vmlinuz-[0-9]*| sed 's/.*vmlinuz-//g')"
-do
-	if [[ vmlinuz-$v =~ vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} ]]; then
-		# we just create this
-		continue
-	fi
-	if [ -e "initrd-$v.img" ]; then
-		## if exist ignore
-		continue
-	fi
-	/sbin/depmod -a "$v"
-	[ -x /sbin/dracut ] && /sbin/dracut -f --kver "$v"
-done
+%endif
 
 ## cleanup some werid symlinks we never used anyway
 rm -rf vmlinuz-{server,desktop} initrd0.img initrd-{server,desktop}
