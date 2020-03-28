@@ -608,7 +608,7 @@ voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
 %define summary_server Linux Kernel for server use with i686 & 64GB RAM
 %define info_server This kernel is compiled for server use, single or \
 multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using \
-no preempt, HZ_100, CFS cpu scheduler and BFQ i/o scheduler, PERFORMANCE governor.
+no preempt, HZ_300, CFS cpu scheduler and BFQ i/o scheduler, PERFORMANCE governor.
 %else
 %define summary_server Linux Kernel for server use with %{_arch}
 %define info_server This kernel is compiled for server use, single or \
