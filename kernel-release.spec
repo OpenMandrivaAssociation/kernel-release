@@ -4,8 +4,8 @@
 #end
 %define _disable_ld_no_undefined 1
 
-# (tpg) try to speed up things
-%global optflags %{optflags} -O3
+## STOP: Adding weird and unsupported upstream kernel C/LD flags of any sort
+## yes , including ftlo . O3 and whatever else
 
 # (crazy) , well that new way of doing buil-id symlinks
 # does not seems to work, see:
@@ -73,7 +73,12 @@
 %bcond_without build_devel
 %bcond_with build_debug
 %bcond_with clang
-%bcond_with bootsplash
+## enabled it runs dracut -f --regenerate-all
+## we *should* enable that, is bc we keep or can keep lots
+## kernel around and the initrd is created using sys libs, sys configs,
+## *systemd* service & apps etc. IOW, a old initrd may have old files, libs, etc
+## changed since last rebuild and may result in either broken boot, or very hard to debug bugs.
+%bcond_with dracut_all_initrd
 # (tpg) enable patches from ClearLinux
 %bcond_without clr
 %if %mdvver > 3000000
@@ -230,39 +235,6 @@ Patch6:		linux-5.2.9-riscv-compile.patch
 # caused by aacraid versioning ("1.2.1[50983]-custom")
 Patch7:		aacraid-dont-freak-out-dependency-generator.patch
 
-# Bootsplash system
-# (tpg) disable it for now 2018-11-07
-%if %{with bootsplash}
-# https://lkml.org/lkml/2017/10/25/346
-# https://patchwork.kernel.org/patch/10172665/, rebased
-Patch100:	RFC-v3-01-13-bootsplash-Initial-implementation-showing-black-screen.patch
-# https://patchwork.kernel.org/patch/10172669/
-Patch101:	RFC-v3-02-13-bootsplash-Add-file-reading-and-picture-rendering.patch
-# https://patchwork.kernel.org/patch/10172715/
-Patch102:	RFC-v3-03-13-bootsplash-Flush-framebuffer-after-drawing.patch
-# https://patchwork.kernel.org/patch/10172699/
-Patch103:	RFC-v3-04-13-bootsplash-Add-corner-positioning.patch
-# https://patchwork.kernel.org/patch/10172667/
-Patch104:	RFC-v3-05-13-bootsplash-Add-animation-support.patch
-# https://patchwork.kernel.org/patch/10172605/, rebased
-Patch105:	RFC-v3-06-13-vt-Redraw-bootsplash-fully-on-console_unblank.patch
-# https://patchwork.kernel.org/patch/10172599/
-Patch106:	RFC-v3-07-13-vt-Add-keyboard-hook-to-disable-bootsplash.patch
-# https://patchwork.kernel.org/patch/10172603/
-Patch107:	RFC-v3-08-13-sysrq-Disable-bootsplash-on-SAK.patch
-# https://patchwork.kernel.org/patch/10172601/
-Patch108:	RFC-v3-09-13-fbcon-Disable-bootsplash-on-oops.patch
-# https://patchwork.kernel.org/patch/10172663/
-Patch109:	RFC-v3-10-13-Documentation-Add-bootsplash-main-documentation.patch
-# https://patchwork.kernel.org/patch/10172685/
-Patch110:	RFC-v3-11-13-bootsplash-sysfs-entries-to-load-and-unload-files.patch
-# https://patchwork.kernel.org/patch/10172597/
-Patch111:	RFC-v3-12-13-tools-bootsplash-Add-a-basic-splash-file-creation-tool.patch
-# https://patchwork.kernel.org/patch/10172661/
-# Contains git binary patch -- needs to be applied with git apply instead of autopatch -p1
-Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-file.patch
-%endif
-
 # Patches to VirtualBox and other external modules are
 # pulled in as Source: rather than Patch: because it's arch specific
 # and can't be applied by %%autopatch -p1
@@ -273,10 +245,6 @@ Source112:	RFC-v3-13-13-tools-bootsplash-Add-script-and-data-to-create-sample-fi
 %if %{with uksm}
 # brokes armx builds
 Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.4.patch
-# Sometimes other people are ahead of upstream porting to new releases...
-# No UKSM for 5.5 yet... :/
-#Patch120:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf/0001-uksm-5.1-initial-submission.patch
-#Patch121:	https://github.com/sirlucjan/kernel-patches/raw/master/5.1/uksm-pf-fix/0001-uksm-5.1-apply-52d1e606ee733.patch
 %endif
 
 %if %{with build_modzstd}
@@ -316,9 +284,6 @@ Patch201:	extra-wifi-drivers-compile.patch
 # Generated from https://gitlab.freedesktop.org/lima/linux.git
 # using git diff v5.1..lima/lima-5.1
 # Currently no patch necessary
-
-# NOT YET
-#Patch250:	4.14-C11.patch
 
 # VirtualBox shared folders support
 # https://patchwork.kernel.org/patch/10906949/
@@ -375,11 +340,6 @@ Patch800:	Unknow-SSD-HFM128GDHTNG-8310B-QUIRK_NO_APST.patch
 # Restore ACPI loglevels to sane values
 Patch801:	https://gitweb.frugalware.org/wip_kernel/raw/86234abea5e625043153f6b8295642fd9f42bff0/source/base/kernel/acpi-use-kern_warning_even_when_error.patch
 Patch802:	https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e18613151cc81b4c0cf6e22/source/base/kernel/fix-acpi_dbg_level.patch
-# (tpg) enable MuQSS CPU scheduler
-# FIXME re-enable when ported to 5.3
-#Patch803:	http://ck.kolivas.org/patches/muqss/5.0/5.4/0001-MultiQueue-Skiplist-Scheduler-v0.196.patch
-# (bero) And make it compatible with modular binder
-#Patch804:	MuQSS-export-can_nice-for-binder.patch
 # (crazy) need to know what function() breaks on nvme failures
 Patch809:	nvme-pci-more-info.patch
 # ( crazy ) this one is adding be_silent mod parameter to acer-wmi
@@ -480,14 +440,10 @@ BuildRequires:	asciidoc
 BuildRequires:	pkgconfig(audit)
 BuildRequires:	binutils-devel
 BuildRequires:	bison
-# BuildRequires:	docbook-style-xsl
 BuildRequires:	flex
-# BuildRequires:	gettext
-# BuildRequires:	gtk2-devel
 BuildRequires:	pkgconfig(libunwind)
 BuildRequires:	pkgconfig(libnewt)
 BuildRequires:	perl-devel
-# BuildRequires:	perl(ExtUtils::Embed)
 BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(zlib)
@@ -660,7 +616,7 @@ voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
 %define summary_server Linux Kernel for server use with i686 & 64GB RAM
 %define info_server This kernel is compiled for server use, single or \
 multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using \
-no preempt, HZ_100, CFS cpu scheduler and BFQ i/o scheduler, PERFORMANCE governor.
+no preempt, HZ_300, CFS cpu scheduler and BFQ i/o scheduler, PERFORMANCE governor.
 %else
 %define summary_server Linux Kernel for server use with %{_arch}
 %define info_server This kernel is compiled for server use, single or \
@@ -1076,7 +1032,7 @@ BuildKernel() {
 # (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
 %ifarch %{x86_64}
 %if %{with clang}
-    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS -flto"
+    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS"
 %else
     %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS"
 %endif
@@ -1181,9 +1137,6 @@ SaveDevel() {
 
 # Needed for external dvb tree (#41418)
     cp -fR drivers/media/dvb-frontends/lgdt330x.h $TempDevelRoot/drivers/media/dvb-frontends/
-
-# add acpica header files, needed for fglrx build
-    cp -fR drivers/acpi/acpica/*.h $TempDevelRoot/drivers/acpi/acpica/
 
 # orc unwinder needs theese
     cp -fR tools/build/Build{,.include} $TempDevelRoot/tools/build
@@ -1353,54 +1306,19 @@ cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
 ### Create kernel Post script
 cat > $kernel_files-post <<EOF
 
-# create initrd/grub.cfg for installed kernel first.
+%if %{with dracut_all_initrd}
+[ -x /sbin/dracut ] && /sbin/dracut -f --regenerate-all
+%endif
 
 /sbin/depmod -a %{kversion}-$kernel_flavour-%{buildrpmrel}
 [ -x /sbin/dracut ] && /sbin/dracut -f --kver %{kversion}-$kernel_flavour-%{buildrpmrel}
 
-# try rebuild all other initrd's , however that may take a while with lots
-# kernels installed
-cd /boot > /dev/null
-
-for v in "$(ls vmlinuz-[0-9]*| sed 's/.*vmlinuz-//g')"
-do
-	if [[ vmlinuz-$v =~ vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} ]]; then
-		# we just create this
-		continue
-	fi
-	if [ -e "initrd-$v.img" ]; then
-		## if exist ignore
-		continue
-	fi
-	/sbin/depmod -a "$v"
-	[ -x /sbin/dracut ] && /sbin/dracut -f --kver "$v"
-done
 
 ## cleanup some werid symlinks we never used anyway
 rm -rf vmlinuz-{server,desktop} initrd0.img initrd-{server,desktop}
 
 # run update-grub2
 [ -x /usr/sbin/update-grub2 ] && /usr/sbin/update-grub2
-
-# (crazy) only half the story , need grub patches , OM scripts ( including ARM ) removed suport for systemd-boot
-# and so on .. we hit a limit here with lots kernels installed.
-# also half of that is not used bc missing grub part support. Also we produce ofc broken symlinks and ducplicate
-# 'wath-should-be-machine-id' too. I cannot see why we need that anyway.
-
-#/usr/bin/kernel-install add %{kversion}-$kernel_flavour-%{buildrpmrel} /boot/vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}
-#cd /boot > /dev/null
-#if [ -L vmlinuz-$kernel_flavour ]; then
-#    rm -f vmlinuz-$kernel_flavour
-#fi
-#ln -sf vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} vmlinuz-$kernel_flavour
-#if [ -L initrd-$kernel_flavour.img ]; then
-#    rm -f initrd-$kernel_flavour.img
-#fi
-#ln -sf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img initrd-$kernel_flavour.img
-#if [ -e initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ]; then
-#    ln -sf vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} vmlinuz
-#    ln -sf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img initrd.img
-#fi
 
 cd - > /dev/null
 %if %{with build_devel}
@@ -1441,21 +1359,6 @@ if [ -e initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ]; then
 	rm -rf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img
 fi
 
-
-#/usr/bin/kernel-install remove %{kversion}-$kernel_flavour-%{buildrpmrel}
-#cd /boot > /dev/null
-## (crazy) we dont use ( nor have support in grub to look ) for initrd-fooname or vmlinuz-fooname
-## so that never worked anyway.
-#if [ -L vmlinuz-$kernel_flavour ]; then
-#    if [ "$(readlink vmlinuz-$kernel_flavour)" = "vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}" ]; then
-#	rm -f vmlinuz-$kernel_flavour
-#    fi
-#fi
-#if [ -L initrd-$kernel_flavour.img ]; then
-#    if [ "$(readlink initrd-$kernel_flavour.img)" = "initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img" ]; then
-#	rm -f initrd-$kernel_flavour.img
-#    fi
-#fi
 
 cd - > /dev/null
 
