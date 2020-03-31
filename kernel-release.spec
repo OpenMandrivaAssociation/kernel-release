@@ -18,7 +18,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	5
-%define sublevel	12
+%define sublevel	13
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -32,7 +32,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		3
+%define rpmrel		1
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -309,8 +309,8 @@ Patch148:	saa716x-5.4.patch
 # cd linux
 # tar cf extra-wifi-drivers-`date +%Y%m%d`.tar drivers/net/wireless/rtl8*
 # zstd -19 extra-wifi-drivers*.tar
-Source200:      extra-wifi-drivers-20200301.tar.zst
-Patch201:       extra-wifi-drivers-compile.patch
+Source200:	extra-wifi-drivers-20200301.tar.zst
+Patch201:	extra-wifi-drivers-compile.patch
 
 # Lima driver for ARM Mali graphics chips
 # Generated from https://gitlab.freedesktop.org/lima/linux.git
@@ -392,6 +392,14 @@ Patch810:	linux-5.4.5-fix-build.patch
 Patch812:	linux-5.5-corsair-strafe-quirks.patch
 Patch813:	cpupower-gcc10.patch
 Patch814:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
+
+# WireGuard VPN
+# from https://git.zx2c4.com/wireguard-linux-compat/
+# unpack tarball, currently v0.0.20200318
+# create patch with kernel-tree-scripts/create-patch.sh
+# NOTE! Dont rename the patch, as upstream WireGuard version check relies on the name
+# TTL 5.6
+Patch1000:	net-WireGuard.patch
 
 # Defines for the things that are needed for all the kernels
 #
