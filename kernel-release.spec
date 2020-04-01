@@ -390,7 +390,6 @@ Patch809:	nvme-pci-more-info.patch
 #Patch810:  acer-wmi-silence-unknow-functions-messages.patch
 Patch810:	linux-5.4.5-fix-build.patch
 Patch812:	linux-5.5-corsair-strafe-quirks.patch
-Patch813:	cpupower-gcc10.patch
 Patch814:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
 
 # WireGuard VPN
