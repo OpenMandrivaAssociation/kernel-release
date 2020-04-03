@@ -382,7 +382,6 @@ very current hardware.
 %define kconflicts3	dkms-nvidia-current < 325.15-1
 %define kconflicts4	dkms-nvidia-long-lived < 319.49-1
 %define kconflicts5	dkms-nvidia304 < 304.108-1
-%define kconflicts6	fuse-exfat < 1.3.0-6
 # nvidia173 does not support this kernel
 
 Autoreqprov:	no
@@ -482,7 +481,7 @@ Requires(pre):	%requires3 %requires4			\
 Requires:	%requires5				\
 Obsoletes:	%kobsoletes1 %kobsoletes2 %kobsoletes3	\
 Conflicts:	%kconflicts1 %kconflicts2 %kconflicts3	\
-Conflicts:	%kconflicts4 %kconflicts5 %kconflicts6	\
+Conflicts:	%kconflicts4 %kconflicts5 \
 Conflicts:	%{kname}-%{1}-latest <= %{kversion}-%{rpmrel}	\
 Obsoletes:	%{kname}-%{1}-latest <= %{kversion}-%{rpmrel}	\
 Provides:	installonlypkg(kernel)			\
