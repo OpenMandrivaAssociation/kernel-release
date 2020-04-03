@@ -17,8 +17,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	5
-%define sublevel	13
+%define patchlevel	6
+%define sublevel	2
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -226,6 +226,7 @@ Source51:	cpupower.config
 %if 0%{sublevel}
 Source90:	https://cdn.kernel.org/pub/linux/kernel/v%(echo %{version}|cut -d. -f1).x/patch-%{version}.xz
 %endif
+Patch1:		linux-5.6-fix-disassembler-4args-detection.patch
 Patch2:		die-floppy-die.patch
 Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch4:		linux-4.7-intel-dvi-duallink.patch
@@ -279,18 +280,17 @@ Patch148:	saa716x-5.4.patch
 # zstd -19 extra-wifi-drivers*.tar
 Source200:	extra-wifi-drivers-20200301.tar.zst
 Patch201:	extra-wifi-drivers-compile.patch
+Patch202:	extra-wifi-drivers-port-to-5.6.patch
 
 # Lima driver for ARM Mali graphics chips
 # Generated from https://gitlab.freedesktop.org/lima/linux.git
 # using git diff v5.1..lima/lima-5.1
 # Currently no patch necessary
 
-# VirtualBox shared folders support
-# https://patchwork.kernel.org/patch/10906949/
-# For newer versions, check
-# https://patchwork.kernel.org/project/linux-fsdevel/list/?submitter=582
-Patch300:	v19-fs-Add-VirtualBox-guest-shared-folder-vboxsf-support.diff
-Source300:	virtualbox-kernel-5.3.patch
+# VirtualBox patches -- added as Source: rather than Patch:
+# because they need to be applied after stuff from the
+# virtualbox-kernel-module-sources package is copied around
+Source300:	vbox-kernel-5.6.patch
 Source301:	vbox-6.1-fix-build-on-znver1-hosts.patch
 
 # Better support for newer x86 processors
@@ -350,16 +350,7 @@ Patch809:	nvme-pci-more-info.patch
 #Patch810:  acer-wmi-silence-unknow-functions-messages.patch
 Patch810:	linux-5.4.5-fix-build.patch
 Patch812:	linux-5.5-corsair-strafe-quirks.patch
-Patch813:	cpupower-gcc10.patch
 Patch814:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
-
-# WireGuard VPN
-# from https://git.zx2c4.com/wireguard-linux-compat/
-# unpack tarball, currently v0.0.20200318
-# create patch with kernel-tree-scripts/create-patch.sh
-# NOTE! Dont rename the patch, as upstream WireGuard version check relies on the name
-# TTL 5.6
-Patch1000:	net-WireGuard.patch
 
 # Defines for the things that are needed for all the kernels
 #
@@ -934,7 +925,7 @@ cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxpci drivers/pci/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefile*
 sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
-#patch -p1 -z .300a~ -b <%{S:300}
+patch -p1 -z .300a~ -b <%{S:300}
 patch -p1 -z .301a~ -b <%{S:301}
 %endif
 %endif
@@ -1500,8 +1491,10 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %endif
 %endif
 
-%kmake -C tools/bpf/bpftool CC=clang
-%kmake -C tools/lib/bpf CC=clang
+%kmake -C tools/lib/bpf CC=clang libbpf.a libbpf.pc libbpf.so.0.0.7
+cd tools/bpf/bpftool
+make CC=clang bpftool
+cd -
 
 ############################################################
 ###  Linker end3 > Check point to build for omv or rosa  ###
@@ -1605,8 +1598,8 @@ mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
 %endif
 
 # install bpftool and libbpf
+%make_install -C tools/lib/bpf install install_headers DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir}
 %make_install -C tools/bpf/bpftool install DESTDIR=%{buildroot} prefix=%{_prefix} bash_compdir=%{_sysconfdir}/bash_completion.d/ mandir=%{_mandir}
-%make_install -C tools/lib/bpf  install install_headers DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir}
 
 # Create directories infastructure
 %if %{with build_source}
