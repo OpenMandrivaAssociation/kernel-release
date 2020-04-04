@@ -708,15 +708,6 @@ Conflicts:	%{_lib}cpufreq-devel
 This package contains the development files for cpupower.
 %endif
 
-%package -n bootsplash-packer
-Summary:	Tool for packing bootsplash images
-Group:		System/Kernel and hardware
-Version:	%{kversion}
-Release:	%{rpmrel}
-
-%description -n bootsplash-packer
-Tool for packing bootsplash images.
-
 %if %{with build_x86_energy_perf_policy}
 %package -n x86_energy_perf_policy
 Version:	%{kversion}
@@ -838,9 +829,6 @@ rm -rf .git
 %autopatch -p1
 %else
 %autopatch -p1
-%endif
-%if %{with bootsplash}
-git apply %{SOURCE112}
 %endif
 
 # merge SAA716x DVB driver from extra tarball
@@ -1476,10 +1464,6 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %kmake -C tools/power/cpupower CPUFREQ_BENCH=false
 %endif
 
-%if %{with bootsplash}
-%kmake -C tools/bootsplash
-%endif
-
 %ifarch %{ix86} %{x86_64}
 %if %{with build_x86_energy_perf_policy}
 %kmake -C tools/power/x86/x86_energy_perf_policy CC=clang LDFLAGS="-Wl,--build-id=none"
@@ -1578,11 +1562,6 @@ chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
 mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
 install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
 install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
-%endif
-
-%if %{with bootsplash}
-mkdir -p %{buildroot}%{_bindir}
-install -m755 tools/bootsplash/bootsplash-packer %{buildroot}%{_bindir}/
 %endif
 
 %ifarch %{ix86} %{x86_64}
@@ -1755,11 +1734,6 @@ cd -
 %files -n cpupower-devel
 %{_libdir}/libcpupower.so
 %{_includedir}/cpufreq.h
-%endif
-
-%if %{with bootsplash}
-%files -n bootsplash-packer
-%{_bindir}/bootsplash-packer
 %endif
 
 %ifarch %{ix86} %{x86_64}
