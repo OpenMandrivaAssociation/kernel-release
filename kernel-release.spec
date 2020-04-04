@@ -243,9 +243,11 @@ Patch7:		aacraid-dont-freak-out-dependency-generator.patch
 # (tpg) The Ultra Kernel Same Page Deduplication
 # (tpg) http://kerneldedup.org/en/projects/uksm/download/
 # (tpg) sources can be found here https://github.com/dolohow/uksm
+# (crazy) each new patch has to be checked for GPL violation on ksm.h
+#  it cannot be re-licensed to GPL3 by random patches.
 %if %{with uksm}
 # brokes armx builds
-Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.4.patch
+Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.6.patch
 %endif
 
 %if %{with build_modzstd}
