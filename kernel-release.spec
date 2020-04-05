@@ -416,6 +416,10 @@ BuildRequires:	numa-devel
 BuildRequires:	pkgconfig(libpci)
 %endif
 
+%if %{with build_turbostat}
+BuildRequires:  pkgconfig(libpcap)
+%endif
+
 # for docs
 %if %{with build_doc}
 BuildRequires:	xmlto
