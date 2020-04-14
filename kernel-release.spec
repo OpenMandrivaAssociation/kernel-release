@@ -18,7 +18,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	6
-%define sublevel	2
+%define sublevel	4
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -399,6 +399,7 @@ BuildRequires:	binutils
 BuildRequires:	hostname
 BuildRequires:	gcc
 BuildRequires:	gcc-c++
+BuildRequires:  pkgconfig(libcap)
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	diffutils
 # For git apply
@@ -414,6 +415,10 @@ BuildRequires:	numa-devel
 # for cpupower
 %if %{with build_cpupower}
 BuildRequires:	pkgconfig(libpci)
+%endif
+
+%if %{with build_turbostat}
+BuildRequires:  pkgconfig(libpcap)
 %endif
 
 # for docs
