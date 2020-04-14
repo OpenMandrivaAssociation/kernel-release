@@ -399,6 +399,7 @@ BuildRequires:	binutils
 BuildRequires:	hostname
 BuildRequires:	gcc
 BuildRequires:	gcc-c++
+BuildRequires:  pkgconfig(libcap)
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	diffutils
 # For git apply
