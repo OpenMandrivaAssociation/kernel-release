@@ -18,7 +18,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	6
-%define sublevel	2
+%define sublevel	6
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -230,6 +230,7 @@ Patch1:		linux-5.6-fix-disassembler-4args-detection.patch
 Patch2:		die-floppy-die.patch
 Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
 Patch4:		linux-4.7-intel-dvi-duallink.patch
+Patch5:		kernel-5.6-kvm-gcc10.patch
 Patch6:		linux-5.2.9-riscv-compile.patch
 # Work around rpm dependency generator screaming about
 # error: Illegal char ']' (0x5d) in: 1.2.1[50983]_custom
@@ -290,7 +291,6 @@ Patch202:	extra-wifi-drivers-port-to-5.6.patch
 # VirtualBox patches -- added as Source: rather than Patch:
 # because they need to be applied after stuff from the
 # virtualbox-kernel-module-sources package is copied around
-Source300:	vbox-kernel-5.6.patch
 Source301:	vbox-6.1-fix-build-on-znver1-hosts.patch
 
 # Better support for newer x86 processors
@@ -399,6 +399,7 @@ BuildRequires:	binutils
 BuildRequires:	hostname
 BuildRequires:	gcc
 BuildRequires:	gcc-c++
+BuildRequires:  pkgconfig(libcap)
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	diffutils
 # For git apply
@@ -414,6 +415,10 @@ BuildRequires:	numa-devel
 # for cpupower
 %if %{with build_cpupower}
 BuildRequires:	pkgconfig(libpci)
+%endif
+
+%if %{with build_turbostat}
+BuildRequires:  pkgconfig(libpcap)
 %endif
 
 # for docs
@@ -912,7 +917,6 @@ cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxpci drivers/pci/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefile*
 sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
-patch -p1 -z .300a~ -b <%{S:300}
 patch -p1 -z .301a~ -b <%{S:301}
 %endif
 %endif
