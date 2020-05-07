@@ -3,4 +3,4 @@ sources:
   saa716x-driver.tar.xz: f9b6ef1cd6f1f71f53d9a8aadfba2cf6b5c3d7b6
   linux-5.6.tar.xz: 3957d9d71454c26048ce4c71774d21386ac72be6
   linux-5.6.tar.sign: b92ad28adf09ef8f72bc45ab48a3031e1a27495a
-  patch-5.6.10.xz: cf4ac5b90254dd974a4952cfa7aa11156a5e23ed
+  patch-5.6.11.xz: e2955a3b43711c1386abcf98246dc334ab44a0fc
