@@ -17,8 +17,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	6
-%define sublevel	6
+%define patchlevel	7
+%define sublevel	1
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -65,7 +65,7 @@
 # Build defines
 %bcond_with build_doc
 %ifarch %{ix86} %{x86_64}
-%bcond_with uksm
+%bcond_without uksm
 %else
 %bcond_with uksm
 %endif
@@ -248,7 +248,7 @@ Patch7:		aacraid-dont-freak-out-dependency-generator.patch
 #  it cannot be re-licensed to GPL3 by random patches.
 %if %{with uksm}
 # brokes armx builds
-Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.6.patch
+Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.7.patch
 %endif
 
 %if %{with build_modzstd}
@@ -830,11 +830,7 @@ cp %{S:6} %{S:7} %{S:8} %{S:9} %{S:10} %{S:11} %{S:12} %{S:13} kernel/configs/
 xzcat %{SOURCE90} |git apply - || git apply %{SOURCE90}
 rm -rf .git
 %endif
-%if %mdvver > 3000000
 %autopatch -p1
-%else
-%autopatch -p1
-%endif
 
 # merge SAA716x DVB driver from extra tarball
 sed -i -e '/saa7164/isource "drivers/media/pci/saa716x/Kconfig"' drivers/media/pci/Kconfig
@@ -1478,7 +1474,7 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %endif
 %endif
 
-%kmake -C tools/lib/bpf CC=clang libbpf.a libbpf.pc libbpf.so.0.0.7
+%kmake -C tools/lib/bpf CC=clang libbpf.a libbpf.pc libbpf.so.0.0.8
 cd tools/bpf/bpftool
 make CC=clang bpftool
 cd -
