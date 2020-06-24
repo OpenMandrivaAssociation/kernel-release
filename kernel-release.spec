@@ -32,7 +32,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -353,6 +353,9 @@ Patch809:	nvme-pci-more-info.patch
 Patch810:	linux-5.4.5-fix-build.patch
 Patch812:	linux-5.5-corsair-strafe-quirks.patch
 Patch814:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
+
+# crazy reverts
+Patch1000:	01-revert-6602f080cb28745259e2fab1a4cf55eeb5894f93.patch
 
 # Defines for the things that are needed for all the kernels
 #
