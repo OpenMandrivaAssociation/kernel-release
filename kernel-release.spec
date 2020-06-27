@@ -464,8 +464,8 @@ Suggests:	microcode-intel
 # get compiler error messages on failures)
 %if %mdvver >= 3000000
 %ifarch %{x86_64}
-BuildRequires:	virtualbox-kernel-module-sources
-BuildRequires:	virtualbox-guest-kernel-module-sources
+BuildRequires:	virtualbox-kernel-module-sources >= 6.1.10
+BuildRequires:	virtualbox-guest-kernel-module-sources >= 6.1.10
 %endif
 %endif
 
