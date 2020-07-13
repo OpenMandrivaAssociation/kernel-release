@@ -22,9 +22,10 @@ Export the currently un-exported symbols they depend on.
  security/security.c | 4 ++++
  9 files changed, 17 insertions(+)
 
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -409,6 +409,7 @@ struct files_struct *get_files_struct(st
+diff -uraN linux-5.7.8/fs/file.c omv-linux-5.7.8/fs/file.c
+--- linux-5.7.8/fs/file.c	2020-07-09 09:39:40.000000000 +0200
++++ omv-linux-5.7.8/fs/file.c	2020-07-13 15:14:49.188263989 +0200
+@@ -409,6 +409,7 @@
  
  	return files;
  }
@@ -32,7 +33,7 @@ Export the currently un-exported symbols they depend on.
  
  void put_files_struct(struct files_struct *files)
  {
-@@ -421,6 +422,7 @@ void put_files_struct(struct files_struc
+@@ -421,6 +422,7 @@
  		kmem_cache_free(files_cachep, files);
  	}
  }
@@ -40,7 +41,7 @@ Export the currently un-exported symbols they depend on.
  
  void reset_files_struct(struct files_struct *files)
  {
-@@ -533,6 +535,7 @@ out:
+@@ -534,6 +536,7 @@
  	spin_unlock(&files->file_lock);
  	return error;
  }
@@ -48,7 +49,7 @@ Export the currently un-exported symbols they depend on.
  
  static int alloc_fd(unsigned start, unsigned flags)
  {
-@@ -606,6 +609,7 @@ void __fd_install(struct files_struct *f
+@@ -612,6 +615,7 @@
  	rcu_assign_pointer(fdt->fd[fd], file);
  	rcu_read_unlock_sched();
  }
@@ -56,7 +57,7 @@ Export the currently un-exported symbols they depend on.
  
  void fd_install(unsigned int fd, struct file *file)
  {
-@@ -668,6 +672,7 @@ out_unlock:
+@@ -676,6 +680,7 @@
  	*res = NULL;
  	return -ENOENT;
  }
@@ -64,9 +65,10 @@ Export the currently un-exported symbols they depend on.
  
  void do_close_on_exec(struct files_struct *files)
  {
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1085,6 +1085,7 @@ void mmput_async(struct mm_struct *mm)
+diff -uraN linux-5.7.8/kernel/fork.c omv-linux-5.7.8/kernel/fork.c
+--- linux-5.7.8/kernel/fork.c	2020-07-09 09:39:40.000000000 +0200
++++ omv-linux-5.7.8/kernel/fork.c	2020-07-13 15:15:57.177994389 +0200
+@@ -1123,6 +1123,7 @@
  		schedule_work(&mm->async_put_work);
  	}
  }
@@ -74,9 +76,10 @@ Export the currently un-exported symbols they depend on.
  #endif
  
  /**
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3943,6 +3943,7 @@ int can_nice(const struct task_struct *p
+diff -uraN linux-5.7.8/kernel/sched/core.c omv-linux-5.7.8/kernel/sched/core.c
+--- linux-5.7.8/kernel/sched/core.c	2020-07-09 09:39:40.000000000 +0200
++++ omv-linux-5.7.8/kernel/sched/core.c	2020-07-13 15:16:48.193591744 +0200
+@@ -4572,6 +4572,7 @@
  	return (nice_rlim <= task_rlimit(p, RLIMIT_NICE) ||
  		capable(CAP_SYS_NICE));
  }
@@ -84,9 +87,10 @@ Export the currently un-exported symbols they depend on.
  
  #ifdef __ARCH_WANT_SYS_NICE
  
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -1353,6 +1353,7 @@ struct sighand_struct *__lock_task_sigha
+diff -uraN linux-5.7.8/kernel/signal.c omv-linux-5.7.8/kernel/signal.c
+--- linux-5.7.8/kernel/signal.c	2020-07-09 09:39:40.000000000 +0200
++++ omv-linux-5.7.8/kernel/signal.c	2020-07-13 15:18:04.854196194 +0200
+@@ -1396,6 +1396,7 @@
  
  	return sighand;
  }
@@ -94,19 +98,21 @@ Export the currently un-exported symbols they depend on.
  
  /*
   * send signal info to all the members of a group
---- a/kernel/task_work.c
-+++ b/kernel/task_work.c
-@@ -40,6 +40,7 @@ task_work_add(struct task_struct *task,
- 		set_notify_resume(task);
+diff -uraN linux-5.7.8/kernel/task_work.c omv-linux-5.7.8/kernel/task_work.c
+--- linux-5.7.8/kernel/task_work.c	2020-07-09 09:39:40.000000000 +0200
++++ omv-linux-5.7.8/kernel/task_work.c	2020-07-13 15:18:57.298331300 +0200
+@@ -52,6 +52,7 @@
+ 
  	return 0;
  }
 +EXPORT_SYMBOL(task_work_add);
  
  /**
   * task_work_cancel - cancel a pending work added by task_work_add()
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -1364,6 +1364,7 @@ void zap_page_range(struct vm_area_struc
+diff -uraN linux-5.7.8/mm/memory.c omv-linux-5.7.8/mm/memory.c
+--- linux-5.7.8/mm/memory.c	2020-07-09 09:39:40.000000000 +0200
++++ omv-linux-5.7.8/mm/memory.c	2020-07-13 15:19:48.003475257 +0200
+@@ -1370,6 +1370,7 @@
  	mmu_notifier_invalidate_range_end(&range);
  	tlb_finish_mmu(&tlb, start, range.end);
  }
@@ -114,9 +120,10 @@ Export the currently un-exported symbols they depend on.
  
  /**
   * zap_page_range_single - remove user pages in a given range
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -3992,6 +3992,7 @@ int shmem_zero_setup(struct vm_area_stru
+diff -uraN linux-5.7.8/mm/shmem.c omv-linux-5.7.8/mm/shmem.c
+--- linux-5.7.8/mm/shmem.c	2020-07-09 09:39:40.000000000 +0200
++++ omv-linux-5.7.8/mm/shmem.c	2020-07-13 15:20:27.829371644 +0200
+@@ -4185,6 +4185,7 @@
  
  	return 0;
  }
@@ -124,9 +131,10 @@ Export the currently un-exported symbols they depend on.
  
  /**
   * shmem_read_mapping_page_gfp - read into page cache, using specified page allocation flags.
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -1295,6 +1295,7 @@ int map_kernel_range_noflush(unsigned lo
+diff -uraN linux-5.7.8/mm/vmalloc.c omv-linux-5.7.8/mm/vmalloc.c
+--- linux-5.7.8/mm/vmalloc.c	2020-07-09 09:39:40.000000000 +0200
++++ omv-linux-5.7.8/mm/vmalloc.c	2020-07-13 15:22:00.544919570 +0200
+@@ -2011,6 +2011,7 @@
  {
  	return vmap_page_range_noflush(addr, addr + size, prot, pages);
  }
@@ -134,7 +142,7 @@ Export the currently un-exported symbols they depend on.
  
  /**
   * unmap_kernel_range_noflush - unmap kernel VM area
-@@ -1435,6 +1436,7 @@ struct vm_struct *get_vm_area(unsigned l
+@@ -2161,6 +2162,7 @@
  				  NUMA_NO_NODE, GFP_KERNEL,
  				  __builtin_return_address(0));
  }
@@ -142,9 +150,10 @@ Export the currently un-exported symbols they depend on.
  
  struct vm_struct *get_vm_area_caller(unsigned long size, unsigned long flags,
  				const void *caller)
---- a/security/security.c
-+++ b/security/security.c
-@@ -247,24 +247,28 @@ int security_binder_set_context_mgr(stru
+diff -uraN linux-5.7.8/security/security.c omv-linux-5.7.8/security/security.c
+--- linux-5.7.8/security/security.c	2020-07-09 09:39:40.000000000 +0200
++++ omv-linux-5.7.8/security/security.c	2020-07-13 15:23:59.601954504 +0200
+@@ -725,24 +725,28 @@
  {
  	return call_int_hook(binder_set_context_mgr, 0, mgr);
  }
