@@ -18,7 +18,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	7
-%define sublevel	8
+%define sublevel	9
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -353,10 +353,6 @@ Patch809:	nvme-pci-more-info.patch
 Patch810:	linux-5.4.5-fix-build.patch
 Patch812:	linux-5.5-corsair-strafe-quirks.patch
 Patch814:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
-
-# crazy reverts, temporary fix, for ath9 driver
-# https://lore.kernel.org/lkml/CAEJqkgjV8p6LtBV8YUGbNb0vYzKOQt4-AMAvYw5mzFr3eicyTg@mail.gmail.com/
-Patch1000:	01-revert-6602f080cb28745259e2fab1a4cf55eeb5894f93.patch
 
 # Defines for the things that are needed for all the kernels
 #
