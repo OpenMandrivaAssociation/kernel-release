@@ -32,7 +32,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		3
+%define rpmrel		4
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -355,6 +355,11 @@ Patch812:	linux-5.5-corsair-strafe-quirks.patch
 Patch814:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
 
 Patch815:	0001-futex.patch
+
+Patch816:	0005-glitched-ondemand-pds.patch
+Patch817:	0005-glitched-pds.patch
+Patch818:	0005-v5.7_undead-pds099o.patch
+
 
 # Defines for the things that are needed for all the kernels
 #
