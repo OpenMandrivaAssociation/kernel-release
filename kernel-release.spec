@@ -356,7 +356,7 @@ Patch814:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.p
 
 Patch815:	0001-futex.patch
 
-Patch816:	0005-glitched-ondemand-pds.patch
+#Patch816:	0005-glitched-ondemand-pds.patch
 Patch817:	0005-glitched-pds.patch
 Patch818:	0005-v5.7_undead-pds099o.patch
 
