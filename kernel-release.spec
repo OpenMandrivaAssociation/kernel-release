@@ -32,7 +32,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -238,6 +238,8 @@ Patch6:		linux-5.2.9-riscv-compile.patch
 Patch7:		aacraid-dont-freak-out-dependency-generator.patch
 # Make uClibc-ng happy
 Patch8:		socket.h-include-bitsperlong.h.patch
+# Make Nouveau work on SynQuacer (and probably all other non-x86 boards)
+Patch9:		kernel-5.8-nouveau-write-combining-only-on-x86.patch
 
 # Patches to VirtualBox and other external modules are
 # pulled in as Source: rather than Patch: because it's arch specific
@@ -1478,7 +1480,7 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 
 %kmake -C tools/lib/bpf CC=clang libbpf.a libbpf.pc libbpf.so.0.0.8
 cd tools/bpf/bpftool
-make CC=clang bpftool
+%kmake CC=clang bpftool
 cd -
 
 ############################################################
