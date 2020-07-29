@@ -18,7 +18,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	7
-%define sublevel	10
+%define sublevel	11
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -241,6 +241,14 @@ Patch8:		socket.h-include-bitsperlong.h.patch
 # Make Nouveau work on SynQuacer (and probably all other non-x86 boards)
 Patch9:		kernel-5.8-nouveau-write-combining-only-on-x86.patch
 Patch10:	kernel-5.7-fewer-conditions-for-ARM64_PTR_AUTH.patch
+
+# FIXME git bisect shows upstream commit
+# 7a8b64d17e35810dc3176fe61208b45c15d25402 breaks
+# booting SynQuacer from USB flash drives.
+# 9d55bebd9816903b821a403a69a94190442ac043 builds on
+# 7a8b64d17e35810dc3176fe61208b45c15d25402.
+Source100:      7a8b64d17e35810dc3176fe61208b45c15d25402.patch
+Source101:      9d55bebd9816903b821a403a69a94190442ac043.patch
 
 # Patches to VirtualBox and other external modules are
 # pulled in as Source: rather than Patch: because it's arch specific
@@ -836,6 +844,12 @@ xzcat %{SOURCE90} |git apply - || git apply %{SOURCE90}
 rm -rf .git
 %endif
 %autopatch -p1
+
+%ifarch %{aarch64}
+# FIXME SynQuacer workaround
+patch -p1 -R <%{S:101}
+patch -p1 -R <%{S:100}
+%endif
 
 # merge SAA716x DVB driver from extra tarball
 sed -i -e '/saa7164/isource "drivers/media/pci/saa716x/Kconfig"' drivers/media/pci/Kconfig
