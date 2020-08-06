@@ -17,8 +17,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	7
-%define sublevel	12
+%define patchlevel	8
+%define sublevel	0
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -32,7 +32,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		2
+%define rpmrel		1
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -81,13 +81,12 @@
 %bcond_with dracut_all_initrd
 # (tpg) enable patches from ClearLinux
 %bcond_without clr
-%if %mdvver > 3000000
 %bcond_without cross_headers
-%else
-%bcond_with cross_headers
-%endif
+# FIXME re-enable by default when the patches have been adapted to 5.8
+%bcond_with saa716x
+%bcond_with rtl8821ce
 
-%global cross_header_archs	aarch64-linux armv7hnl-linux i686-linux x86_64-linux x32-linux riscv32-linux riscv64-linux aarch64-linuxmusl armv7hnl-linuxmusl i686-linuxmusl x86_64-linuxmusl x32-linuxmusl riscv32-linuxmusl riscv64-linuxmusl aarch64-android armv7l-android armv8l-android x86_64-android aarch64-linuxuclibc armv7hnl-linuxuclibc i686-linuxuclibc x86_64-linuxuclibc x32-linuxuclibc riscv32-linuxuclibc riscv64-linuxuclibc
+%global cross_header_archs	aarch64-linux armv7hnl-linux i686-linux x86_64-linux x32-linux riscv32-linux riscv64-linux aarch64-linuxmusl armv7hnl-linuxmusl i686-linuxmusl x86_64-linuxmusl x32-linuxmusl riscv32-linuxmusl riscv64-linuxmusl aarch64-android armv7l-android armv8l-android x86_64-android aarch64-linuxuclibc armv7hnl-linuxuclibc i686-linuxuclibc x86_64-linuxuclibc x32-linuxuclibc riscv32-linuxuclibc riscv64-linuxuclibc ppc64le-linux ppc64-linux
 %global long_cross_header_archs %(
 	for i in %{cross_header_archs}; do
 		CPU=$(echo $i |cut -d- -f1)
@@ -261,7 +260,7 @@ Source101:      9d55bebd9816903b821a403a69a94190442ac043.patch
 #  it cannot be re-licensed to GPL3 by random patches.
 %if %{with uksm}
 # brokes armx builds
-Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.7.patch
+Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.8.patch
 %endif
 
 %if %{with build_modzstd}
@@ -305,6 +304,11 @@ Patch202:	extra-wifi-drivers-port-to-5.6.patch
 # because they need to be applied after stuff from the
 # virtualbox-kernel-module-sources package is copied around
 Source301:	vbox-6.1-fix-build-on-znver1-hosts.patch
+# Re-export a few symbols vbox wants
+Patch301:	https://gitweb.frugalware.org/wip_kernel/raw/9d0e99ff5fef596388913549a8418c07d367a940/source/base/kernel/fix_virtualbox.patch
+Source302:	https://www.virtualbox.org/raw-attachment/ticket/19644/fixes_for_mm_struct.patch
+Source303:	https://www.virtualbox.org/raw-attachment/ticket/19644/fixes_for_changes_in_cpu_tlbstate.patch
+Source304:	https://www.virtualbox.org/raw-attachment/ticket/19644/fixes_for_module_memory.patch
 
 # Better support for newer x86 processors
 # Original patch:
@@ -469,11 +473,9 @@ Suggests:	microcode-intel
 # Let's pull in some of the most commonly used DKMS modules
 # so end users don't have to install compilers (and worse,
 # get compiler error messages on failures)
-%if %mdvver >= 3000000
 %ifarch %{x86_64}
 BuildRequires:	virtualbox-kernel-module-sources >= 6.1.10
 BuildRequires:	virtualbox-guest-kernel-module-sources >= 6.1.10
-%endif
 %endif
 
 %description
@@ -851,11 +853,14 @@ patch -p1 -R <%{S:101}
 patch -p1 -R <%{S:100}
 %endif
 
+%if %{with saa716x}
 # merge SAA716x DVB driver from extra tarball
 sed -i -e '/saa7164/isource "drivers/media/pci/saa716x/Kconfig"' drivers/media/pci/Kconfig
 sed -i -e '/saa7164/iobj-$(CONFIG_SAA716X_CORE) += saa716x/' drivers/media/pci/Makefile
 find drivers/media/tuners drivers/media/dvb-frontends -name "*.c" -o -name "*.h" |xargs sed -i -e 's,"dvb_frontend.h",<media/dvb_frontend.h>,g'
+%endif
 
+%if %{with rtl8821ce}
 # Merge RTL8723DE and RTL8821CE drivers
 cd drivers/net/wireless
 sed -i -e '/quantenna\/Kconfig/asource "drivers/net/wireless/rtl8821ce/Kconfig' Kconfig
@@ -863,6 +868,7 @@ sed -i -e '/quantenna\/Kconfig/asource "drivers/net/wireless/rtl8723de/Kconfig' 
 sed -i -e '/QUANTENNA/aobj-$(CONFIG_RTL8821CE) += rtl8821ce/' Makefile
 sed -i -e '/QUANTENNA/aobj-$(CONFIG_RTL8723DE) += rtl8723de/' Makefile
 cd -
+%endif
 
 %if %{with build_debug}
 %define debug --debug
@@ -874,7 +880,6 @@ cd -
 LC_ALL=C sed -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 
 # Pull in some externally maintained modules
-%if %mdvver >= 3000000
 %ifarch %{x86_64}
 # === VirtualBox guest additions ===
 %define use_internal_vboxvideo 0
@@ -933,7 +938,9 @@ sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefi
 sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 patch -p1 -z .301a~ -b <%{S:301}
-%endif
+patch -p1 -z .302a~ -b <%{S:302}
+patch -p1 -z .303a~ -b <%{S:303}
+patch -p1 -z .304a~ -b <%{S:304}
 %endif
 
 # get rid of unwanted files
@@ -1493,7 +1500,7 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %endif
 %endif
 
-%kmake -C tools/lib/bpf CC=clang libbpf.a libbpf.pc libbpf.so.0.0.8
+%kmake -C tools/lib/bpf CC=clang libbpf.a libbpf.pc libbpf.so.0.0.9
 cd tools/bpf/bpftool
 %kmake CC=clang bpftool
 cd -
