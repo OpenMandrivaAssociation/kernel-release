@@ -166,8 +166,7 @@
 	&& RPM_BUILD_NCPUS="`/usr/bin/getconf _NPROCESSORS_ONLN`"; \\\
 	[ "$RPM_BUILD_NCPUS" -gt 1 ] && echo "-P $RPM_BUILD_NCPUS")
 
-# Sparc arch wants sparc64 kernels
-%define target_arch %(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/' -e 's/x86_64/x86/' -e 's/i.86/x86/' -e 's/znver1/x86/' -e 's/riscv.*/riscv/')
+%define target_arch %(echo %{_arch} | sed -e 's/mips.*/mips/' -e 's/arm.*/arm/' -e 's/aarch64/arm64/' -e 's/x86_64/x86/' -e 's/i.86/x86/' -e 's/znver1/x86/' -e 's/riscv.*/riscv/' -e 's/ppc.*/powerpc/')
 
 #
 # SRC RPM description
@@ -210,6 +209,7 @@ Source10:	i386-common.config
 Source11:	arm64-common.config
 Source12:	arm-common.config
 Source13:	znver1-common.config
+Source14:	powerpc-common.config
 # Files called $ARCH-$FLAVOR.config are merged as well,
 # currently there's no need to have specific overloads there.
 
@@ -839,7 +839,7 @@ done
 #
 %prep
 %setup -q -n linux-%{tar_ver} -a 140 -a 200
-cp %{S:6} %{S:7} %{S:8} %{S:9} %{S:10} %{S:11} %{S:12} %{S:13} kernel/configs/
+cp %{S:6} %{S:7} %{S:8} %{S:9} %{S:10} %{S:11} %{S:12} %{S:13} %{S:14} kernel/configs/
 %if 0%{sublevel}
 [ -e .git ] || git init
 xzcat %{SOURCE90} |git apply - || git apply %{SOURCE90}
@@ -995,20 +995,35 @@ sed -i -e "s/^# CONFIG_RD_ZSTD is not set/CONFIG_RD_ZSTD=y/g" kernel/configs/com
 	x86_64|znver1)
 		CONFIGS=x86_64_defconfig
 		;;
+	ppc64)
+		CONFIGS=pseries_defconfig
+		;;
+	ppc64le)
+		CONFIGS="pseries_defconfig arch/powerpc/configs/le.config"
+		;;
 	*)
 		CONFIGS=defconfig
 		;;
 	esac
 
-	for i in common common-${type} ${arch}-common ${arch}-${type}; do
+	for i in common common-${type}; do
 		[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
 	done
 	if [ "$arch" = "znver1" ]; then
-		# We need to build with ARCH=x86_64 rather than ARCH=znver1
-		# and pull in both x86_64 and znver1 configs, with the latter
-		# coming last so it can override the former
-		CONFIGS="${CONFIGS/znver1.config/x86_64.config znver1.config}"
+		# Since znver1 is a special case of x86_64, let's pull
+		# in x86_64 configs first (and znver1 configs on top
+		# later -- later configs overwrite earlier ones)
+		for i in x86_64-common x86_64-${type}; do
+			[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
+		done
+	fi
+	for i in ${arch}-common ${arch}-${type}; do
+		[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
+	done
+	if [ "$arch" = "znver1" -o "$arch" = "x86_64" ]; then
 		arch=x86
+	elif echo $arch |grep -q ^ppc; then
+		arch=powerpc
 	fi
 
 	make ARCH="${arch}" $CONFIGS
@@ -1155,7 +1170,7 @@ SaveDevel() {
     sed -i -e '/rtl8.*/d' $TempDevelRoot/drivers/net/wireless/{Makefile,Kconfig}
 
     for i in alpha arc avr32 blackfin c6x cris csky frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
-		 mips mn10300 nds32 nios2 openrisc parisc powerpc s390 score sh sparc tile unicore32 xtensa; do
+		 mips mn10300 nds32 nios2 openrisc parisc s390 score sh sparc tile unicore32 xtensa; do
 	rm -rf $TempDevelRoot/arch/$i
     done
 
@@ -1180,6 +1195,7 @@ cat > $kernel_devel_files <<EOF
 $DevelRoot/Documentation
 $DevelRoot/arch/arm
 $DevelRoot/arch/arm64
+$DevelRoot/arch/powerpc
 $DevelRoot/arch/riscv
 $DevelRoot/arch/um
 $DevelRoot/arch/x86
@@ -1410,7 +1426,7 @@ install -d %{temp_root}
 ###
 # Build the configs for every arch we care about
 # that way, we can be sure all *.config files have the right additions
-for a in arm arm64 i386 x86_64 znver1; do
+for a in arm arm64 i386 x86_64 znver1 powerpc; do
 	for t in desktop server; do
 		CreateConfig $a $t
 		export ARCH=$a
@@ -1447,6 +1463,10 @@ for a in arm arm64 i386 x86_64 znver1; do
 					;;
 				riscv*)
 					SARCH=riscv
+					;;
+				ppc*)
+					ARCH=powerpc
+					SARCH=powerpc
 					;;
 				*)
 					[ "$a" != "$TripletArch" ] && continue
@@ -1621,7 +1641,7 @@ rm -f %{target_source}/*_files.* %{target_source}/README.kernel-sources
 # we remove all the source files that we don't ship
 # first architecture files
 for i in alpha arc avr32 blackfin c6x cris csky frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
-    mips nds32 nios2 openrisc parisc powerpc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
+    mips nds32 nios2 openrisc parisc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
     rm -rf %{target_source}/arch/$i
 done
 
@@ -1632,6 +1652,7 @@ rm -rf %{target_source}/.tmp_depmod/
 rm -rf %{buildroot}/usr/src/linux-*/uksm.txt
 
 # more cleaning
+rm -f %{target_source}/arch/x86_64/boot/bzImage
 cd %{target_source}
 # lots of gitignore files
 find -iname ".gitignore" -delete
@@ -1668,6 +1689,7 @@ cd -
 %{_kerneldir}/arch/Kconfig
 %{_kerneldir}/arch/arm
 %{_kerneldir}/arch/arm64
+%{_kerneldir}/arch/powerpc
 %{_kerneldir}/arch/riscv
 %{_kerneldir}/arch/um
 %{_kerneldir}/arch/x86
