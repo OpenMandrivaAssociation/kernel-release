@@ -369,6 +369,8 @@ Patch810:	linux-5.4.5-fix-build.patch
 Patch812:	linux-5.5-corsair-strafe-quirks.patch
 Patch814:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
 
+Patch815:	0001-futex.patch
+
 # Defines for the things that are needed for all the kernels
 #
 %define common_desc_kernel The kernel package contains the Linux kernel (vmlinuz), the core of your \
