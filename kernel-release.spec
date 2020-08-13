@@ -32,7 +32,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -248,6 +248,10 @@ Patch10:	kernel-5.7-fewer-conditions-for-ARM64_PTR_AUTH.patch
 # 7a8b64d17e35810dc3176fe61208b45c15d25402.
 Source100:      7a8b64d17e35810dc3176fe61208b45c15d25402.patch
 Source101:      9d55bebd9816903b821a403a69a94190442ac043.patch
+# FIXME hardening the module loader breaks it when
+# using binutils 2.35, https://sourceware.org/bugzilla/show_bug.cgi?id=26378
+# Let's revert it for now until there's a good fix.
+Patch100:	workaround-aarch64-module-loader.patch
 
 # Patches to VirtualBox and other external modules are
 # pulled in as Source: rather than Patch: because it's arch specific
