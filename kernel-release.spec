@@ -373,6 +373,11 @@ Patch810:	linux-5.4.5-fix-build.patch
 Patch812:	linux-5.5-corsair-strafe-quirks.patch
 Patch814:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
 
+# Futex/Fsync patch improve performance in Valve Proton games (in WINE too if we patch it)
+# We provide also Futex patch for glibc to improve performance in native games/app
+# https://steamcommunity.com/app/221410/discussions/0/3158631000006906163/
+# For testing/benchmarking, futex can be disabled by env or by launch command: "PROTON_NO_FSYNC=1"
+# Patch teken from https://gitlab.manjaro.org/packages/core/linux57/-/blob/master/0001-futex.patch
 Patch815:	0001-futex.patch
 
 # Defines for the things that are needed for all the kernels
