@@ -32,7 +32,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		3
+%define rpmrel		4
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -310,9 +310,7 @@ Patch202:	extra-wifi-drivers-port-to-5.6.patch
 Source301:	vbox-6.1-fix-build-on-znver1-hosts.patch
 # Re-export a few symbols vbox wants
 Patch301:	https://gitweb.frugalware.org/wip_kernel/raw/9d0e99ff5fef596388913549a8418c07d367a940/source/base/kernel/fix_virtualbox.patch
-Source302:	https://www.virtualbox.org/raw-attachment/ticket/19644/fixes_for_mm_struct.patch
-Source303:	https://www.virtualbox.org/raw-attachment/ticket/19644/fixes_for_changes_in_cpu_tlbstate.patch
-Source304:	https://www.virtualbox.org/raw-attachment/ticket/19644/fixes_for_module_memory.patch
+Source302:	vbox-6.1.12-kernel-5.8.patch
 
 # Better support for newer x86 processors
 # Original patch:
@@ -370,6 +368,7 @@ Patch809:	nvme-pci-more-info.patch
 # until is implemented / fixed.
 #Patch810:  acer-wmi-silence-unknow-functions-messages.patch
 Patch810:	linux-5.4.5-fix-build.patch
+Patch811:	iwlwifi-dont-scream-about-debug-firmware.patch
 Patch812:	linux-5.5-corsair-strafe-quirks.patch
 Patch814:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
 
@@ -377,7 +376,7 @@ Patch814:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.p
 # We provide also Futex patch for glibc to improve performance in native games/app
 # https://steamcommunity.com/app/221410/discussions/0/3158631000006906163/
 # For testing/benchmarking, futex can be disabled by env or by launch command: "PROTON_NO_FSYNC=1"
-# Patch teken from https://gitlab.manjaro.org/packages/core/linux57/-/blob/master/0001-futex.patch
+# Patch taken from https://gitlab.manjaro.org/packages/core/linux57/-/blob/master/0001-futex.patch
 Patch815:	0001-futex.patch
 
 # Defines for the things that are needed for all the kernels
@@ -950,8 +949,6 @@ sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 patch -p1 -z .301a~ -b <%{S:301}
 patch -p1 -z .302a~ -b <%{S:302}
-patch -p1 -z .303a~ -b <%{S:303}
-patch -p1 -z .304a~ -b <%{S:304}
 %endif
 
 # get rid of unwanted files
