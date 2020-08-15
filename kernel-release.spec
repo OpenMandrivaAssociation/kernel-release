@@ -240,6 +240,7 @@ Patch8:		socket.h-include-bitsperlong.h.patch
 # Make Nouveau work on SynQuacer (and probably all other non-x86 boards)
 Patch9:		kernel-5.8-nouveau-write-combining-only-on-x86.patch
 Patch10:	kernel-5.7-fewer-conditions-for-ARM64_PTR_AUTH.patch
+Patch11:	kernel-5.8-aarch64-gcc-10.2-workaround.patch
 
 # FIXME git bisect shows upstream commit
 # 7a8b64d17e35810dc3176fe61208b45c15d25402 breaks
