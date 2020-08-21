@@ -1,3 +1,5 @@
+%bcond_with clang
+
 # utils/cpuidle-info.c:193: error: undefined reference to 'cpufreq_cpu_exists'
 # investigate aarch64
 %define _binaries_in_noarch_packages_terminate_build   0
@@ -42,10 +44,18 @@
 %define kpatch		%{nil}
 
 # kernel base name (also name of srpm)
+%if %{with clang}
+%if 0%{relc}
+%define kname		kernel-rc-clang
+%else
+%define kname		kernel-release-clang
+%endif
+%else
 %if 0%{relc}
 %define kname		kernel-rc
 %else
 %define kname		kernel-release
+%endif
 %endif
 
 # version defines
@@ -72,7 +82,6 @@
 %bcond_without build_source
 %bcond_without build_devel
 %bcond_with build_debug
-%bcond_with clang
 ## enabled it runs dracut -f --regenerate-all
 ## we *should* enable that, is bc we keep or can keep lots
 ## kernel around and the initrd is created using sys libs, sys configs,
@@ -153,10 +162,17 @@
 ############################################################
 ### Linker start1 > Check point to build for omv or rosa ###
 ############################################################
+%if %{with clang}
+%define kmake ARCH=%{target_arch} %{make_build} LD="ld.lld --icf=none --no-gc-sections" HOSTLD="ld.lld --icf=none --no-gc-sections"
+# there are places where parallel make don't work
+# usually we use this
+%define smake make LD="ld.lld --icf=none --no-gc-sections"
+%else
 %define kmake ARCH=%{target_arch} %{make_build} LD="$LD"
 # there are places where parallel make don't work
 # usually we use this
 %define smake make LD="$LD"
+%endif
 
 ###################################################
 ###  Linker end1 > Check point to build for omv ###
@@ -425,8 +441,14 @@ BuildRequires:	flex
 BuildRequires:	bison
 BuildRequires:	binutils
 BuildRequires:	hostname
+%if %{with clang}
+BuildRequires:	clang
+BuildRequires:	llvm
+BuildRequires:	lld
+%else
 BuildRequires:	gcc
 BuildRequires:	gcc-c++
+%endif
 BuildRequires:  pkgconfig(libcap)
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	diffutils
@@ -543,8 +565,6 @@ Release:	%{rpmrel}				\
 Requires:	glibc-devel				\
 Requires:	ncurses-devel				\
 Requires:	make					\
-Requires:	gcc >= 7.2.1_2017.11-3			\
-Requires:	perl					\
 %ifarch %{x86_64}					\
 Requires:	pkgconfig(libelf)			\
 %endif							\
@@ -619,31 +639,41 @@ needs debugging info from the kernel, this package may help. \
 %if %{with build_desktop}
 %ifarch %{ix86}
 %define summary_desktop Linux Kernel for desktop use with i686 & 4GB RAM
+%define summary_desktop_clang Clang-built Linux Kernel for desktop use with i686 & 4GB RAM
 %define info_desktop This kernel is compiled for desktop use, single or \
 multiple i686 processor(s)/core(s) and less than 4GB RAM, using HZ_1000, \
 voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler.
 %else
 %define summary_desktop Linux Kernel for desktop use with %{_arch}
+%define summary_desktop_clang Clang-built Linux Kernel for desktop use with %{_arch}
 %define info_desktop This kernel is compiled for desktop use, single or \
 multiple %{_arch} processor(s)/core(s), using HZ_1000, \
 voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
 %endif
 %mkflavour desktop
+%if %{with clang}
+%mkflavour desktop-clang
+%endif
 %endif
 
 #
 %if %{with build_server}
 %ifarch %{ix86}
 %define summary_server Linux Kernel for server use with i686 & 64GB RAM
+%define summary_server_clang Clang-built Linux Kernel for server use with i686 & 64GB RAM
 %define info_server This kernel is compiled for server use, single or \
 multiple i686 processor(s)/core(s) and up to 64GB RAM using PAE, using \
 no preempt, HZ_300, CFS cpu scheduler and BFQ i/o scheduler, PERFORMANCE governor.
 %else
 %define summary_server Linux Kernel for server use with %{_arch}
+%define summary_server_clang Clang-built Linux Kernel for server use with %{_arch}
 %define info_server This kernel is compiled for server use, single or \
 CFS cpu scheduler and BFQ i/o scheduler, PERFORMANCE governor.
 %endif
 %mkflavour server
+%if %{with clang}
+%mkflavour server-clang
+%endif
 %endif
 
 #
@@ -670,8 +700,8 @@ Obsoletes:	%{kname}-source-latest <= %{kversion}-%{rpmrel}
 Buildarch:	noarch
 
 %description -n %{kname}-source
-The %{kname}-source package contains the source code files for the Mandriva and
-ROSA kernel. Theese source files are only needed if you want to build your own
+The %{kname}-source package contains the source code files for the OpenMandriva
+kernel. These source files are only needed if you want to build your own
 custom kernel that is better tuned to your particular hardware.
 
 If you only want the files needed to build 3rdparty (nVidia, Ati, dkms-*,...)
@@ -962,11 +992,15 @@ chmod 755 tools/objtool/sync-check.sh
 
 %build
 %setup_compile_flags
+%if ! %{with clang}
 ############################################################
 ### Linker start2 > Check point to build for omv or rosa ###
 ############################################################
 # Make sure we don't use gold
 export LD="%{_target_platform}-ld.bfd"
+%else
+# With clang, we use lld anyway
+%endif
 
 ############################################################
 ###  Linker end2 > Check point to build for omv or rosa ###
@@ -987,6 +1021,18 @@ CreateConfig() {
 	arch="$1"
 	type="$2"
 	rm -f .config
+
+%if %{with clang}
+	CLANG_EXTRAS=clang-workarounds
+	CC=clang
+	CXX=clang++
+	LLVM_TOOLS='OBJCOPY=llvm-objcopy AR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJDUMP=llvm-objdump HOSTAR=llvm-ar'
+%else
+	CLANG_EXTRAS=''
+	CC=gcc
+	CXX=g++
+	LLVM_TOOLS=""
+%endif
 
 %if %{with build_modxz}
 sed -i -e "s/^# CONFIG_KERNEL_XZ is not set/CONFIG_KERNEL_XZ=y/g" kernel/configs/common.config
@@ -1015,7 +1061,7 @@ sed -i -e "s/^# CONFIG_RD_ZSTD is not set/CONFIG_RD_ZSTD=y/g" kernel/configs/com
 		;;
 	esac
 
-	for i in common common-${type}; do
+	for i in common common-${type} $CLANG_EXTRAS; do
 		[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
 	done
 	if [ "$arch" = "znver1" ]; then
@@ -1035,7 +1081,7 @@ sed -i -e "s/^# CONFIG_RD_ZSTD is not set/CONFIG_RD_ZSTD=y/g" kernel/configs/com
 		arch=powerpc
 	fi
 
-	make ARCH="${arch}" $CONFIGS
+	make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCFLAGS="%{optflags}" $LLVM_TOOLS $CONFIGS
 	scripts/config --set-val BUILD_SALT \"$(echo "$arch-$type-%{EVRD}"|sha1sum|awk '{ print $1; }')\"
 }
 
@@ -1058,19 +1104,7 @@ BuildKernel() {
     KernelVer=$1
     printf '%s\n' "Building kernel $KernelVer"
 # (tpg) build with gcc, as kernel is not yet ready for LLVM/clang
-%ifarch %{x86_64}
-%if %{with clang}
-    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS"
-%else
-    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS"
-%endif
-%else
-%if %{with clang}
-    %kmake all CC=clang CXX=clang++ CFLAGS="$CFLAGS"
-%else
-    %kmake all CC=gcc CXX=g++ CFLAGS="$CFLAGS"
-%endif
-%endif
+    %kmake all CC=$CC CXX=$CXX CFLAGS="$CFLAGS"
 
 # Start installing stuff
     install -d %{temp_boot}
@@ -1089,7 +1123,7 @@ BuildKernel() {
 %ifarch %{ix86} %{armx}
     zstd -15 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
 %else
-    zstd -10 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
+    zstd -19 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
 %endif
 %endif
 
@@ -1115,7 +1149,11 @@ BuildKernel() {
     %{make_build} INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer ARCH=%{target_arch} SRCARCH=%{target_arch} headers_install
 
 %ifarch %{armx}
+%if %{with clang}
+    %{smake} ARCH=%{target_arch} HOSTCC=clang HOSTCXX=clang++ CC=clang CXX=clang++ CFLAGS="$CFLAGS" LDFLAGS="%{ldflags}" HOSTCFLAGS="%{optflags}" OBJCOPY=llvm-objcopy AR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJDUMP=llvm-objdump HOSTAR=llvm-ar V=1 dtbs INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
+%else
     %{smake} ARCH=%{target_arch} V=1 dtbs INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
+%endif
 %endif
 
 # remove /lib/firmware, we use a separate kernel-firmware
@@ -1368,7 +1406,7 @@ fi
 
 if [ -x %{_sbindir}/dkms ] && [ -e %{_unitdir}/dkms.service ] && [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
     /bin/systemctl --quiet restart dkms.service
-    /bin/systemctl --quiet try-restart fedora-loadmodules.service
+    /bin/systemctl --quiet try-restart loadmodules.service
     %{_sbindir}/dkms autoinstall --verbose --kernelver %{kversion}-$kernel_flavour-%{buildrpmrel}
 fi
 
@@ -1435,7 +1473,7 @@ install -d %{temp_root}
 ###
 # Build the configs for every arch we care about
 # that way, we can be sure all *.config files have the right additions
-for a in arm arm64 i386 x86_64 znver1 powerpc; do
+for a in arm arm64 i386 x86_64 znver1 powerpc riscv; do
 	for t in desktop server; do
 		CreateConfig $a $t
 		export ARCH=$a
@@ -1481,7 +1519,7 @@ for a in arm arm64 i386 x86_64 znver1 powerpc; do
 					[ "$a" != "$TripletArch" ] && continue
 					;;
 				esac
-				%{smake} ARCH=${a} SRCARCH=${SARCH} INSTALL_HDR_PATH=%{temp_root}%{_prefix}/${i} headers_install
+				%{smake} ARCH=${a} SRCARCH=${SARCH} KCFLAGS="$CFLAGS" INSTALL_HDR_PATH=%{temp_root}%{_prefix}/${i} headers_install
 			done
 		fi
 %endif
@@ -1490,11 +1528,19 @@ done
 make mrproper
 
 %if %{with build_desktop}
+%if %{with clang}
+CreateKernel desktop-clang
+%else
 CreateKernel desktop
+%endif
 %endif
 
 %if %{with build_server}
+%if %{with clang}
 CreateKernel server
+%else
+CreateKernel server-clang
+%endif
 %endif
 
 # how to build own flavour
@@ -1516,7 +1562,7 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 %if %{with build_cpupower}
 # make sure version-gen.sh is executable.
 chmod +x tools/power/cpupower/utils/version-gen.sh
-%kmake -C tools/power/cpupower CPUFREQ_BENCH=false
+%kmake -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%{optflags}"
 %endif
 
 %ifarch %{ix86} %{x86_64}
@@ -1609,7 +1655,7 @@ make -C tools/perf  -s CC=%{__cc} DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMAN
 ### Linker start4 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_cpupower}
-%make_install -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} install
+%make_install -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{optflags}"
 
 rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
