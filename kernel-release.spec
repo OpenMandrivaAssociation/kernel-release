@@ -1,6 +1,3 @@
-%bcond_without gcc
-%bcond_without clang
-
 # utils/cpuidle-info.c:193: error: undefined reference to 'cpufreq_cpu_exists'
 # investigate aarch64
 %define _binaries_in_noarch_packages_terminate_build   0
@@ -15,6 +12,10 @@
 # https://issues.openmandriva.org/show_bug.cgi?id=2400
 # let us try *old* way for kernel package(s)
 %global _build_id_links alldebug
+
+
+%bcond_without gcc
+%bcond_without clang
 
 # IMPORTANT
 # This is the place where you set kernel version i.e 4.5.0
@@ -122,19 +123,9 @@
 %bcond_with build_cpupower
 %endif
 
-# (default) Enable support for Zstandard and compress modules with XZ
-# unfortunately kmod does not support Zstandard for now, so kernel modules
-# compressed with zstd will not bo loaded and system will fail
+# (crazy) default ZSTD, we have an patch for that.
 # https://github.com/facebook/zstd/issues/1121
-%ifarch %{ix86} %{x86_64}
 %bcond_without build_modzstd
-# compress modules with XZ
-%bcond_with build_modxz
-%else
-%bcond_with build_modzstd
-# compress modules with XZ
-%bcond_without build_modxz
-%endif
 
 # ARM builds
 %ifarch %{armx}
