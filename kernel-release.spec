@@ -370,7 +370,8 @@ Patch814:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.p
 # https://steamcommunity.com/app/221410/discussions/0/3158631000006906163/
 # For testing/benchmarking, futex can be disabled by env or by launch command: "PROTON_NO_FSYNC=1"
 # Patch taken from https://gitlab.manjaro.org/packages/core/linux57/-/blob/master/0001-futex.patch
-Patch815:	0001-futex.patch
+# (crazy) futex patch is wrong, rejected upstream for breaking NUMA and other things
+#Patch815:	0001-futex.patch
 
 # Defines for the things that are needed for all the kernels
 #
