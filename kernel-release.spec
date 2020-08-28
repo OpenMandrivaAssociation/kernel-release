@@ -77,6 +77,11 @@
 %bcond_without build_devel
 %bcond_without cross_headers
 
+%if %{with clang}
+## lld is broken now or the kernel doesn't like it
+%bcond_without ld_workaround
+%endif
+
 %bcond_with build_debug
 %bcond_with dracut_all_initrd
 %bcond_with clr
