@@ -182,19 +182,28 @@ Source1:	http://www.kernel.org/pub/linux/kernel/v%{kernelversion}.x/linux-%{tar_
 NoSource:	0
 %endif
 
-Source4:	README.kernel-sources
-Source5:	%{name}.rpmlintrc
-# Global configs
-Source6:	common.config
-Source8:	common-desktop.config
-Source9:	common-server.config
+Source3:	README.kernel-sources
+Source4:	%{name}.rpmlintrc
+## all in one configs for each kernel
+Source5:	x86_64-desktop-clang-omv-defconfig
+Source6:	x86_64-desktop-gcc-omv-defconfig
+Source7:	x86_64-server-clang-omv-defconfig
+Source8:	x86_64-server-gcc-omv-defconfig
+Source9:	x86_64-znver-desktop-clang-omv-defconfig
+Source10:	x86_64-znver-desktop-gcc-omv-defconfig
+Source11:	x86_64-znver-server-clang-omv-defconfig
+Source12:	x86_64-znver-server-gcc-omv-defconfig
+# to be removed soon
+Source20:	common.config
+Source21:	common-desktop.config
+Source23:	common-server.config
 # Architecture specific configs
-Source7:	x86_64-common.config
-Source10:	i386-common.config
-Source11:	arm64-common.config
-Source12:	arm-common.config
-Source13:	znver1-common.config
-Source14:	powerpc-common.config
+Source24:	x86_64-common.config
+Source25:	i386-common.config
+Source26:	arm64-common.config
+Source26:	arm-common.config
+Source28:	znver1-common.config
+Source29:	powerpc-common.config
 # Files called $ARCH-$FLAVOR.config are merged as well,
 # currently there's no need to have specific overloads there.
 
@@ -853,7 +862,7 @@ done
 #
 %prep
 %setup -q -n linux-%{tar_ver} -a 140 -a 200
-cp %{S:6} %{S:7} %{S:8} %{S:9} %{S:10} %{S:11} %{S:12} %{S:13} %{S:14} kernel/configs/
+cp %{S:20} %{S:21} %{S:22} %{S:23} %{S:24} %{S:25} %{S:26} %{S:27} %{S:28} %{S:29} kernel/configs/
 %if 0%{sublevel}
 [ -e .git ] || git init
 xzcat %{SOURCE90} |git apply - || git apply %{SOURCE90}
