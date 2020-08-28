@@ -1095,21 +1095,6 @@ BuildKernel() {
 	install -m 644 System.map %{temp_boot}/System.map-$KernelVer
 	install -m 644 .config %{temp_boot}/config-$KernelVer
 
-%if %{with build_modxz}
-%ifarch %{ix86} %{armx}
-	xz -5 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
-%else
-	xz -7 -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.xz
-%endif
-%endif
-
-%if %{with build_modzstd}
-%ifarch %{ix86} %{armx}
-	zstd -15 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
-%else
-	zstd -19 -q -T0 -c Module.symvers > %{temp_boot}/symvers-$KernelVer.zst
-%endif
-%endif
 
 %ifarch %{arm}
 	if [ -f arch/arm/boot/uImage ]; then
@@ -1334,7 +1319,6 @@ CreateFiles() {
 	### Create the kernel_files.*
 	cat > $kernel_files <<EOF
 %{_bootdir}/System.map-%{kversion}-$kernel_flavour-%{buildrpmrel}
-%{_bootdir}/symvers-%{kversion}-$kernel_flavour-%{buildrpmrel}.[gxz]*
 %{_bootdir}/config-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %{_bootdir}/$ker-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %dir %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/
