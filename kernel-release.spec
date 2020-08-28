@@ -81,8 +81,8 @@
 ## *systemd* service & apps etc. IOW, a old initrd may have old files, libs, etc
 ## changed since last rebuild and may result in either broken boot, or very hard to debug bugs.
 %bcond_with dracut_all_initrd
-# (tpg) enable patches from ClearLinux
-%bcond_without clr
+# (crazy) disable until I have a chance to review.
+%bcond_with clr
 %bcond_without cross_headers
 # FIXME re-enable by default when the patches have been adapted to 5.8
 %bcond_with saa716x
