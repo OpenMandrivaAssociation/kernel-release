@@ -75,16 +75,11 @@
 %endif
 %bcond_without build_source
 %bcond_without build_devel
-%bcond_with build_debug
-## enabled it runs dracut -f --regenerate-all
-## we *should* enable that, is bc we keep or can keep lots
-## kernel around and the initrd is created using sys libs, sys configs,
-## *systemd* service & apps etc. IOW, a old initrd may have old files, libs, etc
-## changed since last rebuild and may result in either broken boot, or very hard to debug bugs.
-%bcond_with dracut_all_initrd
-# (crazy) disable until I have a chance to review.
-%bcond_with clr
 %bcond_without cross_headers
+
+%bcond_with build_debug
+%bcond_with dracut_all_initrd
+%bcond_with clr
 # FIXME re-enable by default when the patches have been adapted to 5.8
 %bcond_with saa716x
 %bcond_with rtl8821ce
