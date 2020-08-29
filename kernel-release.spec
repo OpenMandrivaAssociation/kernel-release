@@ -73,6 +73,7 @@
 %else
 %bcond_with uksm
 %endif
+
 %bcond_without build_source
 %bcond_without build_devel
 %bcond_without cross_headers
@@ -315,17 +316,17 @@ Patch209:	extra-wifi-drivers-port-to-5.6.patch
 Source1005:	vbox-6.1-fix-build-on-znver1-hosts.patch
 # Re-export a few symbols vbox wants
 Patch210:	https://gitweb.frugalware.org/wip_kernel/raw/9d0e99ff5fef596388913549a8418c07d367a940/source/base/kernel/fix_virtualbox.patch
-Patch211:	vbox-6.1.12-kernel-5.8.patch
+Source1006:	vbox-6.1.12-kernel-5.8.patch
 
 # Better support for newer x86 processors
 # More actively maintained for newer kernels
-Patch212:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0001-cpu-5.2-merge-graysky-s-patchset.patch
+Patch211:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0001-cpu-5.2-merge-graysky-s-patchset.patch
 
 # Assorted fixes
 
 # Modular binder and ashmem -- let's try to make anbox happy
-Patch213:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
-Patch214:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
+Patch212:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
+Patch213:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -836,19 +837,19 @@ done
 # End packages - here begins build stage
 #
 %prep
-%setup -q -n linux-%{tar_ver} -a 140 -a 200
+%setup -q -n linux-%{tar_ver} -a 1003 -a 1004
 cp %{S:20} %{S:21} %{S:22} %{S:23} %{S:24} %{S:25} %{S:26} %{S:27} %{S:28} %{S:29} kernel/configs/
 %if 0%{sublevel}
 [ -e .git ] || git init
-xzcat %{SOURCE90} |git apply - || git apply %{SOURCE90}
+xzcat %{SOURCE1000} |git apply - || git apply %{SOURCE1000}
 rm -rf .git
 %endif
 %autopatch -p1
 
 %ifarch %{aarch64}
 # FIXME SynQuacer workaround
-patch -p1 -R <%{S:101}
-patch -p1 -R <%{S:100}
+patch -p1 -R <%{S:1002}
+patch -p1 -R <%{S:1001}
 %endif
 
 %if %{with saa716x}
@@ -935,8 +936,8 @@ cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxpci drivers/pci/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefile*
 sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
-patch -p1 -z .301a~ -b <%{S:301}
-patch -p1 -z .302a~ -b <%{S:302}
+patch -p1 -z .1005a~ -b <%{S:1005}
+patch -p1 -z .1006a~ -b <%{S:1006}
 %endif
 
 # get rid of unwanted files
@@ -982,14 +983,6 @@ CreateConfig() {
 		LLVM_TOOLS=""
 	fi
 
-%if %{with build_modxz}
-	sed -i -e "s/^# CONFIG_KERNEL_XZ is not set/CONFIG_KERNEL_XZ=y/g" kernel/configs/common.config
-%endif
-
-%if %{with build_modzstd}
-	sed -i -e "s/^# CONFIG_KERNEL_ZSTD is not set/CONFIG_KERNEL_ZSTD=y/g" kernel/configs/common.config
-	sed -i -e "s/^# CONFIG_RD_ZSTD is not set/CONFIG_RD_ZSTD=y/g" kernel/configs/common.config
-%endif
 
 	case ${arch} in
 	i?86|znver1_32)
@@ -1544,6 +1537,7 @@ install -m 644 %{SOURCE4} .
 rm -rf %{buildroot}
 cp -a %{temp_root} %{buildroot}
 
+# ( crazy ) FIXME what the eff actually?
 # compressing modules with XZ, even when Zstandard is used
 # (tpg) enable it when kmod will support Zstandard compressed modules
 %if %{with build_modxz} || %{with build_modzstd}
