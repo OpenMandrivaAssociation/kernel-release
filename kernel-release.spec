@@ -359,7 +359,8 @@ very current hardware.
 ### Global Requires/Provides
 # do not require dracut, please it bloats dockers and other minimal instllations
 # better solution needs to be figured out
-%define requires2	dracut >= 047
+# (crazy) it needs dracut >= 050-4 bc ZSTD support
+%define requires2	dracut >= 050-4
 # (crazy) it needs kmod >= 27-3 bc ZSTD support
 %define requires3	kmod >= 27-3
 %define requires4	sysfsutils >=  2.1.0-12
