@@ -208,62 +208,79 @@ Source29:	powerpc-common.config
 # currently there's no need to have specific overloads there.
 
 # config and systemd service file from fedora
-Source50:	cpupower.service
-Source51:	cpupower.config
+Source30:	cpupower.service
+Source31:	cpupower.config
 
 # Patches
 # Numbers 0 to 9 are reserved for upstream patches
 # (-stable patch, -rc, ...)
 # Added as a Source rather that Patch because it needs to be
 # applied with "git apply" -- may contain binary patches.
+
+# Patches to VirtualBox and other external modules are
+# pulled in as Source: rather than Patch: because it's arch specific
+# and can't be applied by %%autopatch -p1
+
 %if 0%{sublevel}
-Source90:	https://cdn.kernel.org/pub/linux/kernel/v%(echo %{version}|cut -d. -f1).x/patch-%{version}.xz
+Source1000:	https://cdn.kernel.org/pub/linux/kernel/v%(echo %{version}|cut -d. -f1).x/patch-%{version}.xz
 %endif
-Patch1:		linux-5.6-fix-disassembler-4args-detection.patch
-Patch2:		die-floppy-die.patch
-Patch3:		0001-Add-support-for-Acer-Predator-macro-keys.patch
-Patch4:		linux-4.7-intel-dvi-duallink.patch
-Patch5:		kernel-5.6-kvm-gcc10.patch
-Patch6:		linux-5.2.9-riscv-compile.patch
-# Work around rpm dependency generator screaming about
-# error: Illegal char ']' (0x5d) in: 1.2.1[50983]_custom
-# caused by aacraid versioning ("1.2.1[50983]-custom")
-Patch7:		aacraid-dont-freak-out-dependency-generator.patch
-# Make uClibc-ng happy
-Patch8:		socket.h-include-bitsperlong.h.patch
-# Make Nouveau work on SynQuacer (and probably all other non-x86 boards)
-Patch9:		kernel-5.8-nouveau-write-combining-only-on-x86.patch
-Patch10:	kernel-5.7-fewer-conditions-for-ARM64_PTR_AUTH.patch
-Patch11:	kernel-5.8-aarch64-gcc-10.2-workaround.patch
 
 # FIXME git bisect shows upstream commit
 # 7a8b64d17e35810dc3176fe61208b45c15d25402 breaks
 # booting SynQuacer from USB flash drives.
 # 9d55bebd9816903b821a403a69a94190442ac043 builds on
 # 7a8b64d17e35810dc3176fe61208b45c15d25402.
-Source100:	7a8b64d17e35810dc3176fe61208b45c15d25402.patch
-Source101:	9d55bebd9816903b821a403a69a94190442ac043.patch
+Source1001:     7a8b64d17e35810dc3176fe61208b45c15d25402.patch
+Source1002:     9d55bebd9816903b821a403a69a94190442ac043.patch
+
+
+Patch30:	linux-5.6-fix-disassembler-4args-detection.patch
+Patch31:	die-floppy-die.patch
+Patch32:	0001-Add-support-for-Acer-Predator-macro-keys.patch
+Patch33:	linux-4.7-intel-dvi-duallink.patch
+Patch34:	kernel-5.6-kvm-gcc10.patch
+Patch35:	linux-5.2.9-riscv-compile.patch
+# Work around rpm dependency generator screaming about
+# error: Illegal char ']' (0x5d) in: 1.2.1[50983]_custom
+# caused by aacraid versioning ("1.2.1[50983]-custom")
+Patch36:	aacraid-dont-freak-out-dependency-generator.patch
+# Make uClibc-ng happy
+Patch37:	socket.h-include-bitsperlong.h.patch
+# Make Nouveau work on SynQuacer (and probably all other non-x86 boards)
+Patch38:	kernel-5.8-nouveau-write-combining-only-on-x86.patch
+Patch39:	kernel-5.7-fewer-conditions-for-ARM64_PTR_AUTH.patch
+Patch40:	kernel-5.8-aarch64-gcc-10.2-workaround.patch
 # FIXME hardening the module loader breaks it when
 # using binutils 2.35, https://sourceware.org/bugzilla/show_bug.cgi?id=26378
 # Let's revert it for now until there's a good fix.
-Patch100:	workaround-aarch64-module-loader.patch
+Patch41:	workaround-aarch64-module-loader.patch
 
-# Patches to VirtualBox and other external modules are
-# pulled in as Source: rather than Patch: because it's arch specific
-# and can't be applied by %%autopatch -p1
-
-# (tpg) The Ultra Kernel Same Page Deduplication
-# (tpg) http://kerneldedup.org/en/projects/uksm/download/
-# (tpg) sources can be found here https://github.com/dolohow/uksm
+# (tpg)
+# The Ultra Kernel Same Page Deduplication
+# http://kerneldedup.org/en/projects/uksm/download/
+# sources can be found here https://github.com/dolohow/uksm
 %if %{with uksm}
 # brokes armx builds
-Patch120:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.8.patch
+Patch42:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.8.patch
 %endif
 
+## (crazy) drop in 5.9, merged upstream.
 %if %{with build_modzstd}
 # v4 -> https://lkml.org/lkml/2020/4/1/29
-Patch126: https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/support-kernel-and-ramfs-comp-and-decomp-with-zstd.patch
+Patch43:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/support-kernel-and-ramfs-comp-and-decomp-with-zstd.patch
 %endif
+
+# (crazy) see: https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
+Patch44:	Unknow-SSD-HFM128GDHTNG-8310B-QUIRK_NO_APST.patch
+# Restore ACPI loglevels to sane values
+Patch45:	https://gitweb.frugalware.org/wip_kernel/raw/86234abea5e625043153f6b8295642fd9f42bff0/source/base/kernel/acpi-use-kern_warning_even_when_error.patch
+Patch46:	https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e18613151cc81b4c0cf6e22/source/base/kernel/fix-acpi_dbg_level.patch
+# (crazy) need to know what function() breaks on nvme failures
+Patch47:	nvme-pci-more-info.patch
+Patch48:	linux-5.4.5-fix-build.patch
+Patch49:	iwlwifi-dont-scream-about-debug-firmware.patch
+Patch50:	linux-5.5-corsair-strafe-quirks.patch
+Patch51:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
 
 ### Additional hardware support
 ### TV tuners:
@@ -273,42 +290,42 @@ Patch126: https://gitweb.frugalware.org/frugalware-current/raw/master/source/bas
 # tar cJf saa716x-driver.tar.xz drivers/media/pci/saa716x drivers/media/dvb-frontends/tas2101* drivers/media/dvb-frontends/isl6422* drivers/media/dvb-frontends/stv091x.h drivers/media/tuners/av201x* drivers/media/tuners/stv6120*
 # Patches 141 to 145 are a minimal set of patches to the DVB stack to make
 # the added driver work.
-Source140:	saa716x-driver.tar.xz
-Patch141:	0023-tda18212-Added-2-extra-options.-Based-on-CrazyCat-re.patch
-Patch142:	0075-cx24117-Use-a-pointer-to-config-instead-of-storing-i.patch
-Patch143:	0076-cx24117-Add-LNB-power-down-callback.-TBS6984-uses-pc.patch
-Patch144:	0124-Extend-FEC-enum.patch
-Patch145:	saa716x-driver-integration.patch
-Patch146:	saa716x-4.15.patch
-Patch147:	saa716x-linux-4.19.patch
-Patch148:	saa716x-5.4.patch
+Source1003:	saa716x-driver.tar.xz
+Patch200:	0023-tda18212-Added-2-extra-options.-Based-on-CrazyCat-re.patch
+Patch201:	0075-cx24117-Use-a-pointer-to-config-instead-of-storing-i.patch
+Patch202:	0076-cx24117-Add-LNB-power-down-callback.-TBS6984-uses-pc.patch
+Patch203:	0124-Extend-FEC-enum.patch
+Patch204:	saa716x-driver-integration.patch
+Patch205:	saa716x-4.15.patch
+Patch206:	saa716x-linux-4.19.patch
+Patch207:	saa716x-5.4.patch
 
 # Additional WiFi drivers taken from the Endless kernel
 # git clone https://github.com/endlessm/linux.git
 # cd linux
 # tar cf extra-wifi-drivers-`date +%Y%m%d`.tar drivers/net/wireless/rtl8*
 # zstd -19 extra-wifi-drivers*.tar
-Source200:	extra-wifi-drivers-20200301.tar.zst
-Patch201:	extra-wifi-drivers-compile.patch
-Patch202:	extra-wifi-drivers-port-to-5.6.patch
+Source1004:	extra-wifi-drivers-20200301.tar.zst
+Patch208:	extra-wifi-drivers-compile.patch
+Patch209:	extra-wifi-drivers-port-to-5.6.patch
 
 # VirtualBox patches -- added as Source: rather than Patch:
 # because they need to be applied after stuff from the
 # virtualbox-kernel-module-sources package is copied around
-Source301:	vbox-6.1-fix-build-on-znver1-hosts.patch
+Source1005:	vbox-6.1-fix-build-on-znver1-hosts.patch
 # Re-export a few symbols vbox wants
-Patch301:	https://gitweb.frugalware.org/wip_kernel/raw/9d0e99ff5fef596388913549a8418c07d367a940/source/base/kernel/fix_virtualbox.patch
-Source302:	vbox-6.1.12-kernel-5.8.patch
+Patch210:	https://gitweb.frugalware.org/wip_kernel/raw/9d0e99ff5fef596388913549a8418c07d367a940/source/base/kernel/fix_virtualbox.patch
+Patch211:	vbox-6.1.12-kernel-5.8.patch
 
 # Better support for newer x86 processors
 # More actively maintained for newer kernels
-Patch310:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0001-cpu-5.2-merge-graysky-s-patchset.patch
+Patch212:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0001-cpu-5.2-merge-graysky-s-patchset.patch
 
 # Assorted fixes
 
 # Modular binder and ashmem -- let's try to make anbox happy
-Patch340:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
-Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
+Patch213:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
+Patch214:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -318,29 +335,18 @@ Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/d
 %if %{with clr}
 # (tpg) some patches from ClearLinux
 # https://github.com/clearlinux-pkgs/linux/
-Patch400:	0101-i8042-decrease-debug-message-level-to-info.patch
-Patch401:	0103-Increase-the-ext4-default-commit-age.patch
-Patch403:	0105-pci-pme-wakeups.patch
-Patch405:	0107-intel_idle-tweak-cpuidle-cstates.patch
-Patch408:	0116-Initialize-ata-before-graphics.patch
-Patch410:	0119-e1000e-change-default-policy.patch
-Patch411:	0112-give-rdrand-some-credit.patch
-Patch412:	0120-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
-Patch415:	0124-kernel-time-reduce-ntp-wakeups.patch
-Patch416:	0125-init-wait-for-partition-and-retry-scan.patch
+Patch900:	0101-i8042-decrease-debug-message-level-to-info.patch
+Patch901:	0103-Increase-the-ext4-default-commit-age.patch
+Patch902:	0105-pci-pme-wakeups.patch
+Patch903:	0107-intel_idle-tweak-cpuidle-cstates.patch
+Patch904:	0116-Initialize-ata-before-graphics.patch
+Patch905:	0119-e1000e-change-default-policy.patch
+Patch906:	0112-give-rdrand-some-credit.patch
+Patch907:	0120-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
+Patch908:	0124-kernel-time-reduce-ntp-wakeups.patch
+Patch909:	0125-init-wait-for-partition-and-retry-scan.patch
 %endif
 
-# (crazy) see: https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
-Patch800:	Unknow-SSD-HFM128GDHTNG-8310B-QUIRK_NO_APST.patch
-# Restore ACPI loglevels to sane values
-Patch801:	https://gitweb.frugalware.org/wip_kernel/raw/86234abea5e625043153f6b8295642fd9f42bff0/source/base/kernel/acpi-use-kern_warning_even_when_error.patch
-Patch802:	https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e18613151cc81b4c0cf6e22/source/base/kernel/fix-acpi_dbg_level.patch
-# (crazy) need to know what function() breaks on nvme failures
-Patch809:	nvme-pci-more-info.patch
-Patch810:	linux-5.4.5-fix-build.patch
-Patch811:	iwlwifi-dont-scream-about-debug-firmware.patch
-Patch812:	linux-5.5-corsair-strafe-quirks.patch
-Patch814:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
 
 # Defines for the things that are needed for all the kernels
 #
