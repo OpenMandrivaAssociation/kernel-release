@@ -198,14 +198,11 @@ Source16:	i686-server-gcc-omv-defconfig
 # to be removed soon
 Source20:	common.config
 Source21:	common-desktop.config
-Source23:	common-server.config
+Source22:	common-server.config
 # Architecture specific configs
-Source24:	x86_64-common.config
-Source25:	i386-common.config
-Source26:	arm64-common.config
-Source26:	arm-common.config
-Source28:	znver1-common.config
-Source29:	powerpc-common.config
+Source23:	arm64-common.config
+Source24:	arm-common.config
+Source25:	powerpc-common.config
 # Files called $ARCH-$FLAVOR.config are merged as well,
 # currently there's no need to have specific overloads there.
 
@@ -837,7 +834,7 @@ done
 #
 %prep
 %setup -q -n linux-%{tar_ver} -a 1003 -a 1004
-cp %{S:20} %{S:21} %{S:22} %{S:23} %{S:24} %{S:25} %{S:26} %{S:27} %{S:28} %{S:29} kernel/configs/
+cp %{S:20} %{S:21} %{S:22} %{S:23} %{S:24} %{S:25}  kernel/configs/
 %if 0%{sublevel}
 [ -e .git ] || git init
 xzcat %{SOURCE1000} |git apply - || git apply %{SOURCE1000}
