@@ -124,10 +124,6 @@
 %bcond_with build_cpupower
 %endif
 
-# (crazy) default ZSTD, we have an patch for that.
-# https://github.com/facebook/zstd/issues/1121
-%bcond_without build_modzstd
-
 # ARM builds
 %ifarch %{armx}
 %bcond_with build_desktop
@@ -234,7 +230,9 @@ Source1000:	https://cdn.kernel.org/pub/linux/kernel/v%(echo %{version}|cut -d. -
 Source1001:     7a8b64d17e35810dc3176fe61208b45c15d25402.patch
 Source1002:     9d55bebd9816903b821a403a69a94190442ac043.patch
 
-
+# (crazy) WARNING do NOT drop rediff
+# we default to ZSTD
+Patch1:		compress-modules-zstd.patch
 Patch30:	linux-5.6-fix-disassembler-4args-detection.patch
 Patch31:	die-floppy-die.patch
 Patch32:	0001-Add-support-for-Acer-Predator-macro-keys.patch
@@ -266,10 +264,8 @@ Patch42:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.8.pat
 %endif
 
 ## (crazy) drop in 5.9, merged upstream.
-%if %{with build_modzstd}
 # v4 -> https://lkml.org/lkml/2020/4/1/29
 Patch43:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/support-kernel-and-ramfs-comp-and-decomp-with-zstd.patch
-%endif
 
 # (crazy) see: https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
 Patch44:	Unknow-SSD-HFM128GDHTNG-8310B-QUIRK_NO_APST.patch
@@ -382,12 +378,7 @@ very current hardware.
 %define kconflicts5	dkms-nvidia304 < 304.108-1
 
 Autoreqprov:	no
-%if %{with build_modzstd}
 BuildRequires:	zstd
-%endif
-%if %{with build_modxz}
-BuildRequires:	xz
-%endif
 BuildRequires:	findutils
 BuildRequires:	bc
 BuildRequires:	flex
@@ -397,7 +388,9 @@ BuildRequires:	hostname
 %if %{with clang}
 BuildRequires:	clang
 BuildRequires:	llvm
+%if %{without ld_workaround}
 BuildRequires:	lld
+%endif
 %endif
 %if %{with gcc}
 BuildRequires:	gcc
@@ -1536,19 +1529,6 @@ install -m 644 %{SOURCE4} .
 # We want to be able to test several times the install part
 rm -rf %{buildroot}
 cp -a %{temp_root} %{buildroot}
-
-# ( crazy ) FIXME what the eff actually?
-# compressing modules with XZ, even when Zstandard is used
-# (tpg) enable it when kmod will support Zstandard compressed modules
-%if %{with build_modxz} || %{with build_modzstd}
-%ifarch %{ix86} %{armx}
-find %{target_modules} -name "*.ko" | %kxargs xz -5 -T0
-%else
-find %{target_modules} -name "*.ko" | %kxargs xz -7 -T0
-%endif
-%else
-find %{target_modules} -name "*.ko" | %kxargs gzip -9
-%endif
 
 # We used to have a copy of PrepareKernel here
 # Now, we make sure that the thing in the linux dir is what we want it to be
