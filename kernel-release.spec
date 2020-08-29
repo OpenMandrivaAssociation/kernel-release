@@ -292,11 +292,6 @@ Source200:	extra-wifi-drivers-20200301.tar.zst
 Patch201:	extra-wifi-drivers-compile.patch
 Patch202:	extra-wifi-drivers-port-to-5.6.patch
 
-# Lima driver for ARM Mali graphics chips
-# Generated from https://gitlab.freedesktop.org/lima/linux.git
-# using git diff v5.1..lima/lima-5.1
-# Currently no patch necessary
-
 # VirtualBox patches -- added as Source: rather than Patch:
 # because they need to be applied after stuff from the
 # virtualbox-kernel-module-sources package is copied around
@@ -306,8 +301,6 @@ Patch301:	https://gitweb.frugalware.org/wip_kernel/raw/9d0e99ff5fef596388913549a
 Source302:	vbox-6.1.12-kernel-5.8.patch
 
 # Better support for newer x86 processors
-# Original patch:
-#Patch310:	https://raw.githubusercontent.com/graysky2/kernel_gcc_patch/master/enable_additional_cpu_optimizations_for_gcc_v8.1%2B_kernel_v4.13%2B.patch
 # More actively maintained for newer kernels
 Patch310:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0001-cpu-5.2-merge-graysky-s-patchset.patch
 
@@ -328,14 +321,7 @@ Patch341:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/d
 Patch400:	0101-i8042-decrease-debug-message-level-to-info.patch
 Patch401:	0103-Increase-the-ext4-default-commit-age.patch
 Patch403:	0105-pci-pme-wakeups.patch
-# Incompatible with UKSM
-#Patch404:	0106-ksm-wakeups.patch
 Patch405:	0107-intel_idle-tweak-cpuidle-cstates.patch
-# Not necessarily a good idea -- not all CPU cores are
-# guaranteed to be the same (e.g. big.LITTLE)
-%ifarch %{ix86} %{x86_64}
-Patch407:	0114-smpboot-reuse-timer-calibration.patch
-%endif
 Patch408:	0116-Initialize-ata-before-graphics.patch
 Patch410:	0119-e1000e-change-default-policy.patch
 Patch411:	0112-give-rdrand-some-credit.patch
@@ -345,33 +331,16 @@ Patch416:	0125-init-wait-for-partition-and-retry-scan.patch
 %endif
 
 # (crazy) see: https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
-# Not even sure what Vendor that one is .. However it seems be one of the ones random doing that
-# like some Toshibas and some Samsung ones , so disable APST for this one..
-# Seems to be a M.2 SSD SKhynix..
 Patch800:	Unknow-SSD-HFM128GDHTNG-8310B-QUIRK_NO_APST.patch
 # Restore ACPI loglevels to sane values
 Patch801:	https://gitweb.frugalware.org/wip_kernel/raw/86234abea5e625043153f6b8295642fd9f42bff0/source/base/kernel/acpi-use-kern_warning_even_when_error.patch
 Patch802:	https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e18613151cc81b4c0cf6e22/source/base/kernel/fix-acpi_dbg_level.patch
 # (crazy) need to know what function() breaks on nvme failures
 Patch809:	nvme-pci-more-info.patch
-# ( crazy ) this one is adding be_silent mod parameter to acer-wmi
-# When a Unknow function is detected ( aka new ACPI interface not yet impelmeted etc )
-# a message is printed in dmesg each time you use this , eg press some key , plug / unplug AC.
-# Folks reported these upstream can load the model with be_silent=1 to stop the dmesg flood,
-# until is implemented / fixed.
-#Patch810:  acer-wmi-silence-unknow-functions-messages.patch
 Patch810:	linux-5.4.5-fix-build.patch
 Patch811:	iwlwifi-dont-scream-about-debug-firmware.patch
 Patch812:	linux-5.5-corsair-strafe-quirks.patch
 Patch814:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
-
-# Futex/Fsync patch improve performance in Valve Proton games (in WINE too if we patch it)
-# We provide also Futex patch for glibc to improve performance in native games/app
-# https://steamcommunity.com/app/221410/discussions/0/3158631000006906163/
-# For testing/benchmarking, futex can be disabled by env or by launch command: "PROTON_NO_FSYNC=1"
-# Patch taken from https://gitlab.manjaro.org/packages/core/linux57/-/blob/master/0001-futex.patch
-# (crazy) futex patch is wrong, rejected upstream for breaking NUMA and other things
-#Patch815:	0001-futex.patch
 
 # Defines for the things that are needed for all the kernels
 #
@@ -398,12 +367,12 @@ very current hardware.
 %define kobsoletes2	dkms-lzma <= 4.43-32
 %define kobsoletes3	dkms-psb <= 4.41.1-7
 
+## FIXME
 %define kconflicts1	dkms-broadcom-wl < 5.100.82.112-12
 %define kconflicts2	dkms-fglrx < 13.200.5-1
 %define kconflicts3	dkms-nvidia-current < 325.15-1
 %define kconflicts4	dkms-nvidia-long-lived < 319.49-1
 %define kconflicts5	dkms-nvidia304 < 304.108-1
-# nvidia173 does not support this kernel
 
 Autoreqprov:	no
 %if %{with build_modzstd}
@@ -636,7 +605,7 @@ voluntary preempt, CFS cpu scheduler and BFQ i/o scheduler, ONDEMAND governor.
 %endif
 %endif
 
-#
+
 %if %{with build_server}
 %ifarch %{ix86}
 %define summary_server Linux Kernel for server use with i686 & 64GB RAM
