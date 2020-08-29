@@ -358,7 +358,8 @@ very current hardware.
 # do not require dracut, please it bloats dockers and other minimal instllations
 # better solution needs to be figured out
 %define requires2	dracut >= 047
-%define requires3	kmod >= 25
+# (crazy) it needs kmod >= 27-3 bc ZSTD support
+%define requires3	kmod >= 27-3
 %define requires4	sysfsutils >=  2.1.0-12
 %define requires5	kernel-firmware
 
