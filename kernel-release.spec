@@ -190,6 +190,11 @@ Source9:	x86_64-znver-desktop-clang-omv-defconfig
 Source10:	x86_64-znver-desktop-gcc-omv-defconfig
 Source11:	x86_64-znver-server-clang-omv-defconfig
 Source12:	x86_64-znver-server-gcc-omv-defconfig
+Source13:	i686-desktop-clang-omv-defconfig
+Source14:	i686-desktop-gcc-omv-defconfig
+Source15:	i686-server-clang-omv-defconfig
+Source16:	i686-server-gcc-omv-defconfig
+
 # to be removed soon
 Source20:	common.config
 Source21:	common-desktop.config
