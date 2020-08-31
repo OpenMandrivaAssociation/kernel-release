@@ -282,8 +282,9 @@ Patch46:	https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e18613151
 Patch47:	nvme-pci-more-info.patch
 Patch48:	linux-5.4.5-fix-build.patch
 Patch49:	iwlwifi-dont-scream-about-debug-firmware.patch
-Patch50:	linux-5.5-corsair-strafe-quirks.patch
-Patch51:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
+Patch50:	iwlwifi-use-debug-for-debug-infos.patch
+Patch51:	linux-5.5-corsair-strafe-quirks.patch
+Patch52:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
 
 ### Additional hardware support
 ### TV tuners:
