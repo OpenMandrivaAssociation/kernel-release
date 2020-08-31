@@ -240,6 +240,8 @@ Patch1:		compress-modules-zstd.patch
 # (crazy) That is always a error on Ryzen platform, which is not fatal
 # just different, lower to info since it breaks the splash
 Patch2:		amd_iommu_init_info.patch
+# (crazy) while not perfect on all Ryzen platforms better that nothing
+Patch3: 	enable-new-amd-energy-driver-for-all-ryzen.patch
 # (crazy) I really need to send that upstream soon
 Patch10:	iwlwifi-fix-5e003982b07ae.patch
 Patch30:	linux-5.6-fix-disassembler-4args-detection.patch
