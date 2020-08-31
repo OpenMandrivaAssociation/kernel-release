@@ -83,6 +83,8 @@
 %bcond_without ld_workaround
 %endif
 
+
+%bcond_with lazy_developer
 %bcond_with build_debug
 %bcond_with dracut_all_initrd
 %bcond_with clr
@@ -963,30 +965,95 @@ chmod 755 tools/objtool/sync-check.sh
 %define temp_boot %{temp_root}%{_bootdir}
 %define temp_modules %{temp_root}%{_modulesdir}
 
+
 CreateConfig() {
 	arch="$1"
 	type="$2"
-	rm -f .config
+	config_dir=%{_sourcedir}
+	rm -fv .config
+
 
 	if echo $type |grep -q clang; then
-		CLANG_EXTRAS=clang-workarounds
+		# (crazy) we could use LLVM=1 this will take care of all the clang stuff
+		# however on bugs where we have to change LD or some other tool we cannot do that
 		CC=clang
 		CXX=clang++
-		LLVM_TOOLS='OBJCOPY=llvm-objcopy AR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJDUMP=llvm-objdump HOSTAR=llvm-ar'
+		%if %{with ld_workaround}
+		BUILD_LD="ld.bfd"
+		BUILD_KBUILD_LDFLAGS="-fuse-ld=bfd"
+		%else
+		BUILD_LD="ld.lld"
+		# bugs
+		BUILD_KBUILD_LDFLAGS="--icf=none --no-gc-sections"
+		%endif
+		BUILD_TOOLS='AR=llvm-ar HOSTAR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump OBJSIZE=llvm-size READELF=llvm-readelf'
 	else
-		CLANG_EXTRAS=''
 		CC=gcc
 		CXX=g++
-		LLVM_TOOLS=""
+		# force ld.bfd, Kbuild logic issues when ld is linked  to something else
+		BUILD_LD="%{_target_platform}-ld.bfd"
+		BUILD_KBUILD_LDFLAGS="-fuse-ld=bfd"
+		BUILD_TOOLS=""
 	fi
 
-
+	# (crazy) do not use %{S:X} to copy, if someone messes up we end up with broken stuff again
 	case ${arch} in
-	i?86|znver1_32)
-		CONFIGS=i386_defconfig
+	i?86)
+		rm -rf .config
+		%if %{with build_desktop}
+		%if %{with gcc}
+		cp -v %{config_dir}/i686-desktop-gcc-omv-defconfig .config
+		%endif
+		%if %{with clang}
+		cp -v %{config_dir}/i686-desktop-clang-omv-defconfig .config
+		%endif
+		%endif
+		%if %{with build_server}
+		%if %{with gcc}
+		cp -v %{config_dir}/i686-server-gcc-omv-defconfig .config
+		%endif
+		%if %{with clang}
+		cp -v %{config_dir}/i686-server-clang-omv-defconfig .config
+		%endif
+		%endif
 		;;
-	x86_64|znver1)
-		CONFIGS=x86_64_defconfig
+	x86_64)
+		rm -rf .config
+		%if %{with build_desktop}
+		%if %{with gcc}
+		cp -v %{config_dir}/x86_64-desktop-gcc-omv-defconfig .config
+		%endif
+		%if %{with clang}
+		cp -v %{config_dir}/x86_64-desktop-clang-omv-defconfig .config
+		%endif
+		%endif
+		%if %{with build_server}
+		%if %{with gcc}
+		cp -v %{config_dir}/x86_64-server-gcc-omv-defconfig .config
+		%endif
+		%if %{with clang}
+		cp -v %{config_dir}/x86_64-server-clang-omv-defconfig .config
+		%endif
+		%endif
+		;;
+	znver1)
+		rm -rf .config
+		%if %{with build_desktop}
+		%if %{with gcc}
+		cp -v %{config_dir}/x86_64-znver-desktop-gcc-omv-defconfig .config
+		%endif
+		%if %{with clang}
+		cp -v %{config_dir}/x86_64-znver-desktop-clang-omv-defconfig .config
+		%endif
+		%endif
+		%if %{with build_server}
+		%if %{with gcc}
+		cp -v %{config_dir}/x86_64-znver-server-gcc-omv-defconfig .config
+		%endif
+		%if %{with clang}
+		cp -v %{config_dir}/x86_64-znver-server-clang-omv-defconfig .config
+		%endif
+		%endif
 		;;
 	ppc64)
 		CONFIGS=pseries_defconfig
@@ -999,27 +1066,37 @@ CreateConfig() {
 		;;
 	esac
 
-	for i in common common-${type} $CLANG_EXTRAS; do
+	# ( crazy) remove along with the old configs once ARM* and ppc* is finished
+	%ifnarch %{ix86} %{x86_64}
+	for i in common common-${type}; do
 		[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
 	done
-	if [ "$arch" = "znver1" ]; then
-		# Since znver1 is a special case of x86_64, let's pull
-		# in x86_64 configs first (and znver1 configs on top
-		# later -- later configs overwrite earlier ones)
-		for i in x86_64-common x86_64-${type}; do
-			[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
-		done
-	fi
+
 	for i in ${arch}-common ${arch}-${type}; do
 		[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
 	done
+	%endif
+
 	if [ "$arch" = "znver1" -o "$arch" = "x86_64" ]; then
 		arch=x86
 	elif echo $arch |grep -q ^ppc; then
 		arch=powerpc
 	fi
 
-	make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCFLAGS="%{optflags}" $LLVM_TOOLS $CONFIGS
+	# ( crazy) remove along with the old configs once ARM* and ppc* is finished
+	%ifnarch %{ix86} %{x86_64}
+	## paranoia
+	make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 $CONFIGS
+	%else
+	%if %{without lazy_developer}
+	## YES, intentionally, DIE on wrong config
+	make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 oldconfig
+	%else
+	printf '%s\n' "Layz developer option is enabled!!. Don't be lazy!."
+	## that takes kernel defaults on missing or changed things
+	yes "" | make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" config
+	%endif
+	%endif
 	scripts/config --set-val BUILD_SALT \"$(echo "$arch-$type-%{EVRD}"|sha1sum|awk '{ print $1; }')\"
 	# " <--- workaround for vim syntax highlighting bug, ignore
 }
@@ -1046,14 +1123,25 @@ BuildKernel() {
 	if echo $1 |grep -q clang; then
 		CC=clang
 		CXX=clang++
-		LD="ld.lld --icf=none --no-gc-sections"
+		%if %{with ld_workaround}
+		BUILD_LD="ld.bfd"
+		BUILD_KBUILD_LDFLAGS="-fuse-ld=bfd"
+		%else
+		BUILD_LD="ld.lld"
+		# bugs
+		BUILD_KBUILD_LDFLAGS="--icf=none --no-gc-sections"
+		%endif
+		BUILD_TOOLS='AR=llvm-ar HOSTAR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump OBJSIZE=llvm-size READELF=llvm-readelf'
 	else
 		CC=gcc
 		CXX=g++
-		LD="%{_target_platform}-ld.bfd"
-	fi
+		# force ld.bfd, Kbuild logic issues when ld is linked  to something else
+		BUILD_LD="%{_target_platform}-ld.bfd"
+		BUILD_KBUILD_LDFLAGS="-fuse-ld=bfd"
+		BUILD_TOOLS=""
+        fi
 
-	%make_build all ARCH=%{target_arch} LD="$LD" HOSTLD="$LD" CC="$CC" CXX="$CXX" CFLAGS="$CFLAGS"
+	%make_build all ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS  KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1
 
 	# Start installing stuff
 	install -d %{temp_boot}
@@ -1077,7 +1165,7 @@ BuildKernel() {
 
 	# modules
 	install -d %{temp_modules}/$KernelVer
-	%make_build INSTALL_MOD_PATH=%{temp_root} ARCH=%{target_arch} SRCARCH=%{target_arch} KERNELRELEASE=$KernelVer INSTALL_MOD_STRIP=1 modules_install
+	%make_build INSTALL_MOD_PATH=%{temp_root} ARCH=%{target_arch} SRCARCH=%{target_arch} KERNELRELEASE=$KernelVer CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS  KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 INSTALL_MOD_STRIP=1 modules_install
 
 	# headers
 	%make_build INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer ARCH=%{target_arch} SRCARCH=%{target_arch} headers_install
@@ -1446,7 +1534,7 @@ for a in arm arm64 i386 x86_64 znver1 powerpc riscv; do
 					[ "$a" != "$TripletArch" ] && continue
 					;;
 				esac
-				%make_build ARCH=${a} SRCARCH=${SARCH} KCFLAGS="$CFLAGS" INSTALL_HDR_PATH=%{temp_root}%{_prefix}/${i} headers_install
+				%make_build ARCH=${a} SRCARCH=${SARCH}  INSTALL_HDR_PATH=%{temp_root}%{_prefix}/${i} headers_install
 			done
 		fi
 %endif
