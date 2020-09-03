@@ -196,6 +196,7 @@ Source13:	i686-desktop-clang-omv-defconfig
 Source14:	i686-desktop-gcc-omv-defconfig
 Source15:	i686-server-clang-omv-defconfig
 Source16:	i686-server-gcc-omv-defconfig
+Source17:	armv7hnl-desktop-omv-defconfig
 
 # to be removed soon
 Source20:	common.config
