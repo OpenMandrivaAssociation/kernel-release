@@ -1,7 +1,7 @@
-diff -Naur linux-5.7.7/drivers/net/wireless/intel/iwlwifi/pcie/drv.c linux-5.7.7-p/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
---- linux-5.7.7/drivers/net/wireless/intel/iwlwifi/pcie/drv.c	2020-06-30 22:21:22.000000000 +0200
-+++ linux-5.7.7-p/drivers/net/wireless/intel/iwlwifi/pcie/drv.c	2020-07-14 03:08:27.106340422 +0200
-@@ -581,9 +581,10 @@
+diff -up linux-5.8/drivers/net/wireless/intel/iwlwifi/pcie/drv.c.4~ linux-5.8/drivers/net/wireless/intel/iwlwifi/pcie/drv.c
+--- linux-5.8/drivers/net/wireless/intel/iwlwifi/pcie/drv.c.4~	2020-09-02 16:25:03.480170474 +0200
++++ linux-5.8/drivers/net/wireless/intel/iwlwifi/pcie/drv.c	2020-09-02 16:26:33.440420919 +0200
+@@ -588,9 +588,10 @@ static const struct iwl_dev_info iwl_dev
  	IWL_DEV_INFO(0x271C, 0x0214, iwl9260_2ac_cfg, iwl9260_1_name),
  
  /* AX200 */
@@ -11,5 +11,5 @@ diff -Naur linux-5.7.7/drivers/net/wireless/intel/iwlwifi/pcie/drv.c linux-5.7.7
  	IWL_DEV_INFO(0x2723, 0x1654, iwl_ax200_cfg_cc, iwl_ax200_killer_1650x_name),
 -	IWL_DEV_INFO(0x2723, IWL_CFG_ANY, iwl_ax200_cfg_cc, iwl_ax200_name),
  
- /* Qu with Hr */
- 	IWL_DEV_INFO(0x43F0, 0x0044, iwl_ax101_cfg_qu_hr, NULL),
+ 	/* QnJ with Hr */
+ 	IWL_DEV_INFO(0x2720, IWL_CFG_ANY, iwl_qnj_b0_hr_b0_cfg, iwl_ax201_name),

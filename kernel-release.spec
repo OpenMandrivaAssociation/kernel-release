@@ -22,7 +22,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	8
-%define sublevel	3
+%define sublevel	6
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -84,7 +84,7 @@
 %endif
 
 
-%bcond_with lazy_developer
+%bcond_without lazy_developer
 %bcond_with build_debug
 %bcond_with dracut_all_initrd
 %bcond_with clr
@@ -223,6 +223,9 @@ Source31:	cpupower.config
 # and can't be applied by %%autopatch -p1
 
 %if 0%{sublevel}
+# The big upstream patch is added as source rather than patch
+# because "git apply" is needed to handle binary patches it
+# frequently contains (firmware updates etc.)
 Source1000:	https://cdn.kernel.org/pub/linux/kernel/v%(echo %{version}|cut -d. -f1).x/patch-%{version}.xz
 %endif
 
@@ -242,6 +245,7 @@ Patch1:		compress-modules-zstd.patch
 Patch2:		amd_iommu_init_info.patch
 # (crazy) while not perfect on all Ryzen platforms better that nothing
 Patch3: 	enable-new-amd-energy-driver-for-all-ryzen.patch
+Patch4:		https://gitweb.frugalware.org/frugalware-current/raw/c363c86b363c3ae86412b3bfa4f005a9fd21a533/source/base/kernel/revert-43bd3a95c98e1a86b8b55d97f745c224ecff02b9.patch
 # (crazy) I really need to send that upstream soon
 Patch10:	iwlwifi-fix-5e003982b07ae.patch
 Patch30:	linux-5.6-fix-disassembler-4args-detection.patch
@@ -1010,18 +1014,18 @@ CreateConfig() {
 		rm -rf .config
 		%if %{with build_desktop}
 		%if %{with gcc}
-		cp -v %{config_dir}/i686-desktop-gcc-omv-defconfig .config
+		cp -v ${config_dir}/i686-desktop-gcc-omv-defconfig .config
 		%endif
 		%if %{with clang}
-		cp -v %{config_dir}/i686-desktop-clang-omv-defconfig .config
+		cp -v ${config_dir}/i686-desktop-clang-omv-defconfig .config
 		%endif
 		%endif
 		%if %{with build_server}
 		%if %{with gcc}
-		cp -v %{config_dir}/i686-server-gcc-omv-defconfig .config
+		cp -v ${config_dir}/i686-server-gcc-omv-defconfig .config
 		%endif
 		%if %{with clang}
-		cp -v %{config_dir}/i686-server-clang-omv-defconfig .config
+		cp -v ${config_dir}/i686-server-clang-omv-defconfig .config
 		%endif
 		%endif
 		;;
@@ -1029,18 +1033,18 @@ CreateConfig() {
 		rm -rf .config
 		%if %{with build_desktop}
 		%if %{with gcc}
-		cp -v %{config_dir}/x86_64-desktop-gcc-omv-defconfig .config
+		cp -v ${config_dir}/x86_64-desktop-gcc-omv-defconfig .config
 		%endif
 		%if %{with clang}
-		cp -v %{config_dir}/x86_64-desktop-clang-omv-defconfig .config
+		cp -v ${config_dir}/x86_64-desktop-clang-omv-defconfig .config
 		%endif
 		%endif
 		%if %{with build_server}
 		%if %{with gcc}
-		cp -v %{config_dir}/x86_64-server-gcc-omv-defconfig .config
+		cp -v ${config_dir}/x86_64-server-gcc-omv-defconfig .config
 		%endif
 		%if %{with clang}
-		cp -v %{config_dir}/x86_64-server-clang-omv-defconfig .config
+		cp -v ${config_dir}/x86_64-server-clang-omv-defconfig .config
 		%endif
 		%endif
 		;;
@@ -1048,18 +1052,18 @@ CreateConfig() {
 		rm -rf .config
 		%if %{with build_desktop}
 		%if %{with gcc}
-		cp -v %{config_dir}/x86_64-znver-desktop-gcc-omv-defconfig .config
+		cp -v ${config_dir}/x86_64-znver-desktop-gcc-omv-defconfig .config
 		%endif
 		%if %{with clang}
-		cp -v %{config_dir}/x86_64-znver-desktop-clang-omv-defconfig .config
+		cp -v ${config_dir}/x86_64-znver-desktop-clang-omv-defconfig .config
 		%endif
 		%endif
 		%if %{with build_server}
 		%if %{with gcc}
-		cp -v %{config_dir}/x86_64-znver-server-gcc-omv-defconfig .config
+		cp -v ${config_dir}/x86_64-znver-server-gcc-omv-defconfig .config
 		%endif
 		%if %{with clang}
-		cp -v %{config_dir}/x86_64-znver-server-clang-omv-defconfig .config
+		cp -v ${config_dir}/x86_64-znver-server-clang-omv-defconfig .config
 		%endif
 		%endif
 		;;
@@ -1100,7 +1104,7 @@ CreateConfig() {
 	## YES, intentionally, DIE on wrong config
 	make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 oldconfig
 	%else
-	printf '%s\n' "Layz developer option is enabled!!. Don't be lazy!."
+	printf '%s\n' "Lazy developer option is enabled!!. Don't be lazy!."
 	## that takes kernel defaults on missing or changed things
 	yes "" | make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" config
 	%endif
@@ -1600,9 +1604,9 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %endif
 %endif
 
-%make_build -C tools/lib/bpf CC=clang libbpf.a libbpf.pc libbpf.so.0.0.9
+%make_build -C tools/lib/bpf CC=clang LD=ld.lld libbpf.a libbpf.pc libbpf.so -j1
 cd tools/bpf/bpftool
-%make_build CC=clang bpftool
+%make_build CC=clang LD=ld.lld bpftool -j1
 cd -
 
 ############################################################
@@ -1619,8 +1623,6 @@ PrepareKernel "" %{buildrpmrel}custom
 ### install
 ###
 %install
-install -m 644 %{SOURCE4} .
-
 # Directories definition needed for installing
 %define target_source %{buildroot}%{_kerneldir}
 %define target_boot %{buildroot}%{_bootdir}
@@ -1674,8 +1676,8 @@ rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
 chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
 mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
-install -m644 %{SOURCE50} %{buildroot}%{_unitdir}/cpupower.service
-install -m644 %{SOURCE51} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
+install -m644 %{SOURCE30} %{buildroot}%{_unitdir}/cpupower.service
+install -m644 %{SOURCE31} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
 %endif
 
 %ifarch %{ix86} %{x86_64}
@@ -1691,7 +1693,7 @@ mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
 
 # install bpftool and libbpf
 %make_install -C tools/lib/bpf install install_headers DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir}
-%make_install -C tools/bpf/bpftool install DESTDIR=%{buildroot} prefix=%{_prefix} bash_compdir=%{_sysconfdir}/bash_completion.d/ mandir=%{_mandir}
+%make_install -C tools/bpf/bpftool install CC=clang CXX=clang++ LD=ld.lld DESTDIR=%{buildroot} prefix=%{_prefix} bash_compdir=%{_sysconfdir}/bash_completion.d/ mandir=%{_mandir}
 
 # Create directories infastructure
 %if %{with build_source}
@@ -1725,9 +1727,9 @@ cd %{target_source}
 # lots of gitignore files
 find -iname ".gitignore" -delete
 # clean tools tree
-%make_build -C tools clean
-%make_build -C tools/build clean
-%make_build -C tools/build/feature clean
+%make_build -C tools clean -j1
+%make_build -C tools/build clean -j1
+%make_build -C tools/build/feature clean -j1
 rm -f .cache.mk
 # Drop script binaries that can be rebuilt
 find tools scripts -executable |while read r; do
