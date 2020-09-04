@@ -247,6 +247,8 @@ Patch2:		amd_iommu_init_info.patch
 # (crazy) while not perfect on all Ryzen platforms better that nothing
 Patch3: 	enable-new-amd-energy-driver-for-all-ryzen.patch
 Patch4:		https://gitweb.frugalware.org/frugalware-current/raw/c363c86b363c3ae86412b3bfa4f005a9fd21a533/source/base/kernel/revert-43bd3a95c98e1a86b8b55d97f745c224ecff02b9.patch
+# (crazy) drop in 5.9
+Patch5:		vboxguest-fixes.patch
 # (crazy) I really need to send that upstream soon
 Patch10:	iwlwifi-fix-5e003982b07ae.patch
 Patch30:	linux-5.6-fix-disassembler-4args-detection.patch
