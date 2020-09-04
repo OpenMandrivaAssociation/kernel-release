@@ -1104,7 +1104,7 @@ CreateConfig() {
 	esac
 
 	# ( crazy) remove along with the old configs once ARM* and ppc* is finished
-	if [ -n ${CONFIGS} ]; then
+	if [[ -n ${CONFIGS} ]]; then
 		for i in common common-${type}; do
 			[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
 		done
@@ -1121,7 +1121,7 @@ CreateConfig() {
 	fi
 
 	# ( crazy) remove along with the old configs once ARM* and ppc* is finished
-	if [ -n ${CONFIGS} ]; then
+	if [[ -n ${CONFIGS} ]]; then
 		make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 $CONFIGS
 	else
 		%if %{without lazy_developer}
