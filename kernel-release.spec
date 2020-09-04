@@ -1044,7 +1044,7 @@ CreateConfig() {
                        ;;
                esac
 		;;
-	x86_64)
+	x86_64|x86)
                case ${type} in
                desktop)
                        rm -rf .config
@@ -1114,8 +1114,8 @@ CreateConfig() {
 		done
 	fi
 
-    if [ "$arch" = "znver1" ]; then
-		arch=x86_64
+    if [ "$arch" = "znver1" -o "$arch" = "x86_64" ]; then
+		arch=x86
 	elif echo $arch |grep -q ^ppc; then
 		arch=powerpc
 	fi
@@ -1531,7 +1531,7 @@ for a in arm arm64 i386 x86_64 znver1 powerpc riscv; do
 	for t in desktop server; do
 		CreateConfig $a $t
 		export ARCH=$a
-               [ "$ARCH" = "znver1" ] && export ARCH=x86_64
+        [ "$ARCH" = "znver1" ] && export ARCH=x86
 %if %{with cross_headers}
 		if [ "$t" = "desktop" ]; then
 			# While we have a kernel configured for it, let's package
