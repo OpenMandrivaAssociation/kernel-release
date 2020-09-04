@@ -979,6 +979,14 @@ chmod 755 tools/objtool/sync-check.sh
 %define temp_modules %{temp_root}%{_modulesdir}
 
 
+CheckConfig() {
+
+	if [ ! -e $(pwd)/.config ]; then
+		printf '%s\n' "Kernel config in $(pwd) missing, killing the build."
+		exit 1
+	fi
+}
+
 CreateConfig() {
 	arch="$1"
 	type="$2"
@@ -1118,11 +1126,13 @@ CreateConfig() {
 	%else
 	%if %{without lazy_developer}
 	## YES, intentionally, DIE on wrong config
+	CheckConfig
 	make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 oldconfig
 	%else
 	printf '%s\n' "Lazy developer option is enabled!!. Don't be lazy!."
 	## that takes kernel defaults on missing or changed things 
 	## olddefconfig is similar to yes ... but not that verbose
+	CheckConfig
 	make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" olddefconfig
 	%endif
 	%endif
