@@ -1012,61 +1012,76 @@ CreateConfig() {
 	# (crazy) do not use %{S:X} to copy, if someone messes up we end up with broken stuff again
 	case ${arch} in
 	i?86)
-		rm -rf .config
-		%if %{with build_desktop}
-		%if %{with gcc}
-		cp -v ${config_dir}/i686-desktop-gcc-omv-defconfig .config
-		%endif
-		%if %{with clang}
-		cp -v ${config_dir}/i686-desktop-clang-omv-defconfig .config
-		%endif
-		%endif
-		%if %{with build_server}
-		%if %{with gcc}
-		cp -v ${config_dir}/i686-server-gcc-omv-defconfig .config
-		%endif
-		%if %{with clang}
-		cp -v ${config_dir}/i686-server-clang-omv-defconfig .config
-		%endif
-		%endif
+               case ${type} in
+               desktop)
+                       rm -rf .config
+                       cp -v ${config_dir}/i686-desktop-gcc-omv-defconfig .config
+                       ;;
+               desktop-clang)
+                       rm -rf .config
+                       cp -v ${config_dir}/i686-desktop-clang-omv-defconfig .config
+                       ;;
+               server)
+                       rm -rf .config
+                       cp -v ${config_dir}/i686-server-gcc-omv-defconfig .config
+                       ;;
+               server-clang)
+                       rm -rf .config
+                       cp -v ${config_dir}/i686-server-clang-omv-defconfig .config
+                       ;;
+               *)
+                       printf '%s\n' "ERROR: no such type ${type}"
+                       exit 1
+                       ;;
+               esac
 		;;
 	x86_64)
-		rm -rf .config
-		%if %{with build_desktop}
-		%if %{with gcc}
-		cp -v ${config_dir}/x86_64-desktop-gcc-omv-defconfig .config
-		%endif
-		%if %{with clang}
-		cp -v ${config_dir}/x86_64-desktop-clang-omv-defconfig .config
-		%endif
-		%endif
-		%if %{with build_server}
-		%if %{with gcc}
-		cp -v ${config_dir}/x86_64-server-gcc-omv-defconfig .config
-		%endif
-		%if %{with clang}
-		cp -v ${config_dir}/x86_64-server-clang-omv-defconfig .config
-		%endif
-		%endif
+               case ${type} in
+               desktop)
+                       rm -rf .config
+                       cp -v ${config_dir}/x86_64-desktop-gcc-omv-defconfig .config
+                       ;;
+               desktop-clang)
+                       rm -rf .config
+                       cp -v ${config_dir}/x86_64-desktop-clang-omv-defconfig .config
+                       ;;
+               server)
+                       rm -rf .config
+                       cp -v ${config_dir}/x86_64-server-gcc-omv-defconfig .config
+                       ;;
+               server-clang)
+                       rm -rf .config
+                       cp -v ${config_dir}/x86_64-server-clang-omv-defconfig .config
+                       ;;
+               *)
+                       printf '%s\n' "ERROR: no such type ${type}"
+                       exit 1
+                       ;;
+               esac
 		;;
 	znver1)
-		rm -rf .config
-		%if %{with build_desktop}
-		%if %{with gcc}
-		cp -v ${config_dir}/x86_64-znver-desktop-gcc-omv-defconfig .config
-		%endif
-		%if %{with clang}
-		cp -v ${config_dir}/x86_64-znver-desktop-clang-omv-defconfig .config
-		%endif
-		%endif
-		%if %{with build_server}
-		%if %{with gcc}
-		cp -v ${config_dir}/x86_64-znver-server-gcc-omv-defconfig .config
-		%endif
-		%if %{with clang}
-		cp -v ${config_dir}/x86_64-znver-server-clang-omv-defconfig .config
-		%endif
-		%endif
+               case ${type} in
+               desktop)
+                       rm -rf .config
+                       cp -v ${config_dir}/x86_64-znver-desktop-gcc-omv-defconfig .config
+                       ;;
+               desktop-clang)
+                       rm -rf .config
+                       cp -v ${config_dir}/x86_64-znver-desktop-clang-omv-defconfig .config
+                       ;;
+               server)
+                       rm -rf .config
+                       cp -v ${config_dir}/x86_64-znver-server-gcc-omv-defconfig .config
+                       ;;
+               server-clang)
+                       rm -rf .config
+                       cp -v ${config_dir}/x86_64-znver-server-clang-omv-defconfig .config
+                       ;;
+               *)
+                       printf '%s\n' "ERROR: no such type ${type}"
+                       exit 1
+                       ;;
+               esac
 		;;
 	ppc64)
 		CONFIGS=pseries_defconfig
@@ -1090,8 +1105,8 @@ CreateConfig() {
 	done
 	%endif
 
-	if [ "$arch" = "znver1" -o "$arch" = "x86_64" ]; then
-		arch=x86
+       if [ "$arch" = "znver1" ]; then
+               arch=x86_64
 	elif echo $arch |grep -q ^ppc; then
 		arch=powerpc
 	fi
@@ -1505,7 +1520,7 @@ for a in arm arm64 i386 x86_64 znver1 powerpc riscv; do
 	for t in desktop server; do
 		CreateConfig $a $t
 		export ARCH=$a
-		[ "$ARCH" = "znver1" ] && export ARCH=x86
+               [ "$ARCH" = "znver1" ] && export ARCH=x86_64
 %if %{with cross_headers}
 		if [ "$t" = "desktop" ]; then
 			# While we have a kernel configured for it, let's package
