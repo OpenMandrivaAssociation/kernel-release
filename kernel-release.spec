@@ -991,6 +991,7 @@ CreateConfig() {
 	arch="$1"
 	type="$2"
 	config_dir=%{_sourcedir}
+	CONFIGS=""
 	rm -fv .config
 
 
@@ -1103,15 +1104,15 @@ CreateConfig() {
 	esac
 
 	# ( crazy) remove along with the old configs once ARM* and ppc* is finished
-	%ifnarch %{ix86} %{x86_64} znver1
-	for i in common common-${type}; do
-		[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
-	done
+	if [ -n ${CONFIGS} ]; then
+		for i in common common-${type}; do
+			[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
+		done
 
-	for i in ${arch}-common ${arch}-${type}; do
-		[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
-	done
-	%endif
+		for i in ${arch}-common ${arch}-${type}; do
+			[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
+		done
+	fi
 
     if [ "$arch" = "znver1" ]; then
 		arch=x86_64
@@ -1120,22 +1121,21 @@ CreateConfig() {
 	fi
 
 	# ( crazy) remove along with the old configs once ARM* and ppc* is finished
-	%ifnarch %{ix86} %{x86_64} znver1
-	## paranoia
-	make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 $CONFIGS
-	%else
-	%if %{without lazy_developer}
-	## YES, intentionally, DIE on wrong config
-	CheckConfig
-	make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 oldconfig
-	%else
-	printf '%s\n' "Lazy developer option is enabled!!. Don't be lazy!."
-	## that takes kernel defaults on missing or changed things 
-	## olddefconfig is similar to yes ... but not that verbose
-	CheckConfig
-	make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" olddefconfig
-	%endif
-	%endif
+	if [ -n ${CONFIGS} ]; then
+		make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 $CONFIGS
+	else
+		%if %{without lazy_developer}
+		## YES, intentionally, DIE on wrong config
+		CheckConfig
+		make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 oldconfig
+		%else
+		printf '%s\n' "Lazy developer option is enabled!!. Don't be lazy!."
+		## that takes kernel defaults on missing or changed things 
+		## olddefconfig is similar to yes ... but not that verbose
+		CheckConfig
+		make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" olddefconfig
+		%endif
+	fi
 	scripts/config --set-val BUILD_SALT \"$(echo "$arch-$type-%{EVRD}"|sha1sum|awk '{ print $1; }')\"
 	# " <--- workaround for vim syntax highlighting bug, ignore
 }
