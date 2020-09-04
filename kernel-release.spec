@@ -88,6 +88,7 @@
 %bcond_with build_debug
 %bcond_with dracut_all_initrd
 %bcond_with clr
+%bcond_with vbox_orig_mods
 # FIXME re-enable by default when the patches have been adapted to 5.8
 %bcond_with saa716x
 %bcond_with rtl8821ce
@@ -476,7 +477,9 @@ Suggests:	microcode-intel
 # get compiler error messages on failures)
 %ifarch %{x86_64}
 BuildRequires:	virtualbox-kernel-module-sources >= 6.1.10
+%if %{with vbox_orig_mods}
 BuildRequires:	virtualbox-guest-kernel-module-sources >= 6.1.10
+%endif
 %endif
 
 %description
@@ -895,8 +898,7 @@ LC_ALL=C sed -i -e "s/^SUBLEVEL.*/SUBLEVEL = %{sublevel}/" Makefile
 # Pull in some externally maintained modules
 %ifarch %{x86_64}
 # === VirtualBox guest additions ===
-%define use_internal_vboxvideo 0
-%if ! 0%{use_internal_vboxvideo}
+%if %{with vbox_orig_mods}
 # There is an in-kernel version of vboxvideo -- unfortunately
 # it doesn't seem to work properly with vbox just yet
 # Let's replace it with the one that comes with VB for now
@@ -929,6 +931,7 @@ sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/gpu/drm/vboxvideo/Makefile
 sed -i -e 's|800, 600|1024, 768|g' drivers/gpu/drm/vboxvideo/vbox_mode.c
 # VirtualBox shared folders now come in through patch 300
 
+## NONE upstream this stuff will be here for a while
 # === VirtualBox host modules ===
 # VirtualBox
 cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxdrv drivers/virt/
@@ -1132,7 +1135,7 @@ CreateConfig() {
 		make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 oldconfig
 		%else
 		printf '%s\n' "Lazy developer option is enabled!!. Don't be lazy!."
-		## that takes kernel defaults on missing or changed things 
+		## that takes kernel defaults on missing or changed things
 		## olddefconfig is similar to yes ... but not that verbose
 		CheckConfig
 		yes "" | make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" oldconfig
