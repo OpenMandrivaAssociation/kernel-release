@@ -1095,7 +1095,7 @@ CreateConfig() {
 	esac
 
 	# ( crazy) remove along with the old configs once ARM* and ppc* is finished
-	%ifnarch %{ix86} %{x86_64}
+	%ifnarch %{ix86} %{x86_64} znver1
 	for i in common common-${type}; do
 		[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
 	done
@@ -1105,20 +1105,20 @@ CreateConfig() {
 	done
 	%endif
 
-       if [ "$arch" = "znver1" ]; then
-               arch=x86_64
+    if [ "$arch" = "znver1" ]; then
+		arch=x86_64
 	elif echo $arch |grep -q ^ppc; then
 		arch=powerpc
 	fi
 
 	# ( crazy) remove along with the old configs once ARM* and ppc* is finished
-	%ifnarch %{ix86} %{x86_64}
+	%ifnarch %{ix86} %{x86_64} znver1
 	## paranoia
 	make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 $CONFIGS
 	%else
 	%if %{without lazy_developer}
 	## YES, intentionally, DIE on wrong config
-	make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 oldconfig
+	make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 olddefconfig
 	%else
 	printf '%s\n' "Lazy developer option is enabled!!. Don't be lazy!."
 	## that takes kernel defaults on missing or changed things
