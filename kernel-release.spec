@@ -22,7 +22,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	8
-%define sublevel	7
+%define sublevel	11
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -247,7 +247,6 @@ Patch1:		compress-modules-zstd.patch
 Patch2:		amd_iommu_init_info.patch
 # (crazy) while not perfect on all Ryzen platforms better that nothing
 Patch3: 	enable-new-amd-energy-driver-for-all-ryzen.patch
-Patch4:		https://gitweb.frugalware.org/frugalware-current/raw/c363c86b363c3ae86412b3bfa4f005a9fd21a533/source/base/kernel/revert-43bd3a95c98e1a86b8b55d97f745c224ecff02b9.patch
 # (crazy) drop in 5.9
 Patch5:		vboxguest-fixes.patch
 # (crazy) I really need to send that upstream soon
