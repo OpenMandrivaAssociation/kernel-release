@@ -3,4 +3,4 @@ sources:
   linux-5.8.tar.sign: 445c427ad3595f4f7d2aff3042de1d688b9b474d
   linux-5.8.tar.xz: 1f52755a5128c1a6719b3294b73c59aa9597937e
   saa716x-driver.tar.xz: f9b6ef1cd6f1f71f53d9a8aadfba2cf6b5c3d7b6
-  patch-5.8.11.xz: 04390b1e1de6f9f359e22964f83fd4c76142d974
+  patch-5.8.13.xz: 252a3ab5de8b3a17d5cae64cbb2387a81b90c649
