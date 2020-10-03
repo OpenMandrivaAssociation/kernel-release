@@ -22,7 +22,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	8
-%define sublevel	11
+%define sublevel	13
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -236,8 +236,8 @@ Source1000:	https://cdn.kernel.org/pub/linux/kernel/v%(echo %{version}|cut -d. -
 # booting SynQuacer from USB flash drives.
 # 9d55bebd9816903b821a403a69a94190442ac043 builds on
 # 7a8b64d17e35810dc3176fe61208b45c15d25402.
-Source1001:     7a8b64d17e35810dc3176fe61208b45c15d25402.patch
-Source1002:     9d55bebd9816903b821a403a69a94190442ac043.patch
+Source1001:     revert-7a8b64d17e35810dc3176fe61208b45c15d25402.patch
+Source1002:     revert-9d55bebd9816903b821a403a69a94190442ac043.patch
 
 # (crazy) WARNING do NOT drop rediff
 # we default to ZSTD
@@ -864,8 +864,8 @@ rm -rf .git
 
 %ifarch %{aarch64}
 # FIXME SynQuacer workaround
-patch -p1 -R <%{S:1002}
-patch -p1 -R <%{S:1001}
+patch -p1 -b -z .1002~ <%{S:1002}
+patch -p1 -b -z .1001~ <%{S:1001}
 %endif
 
 %if %{with saa716x}
