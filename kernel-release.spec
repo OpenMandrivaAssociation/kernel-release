@@ -21,8 +21,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	8
-%define sublevel	13
+%define patchlevel	9
+%define sublevel	1
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -84,7 +84,7 @@
 %endif
 
 
-%bcond_without lazy_developer
+%bcond_with lazy_developer
 %bcond_with build_debug
 %bcond_with dracut_all_initrd
 %bcond_with clr
@@ -185,19 +185,14 @@ NoSource:	0
 Source3:	README.kernel-sources
 Source4:	%{name}.rpmlintrc
 ## all in one configs for each kernel
-Source5:	x86_64-desktop-clang-omv-defconfig
-Source6:	x86_64-desktop-gcc-omv-defconfig
-Source7:	x86_64-server-clang-omv-defconfig
-Source8:	x86_64-server-gcc-omv-defconfig
-Source9:	x86_64-znver-desktop-clang-omv-defconfig
-Source10:	x86_64-znver-desktop-gcc-omv-defconfig
-Source11:	x86_64-znver-server-clang-omv-defconfig
-Source12:	x86_64-znver-server-gcc-omv-defconfig
-Source13:	i686-desktop-clang-omv-defconfig
+Source10:	x86_64-desktop-gcc-omv-defconfig
+Source11:	x86_64-server-gcc-omv-defconfig
+Source12:	x86_64-znver-desktop-gcc-omv-defconfig
+Source13:	x86_64-znver-server-gcc-omv-defconfig
 Source14:	i686-desktop-gcc-omv-defconfig
-Source15:	i686-server-clang-omv-defconfig
-Source16:	i686-server-gcc-omv-defconfig
-Source17:	armv7hnl-desktop-omv-defconfig
+Source15:	i686-server-gcc-omv-defconfig
+Source16:	armv7hnl-desktop-omv-defconfig
+Source17:	armv7hnl-server-omv-defconfig
 
 # to be removed soon
 Source20:	common.config
@@ -247,8 +242,6 @@ Patch1:		compress-modules-zstd.patch
 Patch2:		amd_iommu_init_info.patch
 # (crazy) while not perfect on all Ryzen platforms better that nothing
 Patch3: 	enable-new-amd-energy-driver-for-all-ryzen.patch
-# (crazy) drop in 5.9
-Patch5:		vboxguest-fixes.patch
 # (crazy) I really need to send that upstream soon
 Patch10:	iwlwifi-fix-5e003982b07ae.patch
 Patch30:	linux-5.6-fix-disassembler-4args-detection.patch
@@ -265,7 +258,6 @@ Patch36:	aacraid-dont-freak-out-dependency-generator.patch
 Patch37:	socket.h-include-bitsperlong.h.patch
 # Make Nouveau work on SynQuacer (and probably all other non-x86 boards)
 Patch38:	kernel-5.8-nouveau-write-combining-only-on-x86.patch
-Patch39:	kernel-5.7-fewer-conditions-for-ARM64_PTR_AUTH.patch
 Patch40:	kernel-5.8-aarch64-gcc-10.2-workaround.patch
 # FIXME hardening the module loader breaks it when
 # using binutils 2.35, https://sourceware.org/bugzilla/show_bug.cgi?id=26378
@@ -278,12 +270,8 @@ Patch41:	workaround-aarch64-module-loader.patch
 # sources can be found here https://github.com/dolohow/uksm
 %if %{with uksm}
 # brokes armx builds
-Patch42:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.8.patch
+Patch42:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.9.patch
 %endif
-
-## (crazy) drop in 5.9, merged upstream.
-# v4 -> https://lkml.org/lkml/2020/4/1/29
-Patch43:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/support-kernel-and-ramfs-comp-and-decomp-with-zstd.patch
 
 # (crazy) see: https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
 Patch44:	Unknow-SSD-HFM128GDHTNG-8310B-QUIRK_NO_APST.patch
@@ -293,8 +281,6 @@ Patch46:	https://gitweb.frugalware.org/wip_kernel/raw/23f5e50042768b823e18613151
 # (crazy) need to know what function() breaks on nvme failures
 Patch47:	nvme-pci-more-info.patch
 Patch48:	linux-5.4.5-fix-build.patch
-Patch49:	iwlwifi-dont-scream-about-debug-firmware.patch
-Patch50:	iwlwifi-use-debug-for-debug-infos.patch
 Patch51:	linux-5.5-corsair-strafe-quirks.patch
 Patch52:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
 
@@ -332,6 +318,7 @@ Source1005:	vbox-6.1-fix-build-on-znver1-hosts.patch
 # Re-export a few symbols vbox wants
 Patch210:	https://gitweb.frugalware.org/wip_kernel/raw/9d0e99ff5fef596388913549a8418c07d367a940/source/base/kernel/fix_virtualbox.patch
 Source1006:	vbox-6.1.12-kernel-5.8.patch
+Source1007:	vbox-kernel-5.9.patch
 
 # Better support for newer x86 processors
 # More actively maintained for newer kernels
@@ -446,6 +433,9 @@ BuildRequires:	xmlto
 
 # for ORC unwinder and perf
 BuildRequires:	pkgconfig(libelf)
+
+# for bpftool
+BuildRequires:	pahole
 
 # for perf
 %if %{with build_perf}
@@ -952,8 +942,9 @@ cp -a $(ls --sort=time -1d /usr/src/virtualbox-*|head -n1)/vboxpci drivers/pci/
 sed -i -e 's,\$(KBUILD_EXTMOD),drivers/pci/vboxpci,g' drivers/pci/vboxpci/Makefile*
 sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
-patch -p1 -z .1005a~ -b <%{S:1005}
-patch -p1 -z .1006a~ -b <%{S:1006}
+patch -p1 -z .1005~ -b <%{S:1005}
+patch -p1 -z .1006~ -b <%{S:1006}
+patch -p1 -z .1007~ -b <%{S:1007}
 %endif
 
 # get rid of unwanted files
@@ -991,6 +982,29 @@ CheckConfig() {
 	fi
 }
 
+clangify() {
+	sed -i \
+		-e '/^CONFIG_CC_VERSION_TEXT=/d' \
+		-e '/^CONFIG_CC_IS_GCC=/d' \
+		-e '/^CONFIG_CC_IS_CLANG=/d' \
+		-e '/^CONFIG_GCC_VERSION=/d' \
+		-e '/^CONFIG_CLANG_VERSION=/d' \
+		-e '/^CONFIG_LD_VERSION=/d' \
+		-e '/^CONFIG_LD_IS_LLD=/d' \
+		-e '/^CONFIG_GCC_PLUGINS=/d' \
+		"$1"
+	cat >>"$1" <<'EOF'
+CONFIG_CC_IS_CLANG=y
+CONFIG_CC_HAS_ASM_GOTO_OUTPUT=y
+
+CONFIG_INIT_STACK_NONE=y
+# CONFIG_INIT_STACK_ALL_PATTERN is not set
+# CONFIG_INIT_STACK_ALL_ZERO is not set
+
+# CONFIG_KCSAN is not set
+EOF
+}
+
 CreateConfig() {
 	arch="$1"
 	type="$2"
@@ -1025,76 +1039,76 @@ CreateConfig() {
 	# (crazy) do not use %{S:X} to copy, if someone messes up we end up with broken stuff again
 	case ${arch} in
 	i?86)
-               case ${type} in
-               desktop)
-                       rm -rf .config
-                       cp -v ${config_dir}/i686-desktop-gcc-omv-defconfig .config
-                       ;;
-               desktop-clang)
-                       rm -rf .config
-                       cp -v ${config_dir}/i686-desktop-clang-omv-defconfig .config
-                       ;;
-               server)
-                       rm -rf .config
-                       cp -v ${config_dir}/i686-server-gcc-omv-defconfig .config
-                       ;;
-               server-clang)
-                       rm -rf .config
-                       cp -v ${config_dir}/i686-server-clang-omv-defconfig .config
-                       ;;
-               *)
-                       printf '%s\n' "ERROR: no such type ${type}"
-                       exit 1
-                       ;;
-               esac
+		case ${type} in
+		desktop|desktop-clang)
+			rm -rf .config
+			cp -v ${config_dir}/i686-desktop-gcc-omv-defconfig .config
+			echo ${type} |grep -q clang && clangify .config
+			;;
+		server|server-clang)
+			rm -rf .config
+			cp -v ${config_dir}/i686-server-gcc-omv-defconfig .config
+			echo ${type} |grep -q clang && clangify .config
+			;;
+		*)
+			printf '%s\n' "ERROR: no such type ${type} for ${arch}"
+			exit 1
+			;;
+		esac
 		;;
 	x86_64|x86)
-               case ${type} in
-               desktop)
-                       rm -rf .config
-                       cp -v ${config_dir}/x86_64-desktop-gcc-omv-defconfig .config
-                       ;;
-               desktop-clang)
-                       rm -rf .config
-                       cp -v ${config_dir}/x86_64-desktop-clang-omv-defconfig .config
-                       ;;
-               server)
-                       rm -rf .config
-                       cp -v ${config_dir}/x86_64-server-gcc-omv-defconfig .config
-                       ;;
-               server-clang)
-                       rm -rf .config
-                       cp -v ${config_dir}/x86_64-server-clang-omv-defconfig .config
-                       ;;
-               *)
-                       printf '%s\n' "ERROR: no such type ${type}"
-                       exit 1
-                       ;;
-               esac
+		case ${type} in
+		desktop|desktop-clang)
+			rm -rf .config
+			cp -v ${config_dir}/x86_64-desktop-gcc-omv-defconfig .config
+			echo ${type} |grep -q clang && clangify .config
+			;;
+		server|server-clang)
+			rm -rf .config
+			cp -v ${config_dir}/x86_64-server-gcc-omv-defconfig .config
+			echo ${type} |grep -q clang && clangify .config
+			;;
+		*)
+			printf '%s\n' "ERROR: no such type ${type} for ${arch}"
+			exit 1
+			;;
+		esac
+		;;
+	arm)
+		case ${type} in
+		desktop|desktop-clang)
+			rm -rf .config
+			cp -v ${config_dir}/armv7hnl-desktop-omv-defconfig .config
+			echo ${type} |grep -q clang && clangify .config
+			;;
+		server|server-clang)
+			rm -rf .config
+			cp -v ${config_dir}/armv7hnl-desktop-omv-defconfig .config
+			echo ${type} |grep -q clang && clangify .config
+			;;
+		*)
+			printf '%s\n' "ERROR: no such type ${type} for ${arch}"
+			exit 1
+			;;
+		esac
 		;;
 	znver1)
-               case ${type} in
-               desktop)
-                       rm -rf .config
-                       cp -v ${config_dir}/x86_64-znver-desktop-gcc-omv-defconfig .config
-                       ;;
-               desktop-clang)
-                       rm -rf .config
-                       cp -v ${config_dir}/x86_64-znver-desktop-clang-omv-defconfig .config
-                       ;;
-               server)
-                       rm -rf .config
-                       cp -v ${config_dir}/x86_64-znver-server-gcc-omv-defconfig .config
-                       ;;
-               server-clang)
-                       rm -rf .config
-                       cp -v ${config_dir}/x86_64-znver-server-clang-omv-defconfig .config
-                       ;;
-               *)
-                       printf '%s\n' "ERROR: no such type ${type}"
-                       exit 1
-                       ;;
-               esac
+		case ${type} in
+		desktop|desktop-clang)
+			rm -rf .config
+			cp -v ${config_dir}/x86_64-znver-desktop-gcc-omv-defconfig .config
+			echo ${type} |grep -q clang && clangify .config
+			;;
+		server|server-clang)
+			rm -rf .config
+			cp -v ${config_dir}/x86_64-znver-server-gcc-omv-defconfig .config
+			echo ${type} |grep -q clang && clangify .config
+			;;
+		*)
+			printf '%s\n' "ERROR: no such type ${type} for ${arch}"
+			exit 1
+			;;
+		esac
 		;;
 	ppc64)
 		CONFIGS=pseries_defconfig
@@ -1118,7 +1132,7 @@ CreateConfig() {
 		done
 	fi
 
-    if [ "$arch" = "znver1" -o "$arch" = "x86_64" ]; then
+	if [ "$arch" = "znver1" -o "$arch" = "x86_64" ]; then
 		arch=x86
 	elif echo $arch |grep -q ^ppc; then
 		arch=powerpc
@@ -1142,6 +1156,7 @@ CreateConfig() {
 	fi
 	scripts/config --set-val BUILD_SALT \"$(echo "$arch-$type-%{EVRD}"|sha1sum|awk '{ print $1; }')\"
 	# " <--- workaround for vim syntax highlighting bug, ignore
+	cp .config kernel/configs/omv-${arch}-${type}.config
 }
 
 PrepareKernel() {
@@ -1182,7 +1197,7 @@ BuildKernel() {
 		BUILD_LD="%{_target_platform}-ld.bfd"
 		BUILD_KBUILD_LDFLAGS="-fuse-ld=bfd"
 		BUILD_TOOLS=""
-        fi
+	fi
 
 	%make_build all ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS  KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1
 
@@ -1327,6 +1342,7 @@ $DevelRoot/include/kvm
 $DevelRoot/include/linux
 $DevelRoot/include/math-emu
 $DevelRoot/include/media
+$DevelRoot/include/memory
 $DevelRoot/include/misc
 $DevelRoot/include/net
 $DevelRoot/include/pcmcia
@@ -1535,7 +1551,7 @@ for a in arm arm64 i386 x86_64 znver1 powerpc riscv; do
 	for t in desktop server; do
 		CreateConfig $a $t
 		export ARCH=$a
-        [ "$ARCH" = "znver1" ] && export ARCH=x86
+		[ "$ARCH" = "znver1" ] && export ARCH=x86
 %if %{with cross_headers}
 		if [ "$t" = "desktop" ]; then
 			# While we have a kernel configured for it, let's package
@@ -1811,6 +1827,7 @@ cd -
 %{_kerneldir}/include/linux
 %{_kerneldir}/include/math-emu
 %{_kerneldir}/include/media
+%{_kerneldir}/include/memory
 %{_kerneldir}/include/misc
 %{_kerneldir}/include/net
 %{_kerneldir}/include/pcmcia
