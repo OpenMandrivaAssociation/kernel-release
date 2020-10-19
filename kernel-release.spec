@@ -193,6 +193,8 @@ Source14:	i686-desktop-gcc-omv-defconfig
 Source15:	i686-server-gcc-omv-defconfig
 Source16:	armv7hnl-desktop-omv-defconfig
 Source17:	armv7hnl-server-omv-defconfig
+Source18:	aarch64-desktop-omv-defconfig
+Source19:	aarch64-server-omv-defconfig
 
 # to be removed soon
 Source20:	common.config
@@ -1084,6 +1086,24 @@ CreateConfig() {
 		server|server-clang)
 			rm -rf .config
 			cp -v ${config_dir}/armv7hnl-desktop-omv-defconfig .config
+			echo ${type} |grep -q clang && clangify .config
+			;;
+		*)
+			printf '%s\n' "ERROR: no such type ${type} for ${arch}"
+			exit 1
+			;;
+		esac
+		;;
+	aarch64)
+		case ${type} in
+		desktop|desktop-clang)
+			rm -rf .config
+			cp -v ${config_dir}/aarch64-desktop-omv-defconfig .config
+			echo ${type} |grep -q clang && clangify .config
+			;;
+		server|server-clang)
+			rm -rf .config
+			cp -v ${config_dir}/aarch64-server-omv-defconfig .config
 			echo ${type} |grep -q clang && clangify .config
 			;;
 		*)
