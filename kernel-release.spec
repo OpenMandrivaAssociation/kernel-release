@@ -84,7 +84,7 @@
 %endif
 
 
-%bcond_with lazy_developer
+%bcond_without lazy_developer
 %bcond_with build_debug
 %bcond_with dracut_all_initrd
 %bcond_with clr
