@@ -84,7 +84,7 @@
 %endif
 
 
-%bcond_without lazy_developer
+%bcond_with lazy_developer
 %bcond_with build_debug
 %bcond_with dracut_all_initrd
 %bcond_with clr
@@ -1094,7 +1094,7 @@ CreateConfig() {
 			;;
 		esac
 		;;
-	aarch64)
+	arm64)
 		case ${type} in
 		desktop|desktop-clang)
 			rm -rf .config
@@ -1219,7 +1219,11 @@ BuildKernel() {
 		BUILD_TOOLS=""
 	fi
 
-	%make_build all ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS  KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1
+	TARGETS=all
+%ifarch %{aarch64}
+	TARGETS="$TARGETS dtbs"
+%endif
+	%make_build ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 $TARGETS
 
 	# Start installing stuff
 	install -d %{temp_boot}
@@ -1234,7 +1238,7 @@ BuildKernel() {
 		cp -f arch/arm/boot/zImage %{temp_boot}/vmlinuz-$KernelVer
 	fi
 %else
-%ifarch aarch64
+%ifarch %{aarch64}
 	cp -f arch/arm64/boot/Image.gz %{temp_boot}/vmlinuz-$KernelVer
 %else
 	cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-$KernelVer
@@ -1248,8 +1252,8 @@ BuildKernel() {
 	# headers
 	%make_build INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer ARCH=%{target_arch} SRCARCH=%{target_arch} headers_install
 
-%ifarch %{armx}
-	%make_build ARCH=%{target_arch} V=1 dtbs INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
+%ifarch %{armx} %{ppc}
+	%make_build ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
 %endif
 
 	# remove /lib/firmware, we use a separate kernel-firmware
