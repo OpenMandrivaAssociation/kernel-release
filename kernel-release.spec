@@ -80,7 +80,7 @@
 
 %if %{with clang}
 ## lld is broken now or the kernel doesn't like it
-%bcond_without ld_workaround
+%bcond_with ld_workaround
 %endif
 
 
@@ -138,6 +138,17 @@
 %bcond_without build_desktop
 %bcond_with build_server
 %endif
+
+# FIXME figure out why bpftool won't build on aarch64
+# as of 5.9.1, error is:
+# ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
+# FAILED: load BTF from vmlinux: Unknown error -2+ on_exit
+%ifarch %{aarch64}
+%bcond_with bpftool
+%else
+%bcond_without bpftool
+%endif
+
 # End of user definitions
 
 # For the .nosrc.rpm
@@ -436,8 +447,10 @@ BuildRequires:	xmlto
 # for ORC unwinder and perf
 BuildRequires:	pkgconfig(libelf)
 
+%if %{with bpftool}
 # for bpftool
 BuildRequires:	pahole
+%endif
 
 # for perf
 %if %{with build_perf}
@@ -1026,7 +1039,7 @@ CreateConfig() {
 		%else
 		BUILD_LD="ld.lld"
 		# bugs
-		BUILD_KBUILD_LDFLAGS="--icf=none --no-gc-sections"
+		BUILD_KBUILD_LDFLAGS="-Wl,--icf=none -Wl,--no-gc-sections"
 		%endif
 		BUILD_TOOLS='AR=llvm-ar HOSTAR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump OBJSIZE=llvm-size READELF=llvm-readelf'
 	else
@@ -1207,7 +1220,7 @@ BuildKernel() {
 		%else
 		BUILD_LD="ld.lld"
 		# bugs
-		BUILD_KBUILD_LDFLAGS="--icf=none --no-gc-sections"
+		BUILD_KBUILD_LDFLAGS="-Wl,--icf=none -Wl,--no-gc-sections"
 		%endif
 		BUILD_TOOLS='AR=llvm-ar HOSTAR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump OBJSIZE=llvm-size READELF=llvm-readelf'
 	else
@@ -1675,10 +1688,12 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %endif
 %endif
 
+%if %{with bpftool}
 %make_build -C tools/lib/bpf CC=clang LD=ld.lld libbpf.a libbpf.pc libbpf.so -j1
 cd tools/bpf/bpftool
 %make_build CC=clang LD=ld.lld bpftool -j1
 cd -
+%endif
 
 ############################################################
 ###  Linker end3 > Check point to build for omv or rosa  ###
@@ -1762,9 +1777,11 @@ mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
 %endif
 %endif
 
+%if %{with bpftool}
 # install bpftool and libbpf
 %make_install -C tools/lib/bpf install install_headers DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir}
 %make_install -C tools/bpf/bpftool install CC=clang CXX=clang++ LD=ld.lld DESTDIR=%{buildroot} prefix=%{_prefix} bash_compdir=%{_sysconfdir}/bash_completion.d/ mandir=%{_mandir}
+%endif
 
 # Create directories infastructure
 %if %{with build_source}
@@ -1940,6 +1957,7 @@ cd -
 %endif
 %endif
 
+%if %{with bpftool}
 %files -n bpftool
 %{_sbindir}/bpftool
 %{_sysconfdir}/bash_completion.d/bpftool
@@ -1953,3 +1971,4 @@ cd -
 %{_libdir}/pkgconfig/*.pc
 %dir %{_includedir}/bpf
 %{_includedir}/bpf/*.h
+%endif
