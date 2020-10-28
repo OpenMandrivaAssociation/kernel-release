@@ -831,6 +831,10 @@ CONFIG_ARCH_HAS_GCOV_PROFILE_ALL=y
 # end of GCOV-based kernel profiling
 
 CONFIG_HAVE_GCC_PLUGINS=y
+CONFIG_GCC_PLUGINS=y
+# CONFIG_GCC_PLUGIN_CYC_COMPLEXITY is not set
+# CONFIG_GCC_PLUGIN_LATENT_ENTROPY is not set
+# CONFIG_GCC_PLUGIN_RANDSTRUCT is not set
 # CONFIG_SHADOW_CALL_STACK is not set
 # end of General architecture-dependent options
 
@@ -1022,6 +1026,8 @@ CONFIG_PHYS_ADDR_T_64BIT=y
 CONFIG_BOUNCE=y
 CONFIG_MMU_NOTIFIER=y
 CONFIG_KSM=y
+CONFIG_UKSM=y
+# CONFIG_KSM_LEGACY is not set
 CONFIG_DEFAULT_MMAP_MIN_ADDR=65536
 CONFIG_ARCH_SUPPORTS_MEMORY_FAILURE=y
 CONFIG_MEMORY_FAILURE=y
@@ -10892,8 +10898,12 @@ CONFIG_LSM="lockdown,yama,loadpin,safesetid,integrity,bpf"
 # Memory initialization
 #
 CONFIG_INIT_STACK_NONE=y
+# CONFIG_GCC_PLUGIN_STRUCTLEAK_USER is not set
+# CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF is not set
+# CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL is not set
 # CONFIG_INIT_ON_ALLOC_DEFAULT_ON is not set
 # CONFIG_INIT_ON_FREE_DEFAULT_ON is not set
+# CONFIG_GCC_PLUGIN_STACKLEAK is not set
 # end of Memory initialization
 # end of Kernel hardening options
 # end of Security options
