@@ -214,8 +214,6 @@ Source20:	common.config
 Source21:	common-desktop.config
 Source22:	common-server.config
 # Architecture specific configs
-Source23:	arm64-common.config
-Source24:	arm-common.config
 Source25:	powerpc-common.config
 # Files called $ARCH-$FLAVOR.config are merged as well,
 # currently there's no need to have specific overloads there.
@@ -872,7 +870,7 @@ done
 #
 %prep
 %setup -q -n linux-%{tar_ver} -a 1003 -a 1004
-cp %{S:20} %{S:21} %{S:22} %{S:23} %{S:24} %{S:25}  kernel/configs/
+cp %{S:20} %{S:21} %{S:22} %{S:25}  kernel/configs/
 %if 0%{sublevel}
 [ -e .git ] || git init
 xzcat %{SOURCE1000} |git apply - || git apply %{SOURCE1000}
