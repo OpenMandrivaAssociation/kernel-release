@@ -3,4 +3,4 @@ sources:
   linux-5.9.tar.sign: c71915a12a6dc384b6099d524d7711b3ef673998
   linux-5.9.tar.xz: 0617d9e190869ec11f2a28791f2cbd34c250f51b
   saa716x-driver.tar.xz: f9b6ef1cd6f1f71f53d9a8aadfba2cf6b5c3d7b6
-  patch-5.9.12.xz: de98584320a82826647b3ccc7c46f0b515916f9c
+  patch-5.9.14.xz: f77249c1190523667354a7b466686e161d7c169a
