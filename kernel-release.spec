@@ -21,8 +21,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	9
-%define sublevel	14
+%define patchlevel	10
+%define sublevel	1
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -36,7 +36,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		2
+%define rpmrel		1
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -68,8 +68,9 @@
 
 # Build defines
 %bcond_with build_doc
+# UKSM disabled for 5.10-rc as it needs rebasing
 %ifarch %{ix86} %{x86_64}
-%bcond_without uksm
+%bcond_with uksm
 %else
 %bcond_with uksm
 %endif
@@ -95,7 +96,7 @@
 %bcond_with saa716x
 %bcond_with rtl8821ce
 
-%global cross_header_archs	aarch64-linux armv7hnl-linux i686-linux x86_64-linux x32-linux riscv32-linux riscv64-linux aarch64-linuxmusl armv7hnl-linuxmusl i686-linuxmusl x86_64-linuxmusl x32-linuxmusl riscv32-linuxmusl riscv64-linuxmusl aarch64-android armv7l-android armv8l-android x86_64-android aarch64-linuxuclibc armv7hnl-linuxuclibc i686-linuxuclibc x86_64-linuxuclibc x32-linuxuclibc riscv32-linuxuclibc riscv64-linuxuclibc ppc64le-linux ppc64le-linuxmusl ppc64le-linuxuclibc ppc64-linux ppc64-linuxmusl ppc64-linuxuclibc
+%global cross_header_archs	aarch64-linux armv7hnl-linux i686-linux x86_64-linux x32-linux riscv32-linux riscv64-linux aarch64-linuxmusl armv7hnl-linuxmusl i686-linuxmusl x86_64-linuxmusl x32-linuxmusl riscv32-linuxmusl riscv64-linuxmusl aarch64-android armv7l-android armv8l-android x86_64-android aarch64-linuxuclibc armv7hnl-linuxuclibc i686-linuxuclibc x86_64-linuxuclibc x32-linuxuclibc riscv32-linuxuclibc riscv64-linuxuclibc ppc64le-linux ppc64-linux
 %global long_cross_header_archs %(
 	for i in %{cross_header_archs}; do
 		CPU=$(echo $i |cut -d- -f1)
@@ -209,15 +210,6 @@ Source17:	armv7hnl-server-omv-defconfig
 Source18:	aarch64-desktop-omv-defconfig
 Source19:	aarch64-server-omv-defconfig
 
-# to be removed soon
-Source20:	common.config
-Source21:	common-desktop.config
-Source22:	common-server.config
-# Architecture specific configs
-Source25:	powerpc-common.config
-# Files called $ARCH-$FLAVOR.config are merged as well,
-# currently there's no need to have specific overloads there.
-
 # config and systemd service file from fedora
 Source30:	cpupower.service
 Source31:	cpupower.config
@@ -270,7 +262,8 @@ Patch36:	aacraid-dont-freak-out-dependency-generator.patch
 # Make uClibc-ng happy
 Patch37:	socket.h-include-bitsperlong.h.patch
 # Make Nouveau work on SynQuacer (and probably all other non-x86 boards)
-Patch38:	kernel-5.8-nouveau-write-combining-only-on-x86.patch
+# FIXME this may need porting, not sure where WC is set in 5.10
+#Patch38:	kernel-5.8-nouveau-write-combining-only-on-x86.patch
 Patch40:	kernel-5.8-aarch64-gcc-10.2-workaround.patch
 # FIXME hardening the module loader breaks it when
 # using binutils 2.35, https://sourceware.org/bugzilla/show_bug.cgi?id=26378
@@ -329,6 +322,7 @@ Patch209:	extra-wifi-drivers-port-to-5.6.patch
 # virtualbox-kernel-module-sources package is copied around
 Source1005:	vbox-6.1-fix-build-on-znver1-hosts.patch
 Source1006:	vbox-6.1.16-compile.patch
+Source1007:	vbox-5.10.patch
 # Re-export a few symbols vbox wants
 Patch210:	https://gitweb.frugalware.org/wip_kernel/raw/9d0e99ff5fef596388913549a8418c07d367a940/source/base/kernel/fix_virtualbox.patch
 
@@ -871,7 +865,6 @@ done
 #
 %prep
 %setup -q -n linux-%{tar_ver} -a 1003 -a 1004
-cp %{S:20} %{S:21} %{S:22} %{S:25}  kernel/configs/
 %if 0%{sublevel}
 [ -e .git ] || git init
 xzcat %{SOURCE1000} |git apply - || git apply %{SOURCE1000}
@@ -881,8 +874,8 @@ rm -rf .git
 
 %ifarch %{aarch64}
 # FIXME SynQuacer workaround
-patch -p1 -b -z .1002~ <%{S:1002}
-patch -p1 -b -z .1001~ <%{S:1001}
+#patch -p1 -b -z .1002~ <%{S:1002}
+#patch -p1 -b -z .1001~ <%{S:1001}
 %endif
 
 %if %{with saa716x}
@@ -971,6 +964,7 @@ sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 patch -p1 -z .1005~ -b <%{S:1005}
 patch -p1 -z .1006~ -b <%{S:1006}
+patch -p1 -z .1007~ -b <%{S:1007}
 %endif
 
 # get rid of unwanted files
@@ -1028,6 +1022,7 @@ CONFIG_INIT_STACK_NONE=y
 # CONFIG_INIT_STACK_ALL_ZERO is not set
 
 # CONFIG_KCSAN is not set
+# CONFIG_SHADOW_CALL_STACK is not set
 EOF
 }
 
@@ -1176,6 +1171,7 @@ CreateConfig() {
 		done
 	fi
 
+	cfgarch=$arch
 	if [ "$arch" = "znver1" -o "$arch" = "x86_64" ]; then
 		arch=x86
 	elif echo $arch |grep -q ^ppc; then
@@ -1200,7 +1196,7 @@ CreateConfig() {
 	fi
 	scripts/config --set-val BUILD_SALT \"$(echo "$arch-$type-%{EVRD}"|sha1sum|awk '{ print $1; }')\"
 	# " <--- workaround for vim syntax highlighting bug, ignore
-	cp .config kernel/configs/omv-${arch}-${type}.config
+	cp .config kernel/configs/omv-${cfgarch}-${type}.config
 }
 
 PrepareKernel() {
@@ -1510,6 +1506,7 @@ rm -rf vmlinuz-{server,desktop} initrd0.img initrd-{server,desktop}
 # run update-grub2
 [ -x /usr/sbin/update-grub2 ] && /usr/sbin/update-grub2
 
+cd - > /dev/null
 %if %{with build_devel}
 # create kernel-devel symlinks if matching -devel- rpm is installed
 if [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
