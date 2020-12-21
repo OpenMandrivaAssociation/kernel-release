@@ -321,8 +321,7 @@ Patch209:	extra-wifi-drivers-port-to-5.6.patch
 # because they need to be applied after stuff from the
 # virtualbox-kernel-module-sources package is copied around
 Source1005:	vbox-6.1-fix-build-on-znver1-hosts.patch
-Source1006:	vbox-6.1.16-compile.patch
-Source1007:	vbox-5.10.patch
+Source1006:	vbox-5.10.patch
 # Re-export a few symbols vbox wants
 Patch210:	https://gitweb.frugalware.org/wip_kernel/raw/9d0e99ff5fef596388913549a8418c07d367a940/source/base/kernel/fix_virtualbox.patch
 
@@ -969,7 +968,6 @@ echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 %endif
 patch -p1 -z .1005~ -b <%{S:1005}
 patch -p1 -z .1006~ -b <%{S:1006}
-patch -p1 -z .1007~ -b <%{S:1007}
 %endif
 
 # get rid of unwanted files
