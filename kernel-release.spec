@@ -36,7 +36,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		2
+%define rpmrel		3
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -338,6 +338,9 @@ Patch213:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/d
 # AMDGPU fixes
 # https://patchwork.freedesktop.org/patch/408230/
 Patch220:	8353d30e747f-drm-amd-display-disable-stream-if-pixel-clock-changed-with-link-active.patch
+
+# k10temp fixes
+Patch221:	https://gitweb.frugalware.org/frugalware-current/raw/2fe3eaa10ecbeb59db965230a1d1aa0a775f6b5a/source/base/kernel/k10temp-fix-ZEN2-desktop-add-ZEN3-desktop.patch
 
 # NTFS kernel patches
 # https://lore.kernel.org/lkml/20201204154600.1546096-1-almaz.alexandrovich@paragon-software.com/
