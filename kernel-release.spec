@@ -36,7 +36,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		3
+%define rpmrel		4
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -245,8 +245,6 @@ Patch1:		compress-modules-zstd.patch
 # (crazy) That is always a error on Ryzen platform, which is not fatal
 # just different, lower to info since it breaks the splash
 Patch2:		amd_iommu_init_info.patch
-# (crazy) while not perfect on all Ryzen platforms better that nothing
-Patch3: 	enable-new-amd-energy-driver-for-all-ryzen.patch
 # (crazy) I really need to send that upstream soon
 Patch10:	iwlwifi-fix-5e003982b07ae.patch
 Patch30:	linux-5.6-fix-disassembler-4args-detection.patch
@@ -341,6 +339,16 @@ Patch220:	8353d30e747f-drm-amd-display-disable-stream-if-pixel-clock-changed-wit
 
 # k10temp fixes
 Patch221:	https://gitweb.frugalware.org/frugalware-current/raw/2fe3eaa10ecbeb59db965230a1d1aa0a775f6b5a/source/base/kernel/k10temp-fix-ZEN2-desktop-add-ZEN3-desktop.patch
+
+# Backported extra AMD drivers
+Patch222:	https://gitweb.frugalware.org/frugalware-current/raw/e4ce7d381051c513cf9ba5443b255534d48ce90a/source/base/kernel/add-amd-sfh-hid_driver.patch
+Patch223:	https://gitweb.frugalware.org/frugalware-current/raw/e4ce7d381051c513cf9ba5443b255534d48ce90a/source/base/kernel/add-sbtsi_driver.patch
+Patch224:	https://gitweb.frugalware.org/frugalware-current/raw/9feb87fc5d15fc0b31f5e0cfa2bab188c4e6575a/source/base/kernel/enable-new-amd-energy-driver-for-all-ryzen.patch
+
+# Fix CPU frequency governor mess caused by recent Intel patches
+Patch225:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/0001-Revert-cpufreq-Avoid-configuring-old-governors-as-de.patch
+Patch226:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/revert-parts-of-a00ec3874e7d326ab2dffbed92faddf6a77a84e9-no-Intel-NO.patch
+
 
 # NTFS kernel patches
 # https://lore.kernel.org/lkml/20201204154600.1546096-1-almaz.alexandrovich@paragon-software.com/
