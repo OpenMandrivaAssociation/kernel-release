@@ -158,3 +158,25 @@ diff -up linux-5.9/security/security.c.37~ linux-5.9/security/security.c
  
  int security_ptrace_access_check(struct task_struct *child, unsigned int mode)
  {
+diff -up linux-5.10/ipc/msgutil.c.omv~ linux-5.10/ipc/msgutil.c
+--- linux-5.10/ipc/msgutil.c.omv~	2020-12-27 01:16:41.770345629 +0100
++++ linux-5.10/ipc/msgutil.c	2020-12-27 01:16:53.026491226 +0100
+@@ -33,6 +33,7 @@ struct ipc_namespace init_ipc_ns = {
+ 	.ns.ops = &ipcns_operations,
+ #endif
+ };
++EXPORT_SYMBOL_GPL(init_ipc_ns);
+ 
+ struct msg_msgseg {
+ 	struct msg_msgseg *next;
+diff -up linux-5.10/ipc/namespace.c.omv~ linux-5.10/ipc/namespace.c
+--- linux-5.10/ipc/namespace.c.omv~	2020-12-27 01:19:48.196765724 +0100
++++ linux-5.10/ipc/namespace.c	2020-12-27 01:20:03.157960652 +0100
+@@ -172,6 +172,7 @@ void put_ipc_ns(struct ipc_namespace *ns
+ 			schedule_work(&free_ipc_work);
+ 	}
+ }
++EXPORT_SYMBOL_GPL(put_ipc_ns);
+ 
+ static inline struct ipc_namespace *to_ipc_ns(struct ns_common *ns)
+ {
