@@ -36,7 +36,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -70,7 +70,7 @@
 %bcond_with build_doc
 # UKSM disabled for 5.10-rc as it needs rebasing
 %ifarch %{ix86} %{x86_64}
-%bcond_with uksm
+%bcond_without uksm
 %else
 %bcond_with uksm
 %endif
@@ -273,8 +273,8 @@ Patch41:	workaround-aarch64-module-loader.patch
 # http://kerneldedup.org/en/projects/uksm/download/
 # sources can be found here https://github.com/dolohow/uksm
 %if %{with uksm}
-# brokes armx builds
-Patch42:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.9.patch
+# breaks armx builds
+Patch42:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.10.patch
 %endif
 
 # (crazy) see: https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
