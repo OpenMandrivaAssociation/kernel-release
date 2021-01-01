@@ -22,7 +22,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	10
-%define sublevel	3
+%define sublevel	4
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -36,7 +36,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		2
+%define rpmrel		1
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -333,21 +333,25 @@ Patch211:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patche
 Patch212:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
 Patch213:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
 
+# https://gitweb.frugalware.org/frugalware-current/commit/bc3e827af39a321efd770ba4f4de63bca2853471
+Patch214:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/nvme-Patriot_Viper_VPN100-QUIRK_IGNORE_DEV_SUBNQN.patch
+
 # AMDGPU fixes
 # https://patchwork.freedesktop.org/patch/408230/
 Patch220:	8353d30e747f-drm-amd-display-disable-stream-if-pixel-clock-changed-with-link-active.patch
 
 # k10temp fixes
-Patch221:	https://gitweb.frugalware.org/frugalware-current/raw/2fe3eaa10ecbeb59db965230a1d1aa0a775f6b5a/source/base/kernel/k10temp-fix-ZEN2-desktop-add-ZEN3-desktop.patch
+Patch221:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/0001-Revert-hwmon-k10temp-Remove-support-for-displaying-v.patch
+Patch222:	https://gitweb.frugalware.org/frugalware-current/raw/2fe3eaa10ecbeb59db965230a1d1aa0a775f6b5a/source/base/kernel/k10temp-fix-ZEN2-desktop-add-ZEN3-desktop.patch
 
 # Backported extra AMD drivers
-Patch222:	https://gitweb.frugalware.org/frugalware-current/raw/e4ce7d381051c513cf9ba5443b255534d48ce90a/source/base/kernel/add-amd-sfh-hid_driver.patch
-Patch223:	https://gitweb.frugalware.org/frugalware-current/raw/e4ce7d381051c513cf9ba5443b255534d48ce90a/source/base/kernel/add-sbtsi_driver.patch
-Patch224:	https://gitweb.frugalware.org/frugalware-current/raw/9feb87fc5d15fc0b31f5e0cfa2bab188c4e6575a/source/base/kernel/enable-new-amd-energy-driver-for-all-ryzen.patch
+Patch223:	https://gitweb.frugalware.org/frugalware-current/raw/e4ce7d381051c513cf9ba5443b255534d48ce90a/source/base/kernel/add-amd-sfh-hid_driver.patch
+Patch224:	https://gitweb.frugalware.org/frugalware-current/raw/e4ce7d381051c513cf9ba5443b255534d48ce90a/source/base/kernel/add-sbtsi_driver.patch
+Patch225:	https://gitweb.frugalware.org/frugalware-current/raw/9feb87fc5d15fc0b31f5e0cfa2bab188c4e6575a/source/base/kernel/enable-new-amd-energy-driver-for-all-ryzen.patch
 
 # Fix CPU frequency governor mess caused by recent Intel patches
-Patch225:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/0001-Revert-cpufreq-Avoid-configuring-old-governors-as-de.patch
-Patch226:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/revert-parts-of-a00ec3874e7d326ab2dffbed92faddf6a77a84e9-no-Intel-NO.patch
+Patch226:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/0001-Revert-cpufreq-Avoid-configuring-old-governors-as-de.patch
+Patch227:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/revert-parts-of-a00ec3874e7d326ab2dffbed92faddf6a77a84e9-no-Intel-NO.patch
 
 
 # NTFS kernel patches
