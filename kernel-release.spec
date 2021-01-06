@@ -22,7 +22,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	10
-%define sublevel	4
+%define sublevel	5
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -335,10 +335,6 @@ Patch213:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/d
 
 # https://gitweb.frugalware.org/frugalware-current/commit/bc3e827af39a321efd770ba4f4de63bca2853471
 Patch214:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/nvme-Patriot_Viper_VPN100-QUIRK_IGNORE_DEV_SUBNQN.patch
-
-# AMDGPU fixes
-# https://patchwork.freedesktop.org/patch/408230/
-Patch220:	8353d30e747f-drm-amd-display-disable-stream-if-pixel-clock-changed-with-link-active.patch
 
 # k10temp fixes
 Patch221:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/0001-Revert-hwmon-k10temp-Remove-support-for-displaying-v.patch
