@@ -22,7 +22,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	10
-%define sublevel	5
+%define sublevel	6
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -349,6 +349,9 @@ Patch225:	https://gitweb.frugalware.org/frugalware-current/raw/9feb87fc5d15fc0b3
 Patch226:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/0001-Revert-cpufreq-Avoid-configuring-old-governors-as-de.patch
 Patch227:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/revert-parts-of-a00ec3874e7d326ab2dffbed92faddf6a77a84e9-no-Intel-NO.patch
 
+# Fix some Bluetooth chips
+# https://bugzilla.kernel.org/show_bug.cgi?id=210681
+Patch230:	firmware_rome_error.patch
 
 # NTFS kernel patches
 # https://lore.kernel.org/lkml/20201225135119.3666763-1-almaz.alexandrovich@paragon-software.com/
