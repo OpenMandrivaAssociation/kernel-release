@@ -353,6 +353,9 @@ Patch227:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871
 # https://bugzilla.kernel.org/show_bug.cgi?id=210681
 Patch230:	firmware_rome_error.patch
 
+# Enable HiKey 960 GPU
+Patch235:	linux-5.10-enable-hikey960-gpu.patch
+
 # NTFS kernel patches
 # https://lore.kernel.org/lkml/20201225135119.3666763-1-almaz.alexandrovich@paragon-software.com/
 Patch300:	PATCH-v16-01-10-fs-ntfs3-Add-headers-and-misc-files.patch
