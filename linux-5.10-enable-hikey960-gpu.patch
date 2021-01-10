@@ -1,0 +1,34 @@
+diff -up linux-5.10/arch/arm64/boot/dts/hisilicon/hi3660-gpu.dtsi.omv~ linux-5.10/arch/arm64/boot/dts/hisilicon/hi3660-gpu.dtsi
+--- linux-5.10/arch/arm64/boot/dts/hisilicon/hi3660-gpu.dtsi.omv~	2021-01-10 01:48:15.445951749 +0100
++++ linux-5.10/arch/arm64/boot/dts/hisilicon/hi3660-gpu.dtsi	2021-01-10 01:51:38.820532078 +0100
+@@ -0,0 +1,19 @@
++/{
++	gpu: mali@E82C0000 {
++		compatible = "arm,malit6xx", "arm,mali-midgard";
++		#cooling-cells = <3>; /* min followed by max */
++		gpu-outstanding = <0x0>;
++		reg = <0x0 0xE82C0000 0x0 0x4000>;
++		interrupts = <0 258 4 0 259 4 0 260 4>;
++		interrupt-names = "JOB", "MMU", "GPU";
++		operating-points = <
++			/* <frequency> <voltage> */
++			178000	650000
++			400000	700000
++			533000	800000
++			807000	900000
++			960000	1000000
++			1037000	1100000
++		>;
++	};
++};
+diff -up linux-5.10/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts.omv~ linux-5.10/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
+--- linux-5.10/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts.omv~	2021-01-10 01:51:52.257702620 +0100
++++ linux-5.10/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts	2021-01-10 01:52:07.742899163 +0100
+@@ -10,6 +10,7 @@
+ 
+ #include "hi3660.dtsi"
+ #include "hikey960-pinctrl.dtsi"
++#include "hi3660-gpu.dtsi"
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/input/input.h>
+ #include <dt-bindings/interrupt-controller/irq.h>
