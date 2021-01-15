@@ -1002,7 +1002,7 @@ find . -name "*.g*ignore" -delete
 chmod 755 tools/objtool/sync-check.sh
 
 %build
-%setup_compile_flags
+%set_build_flags
 
 ############################################################
 ###  Linker end2 > Check point to build for omv or rosa ###
@@ -1021,11 +1021,18 @@ chmod 755 tools/objtool/sync-check.sh
 
 
 CheckConfig() {
-
 	if [ ! -e $(pwd)/.config ]; then
 		printf '%s\n' "Kernel config in $(pwd) missing, killing the build."
 		exit 1
 	fi
+}
+
+VerifyConfig() {
+# (tpg) please add CONFIG that were carelessly enabled, while it is known these MUST be disabled
+    if grep -Fxq "CONFIG_RT_GROUP_SCHED=y" $(pwd)/.config $(pwd)/*-defconfig; then
+	printf '%s\n' "Please stop enabling CONFIG_RT_GROUP_SCHED - this option is not recommended with systemd systemd/systemd#553, killing the build."
+	exit 1
+    fi
 }
 
 clangify() {
@@ -1058,7 +1065,6 @@ CreateConfig() {
 	config_dir=%{_sourcedir}
 	CONFIGS=""
 	rm -fv .config
-
 
 	if echo $type |grep -q clang; then
 		# (crazy) we could use LLVM=1 this will take care of all the clang stuff
@@ -1230,6 +1236,7 @@ PrepareKernel() {
 	extension=$2
 	config_dir=%{_sourcedir}
 	printf '%s\n' "Make config for kernel $extension"
+	VerifyConfig
 	%make_build -s mrproper
 %ifarch znver1
 	CreateConfig %{_target_cpu} ${flavour}
