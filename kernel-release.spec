@@ -22,7 +22,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	10
-%define sublevel	8
+%define sublevel	9
 %define relc		%{nil}
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -368,6 +368,25 @@ Patch306:	PATCH-v16-07-10-fs-ntfs3-Add-NTFS-journal.patch
 Patch307:	PATCH-v16-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
 Patch308:	PATCH-v16-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
 Patch309:	PATCH-v16-10-10-fs-ntfs3-Add-MAINTAINERS.patch
+
+# Bootsplash support
+# based on https://gitlab.manjaro.org/packages/core/linux510/-/tree/master
+Patch401:	0401-revert-fbcon-remove-now-unusued-softback_lines-cursor-argument.patch
+Patch402:	0402-revert-fbcon-remove-no-op-fbcon_set_origin.patch
+Patch403:	0403-revert-fbcon-remove-soft-scrollback-code.patch
+Patch501:	0501-bootsplash.patch
+Patch502:	0502-bootsplash.patch
+Patch503:	0503-bootsplash.patch
+Patch504:	0504-bootsplash.patch
+Patch505:	0505-bootsplash.patch
+Patch506:	0506-bootsplash.patch
+Patch507:	0507-bootsplash.patch
+Patch508:	0508-bootsplash.patch
+Patch509:	0509-bootsplash.patch
+Patch510:	0510-bootsplash.patch
+Patch511:	0511-bootsplash.patch
+Patch512:	0512-bootsplash.patch
+Source513:	0513-bootsplash.gitpatch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -891,6 +910,7 @@ xzcat %{SOURCE1000} |git apply - || git apply %{SOURCE1000}
 rm -rf .git
 %endif
 %autopatch -p1
+git apply %{SOURCE513}
 
 sed -i -e "s,' ' -f 2,' ' -f 4," scripts/lld-version.sh
 

@@ -4,3 +4,4 @@ sources:
   linux-5.10.tar.xz: be0b909f1fbb760cc2d5cf146e1da3b2af0cf899
   saa716x-driver.tar.xz: f9b6ef1cd6f1f71f53d9a8aadfba2cf6b5c3d7b6
   patch-5.10.8.xz: 0e367f576cb849c32eda1183ccd21a4137c74f14
+  patch-5.10.9.xz: c23cf1d5160091175fd19f6ad5bebe72eff82fbc
