@@ -36,7 +36,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		1
+%define rpmrel		99
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -407,6 +407,10 @@ Patch907:	0120-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
 Patch908:	0124-kernel-time-reduce-ntp-wakeups.patch
 Patch909:	0125-init-wait-for-partition-and-retry-scan.patch
 %endif
+
+# Stuff from Angry. Do not touch! One of the last Penguin's P commits. Only for internal testing. F off everyone
+# Futex2 patch
+Patch1000: https://github.com/sirlucjan/kernel-patches/blob/master/5.10/futex2-trunk-patches-v2/0001-futex2-resync-from-gitlab.collabora.com.patch
 
 
 # Defines for the things that are needed for all the kernels
