@@ -15,7 +15,21 @@
 
 
 %bcond_without gcc
+%ifarch %{ix86}
+# FIXME building the i686 kernel with clang results in
+# "FAILED: load BTF from vmlinux: Unknown error -2+ on exit"
+# (clang 10.0, kernel 5.10.11)
+%bcond_with clang
+%else
+%ifarch %{arm}
+# FIXME building the armv7hnl kernel with clang results in
+# "scripts/link-vmlinux.sh: line 141: 853424 Segmentation fault (core dumped)
+# LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${1}"
+# (clang 11.0.1, kernel 5.10.11)
+%else
 %bcond_without clang
+%endif
+%endif
 
 # IMPORTANT
 # This is the place where you set kernel version i.e 4.5.0
