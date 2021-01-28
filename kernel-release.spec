@@ -288,6 +288,9 @@ Patch48:	linux-5.4.5-fix-build.patch
 Patch51:	linux-5.5-corsair-strafe-quirks.patch
 Patch52:	http://crazy.dev.frugalware.org/smpboot-no-stack-protector-for-gcc10.patch
 
+# https://www.spinics.net/lists/kernel/msg3797871.html
+Patch60:	kernel-fix-build-with-binutils-2.36.patch
+
 ### Additional hardware support
 ### TV tuners:
 # SAA716x DVB driver

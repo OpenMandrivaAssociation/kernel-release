@@ -1,0 +1,16 @@
+diff -up linux-5.10/tools/objtool/elf.c.omv~ linux-5.10/tools/objtool/elf.c
+--- linux-5.10/tools/objtool/elf.c.omv~	2021-01-28 04:24:11.708071006 +0100
++++ linux-5.10/tools/objtool/elf.c	2021-01-28 04:24:48.663548591 +0100
+@@ -355,7 +355,11 @@ static int read_symbols(struct elf *elf)
+ 	symtab = find_section_by_name(elf, ".symtab");
+ 	if (!symtab) {
+ 		WARN("missing symbol table");
+-		return -1;
++		/*
++		 * A missing symbol table is actually possible if it's an empty
++		 * .o file.  This can happen for thunk_64.o.
++		 */
++		return 0;
+ 	}
+ 
+ 	symtab_shndx = find_section_by_name(elf, ".symtab_shndx");
