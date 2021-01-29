@@ -26,6 +26,7 @@
 # "scripts/link-vmlinux.sh: line 141: 853424 Segmentation fault (core dumped)
 # LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${1}"
 # (clang 11.0.1, kernel 5.10.11)
+%bcond_with clang
 %else
 %bcond_without clang
 %endif
