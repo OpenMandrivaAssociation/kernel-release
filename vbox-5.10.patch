@@ -97,3 +97,14 @@ diff -up linux-5.10/drivers/virt/vboxdrv/r0drv/linux/memobj-r0drv-linux.c.omv~ l
  # endif
  
      NOREF(pMem);
+diff -up linux-5.11-rc1/drivers/net/vboxnetflt/linux/VBoxNetFlt-linux.c.omv~ linux-5.11-rc1/drivers/net/vboxnetflt/linux/VBoxNetFlt-linux.c
+--- linux-5.11-rc1/drivers/net/vboxnetflt/linux/VBoxNetFlt-linux.c.omv~	2020-12-28 21:16:04.238303005 +0100
++++ linux-5.11-rc1/drivers/net/vboxnetflt/linux/VBoxNetFlt-linux.c	2020-12-28 21:16:14.629431647 +0100
+@@ -45,6 +45,7 @@
+ #include <linux/in.h>
+ #include <linux/ip.h>
+ #include <linux/if_vlan.h>
++#include <linux/ethtool.h>
+ #if RTLNX_VER_MIN(4,5,0)
+ #include <uapi/linux/pkt_cls.h>
+ #endif
