@@ -15,30 +15,15 @@
 
 
 %bcond_without gcc
-%ifarch %{ix86}
-# FIXME building the i686 kernel with clang results in
-# "FAILED: load BTF from vmlinux: Unknown error -2+ on exit"
-# (clang 10.0, kernel 5.10.11)
-%bcond_with clang
-%else
-%ifarch %{arm}
-# FIXME building the armv7hnl kernel with clang results in
-# "scripts/link-vmlinux.sh: line 141: 853424 Segmentation fault (core dumped)
-# LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${1}"
-# (clang 11.0.1, kernel 5.10.11)
-%bcond_with clang
-%else
 %bcond_without clang
-%endif
-%endif
 
 # IMPORTANT
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	10
-%define sublevel	16
-%define relc		%{nil}
+%define patchlevel	11
+%define sublevel	0
+%define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
 
@@ -83,9 +68,9 @@
 
 # Build defines
 %bcond_with build_doc
-# UKSM disabled for 5.10-rc as it needs rebasing
+# UKSM disabled for 5.11-rc as it needs rebasing
 %ifarch %{ix86} %{x86_64}
-%bcond_without uksm
+%bcond_with uksm
 %else
 %bcond_with uksm
 %endif
@@ -348,28 +333,13 @@ Patch211:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patche
 Patch212:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
 Patch213:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
 
-# https://gitweb.frugalware.org/frugalware-current/commit/bc3e827af39a321efd770ba4f4de63bca2853471
-Patch214:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/nvme-Patriot_Viper_VPN100-QUIRK_IGNORE_DEV_SUBNQN.patch
-
 # k10temp fixes
-Patch221:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/0001-Revert-hwmon-k10temp-Remove-support-for-displaying-v.patch
-Patch222:	https://gitweb.frugalware.org/frugalware-current/raw/2fe3eaa10ecbeb59db965230a1d1aa0a775f6b5a/source/base/kernel/k10temp-fix-ZEN2-desktop-add-ZEN3-desktop.patch
-
-# Backported extra AMD drivers
-Patch223:	https://gitweb.frugalware.org/frugalware-current/raw/e4ce7d381051c513cf9ba5443b255534d48ce90a/source/base/kernel/add-amd-sfh-hid_driver.patch
-Patch224:	https://gitweb.frugalware.org/frugalware-current/raw/e4ce7d381051c513cf9ba5443b255534d48ce90a/source/base/kernel/add-sbtsi_driver.patch
-Patch225:	https://gitweb.frugalware.org/frugalware-current/raw/9feb87fc5d15fc0b31f5e0cfa2bab188c4e6575a/source/base/kernel/enable-new-amd-energy-driver-for-all-ryzen.patch
+Patch221:	k10temp-ryzen-zen3.patch
 
 # Fix CPU frequency governor mess caused by recent Intel patches
-Patch226:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/0001-Revert-cpufreq-Avoid-configuring-old-governors-as-de.patch
-Patch227:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/revert-parts-of-a00ec3874e7d326ab2dffbed92faddf6a77a84e9-no-Intel-NO.patch
+Patch225:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/0001-Revert-cpufreq-Avoid-configuring-old-governors-as-de.patch
+Patch226:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/revert-parts-of-a00ec3874e7d326ab2dffbed92faddf6a77a84e9-no-Intel-NO.patch
 
-# Fix some Bluetooth chips
-# https://bugzilla.kernel.org/show_bug.cgi?id=210681
-Patch230:	firmware_rome_error.patch
-
-# Enable HiKey 960 GPU
-Patch235:	linux-5.10-enable-hikey960-gpu.patch
 
 # NTFS kernel patches
 # https://lore.kernel.org/lkml/20201225135119.3666763-1-almaz.alexandrovich@paragon-software.com/
@@ -383,25 +353,6 @@ Patch306:	PATCH-v16-07-10-fs-ntfs3-Add-NTFS-journal.patch
 Patch307:	PATCH-v16-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
 Patch308:	PATCH-v16-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
 Patch309:	PATCH-v16-10-10-fs-ntfs3-Add-MAINTAINERS.patch
-
-# Bootsplash support
-# based on https://gitlab.manjaro.org/packages/core/linux510/-/tree/master
-Patch401:	0401-revert-fbcon-remove-now-unusued-softback_lines-cursor-argument.patch
-Patch402:	0402-revert-fbcon-remove-no-op-fbcon_set_origin.patch
-Patch403:	0403-revert-fbcon-remove-soft-scrollback-code.patch
-Patch501:	0501-bootsplash.patch
-Patch502:	0502-bootsplash.patch
-Patch503:	0503-bootsplash.patch
-Patch504:	0504-bootsplash.patch
-Patch505:	0505-bootsplash.patch
-Patch506:	0506-bootsplash.patch
-Patch507:	0507-bootsplash.patch
-Patch508:	0508-bootsplash.patch
-Patch509:	0509-bootsplash.patch
-Patch510:	0510-bootsplash.patch
-Patch511:	0511-bootsplash.patch
-Patch512:	0512-bootsplash.patch
-Source513:	0513-bootsplash.gitpatch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -925,7 +876,6 @@ xzcat %{SOURCE1000} |git apply - || git apply %{SOURCE1000}
 rm -rf .git
 %endif
 %autopatch -p1
-git apply %{SOURCE513}
 
 sed -i -e "s,' ' -f 2,' ' -f 4," scripts/lld-version.sh
 
@@ -1037,7 +987,7 @@ find . -name "*.g*ignore" -delete
 chmod 755 tools/objtool/sync-check.sh
 
 %build
-%set_build_flags
+%setup_compile_flags
 
 ############################################################
 ###  Linker end2 > Check point to build for omv or rosa ###
@@ -1056,18 +1006,11 @@ chmod 755 tools/objtool/sync-check.sh
 
 
 CheckConfig() {
+
 	if [ ! -e $(pwd)/.config ]; then
 		printf '%s\n' "Kernel config in $(pwd) missing, killing the build."
 		exit 1
 	fi
-}
-
-VerifyConfig() {
-# (tpg) please add CONFIG that were carelessly enabled, while it is known these MUST be disabled
-    if grep -Fxq "CONFIG_RT_GROUP_SCHED=y" $(pwd)/.config $(pwd)/*-defconfig; then
-	printf '%s\n' "Please stop enabling CONFIG_RT_GROUP_SCHED - this option is not recommended with systemd systemd/systemd#553, killing the build."
-	exit 1
-    fi
 }
 
 clangify() {
@@ -1100,6 +1043,7 @@ CreateConfig() {
 	config_dir=%{_sourcedir}
 	CONFIGS=""
 	rm -fv .config
+
 
 	if echo $type |grep -q clang; then
 		# (crazy) we could use LLVM=1 this will take care of all the clang stuff
@@ -1271,7 +1215,6 @@ PrepareKernel() {
 	extension=$2
 	config_dir=%{_sourcedir}
 	printf '%s\n' "Make config for kernel $extension"
-	VerifyConfig
 	%make_build -s mrproper
 %ifarch znver1
 	CreateConfig %{_target_cpu} ${flavour}
