@@ -22,7 +22,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	11
-%define sublevel	0
+%define sublevel	1
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -353,6 +353,25 @@ Patch306:	PATCH-v16-07-10-fs-ntfs3-Add-NTFS-journal.patch
 Patch307:	PATCH-v16-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
 Patch308:	PATCH-v16-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
 Patch309:	PATCH-v16-10-10-fs-ntfs3-Add-MAINTAINERS.patch
+
+# Bootsplash support
+# based on https://gitlab.manjaro.org/packages/core/linux511/-/tree/master
+Patch401:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0401-revert-fbcon-remove-now-unusued-softback_lines-cursor-argument.patch
+Patch402:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0402-revert-fbcon-remove-no-op-fbcon_set_origin.patch
+Patch403:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0403-revert-fbcon-remove-soft-scrollback-code.patch
+Patch501:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0501-bootsplash.patch
+Patch502:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0502-bootsplash.patch
+Patch503:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0503-bootsplash.patch
+Patch504:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0504-bootsplash.patch
+Patch505:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0505-bootsplash.patch
+Patch506:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0506-bootsplash.patch
+Patch507:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0507-bootsplash.patch
+Patch508:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0508-bootsplash.patch
+Patch509:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0509-bootsplash.patch
+Patch510:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0510-bootsplash.patch
+Patch511:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0511-bootsplash.patch
+Patch512:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0512-bootsplash.patch
+Source513:     https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0513-bootsplash.gitpatch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -876,6 +895,7 @@ xzcat %{SOURCE1000} |git apply - || git apply %{SOURCE1000}
 rm -rf .git
 %endif
 %autopatch -p1
+git apply %{S:513}
 
 sed -i -e "s,' ' -f 2,' ' -f 4," scripts/lld-version.sh
 
@@ -1707,9 +1727,10 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %endif
 
 %if %{with bpftool}
-%make_build -C tools/lib/bpf CC=clang LD=ld.lld libbpf.a libbpf.pc libbpf.so -j1
+# FIXME As of lld 12.0 and kernel 5.11, lld results in unresolved symbols, ld.bfd works
+%make_build -C tools/lib/bpf CC=clang LD=ld.bfd HOSTCC=clang HOSTLD=ld.bfd libbpf.a libbpf.pc libbpf.so -j1
 cd tools/bpf/bpftool
-%make_build CC=clang LD=ld.lld bpftool -j1
+%make_build CC=clang LD=ld.bfd HOSTCC=clang HOSTLD=ld.bfd bpftool -j1
 cd -
 %endif
 
