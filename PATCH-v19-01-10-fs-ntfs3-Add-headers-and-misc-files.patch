@@ -3,38 +3,38 @@ Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2E7CC433DB
-	for <linux-kernel@archiver.kernel.org>; Mon,  1 Mar 2021 16:06:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37A1CC433E6
+	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:08:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4982264E42
-	for <linux-kernel@archiver.kernel.org>; Mon,  1 Mar 2021 16:06:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B9DEB64DD9
+	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:08:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237563AbhCAQGu (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Mon, 1 Mar 2021 11:06:50 -0500
-Received: from relaydlg-01.paragon-software.com ([81.5.88.159]:54499 "EHLO
-        relaydlg-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237394AbhCAQEG (ORCPT
+        id S232084AbhA1JIO (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Thu, 28 Jan 2021 04:08:14 -0500
+Received: from relayfre-01.paragon-software.com ([176.12.100.13]:47782 "EHLO
+        relayfre-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231766AbhA1JGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Mar 2021 11:04:06 -0500
+        Thu, 28 Jan 2021 04:06:10 -0500
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relaydlg-01.paragon-software.com (Postfix) with ESMTPS id 34B10822BB;
-        Mon,  1 Mar 2021 19:03:08 +0300 (MSK)
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 9077E1D7C;
+        Thu, 28 Jan 2021 12:05:02 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1614614588;
-        bh=8PoS1LelhQp83SeKO89C3u5yyIlRBVFXrfpzajQvwX4=;
+        d=paragon-software.com; s=mail; t=1611824702;
+        bh=/Ll+fAeRkLUfDElu8ZCtygU2fGro9EVUROQ7gP1eDeM=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=J5EYEev9BuJtWaXGQq4uYb+Vla1yVg3ToUr6XocxoUQfWYtZ8R5m+BFMpQnyiLM0/
-         LQU8h6OlR9vpwr9afWGlm1En5zhw6axzl5OQew0ErJdfk8ZO2jytKvuOy61gUptF40
-         gvlmhSnKiEgMRtFd382J+KI9G/vXVNRYz4u32l0k=
+        b=LF/fOfUop4eO3krTnUud23YzWQ+jTl5d4rzJxVpo4Hc0WKKt3nBpy7x0ODvICYuJi
+         hQJ7rhRr4esVfhMWZ6mfCr0a5vzwxlvqPJWTNl8AUc5PfwHCQOK/scvzphQtIgt6O/
+         +x0o8qTQif326xWthgqDt21zxn+gh9zL4w1IBpxo=
 Received: from fsd-lkpg.ufsd.paragon-software.com (172.30.114.105) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Mon, 1 Mar 2021 19:03:07 +0300
+ 15.1.1847.3; Thu, 28 Jan 2021 12:05:01 +0300
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 To:     <linux-fsdevel@vger.kernel.org>
 CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
@@ -45,12 +45,12 @@ CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
         <dan.carpenter@oracle.com>, <hch@lst.de>, <ebiggers@kernel.org>,
         <andy.lavr@gmail.com>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH v22 01/10] fs/ntfs3: Add headers and misc files
-Date:   Mon, 1 Mar 2021 19:00:53 +0300
-Message-ID: <20210301160102.2884774-2-almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH v19 01/10] fs/ntfs3: Add headers and misc files
+Date:   Thu, 28 Jan 2021 12:04:46 +0300
+Message-ID: <20210128090455.3576502-2-almaz.alexandrovich@paragon-software.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20210301160102.2884774-1-almaz.alexandrovich@paragon-software.com>
-References: <20210301160102.2884774-1-almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
+References: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -60,7 +60,7 @@ X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Archived-At: <https://lore.kernel.org/lkml/20210301160102.2884774-2-almaz.alexandrovich@paragon-software.com/>
+Archived-At: <https://lore.kernel.org/lkml/20210128090455.3576502-2-almaz.alexandrovich@paragon-software.com/>
 List-Archive: <https://lore.kernel.org/lkml/>
 List-Post: <mailto:linux-kernel@vger.kernel.org>
 
@@ -68,11 +68,11 @@ This adds headers and misc files
 
 Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 ---
- fs/ntfs3/debug.h   |   64 +++
- fs/ntfs3/ntfs.h    | 1237 ++++++++++++++++++++++++++++++++++++++++++++
- fs/ntfs3/ntfs_fs.h | 1073 ++++++++++++++++++++++++++++++++++++++
- fs/ntfs3/upcase.c  |   96 ++++
- 4 files changed, 2470 insertions(+)
+ fs/ntfs3/debug.h   |   62 +++
+ fs/ntfs3/ntfs.h    | 1238 ++++++++++++++++++++++++++++++++++++++++++++
+ fs/ntfs3/ntfs_fs.h | 1065 +++++++++++++++++++++++++++++++++++++
+ fs/ntfs3/upcase.c  |  100 ++++
+ 4 files changed, 2465 insertions(+)
  create mode 100644 fs/ntfs3/debug.h
  create mode 100644 fs/ntfs3/ntfs.h
  create mode 100644 fs/ntfs3/ntfs_fs.h
@@ -80,14 +80,14 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
 diff --git a/fs/ntfs3/debug.h b/fs/ntfs3/debug.h
 new file mode 100644
-index 000000000000..dfaa4c79dc6d
+index 000000000000..41893421081a
 --- /dev/null
 +++ b/fs/ntfs3/debug.h
-@@ -0,0 +1,64 @@
+@@ -0,0 +1,62 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + *
-+ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
 + *
 + * useful functions for debuging
 + */
@@ -143,21 +143,19 @@ index 000000000000..dfaa4c79dc6d
 +
 +#define ntfs_malloc(s)		kmalloc(s, GFP_NOFS)
 +#define ntfs_zalloc(s)		kzalloc(s, GFP_NOFS)
-+#define ntfs_vmalloc(s)		kvmalloc(s, GFP_KERNEL)
 +#define ntfs_free(p)		kfree(p)
-+#define ntfs_vfree(p)		kvfree(p)
 +#define ntfs_memdup(src, len)	kmemdup(src, len, GFP_NOFS)
 +// clang-format on
 diff --git a/fs/ntfs3/ntfs.h b/fs/ntfs3/ntfs.h
 new file mode 100644
-index 000000000000..d3d3d93a1f06
+index 000000000000..19aac05ff3d1
 --- /dev/null
 +++ b/fs/ntfs3/ntfs.h
-@@ -0,0 +1,1237 @@
+@@ -0,0 +1,1238 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + *
-+ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
 + *
 + * on-disk ntfs structs
 + */
@@ -192,7 +190,7 @@ index 000000000000..d3d3d93a1f06
 + * Logical and virtual cluster number
 + * If needed, may be redefined to use 64 bit value
 + */
-+//#define CONFIG_NTFS3_64BIT_CLUSTER
++//#define NTFS3_64BIT_CLUSTER
 +
 +#define NTFS_LZNT_MAX_CLUSTER	4096
 +#define NTFS_LZNT_CUNIT		4
@@ -225,7 +223,7 @@ index 000000000000..d3d3d93a1f06
 +
 +static_assert(SECTOR_SHIFT == 9);
 +
-+#ifdef CONFIG_NTFS3_64BIT_CLUSTER
++#ifdef NTFS3_64BIT_CLUSTER
 +typedef u64 CLST;
 +static_assert(sizeof(size_t) == 8);
 +#else
@@ -343,7 +341,7 @@ index 000000000000..d3d3d93a1f06
 +
 +static inline CLST ino_get(const struct MFT_REF *ref)
 +{
-+#ifdef CONFIG_NTFS3_64BIT_CLUSTER
++#ifdef NTFS3_64BIT_CLUSTER
 +	return le32_to_cpu(ref->low) | ((u64)le16_to_cpu(ref->high) << 32);
 +#else
 +	return le32_to_cpu(ref->low);
@@ -581,7 +579,7 @@ index 000000000000..d3d3d93a1f06
 +	return !attr->non_res && (attr->res.flags & RESIDENT_FLAG_INDEXED);
 +}
 +
-+static inline __le16 const *attr_name(const struct ATTRIB *attr)
++static const inline __le16 *attr_name(const struct ATTRIB *attr)
 +{
 +	return Add2Ptr(attr, le16_to_cpu(attr->name_off));
 +}
@@ -698,7 +696,7 @@ index 000000000000..d3d3d93a1f06
 +		       le->name_len * sizeof(short)));
 +}
 +
-+static inline __le16 const *le_name(const struct ATTR_LIST_ENTRY *le)
++static const inline __le16 *le_name(const struct ATTR_LIST_ENTRY *le)
 +{
 +	return Add2Ptr(le, le->name_off);
 +}
@@ -948,7 +946,7 @@ index 000000000000..d3d3d93a1f06
 +	enum ATTR_TYPE type;	// 0x00: The type of attribute to index on
 +	enum COLLATION_RULE rule; // 0x04: The rule
 +	__le32 index_block_size;// 0x08: The size of index record
-+	u8 index_block_clst;	// 0x0C: The number of clusters or sectors per index
++	u8 index_block_clst;	// 0x0C: The number of clusters per index
 +	u8 res[3];
 +	struct INDEX_HDR ihdr;	// 0x10:
 +};
@@ -1350,8 +1348,9 @@ index 000000000000..d3d3d93a1f06
 +
 +static_assert(offsetof(struct EA_FULL, name) == 8);
 +
-+#define ACL_REVISION	2
-+#define ACL_REVISION_DS 4
++#define MAX_EA_DATA_SIZE (256 * 1024)
++
++#define ACL_REVISION 2
 +
 +#define SE_SELF_RELATIVE cpu_to_le16(0x8000)
 +
@@ -1393,14 +1392,14 @@ index 000000000000..d3d3d93a1f06
 +// clang-format on
 diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
 new file mode 100644
-index 000000000000..25069b8c46e5
+index 000000000000..09e183f95bd1
 --- /dev/null
 +++ b/fs/ntfs3/ntfs_fs.h
-@@ -0,0 +1,1073 @@
+@@ -0,0 +1,1065 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + *
-+ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
 + *
 + */
 +
@@ -1467,7 +1466,7 @@ index 000000000000..25069b8c46e5
 +
 +/* TODO: use rb tree instead of array */
 +struct runs_tree {
-+	struct ntfs_run *runs;
++	struct ntfs_run *runs_;
 +	size_t count; // Currently used size a ntfs_run storage.
 +	size_t allocated; // Currently allocated ntfs_run storage size.
 +};
@@ -1497,6 +1496,8 @@ index 000000000000..25069b8c46e5
 +
 +	struct runs_tree run;
 +	size_t nbits;
++
++	u16 free_holder[8]; // holder for free_bits
 +
 +	size_t total_zeroes; // total number of free bits
 +	u16 *free_bits; // free bits in each window
@@ -1537,7 +1538,7 @@ index 000000000000..25069b8c46e5
 +	INDEX_MUTEX_TOTAL
 +};
 +
-+/* ntfs_index - allocation unit inside directory */
++/* This struct works with indexes */
 +struct ntfs_index {
 +	struct runs_tree bitmap_run;
 +	struct runs_tree alloc_run;
@@ -1601,7 +1602,6 @@ index 000000000000..25069b8c46e5
 +
 +	struct ATTR_DEF_ENTRY *def_table; // attribute definition table
 +	u32 def_entries;
-+	u32 ea_max_size;
 +
 +	struct MFT_REC *new_rec;
 +
@@ -1611,15 +1611,10 @@ index 000000000000..25069b8c46e5
 +		u64 lbo, lbo2;
 +		struct ntfs_inode *ni;
 +		struct wnd_bitmap bitmap; // $MFT::Bitmap
-+		/*
-+		 * MFT records [11-24) used to expand MFT itself
-+		 * They always marked as used in $MFT::Bitmap
-+		 * 'reserved_bitmap' contains real bitmap of these records
-+		 */
-+		ulong reserved_bitmap; // bitmap of used records [11 - 24)
++		ulong reserved_bitmap;
 +		size_t next_free; // The next record to allocate from
-+		size_t used; // mft valid size in records
-+		u32 recs_mirr; // Number of records in MFTMirr
++		size_t used;
++		u32 recs_mirr; // Number of records MFTMirr
 +		u8 next_reserved;
 +		u8 reserved_bitmap_inited;
 +	} mft;
@@ -1634,7 +1629,7 @@ index 000000000000..25069b8c46e5
 +		u64 blocks; // in blocks
 +		u64 ser_num;
 +		struct ntfs_inode *ni;
-+		__le16 flags; // cached current VOLUME_INFO::flags, VOLUME_FLAG_DIRTY
++		__le16 flags; // see VOLUME_FLAG_XXX
 +		u8 major_ver;
 +		u8 minor_ver;
 +		char label[65];
@@ -1853,12 +1848,11 @@ index 000000000000..25069b8c46e5
 +extern const struct file_operations ntfs_dir_operations;
 +
 +/* globals from file.c*/
-+int ntfs_getattr(struct user_namespace *mnt_userns, const struct path *path,
-+		 struct kstat *stat, u32 request_mask, u32 flags);
++int ntfs_getattr(const struct path *path, struct kstat *stat, u32 request_mask,
++		 u32 flags);
 +void ntfs_sparse_cluster(struct inode *inode, struct page *page0, CLST vcn,
 +			 CLST len);
-+int ntfs3_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
-+		  struct iattr *attr);
++int ntfs3_setattr(struct dentry *dentry, struct iattr *attr);
 +int ntfs_file_open(struct inode *inode, struct file *file);
 +int ntfs_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
 +		__u64 start, __u64 len);
@@ -2044,10 +2038,10 @@ index 000000000000..25069b8c46e5
 +int ntfs_flush_inodes(struct super_block *sb, struct inode *i1,
 +		      struct inode *i2);
 +int inode_write_data(struct inode *inode, const void *data, size_t bytes);
-+int ntfs_create_inode(struct user_namespace *mnt_userns, struct inode *dir,
-+		      struct dentry *dentry, const struct cpu_str *uni,
-+		      umode_t mode, dev_t dev, const char *symname, u32 size,
-+		      int excl, struct ntfs_fnd *fnd, struct inode **new_inode);
++int ntfs_create_inode(struct inode *dir, struct dentry *dentry,
++		      const struct cpu_str *uni, umode_t mode, dev_t dev,
++		      const char *symname, u32 size, int excl,
++		      struct ntfs_fnd *fnd, struct inode **new_inode);
 +int ntfs_link_inode(struct inode *inode, struct dentry *dentry);
 +int ntfs_unlink_inode(struct inode *dir, const struct dentry *dentry);
 +void ntfs_evict_inode(struct inode *inode);
@@ -2170,18 +2164,15 @@ index 000000000000..25069b8c46e5
 +/* globals from xattr.c */
 +#ifdef CONFIG_NTFS3_FS_POSIX_ACL
 +struct posix_acl *ntfs_get_acl(struct inode *inode, int type);
-+int ntfs_set_acl(struct user_namespace *mnt_userns, struct inode *inode,
-+		 struct posix_acl *acl, int type);
-+int ntfs_init_acl(struct user_namespace *mnt_userns, struct inode *inode,
-+		  struct inode *dir);
++int ntfs_set_acl(struct inode *inode, struct posix_acl *acl, int type);
++int ntfs_init_acl(struct inode *inode, struct inode *dir);
 +#else
 +#define ntfs_get_acl NULL
 +#define ntfs_set_acl NULL
 +#endif
 +
-+int ntfs_acl_chmod(struct user_namespace *mnt_userns, struct inode *inode);
-+int ntfs_permission(struct user_namespace *mnt_userns, struct inode *inode,
-+		    int mask);
++int ntfs_acl_chmod(struct inode *inode);
++int ntfs_permission(struct inode *inode, int mask);
 +ssize_t ntfs_listxattr(struct dentry *dentry, char *buffer, size_t size);
 +extern const struct xattr_handler *ntfs_xattr_handlers[];
 +
@@ -2244,7 +2235,7 @@ index 000000000000..25069b8c46e5
 +
 +static inline void run_init(struct runs_tree *run)
 +{
-+	run->runs = NULL;
++	run->runs_ = NULL;
 +	run->count = 0;
 +	run->allocated = 0;
 +}
@@ -2256,14 +2247,14 @@ index 000000000000..25069b8c46e5
 +
 +static inline void run_close(struct runs_tree *run)
 +{
-+	ntfs_vfree(run->runs);
++	ntfs_free(run->runs_);
 +	memset(run, 0, sizeof(*run));
 +}
 +
 +static inline void run_free(struct runs_tree *run)
 +{
 +	if (run) {
-+		ntfs_vfree(run->runs);
++		ntfs_free(run->runs_);
 +		ntfs_free(run);
 +	}
 +}
@@ -2472,14 +2463,14 @@ index 000000000000..25069b8c46e5
 +}
 diff --git a/fs/ntfs3/upcase.c b/fs/ntfs3/upcase.c
 new file mode 100644
-index 000000000000..bd828bc172c3
+index 000000000000..57a03731b75a
 --- /dev/null
 +++ b/fs/ntfs3/upcase.c
-@@ -0,0 +1,96 @@
+@@ -0,0 +1,100 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
 + *
 + */
 +#include <linux/blkdev.h>
@@ -2532,8 +2523,10 @@ index 000000000000..bd828bc172c3
 +			return diff2;
 +	}
 +
-+	diff2 = l1 - l2;
-+	return diff2 ? diff2 : diff1;
++	if (bothcase && diff1)
++		return diff1;
++
++	return l1 - l2;
 +}
 +
 +int ntfs_cmp_names_cpu(const struct cpu_str *uni1, const struct le_str *uni2,
@@ -2569,8 +2562,10 @@ index 000000000000..bd828bc172c3
 +			return diff2;
 +	}
 +
-+	diff2 = l1 - l2;
-+	return diff2 ? diff2 : diff1;
++	if (bothcase && diff1)
++		return diff1;
++
++	return l1 - l2;
 +}
 -- 
 2.25.4
