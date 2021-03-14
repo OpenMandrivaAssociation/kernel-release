@@ -121,10 +121,20 @@
 
 # build perf and cpupower tools
 %if 0%{relc}
-# One version of perf is enough - let's build it for stable only
+# One version of bpf and perf is enough - let's build it for stable only
 %bcond_with perf
+%bcond_with bpftool
 %else
 %bcond_without perf
+# FIXME figure out why bpftool won't build on aarch64
+# as of 5.9.1, error is:
+# ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
+# FAILED: load BTF from vmlinux: Unknown error -2+ on_exit
+%ifarch %{aarch64}
+%bcond_with bpftool
+%else
+%bcond_without bpftool
+%endif
 %endif
 %bcond_without build_x86_energy_perf_policy
 %bcond_without build_turbostat
@@ -145,16 +155,6 @@
 %ifarch %{riscv}
 %bcond_without build_desktop
 %bcond_with build_server
-%endif
-
-# FIXME figure out why bpftool won't build on aarch64
-# as of 5.9.1, error is:
-# ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
-# FAILED: load BTF from vmlinux: Unknown error -2+ on_exit
-%ifarch %{aarch64}
-%bcond_with bpftool
-%else
-%bcond_without bpftool
 %endif
 
 # End of user definitions
@@ -349,21 +349,21 @@ Patch226:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871
 Patch230:	linux-5.11-perf-compile.patch
 
 # NTFS kernel patches
-# https://lore.kernel.org/lkml/20210301160102.2884774-1-almaz.alexandrovich@paragon-software.com/
+# https://lore.kernel.org/lkml/20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com/
 # (when losing track of what the latest version is, google "PATCH v22" NTFS and increase the
 # version number until nothing is found -- short of always keeping track of the mailing lists,
 # there doesn't seem to be a better way to always have the current version)
-Patch300:	PATCH-v22-01-10-fs-ntfs3-Add-headers-and-misc-files.patch
-Patch301:	PATCH-v22-02-10-fs-ntfs3-Add-initialization-of-super-block.patch
-Patch302:	PATCH-v22-03-10-fs-ntfs3-Add-bitmap.patch
-# MODIFIED -- backport to 5.11.x -- bero
-Patch303:	PATCH-v22-04-10-fs-ntfs3-Add-file-operations-and-implementation.patch
-Patch304:	PATCH-v22-05-10-fs-ntfs3-Add-attrib-operations.patch
-Patch305:	PATCH-v22-06-10-fs-ntfs3-Add-compression.patch
-Patch306:	PATCH-v22-07-10-fs-ntfs3-Add-NTFS-journal.patch
-Patch307:	PATCH-v22-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
-Patch308:	PATCH-v22-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
-Patch309:	PATCH-v22-10-10-fs-ntfs3-Add-MAINTAINERS.patch
+# Versions > 19 require kernel 5.12+
+Patch300:	PATCH-v19-01-10-fs-ntfs3-Add-headers-and-misc-files.patch
+Patch301:	PATCH-v19-02-10-fs-ntfs3-Add-initialization-of-super-block.patch
+Patch302:	PATCH-v19-03-10-fs-ntfs3-Add-bitmap.patch
+Patch303:	PATCH-v19-04-10-fs-ntfs3-Add-file-operations-and-implementation.patch
+Patch304:	PATCH-v19-05-10-fs-ntfs3-Add-attrib-operations.patch
+Patch305:	PATCH-v19-06-10-fs-ntfs3-Add-compression.patch
+Patch306:	PATCH-v19-07-10-fs-ntfs3-Add-NTFS-journal.patch
+Patch307:	PATCH-v19-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
+Patch308:	PATCH-v19-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
+Patch309:	PATCH-v19-10-10-fs-ntfs3-Add-MAINTAINERS.patch
 
 # Bootsplash support
 # based on https://gitlab.manjaro.org/packages/core/linux511/-/tree/master
@@ -488,10 +488,8 @@ BuildRequires:	xmlto
 # for ORC unwinder and perf
 BuildRequires:	pkgconfig(libelf)
 
-%if %{with bpftool}
-# for bpftool
+# for bpf
 BuildRequires:	pahole
-%endif
 
 # for perf
 %if %{with perf}
@@ -506,8 +504,9 @@ BuildRequires:	perl-devel
 BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(zlib)
-# (tpg) needed for bfd
-BuildRequires:	binutils-devel
+BuildRequires:	pkgconfig(babeltrace)
+BuildRequires:	jdk-current
+BuildRequires:	perl-devel
 %endif
 
 %ifarch %{arm}
@@ -1683,6 +1682,7 @@ for a in arm arm64 i386 x86_64 znver1 powerpc riscv; do
 %endif
 	done
 done
+unset ARCH
 make mrproper
 
 %if %{with build_desktop}
@@ -1739,6 +1739,7 @@ cd -
 %endif
 
 %if %{with perf}
+[ -e %{_sysconfdir}/profile.d/90java.sh ] && . %{_sysconfdir}/profile.d/90java.sh
 %make_build -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%{__cc} HOSTCC=%{__cc} LD=ld.bfd HOSTLD=ld.bfd WERROR=0 prefix=%{_prefix} all man
 %endif
 
@@ -1790,13 +1791,12 @@ popd
 
 # need to set extraversion to match srpm again to avoid rebuild
 sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
+
 %if %{with perf}
-
+[ -e %{_sysconfdir}/profile.d/90java.sh ] && . %{_sysconfdir}/profile.d/90java.sh
 # perf tool binary and supporting scripts/binaries
-make -C tools/perf -s CC=%{__cc} HOSTCC=%{__cc} DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
-
-# perf man pages (note: implicit rpm magic compresses them later)
-make -C tools/perf  -s CC=%{__cc} HOSTCC=%{__cc} DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
+# and man pages (note: implicit rpm magic compresses them later)
+%make_build -C tools/perf -s CC=%{__cc} HOSTCC=%{__cc} LD=ld.bfd HOSTLD=ld.bfd DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install install-man
 %endif
 
 ############################################################
