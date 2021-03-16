@@ -501,13 +501,13 @@ BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	pkgconfig(libunwind)
 BuildRequires:	pkgconfig(libnewt)
-BuildRequires:	perl-devel
 BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(babeltrace)
 BuildRequires:	jdk-current
 BuildRequires:	perl-devel
+BuildRequires:	perl(ExtUtils::Embed)
 %endif
 
 %ifarch %{arm}
