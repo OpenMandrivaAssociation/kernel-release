@@ -1953,7 +1953,6 @@ cd -
 %{_bindir}/perf-read-vdso32
 %endif
 %{_bindir}/trace
-%{_libdir}/libperf-gtk.so
 %dir %{_libdir}/traceevent
 %dir %{_libdir}/traceevent/plugins
 %{_libdir}/traceevent/plugins/plugin_*
