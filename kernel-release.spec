@@ -1960,6 +1960,10 @@ cd -
 %{_prefix}/libexec/perf-core/*
 %{_mandir}/man[1-8]/perf*
 %{_sysconfdir}/bash_completion.d/perf
+%{_prefix}/lib/perf
+%{_libdir}/libperf-jvmti.so
+%doc %{_docdir}/perf-tip
+%{_datadir}/perf-core
 %endif
 
 %if %{with build_cpupower}
