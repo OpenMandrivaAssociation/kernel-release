@@ -1953,9 +1953,11 @@ cd -
 %{_bindir}/perf-read-vdso32
 %endif
 %{_bindir}/trace
+%ifarch %{x86_64}
 %dir %{_libdir}/traceevent
 %dir %{_libdir}/traceevent/plugins
 %{_libdir}/traceevent/plugins/plugin_*
+%endif
 %dir %{_prefix}/libexec/perf-core
 %{_prefix}/libexec/perf-core/*
 %{_mandir}/man[1-8]/perf*
