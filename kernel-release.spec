@@ -2000,7 +2000,6 @@ cd -
 %{_libdir}/libbpf.so.%{bpf_major}*
 
 %files -n %{libbpfdevel}
-%{_libdir}/libbpf.a
 %{_libdir}/libbpf.so
 %{_libdir}/pkgconfig/*.pc
 %dir %{_includedir}/bpf
