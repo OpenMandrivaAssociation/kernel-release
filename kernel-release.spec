@@ -418,7 +418,9 @@ very current hardware.
 # do not require dracut, please it bloats dockers and other minimal instllations
 # better solution needs to be figured out
 # (crazy) it needs dracut >= 050-4 bc ZSTD support
+%ifnarch %{armx} %{riscv}
 %define requires2	dracut >= 050-4
+%endif
 # (crazy) it needs kmod >= 27-3 bc ZSTD support
 %define requires3	kmod >= 27-3
 %define requires4	sysfsutils >=  2.1.0-12
@@ -1530,15 +1532,16 @@ EOF
 	cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
 %endif
 
-	### Create kernel Post script
+### Create kernel Post script
 	cat > $kernel_files-post <<EOF
+%ifnarch %{armx} %{riscv}
 %if %{with dracut_all_initrd}
 [ -x /sbin/dracut ] && /sbin/dracut -f --regenerate-all
 %endif
 
 /sbin/depmod -a %{kversion}-$kernel_flavour-%{buildrpmrel}
 [ -x /sbin/dracut ] && /sbin/dracut -f --kver %{kversion}-$kernel_flavour-%{buildrpmrel}
-
+%endif
 
 ## cleanup some werid symlinks we never used anyway
 rm -rf vmlinuz-{server,desktop} initrd0.img initrd-{server,desktop}
