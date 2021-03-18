@@ -1966,7 +1966,9 @@ cd -
 %{_mandir}/man[1-8]/perf*
 %{_sysconfdir}/bash_completion.d/perf
 %{_prefix}/lib/perf
+%ifarch %{x86_64}
 %{_libdir}/libperf-jvmti.so
+%endif
 %doc %{_docdir}/perf-tip
 %{_datadir}/perf-core
 %endif
