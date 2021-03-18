@@ -1960,6 +1960,10 @@ cd -
 %dir %{_libdir}/traceevent
 %dir %{_libdir}/traceevent/plugins
 %{_libdir}/traceevent/plugins/plugin_*
+%else
+%dir %{_prefix}/lib/traceevent
+%dir %{_prefix}/lib/traceevent/plugins
+%{_prefix}/lib/traceevent/plugins/plugin_*
 %endif
 %dir %{_prefix}/libexec/perf-core
 %{_prefix}/libexec/perf-core/*
@@ -1968,6 +1972,8 @@ cd -
 %{_prefix}/lib/perf
 %ifarch %{x86_64}
 %{_libdir}/libperf-jvmti.so
+%else
+%{_prefix}/lib/libperf-jvmti.so
 %endif
 %doc %{_docdir}/perf-tip
 %{_datadir}/perf-core
