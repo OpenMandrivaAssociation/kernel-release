@@ -22,7 +22,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	11
-%define sublevel	7
+%define sublevel	13
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -70,7 +70,7 @@
 %bcond_with build_doc
 # UKSM disabled for 5.11-rc as it needs rebasing
 %ifarch %{ix86} %{x86_64}
-%bcond_with uksm
+%bcond_without uksm
 %else
 %bcond_with uksm
 %endif
@@ -78,19 +78,10 @@
 %bcond_without build_source
 %bcond_without build_devel
 %bcond_without cross_headers
-
-%if %{with clang}
-# As of kernel 5.10-rc1, llvm 11, clang-built kernels linked with
-# lld result in "inconsistent ORC unwind table entries in file: vmlinux"
-# on x86_64
-%bcond_without ld_workaround
-%endif
-
-
 %bcond_with lazy_developer
 %bcond_with build_debug
 %bcond_with dracut_all_initrd
-%bcond_with clr
+%bcond_without clr
 %bcond_with vbox_orig_mods
 # FIXME re-enable by default when the patches have been adapted to 5.8
 %bcond_with saa716x
@@ -241,12 +232,13 @@ Source1000:	https://cdn.kernel.org/pub/linux/kernel/v%(echo %{version}|cut -d. -
 # booting SynQuacer from USB flash drives.
 # 9d55bebd9816903b821a403a69a94190442ac043 builds on
 # 7a8b64d17e35810dc3176fe61208b45c15d25402.
-Source1001:     revert-7a8b64d17e35810dc3176fe61208b45c15d25402.patch
-Source1002:     revert-9d55bebd9816903b821a403a69a94190442ac043.patch
+Source1001:	revert-7a8b64d17e35810dc3176fe61208b45c15d25402.patch
+Source1002:	revert-9d55bebd9816903b821a403a69a94190442ac043.patch
 
 # (crazy) WARNING do NOT drop rediff
 # we default to ZSTD
 Patch1:		compress-modules-zstd.patch
+
 # (crazy) That is always a error on Ryzen platform, which is not fatal
 # just different, lower to info since it breaks the splash
 Patch2:		amd_iommu_init_info.patch
@@ -279,7 +271,7 @@ Patch41:	workaround-aarch64-module-loader.patch
 # sources can be found here https://github.com/dolohow/uksm
 %if %{with uksm}
 # breaks armx builds
-Patch42:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.10.patch
+Patch42:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.11.patch
 %endif
 
 # (crazy) see: https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
@@ -348,6 +340,32 @@ Patch226:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871
 # Fix perf
 Patch230:	linux-5.11-perf-compile.patch
 
+# (tpg) Pine64 RockPro64 sbc patches
+Patch240:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/board-rockpro64-fix-emmc.patch
+Patch241:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/board-rockpro64-fix-spi1-flash-speed.patch
+Patch242:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/board-rockpro64-work-led-heartbeat.patch
+Patch243:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/general-fix-mmc-signal-voltage-before-reboot.patch
+Patch244:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/rk3399-bump-voltages-for-low-opps.patch
+Patch245:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/rk3399-unlock-temperature.patch
+Patch246:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/general-increasing_DMA_block_memory_allocation_to_2048.patch
+Patch247:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/general-rk808-configurable-switch-voltage-steps.patch
+Patch248:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-arm64-dts-rockchip-modify-pcie-node-rockpro64.patch
+Patch249:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0014-arm64-rockchip-add-DP-ALT-rockpro64.patch
+Patch250:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0015-ayufan-drm-rockchip-add-support-for-modeline-32MHz-e.patch
+# (tpg) patches taken from https://github.com/OpenMandrivaSoftware/os-image-builder/tree/master/device/rockchip/generic/kernel-patches
+Patch251:	add-board-orangepi-4.patch
+Patch252:	board-rockpi4-0002-arm64-dts-leds.patch
+#Patch253:	board-rockpi4-0005-arm64-dts-enable-es8316-audio.patch rediff ?
+#Patch254:	general-add-xtx-spi-nor-chips.patch rediff ?
+Patch255:	general-btsdio-ignore-uart-devs.patch
+Patch256:	general-emmc-hs400es-init-tweak.patch
+Patch257:	general-fix-es8316-kernel-panic.patch
+#Patch258:	general-rkvdec_nv15.patch rediff?
+Patch259:	panfrost-less-debug-spewage.patch
+Patch260:	rk3399-add-sclk-i2sout-src-clock.patch
+#Patch261:	rk3399-pci-rockchip-support-ep-gpio-undefined-case.patch rediff?
+Patch262:	rk3399-sd-drive-level-8ma.patch
+
 # NTFS kernel patches
 # https://lore.kernel.org/lkml/20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com/
 # (when losing track of what the latest version is, google "PATCH v22" NTFS and increase the
@@ -367,22 +385,22 @@ Patch309:	PATCH-v19-10-10-fs-ntfs3-Add-MAINTAINERS.patch
 
 # Bootsplash support
 # based on https://gitlab.manjaro.org/packages/core/linux511/-/tree/master
-Patch401:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0401-revert-fbcon-remove-now-unusued-softback_lines-cursor-argument.patch
-Patch402:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0402-revert-fbcon-remove-no-op-fbcon_set_origin.patch
-Patch403:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0403-revert-fbcon-remove-soft-scrollback-code.patch
-Patch501:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0501-bootsplash.patch
-Patch502:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0502-bootsplash.patch
-Patch503:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0503-bootsplash.patch
-Patch504:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0504-bootsplash.patch
-Patch505:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0505-bootsplash.patch
-Patch506:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0506-bootsplash.patch
-Patch507:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0507-bootsplash.patch
-Patch508:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0508-bootsplash.patch
-Patch509:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0509-bootsplash.patch
-Patch510:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0510-bootsplash.patch
-Patch511:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0511-bootsplash.patch
-Patch512:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0512-bootsplash.patch
-Source513:     https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0513-bootsplash.gitpatch
+Patch401:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0401-revert-fbcon-remove-now-unusued-softback_lines-cursor-argument.patch
+Patch402:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0402-revert-fbcon-remove-no-op-fbcon_set_origin.patch
+Patch403:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0403-revert-fbcon-remove-soft-scrollback-code.patch
+Patch501:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0501-bootsplash.patch
+Patch502:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0502-bootsplash.patch
+Patch503:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0503-bootsplash.patch
+Patch504:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0504-bootsplash.patch
+Patch505:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0505-bootsplash.patch
+Patch506:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0506-bootsplash.patch
+Patch507:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0507-bootsplash.patch
+Patch508:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0508-bootsplash.patch
+Patch509:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0509-bootsplash.patch
+Patch510:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0510-bootsplash.patch
+Patch511:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0511-bootsplash.patch
+Patch512:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0512-bootsplash.patch
+Source513:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0513-bootsplash.gitpatch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -393,17 +411,22 @@ Source513:     https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/05
 # (tpg) some patches from ClearLinux
 # https://github.com/clearlinux-pkgs/linux/
 Patch900:	0101-i8042-decrease-debug-message-level-to-info.patch
-Patch901:	0103-Increase-the-ext4-default-commit-age.patch
-Patch902:	0105-pci-pme-wakeups.patch
-Patch903:	0107-intel_idle-tweak-cpuidle-cstates.patch
-Patch904:	0116-Initialize-ata-before-graphics.patch
-Patch905:	0119-e1000e-change-default-policy.patch
-Patch906:	0112-give-rdrand-some-credit.patch
-Patch907:	0120-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
-Patch908:	0124-kernel-time-reduce-ntp-wakeups.patch
-Patch909:	0125-init-wait-for-partition-and-retry-scan.patch
+Patch901:	0102-increase-the-ext4-default-commit-age.patch
+Patch902:	0103-silence-rapl.patch
+Patch903:	0104-pci-pme-wakeups.patch
+Patch904:	0105-ksm-wakeups.patch
+Patch905:	0106-intel_idle-tweak-cpuidle-cstates.patch
+Patch906:	0107-bootstats-add-printk-s-to-measure-boot-time-in-more-.patch
+Patch907:	0108-smpboot-reuse-timer-calibration.patch
+Patch908:	0109-initialize-ata-before-graphics.patch
+Patch909:	0110-give-rdrand-some-credit.patch
+Patch910:	0111-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
+##Patch911:	0112-kernel-time-reduce-ntp-wakeups.patch not needed
+##Patch912:	0113-init-wait-for-partition-and-retry-scan.patch not needed
+Patch913:	0117-migrate-some-systemd-defaults-to-the-kernel-defaults.patch
+Patch914:	0120-use-lfence-instead-of-rep-and-nop.patch
+##Patch915:	0122-locking-rwsem-spin-faster.patch not needed
 %endif
-
 
 # Defines for the things that are needed for all the kernels
 #
@@ -452,9 +475,7 @@ BuildRequires:	hostname
 %if %{with clang}
 BuildRequires:	clang
 BuildRequires:	llvm
-%if %{without ld_workaround}
 BuildRequires:	lld
-%endif
 %endif
 %if %{with gcc}
 BuildRequires:	gcc
@@ -901,6 +922,7 @@ done
 # End packages - here begins build stage
 #
 %prep
+
 %setup -q -n linux-%{tar_ver} -a 1003 -a 1004
 %if 0%{sublevel}
 [ -e .git ] || git init
@@ -1018,7 +1040,7 @@ find . -name "*.g*ignore" -delete
 chmod 755 tools/objtool/sync-check.sh
 
 %build
-%setup_compile_flags
+%set_build_flags
 
 ############################################################
 ###  Linker end2 > Check point to build for omv or rosa ###
@@ -1077,19 +1099,11 @@ CreateConfig() {
 
 
 	if echo $type |grep -q clang; then
-		# (crazy) we could use LLVM=1 this will take care of all the clang stuff
-		# however on bugs where we have to change LD or some other tool we cannot do that
 		CC=clang
 		CXX=clang++
-		%if %{with ld_workaround}
-		BUILD_LD="ld.bfd"
-		BUILD_KBUILD_LDFLAGS="-fuse-ld=bfd"
-		%else
 		BUILD_LD="ld.lld"
-		# bugs
 		BUILD_KBUILD_LDFLAGS="-Wl,--icf=none -Wl,--no-gc-sections"
-		%endif
-		BUILD_TOOLS='AR=llvm-ar HOSTAR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump OBJSIZE=llvm-size READELF=llvm-readelf'
+		BUILD_TOOLS='LLVM=1 LLVM_IAS=1'
 	else
 		CC=gcc
 		CXX=g++
@@ -1214,7 +1228,7 @@ CreateConfig() {
 	fi
 
 	cfgarch=$arch
-	if [ "$arch" = "znver1" -o "$arch" = "x86_64" ]; then
+	if [ "$arch" = "znver1" ] || [ "$arch" = "x86_64" ]; then
 		arch=x86
 	elif echo $arch |grep -q ^ppc; then
 		arch=powerpc
@@ -1263,15 +1277,9 @@ BuildKernel() {
 	if echo $1 |grep -q clang; then
 		CC=clang
 		CXX=clang++
-		%if %{with ld_workaround}
-		BUILD_LD="ld.bfd"
-		BUILD_KBUILD_LDFLAGS="-fuse-ld=bfd"
-		%else
 		BUILD_LD="ld.lld"
-		# bugs
 		BUILD_KBUILD_LDFLAGS="-Wl,--icf=none -Wl,--no-gc-sections"
-		%endif
-		BUILD_TOOLS='AR=llvm-ar HOSTAR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump OBJSIZE=llvm-size READELF=llvm-readelf'
+		BUILD_TOOLS='LLVM=1 LLVM_IAS=1'
 	else
 		CC=gcc
 		CXX=g++
@@ -1309,7 +1317,7 @@ BuildKernel() {
 
 	# modules
 	install -d %{temp_modules}/$KernelVer
-	%make_build INSTALL_MOD_PATH=%{temp_root} ARCH=%{target_arch} SRCARCH=%{target_arch} KERNELRELEASE=$KernelVer CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS  KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 INSTALL_MOD_STRIP=1 modules_install
+	%make_build INSTALL_MOD_PATH=%{temp_root} ARCH=%{target_arch} SRCARCH=%{target_arch} KERNELRELEASE=$KernelVer CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 INSTALL_MOD_STRIP=1 modules_install
 
 	# headers
 	%make_build INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer ARCH=%{target_arch} SRCARCH=%{target_arch} headers_install
