@@ -1,0 +1,19 @@
+diff -Naur a/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
+--- a/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi	2021-02-14 22:32:24.000000000 +0000
++++ b/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi	2021-03-20 11:34:28.599479406 +0000
+@@ -11,6 +11,7 @@
+ 
+ / {
+ 	chosen {
++		bootargs = "mmc_cmdqueue=0 earlycon=uart8250,mmio32,0xff1a0000";
+ 		stdout-path = "serial2:1500000n8";
+ 	};
+ 
+@@ -693,6 +694,7 @@
+ 
+ &sdhci {
+ 	bus-width = <8>;
++	keep-power-in-suspend;
+ 	mmc-hs200-1_8v;
+ 	non-removable;
+ 	status = "okay";
