@@ -3,39 +3,38 @@ Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DEB1C433E9
-	for <linux-kernel@archiver.kernel.org>; Fri, 25 Dec 2020 13:54:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42B69C433DB
+	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:12:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D5FF022AAA
-	for <linux-kernel@archiver.kernel.org>; Fri, 25 Dec 2020 13:54:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B0BCA64DDC
+	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:12:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729328AbgLYNyk (ORCPT
-        <rfc822;linux-kernel@archiver.kernel.org>);
-        Fri, 25 Dec 2020 08:54:40 -0500
-Received: from relaydlg-01.paragon-software.com ([81.5.88.159]:50656 "EHLO
+        id S231633AbhA1JMj (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Thu, 28 Jan 2021 04:12:39 -0500
+Received: from relaydlg-01.paragon-software.com ([81.5.88.159]:37282 "EHLO
         relaydlg-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726322AbgLYNyi (ORCPT
+        by vger.kernel.org with ESMTP id S231408AbhA1JGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Dec 2020 08:54:38 -0500
+        Thu, 28 Jan 2021 04:06:34 -0500
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relaydlg-01.paragon-software.com (Postfix) with ESMTPS id DF238821E5;
-        Fri, 25 Dec 2020 16:53:27 +0300 (MSK)
+        by relaydlg-01.paragon-software.com (Postfix) with ESMTPS id A858D82303;
+        Thu, 28 Jan 2021 12:05:04 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1608904407;
-        bh=Jb6h+aSbr2Q7XByjhYbQv1GBIcAPMzu95x1r0h6lAt4=;
+        d=paragon-software.com; s=mail; t=1611824704;
+        bh=UKz33/EL49jdc1VbGOU9DKSeN9j5aXnXWkMVyjPw5Ks=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=RYRPJ5qh5VbU7MqdSCybpFQD7x0dEbSnjKIbBZBXukLzJkBPxKYghE/wMBgNUiBE6
-         Qqo0kXbAf01LW+g0bBPUzXMRPXDMrwJlzW/OxpZk2iYznRH4j2K5uCHvEbWDiE28ST
-         isJ2RWfNq//jfKVQYMcYvZFxYk3jAkkqiknv/Yf0=
+        b=GHzD59SogtQVxzVI4tqAT5BW+JA2lKCso6uzsI7Iuo30zk7wwrjNfTRZpJdbBtV/4
+         s//gzFuF5u/bse3CLf1Qp7SYUtLL1CjenCNFK4K05U9IrgvOj9LxGNAHWHfd884pc4
+         wyBVksdCOeqeuiG4cG2FYEIGPiCZmLDa4/CaC6PY=
 Received: from fsd-lkpg.ufsd.paragon-software.com (172.30.114.105) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Fri, 25 Dec 2020 16:53:27 +0300
+ 15.1.1847.3; Thu, 28 Jan 2021 12:05:03 +0300
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 To:     <linux-fsdevel@vger.kernel.org>
 CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
@@ -44,13 +43,14 @@ CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
         <mark@harmstone.com>, <nborisov@suse.com>,
         <linux-ntfs-dev@lists.sourceforge.net>, <anton@tuxera.com>,
         <dan.carpenter@oracle.com>, <hch@lst.de>, <ebiggers@kernel.org>,
+        <andy.lavr@gmail.com>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH v16 07/10] fs/ntfs3: Add NTFS journal
-Date:   Fri, 25 Dec 2020 16:51:16 +0300
-Message-ID: <20201225135119.3666763-8-almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH v19 07/10] fs/ntfs3: Add NTFS journal
+Date:   Thu, 28 Jan 2021 12:04:52 +0300
+Message-ID: <20210128090455.3576502-8-almaz.alexandrovich@paragon-software.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20201225135119.3666763-1-almaz.alexandrovich@paragon-software.com>
-References: <20201225135119.3666763-1-almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
+References: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -60,7 +60,7 @@ X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Archived-At: <https://lore.kernel.org/lkml/20201225135119.3666763-8-almaz.alexandrovich@paragon-software.com/>
+Archived-At: <https://lore.kernel.org/lkml/20210128090455.3576502-8-almaz.alexandrovich@paragon-software.com/>
 List-Archive: <https://lore.kernel.org/lkml/>
 List-Post: <mailto:linux-kernel@vger.kernel.org>
 
@@ -68,16 +68,16 @@ This adds NTFS journal
 
 Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 ---
- fs/ntfs3/fslog.c | 5220 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 5220 insertions(+)
+ fs/ntfs3/fslog.c | 5204 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 5204 insertions(+)
  create mode 100644 fs/ntfs3/fslog.c
 
 diff --git a/fs/ntfs3/fslog.c b/fs/ntfs3/fslog.c
 new file mode 100644
-index 000000000000..14162b03d261
+index 000000000000..1aeaa25441a2
 --- /dev/null
 +++ b/fs/ntfs3/fslog.c
-@@ -0,0 +1,5220 @@
+@@ -0,0 +1,5204 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
@@ -888,7 +888,7 @@ index 000000000000..14162b03d261
 +	u32 off;
 +	u32 bytes = esize * used + sizeof(struct RESTART_TABLE);
 +	u32 lf = sizeof(struct RESTART_TABLE) + (used - 1) * esize;
-+	struct RESTART_TABLE *t = ntfs_alloc(bytes, 1);
++	struct RESTART_TABLE *t = ntfs_zalloc(bytes);
 +
 +	t->size = cpu_to_le16(esize);
 +	t->used = cpu_to_le16(used);
@@ -1199,8 +1199,7 @@ index 000000000000..14162b03d261
 +};
 +
 +static int read_log_page(struct ntfs_log *log, u32 vbo,
-+			 struct RECORD_PAGE_HDR **buffer, bool allow_errors,
-+			 bool ignore_usa_error, bool *usa_error)
++			 struct RECORD_PAGE_HDR **buffer, bool *usa_error)
 +{
 +	int err = 0;
 +	u32 page_idx = vbo >> log->page_bits;
@@ -1216,7 +1215,7 @@ index 000000000000..14162b03d261
 +		return -EINVAL;
 +
 +	if (!*buffer) {
-+		to_free = ntfs_alloc(bytes, 0);
++		to_free = ntfs_malloc(bytes);
 +		if (!to_free)
 +			return -ENOMEM;
 +		*buffer = to_free;
@@ -1237,17 +1236,12 @@ index 000000000000..14162b03d261
 +
 +	bBAAD = page_buf->rhdr.sign == NTFS_BAAD_SIGNATURE;
 +
-+	/* Check that the update sequence array for this page is valid */
-+	if (bBAAD) {
-+		/* If we don't allow errors, raise an error status */
-+		if (!ignore_usa_error) {
-+			err = -EINVAL;
-+			goto out;
-+		}
-+	}
-+
 +	if (usa_error)
 +		*usa_error = bBAAD;
++	/* Check that the update sequence array for this page is valid */
++	/* If we don't allow errors, raise an error status */
++	else if (bBAAD)
++		err = -EINVAL;
 +
 +out:
 +	if (err && to_free) {
@@ -1267,9 +1261,8 @@ index 000000000000..14162b03d261
 +static int log_read_rst(struct ntfs_log *log, u32 l_size, bool first,
 +			struct restart_info *info)
 +{
-+	int err;
 +	u32 skip, vbo;
-+	struct RESTART_HDR *r_page = ntfs_alloc(DefaultLogPageSize, 0);
++	struct RESTART_HDR *r_page = ntfs_malloc(DefaultLogPageSize);
 +
 +	if (!r_page)
 +		return -ENOMEM;
@@ -1293,12 +1286,11 @@ index 000000000000..14162b03d261
 +		struct RESTART_AREA *ra;
 +
 +		/* Read a page header at the current offset */
-+		err = read_log_page(log, vbo,
-+				    (struct RECORD_PAGE_HDR **)&r_page, true,
-+				    true, &usa_error);
-+
-+		if (err)
++		if (read_log_page(log, vbo, (struct RECORD_PAGE_HDR **)&r_page,
++				  &usa_error)) {
++			/* ignore any errors */
 +			continue;
++		}
 +
 +		/* exit if the signature is a log record page */
 +		if (r_page->rhdr.sign == NTFS_RCRD_SIGNATURE) {
@@ -1347,17 +1339,17 @@ index 000000000000..14162b03d261
 +		sys_page_size = le32_to_cpu(r_page->sys_page_size);
 +		if (DefaultLogPageSize != sys_page_size) {
 +			ntfs_free(r_page);
-+			r_page = ntfs_alloc(sys_page_size, 1);
++			r_page = ntfs_zalloc(sys_page_size);
 +			if (!r_page)
 +				return -ENOMEM;
 +
-+			err = read_log_page(log, vbo,
-+					    (struct RECORD_PAGE_HDR **)&r_page,
-+					    true, true, &usa_error);
-+
-+			if (err) {
++			if (read_log_page(log, vbo,
++					  (struct RECORD_PAGE_HDR **)&r_page,
++					  &usa_error)) {
++				/* ignore any errors */
 +				ntfs_free(r_page);
-+				return err;
++				r_page = NULL;
++				continue;
 +			}
 +		}
 +
@@ -1487,7 +1479,7 @@ index 000000000000..14162b03d261
 +static struct RESTART_AREA *log_create_ra(struct ntfs_log *log)
 +{
 +	struct CLIENT_REC *cr;
-+	struct RESTART_AREA *ra = ntfs_alloc(log->restart_size, 1);
++	struct RESTART_AREA *ra = ntfs_zalloc(log->restart_size);
 +
 +	if (!ra)
 +		return NULL;
@@ -1568,7 +1560,7 @@ index 000000000000..14162b03d261
 +		seq += 1;
 +
 +	/* log page header for this page */
-+	err = read_log_page(log, hdr_off, &page, false, false, NULL);
++	err = read_log_page(log, hdr_off, &page, NULL);
 +	if (err)
 +		return err;
 +
@@ -1724,7 +1716,7 @@ index 000000000000..14162b03d261
 +		second_off = 0x12 * log->page_size;
 +
 +		// 0x10 == 0x12 - 0x2
-+		page_bufs = ntfs_alloc(log->page_size * 0x10, 0);
++		page_bufs = ntfs_malloc(log->page_size * 0x10);
 +		if (!page_bufs)
 +			return -ENOMEM;
 +	} else {
@@ -1734,8 +1726,7 @@ index 000000000000..14162b03d261
 +
 +next_tail:
 +	/* Read second tail page (at pos 3/0x12000) */
-+	if (read_log_page(log, second_off, &second_tail, true, true,
-+			  &usa_error) ||
++	if (read_log_page(log, second_off, &second_tail, &usa_error) ||
 +	    usa_error || second_tail->rhdr.sign != NTFS_RCRD_SIGNATURE) {
 +		ntfs_free(second_tail);
 +		second_tail = NULL;
@@ -1747,8 +1738,7 @@ index 000000000000..14162b03d261
 +	}
 +
 +	/* Read first tail page (at pos 2/0x2000 ) */
-+	if (read_log_page(log, final_off, &first_tail, true, true,
-+			  &usa_error) ||
++	if (read_log_page(log, final_off, &first_tail, &usa_error) ||
 +	    usa_error || first_tail->rhdr.sign != NTFS_RCRD_SIGNATURE) {
 +		ntfs_free(first_tail);
 +		first_tail = NULL;
@@ -1806,7 +1796,7 @@ index 000000000000..14162b03d261
 +		best_page = second_tail;
 +		this_off = second_file_off;
 +	} else {
-+		goto free_and_tail_read;
++		goto tail_read;
 +	}
 +
 +	best_page_pos = le16_to_cpu(best_page->page_pos);
@@ -1851,7 +1841,6 @@ index 000000000000..14162b03d261
 +			page_pos = page_cnt = 1;
 +		}
 +	} else {
-+free_and_tail_read:
 +		ntfs_free(first_tail);
 +		ntfs_free(second_tail);
 +		goto tail_read;
@@ -1894,8 +1883,8 @@ index 000000000000..14162b03d261
 +
 +next_page:
 +	tail_page = NULL;
-+	/* Read the next log page, allowing errors */
-+	err = read_log_page(log, curpage_off, &page, true, true, &usa_error);
++	/* Read the next log page */
++	err = read_log_page(log, curpage_off, &page, &usa_error);
 +
 +	/* Compute the next log page offset the file */
 +	nextpage_off = next_page_off(log, curpage_off);
@@ -2189,7 +2178,7 @@ index 000000000000..14162b03d261
 +	tst_page = NULL;
 +
 +	/* Walk through the file, reading log pages */
-+	err = read_log_page(log, nextpage_off, &tst_page, 1, 1, &usa_error);
++	err = read_log_page(log, nextpage_off, &tst_page, &usa_error);
 +
 +	/*
 +	 * If we get a USA error then assume that we correctly found
@@ -2247,8 +2236,7 @@ index 000000000000..14162b03d261
 +	ntfs_free(tst_page);
 +	tst_page = NULL;
 +
-+	err = read_log_page(log, nextpage_off, &tst_page, true, true,
-+			    &usa_error);
++	err = read_log_page(log, nextpage_off, &tst_page, &usa_error);
 +	if (!err && !usa_error &&
 +	    check_subseq_log_page(log, tst_page, nextpage_off, expected_seq)) {
 +		err = -EINVAL;
@@ -2280,7 +2268,7 @@ index 000000000000..14162b03d261
 +			u64 off = hdr_file_off(log, tmp_page);
 +
 +			if (!page) {
-+				page = ntfs_alloc(log->page_size, 0);
++				page = ntfs_malloc(log->page_size);
 +				if (!page)
 +					return -ENOMEM;
 +			}
@@ -2355,6 +2343,7 @@ index 000000000000..14162b03d261
 +	 * we continue to attempt to perform the read
 +	 */
 +	for (;;) {
++		bool usa_error;
 +		u32 tail = log->page_size - off;
 +
 +		if (tail >= data_len)
@@ -2362,7 +2351,7 @@ index 000000000000..14162b03d261
 +
 +		data_len -= tail;
 +
-+		err = read_log_page(log, vbo, &ph, false, true, NULL);
++		err = read_log_page(log, vbo, &ph, &usa_error);
 +		if (err)
 +			goto out;
 +
@@ -2427,7 +2416,7 @@ index 000000000000..14162b03d261
 +		return 0;
 +
 +	err = read_log_page(log, lsn_to_vbo(log, lsnc),
-+			    (struct RECORD_PAGE_HDR **)&rh, false, false, NULL);
++			    (struct RECORD_PAGE_HDR **)&rh, NULL);
 +	if (err)
 +		return err;
 +
@@ -2453,7 +2442,7 @@ index 000000000000..14162b03d261
 +		goto out;
 +	}
 +
-+	rst = ntfs_alloc(len, 0);
++	rst = ntfs_malloc(len);
 +	if (!rst) {
 +		err = -ENOMEM;
 +		goto out;
@@ -2483,8 +2472,7 @@ index 000000000000..14162b03d261
 +	/* Read the record header for this lsn */
 +	if (!rh) {
 +		err = read_log_page(log, lsn_to_vbo(log, lsn),
-+				    (struct RECORD_PAGE_HDR **)&rh, false,
-+				    false, NULL);
++				    (struct RECORD_PAGE_HDR **)&rh, NULL);
 +
 +		lcb->lrh = rh;
 +		if (err)
@@ -2513,7 +2501,7 @@ index 000000000000..14162b03d261
 +	 * put a pointer to the log record the context block
 +	 */
 +	if (rh->flags & LOG_RECORD_MULTI_PAGE) {
-+		void *lr = ntfs_alloc(len, 0);
++		void *lr = ntfs_malloc(len);
 +
 +		if (!lr)
 +			return -ENOMEM;
@@ -2566,7 +2554,7 @@ index 000000000000..14162b03d261
 +	if (!verify_client_lsn(log, cr, lsn))
 +		return -EINVAL;
 +
-+	lcb = ntfs_alloc(sizeof(struct lcb), 1);
++	lcb = ntfs_zalloc(sizeof(struct lcb));
 +	if (!lcb)
 +		return -ENOMEM;
 +	lcb->client = log->client_id;
@@ -2619,8 +2607,7 @@ index 000000000000..14162b03d261
 +
 +		hdr = NULL;
 +		err = read_log_page(log, lsn_to_vbo(log, current_lsn),
-+				    (struct RECORD_PAGE_HDR **)&hdr, false,
-+				    false, NULL);
++				    (struct RECORD_PAGE_HDR **)&hdr, NULL);
 +		if (err)
 +			goto out;
 +
@@ -2658,8 +2645,7 @@ index 000000000000..14162b03d261
 +
 +	hdr = NULL;
 +	err = read_log_page(log, lsn_to_vbo(log, next_lsn),
-+			    (struct RECORD_PAGE_HDR **)&hdr, false, false,
-+			    NULL);
++			    (struct RECORD_PAGE_HDR **)&hdr, NULL);
 +	if (err)
 +		return err;
 +	ntfs_free(lcb->lrh);
@@ -3084,7 +3070,7 @@ index 000000000000..14162b03d261
 +	u32 asize = name_size +
 +		    (is_ext ? SIZEOF_NONRESIDENT_EX : SIZEOF_NONRESIDENT);
 +
-+	attr = ntfs_alloc(asize, 1);
++	attr = ntfs_zalloc(asize);
 +	if (!attr)
 +		return NULL;
 +
@@ -3183,7 +3169,7 @@ index 000000000000..14162b03d261
 +		if (inode) {
 +			mi = &ntfs_i(inode)->mi;
 +		} else if (op == InitializeFileRecordSegment) {
-+			mi = ntfs_alloc(sizeof(struct mft_inode), 1);
++			mi = ntfs_zalloc(sizeof(struct mft_inode));
 +			if (!mi)
 +				return -ENOMEM;
 +			err = mi_format_new(mi, sbi, rno, 0, false);
@@ -3278,7 +3264,7 @@ index 000000000000..14162b03d261
 +		if (attr->type == ATTR_ALLOC)
 +			bytes = (bytes + 511) & ~511; // align
 +
-+		buffer_le = ntfs_alloc(bytes, 0);
++		buffer_le = ntfs_malloc(bytes);
 +		if (!buffer_le)
 +			return -ENOMEM;
 +
@@ -3904,13 +3890,13 @@ index 000000000000..14162b03d261
 +	if (!page_size)
 +		return -EINVAL;
 +
-+	log = ntfs_alloc(sizeof(struct ntfs_log), 1);
++	log = ntfs_zalloc(sizeof(struct ntfs_log));
 +	if (!log)
 +		return -ENOMEM;
 +
 +	log->ni = ni;
 +	log->l_size = l_size;
-+	log->one_page_buf = ntfs_alloc(page_size, 0);
++	log->one_page_buf = ntfs_malloc(page_size);
 +
 +	if (!log->one_page_buf) {
 +		err = -ENOMEM;
@@ -3966,8 +3952,9 @@ index 000000000000..14162b03d261
 +
 +	if (rst_info.chkdsk_was_run && page_size != rst_info.vbo) {
 +		struct RECORD_PAGE_HDR *sp = NULL;
++		bool usa_error;
 +
-+		if (!read_log_page(log, page_size, &sp, true, true, NULL) &&
++		if (!read_log_page(log, page_size, &sp, &usa_error) &&
 +		    sp->rhdr.sign == NTFS_CHKD_SIGNATURE) {
 +			use_second_page = false;
 +		}
@@ -4129,7 +4116,7 @@ index 000000000000..14162b03d261
 +
 +	log->current_avail = current_log_avail(log);
 +
-+	ra = ntfs_alloc(log->restart_size, 1);
++	ra = ntfs_zalloc(log->restart_size);
 +	if (!ra) {
 +		err = -ENOMEM;
 +		goto out;
@@ -4157,9 +4144,6 @@ index 000000000000..14162b03d261
 +
 +	/* Now we need to walk through looking for the last lsn */
 +	err = last_log_lsn(log);
-+	if (err == -EROFS)
-+		goto out;
-+
 +	if (err)
 +		goto out;
 +
@@ -4696,7 +4680,7 @@ index 000000000000..14162b03d261
 +
 +		t16 = le16_to_cpu(lrh->undo_len);
 +		if (t16) {
-+			oe->ptr = ntfs_alloc(t16, 0);
++			oe->ptr = ntfs_malloc(t16);
 +			if (!oe->ptr) {
 +				err = -ENOMEM;
 +				goto out;
@@ -4801,7 +4785,7 @@ index 000000000000..14162b03d261
 +		goto next_dirty_page;
 +	}
 +
-+	oa = ntfs_alloc(sizeof(struct OpenAttr), 1);
++	oa = ntfs_zalloc(sizeof(struct OpenAttr));
 +	if (!oa) {
 +		err = -ENOMEM;
 +		goto out;
@@ -5208,7 +5192,7 @@ index 000000000000..14162b03d261
 +	if (is_ro)
 +		goto out;
 +
-+	rh = ntfs_alloc(log->page_size, 1);
++	rh = ntfs_zalloc(log->page_size);
 +	if (!rh) {
 +		err = -ENOMEM;
 +		goto out;

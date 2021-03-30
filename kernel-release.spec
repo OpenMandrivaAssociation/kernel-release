@@ -15,30 +15,15 @@
 
 
 %bcond_without gcc
-%ifarch %{ix86}
-# FIXME building the i686 kernel with clang results in
-# "FAILED: load BTF from vmlinux: Unknown error -2+ on exit"
-# (clang 10.0, kernel 5.10.11)
-%bcond_with clang
-%else
-%ifarch %{arm}
-# FIXME building the armv7hnl kernel with clang results in
-# "scripts/link-vmlinux.sh: line 141: 853424 Segmentation fault (core dumped)
-# LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${1}"
-# (clang 11.0.1, kernel 5.10.11)
-%bcond_with clang
-%else
 %bcond_without clang
-%endif
-%endif
 
 # IMPORTANT
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	10
-%define sublevel	15
-%define relc		%{nil}
+%define patchlevel	11
+%define sublevel	10
+%define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
 
@@ -83,9 +68,9 @@
 
 # Build defines
 %bcond_with build_doc
-# UKSM disabled for 5.10-rc as it needs rebasing
+# UKSM disabled for 5.11-rc as it needs rebasing
 %ifarch %{ix86} %{x86_64}
-%bcond_without uksm
+%bcond_with uksm
 %else
 %bcond_with uksm
 %endif
@@ -135,7 +120,22 @@
 %endif
 
 # build perf and cpupower tools
-%bcond_with build_perf
+%if 0%{relc}
+# One version of bpf and perf is enough - let's build it for stable only
+%bcond_with perf
+%bcond_with bpftool
+%else
+%bcond_without perf
+# FIXME figure out why bpftool won't build on aarch64
+# as of 5.9.1, error is:
+# ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
+# FAILED: load BTF from vmlinux: Unknown error -2+ on_exit
+%ifarch %{aarch64}
+%bcond_with bpftool
+%else
+%bcond_without bpftool
+%endif
+%endif
 %bcond_without build_x86_energy_perf_policy
 %bcond_without build_turbostat
 %ifarch %{ix86} %{x86_64}
@@ -155,16 +155,6 @@
 %ifarch %{riscv}
 %bcond_without build_desktop
 %bcond_with build_server
-%endif
-
-# FIXME figure out why bpftool won't build on aarch64
-# as of 5.9.1, error is:
-# ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
-# FAILED: load BTF from vmlinux: Unknown error -2+ on_exit
-%ifarch %{aarch64}
-%bcond_with bpftool
-%else
-%bcond_without bpftool
 %endif
 
 # End of user definitions
@@ -348,60 +338,51 @@ Patch211:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patche
 Patch212:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
 Patch213:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
 
-# https://gitweb.frugalware.org/frugalware-current/commit/bc3e827af39a321efd770ba4f4de63bca2853471
-Patch214:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/nvme-Patriot_Viper_VPN100-QUIRK_IGNORE_DEV_SUBNQN.patch
-
 # k10temp fixes
-Patch221:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kernel/0001-Revert-hwmon-k10temp-Remove-support-for-displaying-v.patch
-Patch222:	https://gitweb.frugalware.org/frugalware-current/raw/2fe3eaa10ecbeb59db965230a1d1aa0a775f6b5a/source/base/kernel/k10temp-fix-ZEN2-desktop-add-ZEN3-desktop.patch
-
-# Backported extra AMD drivers
-Patch223:	https://gitweb.frugalware.org/frugalware-current/raw/e4ce7d381051c513cf9ba5443b255534d48ce90a/source/base/kernel/add-amd-sfh-hid_driver.patch
-Patch224:	https://gitweb.frugalware.org/frugalware-current/raw/e4ce7d381051c513cf9ba5443b255534d48ce90a/source/base/kernel/add-sbtsi_driver.patch
-Patch225:	https://gitweb.frugalware.org/frugalware-current/raw/9feb87fc5d15fc0b31f5e0cfa2bab188c4e6575a/source/base/kernel/enable-new-amd-energy-driver-for-all-ryzen.patch
+Patch221:	k10temp-ryzen-zen3.patch
 
 # Fix CPU frequency governor mess caused by recent Intel patches
-Patch226:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/0001-Revert-cpufreq-Avoid-configuring-old-governors-as-de.patch
-Patch227:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/revert-parts-of-a00ec3874e7d326ab2dffbed92faddf6a77a84e9-no-Intel-NO.patch
+Patch225:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/0001-Revert-cpufreq-Avoid-configuring-old-governors-as-de.patch
+Patch226:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/revert-parts-of-a00ec3874e7d326ab2dffbed92faddf6a77a84e9-no-Intel-NO.patch
 
-# Fix some Bluetooth chips
-# https://bugzilla.kernel.org/show_bug.cgi?id=210681
-Patch230:	firmware_rome_error.patch
-
-# Enable HiKey 960 GPU
-Patch235:	linux-5.10-enable-hikey960-gpu.patch
+# Fix perf
+Patch230:	linux-5.11-perf-compile.patch
 
 # NTFS kernel patches
-# https://lore.kernel.org/lkml/20201225135119.3666763-1-almaz.alexandrovich@paragon-software.com/
-Patch300:	PATCH-v16-01-10-fs-ntfs3-Add-headers-and-misc-files.patch
-Patch301:	PATCH-v16-02-10-fs-ntfs3-Add-initialization-of-super-block.patch
-Patch302:	PATCH-v16-03-10-fs-ntfs3-Add-bitmap.patch
-Patch303:	PATCH-v16-04-10-fs-ntfs3-Add-file-operations-and-implementation.patch
-Patch304:	PATCH-v16-05-10-fs-ntfs3-Add-attrib-operations.patch
-Patch305:	PATCH-v16-06-10-fs-ntfs3-Add-compression.patch
-Patch306:	PATCH-v16-07-10-fs-ntfs3-Add-NTFS-journal.patch
-Patch307:	PATCH-v16-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
-Patch308:	PATCH-v16-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
-Patch309:	PATCH-v16-10-10-fs-ntfs3-Add-MAINTAINERS.patch
+# https://lore.kernel.org/lkml/20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com/
+# (when losing track of what the latest version is, google "PATCH v22" NTFS and increase the
+# version number until nothing is found -- short of always keeping track of the mailing lists,
+# there doesn't seem to be a better way to always have the current version)
+# Versions > 19 require kernel 5.12+
+Patch300:	PATCH-v19-01-10-fs-ntfs3-Add-headers-and-misc-files.patch
+Patch301:	PATCH-v19-02-10-fs-ntfs3-Add-initialization-of-super-block.patch
+Patch302:	PATCH-v19-03-10-fs-ntfs3-Add-bitmap.patch
+Patch303:	PATCH-v19-04-10-fs-ntfs3-Add-file-operations-and-implementation.patch
+Patch304:	PATCH-v19-05-10-fs-ntfs3-Add-attrib-operations.patch
+Patch305:	PATCH-v19-06-10-fs-ntfs3-Add-compression.patch
+Patch306:	PATCH-v19-07-10-fs-ntfs3-Add-NTFS-journal.patch
+Patch307:	PATCH-v19-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
+Patch308:	PATCH-v19-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
+Patch309:	PATCH-v19-10-10-fs-ntfs3-Add-MAINTAINERS.patch
 
 # Bootsplash support
-# based on https://gitlab.manjaro.org/packages/core/linux510/-/tree/master
-Patch401:	0401-revert-fbcon-remove-now-unusued-softback_lines-cursor-argument.patch
-Patch402:	0402-revert-fbcon-remove-no-op-fbcon_set_origin.patch
-Patch403:	0403-revert-fbcon-remove-soft-scrollback-code.patch
-Patch501:	0501-bootsplash.patch
-Patch502:	0502-bootsplash.patch
-Patch503:	0503-bootsplash.patch
-Patch504:	0504-bootsplash.patch
-Patch505:	0505-bootsplash.patch
-Patch506:	0506-bootsplash.patch
-Patch507:	0507-bootsplash.patch
-Patch508:	0508-bootsplash.patch
-Patch509:	0509-bootsplash.patch
-Patch510:	0510-bootsplash.patch
-Patch511:	0511-bootsplash.patch
-Patch512:	0512-bootsplash.patch
-Source513:	0513-bootsplash.gitpatch
+# based on https://gitlab.manjaro.org/packages/core/linux511/-/tree/master
+Patch401:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0401-revert-fbcon-remove-now-unusued-softback_lines-cursor-argument.patch
+Patch402:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0402-revert-fbcon-remove-no-op-fbcon_set_origin.patch
+Patch403:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0403-revert-fbcon-remove-soft-scrollback-code.patch
+Patch501:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0501-bootsplash.patch
+Patch502:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0502-bootsplash.patch
+Patch503:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0503-bootsplash.patch
+Patch504:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0504-bootsplash.patch
+Patch505:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0505-bootsplash.patch
+Patch506:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0506-bootsplash.patch
+Patch507:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0507-bootsplash.patch
+Patch508:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0508-bootsplash.patch
+Patch509:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0509-bootsplash.patch
+Patch510:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0510-bootsplash.patch
+Patch511:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0511-bootsplash.patch
+Patch512:      https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0512-bootsplash.patch
+Source513:     https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0513-bootsplash.gitpatch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -437,7 +418,9 @@ very current hardware.
 # do not require dracut, please it bloats dockers and other minimal instllations
 # better solution needs to be figured out
 # (crazy) it needs dracut >= 050-4 bc ZSTD support
+%ifnarch %{armx} %{riscv}
 %define requires2	dracut >= 050-4
+%endif
 # (crazy) it needs kmod >= 27-3 bc ZSTD support
 %define requires3	kmod >= 27-3
 %define requires4	sysfsutils >=  2.1.0-12
@@ -507,26 +490,26 @@ BuildRequires:	xmlto
 # for ORC unwinder and perf
 BuildRequires:	pkgconfig(libelf)
 
-%if %{with bpftool}
-# for bpftool
+# for bpf
 BuildRequires:	pahole
-%endif
 
 # for perf
-%if %{with build_perf}
+%if %{with perf}
 BuildRequires:	asciidoc
+BuildRequires:	xmlto
 BuildRequires:	pkgconfig(audit)
 BuildRequires:	binutils-devel
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	pkgconfig(libunwind)
 BuildRequires:	pkgconfig(libnewt)
-BuildRequires:	perl-devel
 BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(zlib)
-# (tpg) needed for bfd
-BuildRequires:	binutils-devel
+BuildRequires:	pkgconfig(babeltrace)
+BuildRequires:	jdk-current
+BuildRequires:	perl-devel
+BuildRequires:	perl(ExtUtils::Embed)
 %endif
 
 %ifarch %{arm}
@@ -769,7 +752,7 @@ Linux kernel modules at load time.
 #
 # kernel/tools
 #
-%if %{with build_perf}
+%if %{with perf}
 %package -n perf
 Version:	%{kversion}
 Release:	%{rpmrel}
@@ -925,9 +908,7 @@ xzcat %{SOURCE1000} |git apply - || git apply %{SOURCE1000}
 rm -rf .git
 %endif
 %autopatch -p1
-git apply %{SOURCE513}
-
-sed -i -e "s,' ' -f 2,' ' -f 4," scripts/lld-version.sh
+git apply %{S:513}
 
 %ifarch %{aarch64}
 # FIXME SynQuacer workaround
@@ -1037,7 +1018,7 @@ find . -name "*.g*ignore" -delete
 chmod 755 tools/objtool/sync-check.sh
 
 %build
-%set_build_flags
+%setup_compile_flags
 
 ############################################################
 ###  Linker end2 > Check point to build for omv or rosa ###
@@ -1056,18 +1037,11 @@ chmod 755 tools/objtool/sync-check.sh
 
 
 CheckConfig() {
+
 	if [ ! -e $(pwd)/.config ]; then
 		printf '%s\n' "Kernel config in $(pwd) missing, killing the build."
 		exit 1
 	fi
-}
-
-VerifyConfig() {
-# (tpg) please add CONFIG that were carelessly enabled, while it is known these MUST be disabled
-    if grep -Fxq "CONFIG_RT_GROUP_SCHED=y" $(pwd)/.config $(pwd)/*-defconfig; then
-	printf '%s\n' "Please stop enabling CONFIG_RT_GROUP_SCHED - this option is not recommended with systemd systemd/systemd#553, killing the build."
-	exit 1
-    fi
 }
 
 clangify() {
@@ -1100,6 +1074,7 @@ CreateConfig() {
 	config_dir=%{_sourcedir}
 	CONFIGS=""
 	rm -fv .config
+
 
 	if echo $type |grep -q clang; then
 		# (crazy) we could use LLVM=1 this will take care of all the clang stuff
@@ -1271,7 +1246,6 @@ PrepareKernel() {
 	extension=$2
 	config_dir=%{_sourcedir}
 	printf '%s\n' "Make config for kernel $extension"
-	VerifyConfig
 	%make_build -s mrproper
 %ifarch znver1
 	CreateConfig %{_target_cpu} ${flavour}
@@ -1558,15 +1532,16 @@ EOF
 	cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
 %endif
 
-	### Create kernel Post script
+### Create kernel Post script
 	cat > $kernel_files-post <<EOF
+%ifnarch %{armx} %{riscv}
 %if %{with dracut_all_initrd}
 [ -x /sbin/dracut ] && /sbin/dracut -f --regenerate-all
 %endif
 
 /sbin/depmod -a %{kversion}-$kernel_flavour-%{buildrpmrel}
 [ -x /sbin/dracut ] && /sbin/dracut -f --kver %{kversion}-$kernel_flavour-%{buildrpmrel}
-
+%endif
 
 ## cleanup some werid symlinks we never used anyway
 rm -rf vmlinuz-{server,desktop} initrd0.img initrd-{server,desktop}
@@ -1711,6 +1686,7 @@ for a in arm arm64 i386 x86_64 znver1 powerpc riscv; do
 %endif
 	done
 done
+unset ARCH
 make mrproper
 
 %if %{with build_desktop}
@@ -1742,32 +1718,46 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 ############################################################
 ### Linker start3 > Check point to build for omv or rosa ###
 ############################################################
-%if %{with build_perf}
-%make_build -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%{__cc} WERROR=0 prefix=%{_prefix} all
-%make_build -C tools/perf -s CC=%{__cc} prefix=%{_prefix} man
-%endif
+
+# We install all tools here too (rather than in %%install
+# where it really belongs): make mrproper in preparation
+# for packaging kernel-source would force a rebuilda
 
 %if %{with build_cpupower}
 # make sure version-gen.sh is executable.
 chmod +x tools/power/cpupower/utils/version-gen.sh
 %make_build -C tools/power/cpupower CPUFREQ_BENCH=false LDFLAGS="%{optflags}"
+%make_install -C tools/power/cpupower DESTDIR=%{temp_root} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{optflags}"
 %endif
 
 %ifarch %{ix86} %{x86_64}
 %if %{with build_x86_energy_perf_policy}
 %make_build -C tools/power/x86/x86_energy_perf_policy CC=clang LDFLAGS="-Wl,--build-id=none"
+mkdir -p %{temp_root}%{_bindir} %{temp_root}%{_mandir}/man8
+%make_install -C tools/power/x86/x86_energy_perf_policy DESTDIR="%{temp_root}"
 %endif
 
 %if %{with build_turbostat}
 %make_build -C tools/power/x86/turbostat CC=clang
+mkdir -p %{temp_root}%{_bindir} %{temp_root}%{_mandir}/man8
+%make_install -C tools/power/x86/turbostat DESTDIR="%{temp_root}"
 %endif
 %endif
 
 %if %{with bpftool}
-%make_build -C tools/lib/bpf CC=clang LD=ld.lld libbpf.a libbpf.pc libbpf.so -j1
-cd tools/bpf/bpftool
-%make_build CC=clang LD=ld.lld bpftool -j1
-cd -
+# FIXME As of lld 12.0 and kernel 5.11, lld results in unresolved symbols, ld.bfd works
+%make_build -C tools/lib/bpf CC=clang LD=ld.bfd HOSTCC=clang HOSTLD=ld.bfd libbpf.a libbpf.pc libbpf.so -j1
+#cd tools/bpf/bpftool
+%make_build -C tools/bpf/bpftool CC=clang LD=ld.bfd HOSTCC=clang HOSTLD=ld.bfd bpftool -j1
+#cd -
+%make_install -C tools/lib/bpf install_headers DESTDIR=%{temp_root} prefix=%{_prefix} libdir=%{_libdir} CC=clang CXX=clang++ LD=ld.bfd HOSTLD=ld.bfd
+%make_install -C tools/bpf/bpftool CC=clang CXX=clang++ LD=ld.bfd HOSTCC=clang HOSTLD=ld.bfd DESTDIR=%{temp_root} prefix=%{_prefix} bash_compdir=%{_sysconfdir}/bash_completion.d/ mandir=%{_mandir}
+%endif
+
+%if %{with perf}
+[ -e %{_sysconfdir}/profile.d/90java.sh ] && . %{_sysconfdir}/profile.d/90java.sh
+%make_build -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%{__cc} HOSTCC=%{__cc} LD=ld.bfd HOSTLD=ld.bfd WERROR=0 prefix=%{_prefix} all man
+%make_build -C tools/perf -s HAVE_CPLUS_DEMANGLE=1 CC=%{__cc} HOSTCC=%{__cc} LD=ld.bfd HOSTLD=ld.bfd WERROR=0 prefix=%{_prefix} DESTDIR_SQ=%{temp_root} DESTDIR=%{temp_root} install install-man
 %endif
 
 ############################################################
@@ -1818,44 +1808,17 @@ popd
 
 # need to set extraversion to match srpm again to avoid rebuild
 sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
-%if %{with build_perf}
-
-# perf tool binary and supporting scripts/binaries
-make -C tools/perf -s CC=%{__cc} DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install
-
-# perf man pages (note: implicit rpm magic compresses them later)
-make -C tools/perf  -s CC=%{__cc} DESTDIR=%{buildroot} WERROR=0 HAVE_CPLUS_DEMANGLE=1 prefix=%{_prefix} install-man
-%endif
 
 ############################################################
 ### Linker start4 > Check point to build for omv or rosa ###
 ############################################################
 %if %{with build_cpupower}
-%make_install -C tools/power/cpupower DESTDIR=%{buildroot} libdir=%{_libdir} mandir=%{_mandir} CPUFREQ_BENCH=false CC=%{__cc} LDFLAGS="%{optflags}"
-
 rm -f %{buildroot}%{_libdir}/*.{a,la}
 %find_lang cpupower
 chmod 0755 %{buildroot}%{_libdir}/libcpupower.so*
 mkdir -p %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
 install -m644 %{SOURCE30} %{buildroot}%{_unitdir}/cpupower.service
 install -m644 %{SOURCE31} %{buildroot}%{_sysconfdir}/sysconfig/cpupower
-%endif
-
-%ifarch %{ix86} %{x86_64}
-%if %{with build_x86_energy_perf_policy}
-mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
-%make_install -C tools/power/x86/x86_energy_perf_policy install DESTDIR="%{buildroot}"
-%endif
-%if %{with build_turbostat}
-mkdir -p %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man8
-%make_install -C tools/power/x86/turbostat install DESTDIR="%{buildroot}"
-%endif
-%endif
-
-%if %{with bpftool}
-# install bpftool and libbpf
-%make_install -C tools/lib/bpf install install_headers DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir}
-%make_install -C tools/bpf/bpftool install CC=clang CXX=clang++ LD=ld.lld DESTDIR=%{buildroot} prefix=%{_prefix} bash_compdir=%{_sysconfdir}/bash_completion.d/ mandir=%{_mandir}
 %endif
 
 # Create directories infastructure
@@ -1986,21 +1949,34 @@ cd -
 %doc Documentation/*
 %endif
 
-%if %{with build_perf}
+%if %{with perf}
 %files -n perf
 %{_bindir}/perf
 %ifarch %{x86_64}
 %{_bindir}/perf-read-vdso32
 %endif
 %{_bindir}/trace
-%{_libdir}/libperf-gtk.so
+%ifarch %{x86_64}
 %dir %{_libdir}/traceevent
 %dir %{_libdir}/traceevent/plugins
 %{_libdir}/traceevent/plugins/plugin_*
+%else
+%dir %{_prefix}/lib/traceevent
+%dir %{_prefix}/lib/traceevent/plugins
+%{_prefix}/lib/traceevent/plugins/plugin_*
+%endif
 %dir %{_prefix}/libexec/perf-core
 %{_prefix}/libexec/perf-core/*
 %{_mandir}/man[1-8]/perf*
 %{_sysconfdir}/bash_completion.d/perf
+%{_prefix}/lib/perf
+%ifarch %{x86_64}
+%{_libdir}/libperf-jvmti.so
+%else
+%{_prefix}/lib/libperf-jvmti.so
+%endif
+%doc %{_docdir}/perf-tip
+%{_datadir}/perf-core
 %endif
 
 %if %{with build_cpupower}
@@ -2041,7 +2017,6 @@ cd -
 %{_libdir}/libbpf.so.%{bpf_major}*
 
 %files -n %{libbpfdevel}
-%{_libdir}/libbpf.a
 %{_libdir}/libbpf.so
 %{_libdir}/pkgconfig/*.pc
 %dir %{_includedir}/bpf

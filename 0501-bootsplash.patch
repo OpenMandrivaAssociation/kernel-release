@@ -1,6 +1,6 @@
-diff -up linux-5.10/drivers/video/console/Kconfig.59~ linux-5.10/drivers/video/console/Kconfig
---- linux-5.10/drivers/video/console/Kconfig.59~	2021-01-19 23:05:51.694607935 +0100
-+++ linux-5.10/drivers/video/console/Kconfig	2021-01-19 23:07:32.109742870 +0100
+diff -up linux-5.11/drivers/video/console/Kconfig.51~ linux-5.11/drivers/video/console/Kconfig
+--- linux-5.11/drivers/video/console/Kconfig.51~	2021-02-25 16:12:55.889538384 +0100
++++ linux-5.11/drivers/video/console/Kconfig	2021-02-25 16:18:20.765114723 +0100
 @@ -115,6 +115,30 @@ config FRAMEBUFFER_CONSOLE_DEFERRED_TAKE
  	  by the firmware in place, rather then replacing the contents with a
  	  black screen as soon as fbcon loads.
@@ -32,9 +32,9 @@ diff -up linux-5.10/drivers/video/console/Kconfig.59~ linux-5.10/drivers/video/c
  config STI_CONSOLE
  	bool "STI text console"
  	depends on PARISC && HAS_IOMEM
-diff -up linux-5.10/drivers/video/fbdev/core/bootsplash.c.59~ linux-5.10/drivers/video/fbdev/core/bootsplash.c
---- linux-5.10/drivers/video/fbdev/core/bootsplash.c.59~	2021-01-19 23:05:51.694607935 +0100
-+++ linux-5.10/drivers/video/fbdev/core/bootsplash.c	2021-01-19 23:05:51.694607935 +0100
+diff -up linux-5.11/drivers/video/fbdev/core/bootsplash.c.51~ linux-5.11/drivers/video/fbdev/core/bootsplash.c
+--- linux-5.11/drivers/video/fbdev/core/bootsplash.c.51~	2021-02-25 16:12:55.890538399 +0100
++++ linux-5.11/drivers/video/fbdev/core/bootsplash.c	2021-02-25 16:12:55.890538399 +0100
 @@ -0,0 +1,294 @@
 +/*
 + * Kernel based bootsplash.
@@ -330,9 +330,9 @@ diff -up linux-5.10/drivers/video/fbdev/core/bootsplash.c.59~ linux-5.10/drivers
 +err:
 +	pr_err("Failed to initialize.\n");
 +}
-diff -up linux-5.10/drivers/video/fbdev/core/bootsplash_internal.h.59~ linux-5.10/drivers/video/fbdev/core/bootsplash_internal.h
---- linux-5.10/drivers/video/fbdev/core/bootsplash_internal.h.59~	2021-01-19 23:05:51.697941328 +0100
-+++ linux-5.10/drivers/video/fbdev/core/bootsplash_internal.h	2021-01-19 23:05:51.697941328 +0100
+diff -up linux-5.11/drivers/video/fbdev/core/bootsplash_internal.h.51~ linux-5.11/drivers/video/fbdev/core/bootsplash_internal.h
+--- linux-5.11/drivers/video/fbdev/core/bootsplash_internal.h.51~	2021-02-25 16:12:55.890538399 +0100
++++ linux-5.11/drivers/video/fbdev/core/bootsplash_internal.h	2021-02-25 16:12:55.890538399 +0100
 @@ -0,0 +1,55 @@
 +/*
 + * Kernel based bootsplash.
@@ -389,9 +389,9 @@ diff -up linux-5.10/drivers/video/fbdev/core/bootsplash_internal.h.59~ linux-5.1
 +void bootsplash_do_render_background(struct fb_info *info);
 +
 +#endif
-diff -up linux-5.10/drivers/video/fbdev/core/bootsplash_render.c.59~ linux-5.10/drivers/video/fbdev/core/bootsplash_render.c
---- linux-5.10/drivers/video/fbdev/core/bootsplash_render.c.59~	2021-01-19 23:05:51.697941328 +0100
-+++ linux-5.10/drivers/video/fbdev/core/bootsplash_render.c	2021-01-19 23:05:51.697941328 +0100
+diff -up linux-5.11/drivers/video/fbdev/core/bootsplash_render.c.51~ linux-5.11/drivers/video/fbdev/core/bootsplash_render.c
+--- linux-5.11/drivers/video/fbdev/core/bootsplash_render.c.51~	2021-02-25 16:12:55.890538399 +0100
++++ linux-5.11/drivers/video/fbdev/core/bootsplash_render.c	2021-02-25 16:12:55.890538399 +0100
 @@ -0,0 +1,93 @@
 +/*
 + * Kernel based bootsplash.
@@ -486,9 +486,9 @@ diff -up linux-5.10/drivers/video/fbdev/core/bootsplash_render.c.59~ linux-5.10/
 +		}
 +	}
 +}
-diff -up linux-5.10/drivers/video/fbdev/core/dummyblit.c.59~ linux-5.10/drivers/video/fbdev/core/dummyblit.c
---- linux-5.10/drivers/video/fbdev/core/dummyblit.c.59~	2021-01-19 23:05:51.697941328 +0100
-+++ linux-5.10/drivers/video/fbdev/core/dummyblit.c	2021-01-19 23:05:51.697941328 +0100
+diff -up linux-5.11/drivers/video/fbdev/core/dummyblit.c.51~ linux-5.11/drivers/video/fbdev/core/dummyblit.c
+--- linux-5.11/drivers/video/fbdev/core/dummyblit.c.51~	2021-02-25 16:12:55.890538399 +0100
++++ linux-5.11/drivers/video/fbdev/core/dummyblit.c	2021-02-25 16:12:55.890538399 +0100
 @@ -0,0 +1,89 @@
 +/*
 + *  linux/drivers/video/fbdev/core/dummyblit.c -- Dummy Blitting Operation
@@ -579,9 +579,9 @@ diff -up linux-5.10/drivers/video/fbdev/core/dummyblit.c.59~ linux-5.10/drivers/
 +MODULE_AUTHOR("Max Staudt <mstaudt@suse.de>");
 +MODULE_DESCRIPTION("Dummy Blitting Operation");
 +MODULE_LICENSE("GPL");
-diff -up linux-5.10/drivers/video/fbdev/core/fbcon.c.59~ linux-5.10/drivers/video/fbdev/core/fbcon.c
---- linux-5.10/drivers/video/fbdev/core/fbcon.c.59~	2021-01-19 23:05:51.691274541 +0100
-+++ linux-5.10/drivers/video/fbdev/core/fbcon.c	2021-01-19 23:05:51.697941328 +0100
+diff -up linux-5.11/drivers/video/fbdev/core/fbcon.c.51~ linux-5.11/drivers/video/fbdev/core/fbcon.c
+--- linux-5.11/drivers/video/fbdev/core/fbcon.c.51~	2021-02-25 16:12:55.886538341 +0100
++++ linux-5.11/drivers/video/fbdev/core/fbcon.c	2021-02-25 16:12:55.890538399 +0100
 @@ -81,6 +81,7 @@
  #include <asm/irq.h>
  
@@ -629,7 +629,7 @@ diff -up linux-5.10/drivers/video/fbdev/core/fbcon.c.59~ linux-5.10/drivers/vide
  }
  
  static int fbcon_invalid_charcount(struct fb_info *info, unsigned charcount)
-@@ -2238,6 +2257,9 @@ static int fbcon_switch(struct vc_data *
+@@ -2234,6 +2253,9 @@ static int fbcon_switch(struct vc_data *
  	info = registered_fb[con2fb_map[vc->vc_num]];
  	ops = info->fbcon_par;
  
@@ -639,9 +639,9 @@ diff -up linux-5.10/drivers/video/fbdev/core/fbcon.c.59~ linux-5.10/drivers/vide
  	if (softback_top) {
  		if (softback_lines)
  			fbcon_set_origin(vc);
-diff -up linux-5.10/drivers/video/fbdev/core/fbcon.h.59~ linux-5.10/drivers/video/fbdev/core/fbcon.h
---- linux-5.10/drivers/video/fbdev/core/fbcon.h.59~	2021-01-19 23:05:51.687941149 +0100
-+++ linux-5.10/drivers/video/fbdev/core/fbcon.h	2021-01-19 23:05:51.697941328 +0100
+diff -up linux-5.11/drivers/video/fbdev/core/fbcon.h.51~ linux-5.11/drivers/video/fbdev/core/fbcon.h
+--- linux-5.11/drivers/video/fbdev/core/fbcon.h.51~	2021-02-25 16:12:55.881538269 +0100
++++ linux-5.11/drivers/video/fbdev/core/fbcon.h	2021-02-25 16:12:55.890538399 +0100
 @@ -208,6 +208,11 @@ static inline int attr_col_ec(int shift,
  #define SCROLL_REDRAW	   0x004
  #define SCROLL_PAN_REDRAW  0x005
@@ -654,9 +654,9 @@ diff -up linux-5.10/drivers/video/fbdev/core/fbcon.h.59~ linux-5.10/drivers/vide
  #ifdef CONFIG_FB_TILEBLITTING
  extern void fbcon_set_tileops(struct vc_data *vc, struct fb_info *info);
  #endif
-diff -up linux-5.10/drivers/video/fbdev/core/Makefile.59~ linux-5.10/drivers/video/fbdev/core/Makefile
---- linux-5.10/drivers/video/fbdev/core/Makefile.59~	2020-12-13 23:41:30.000000000 +0100
-+++ linux-5.10/drivers/video/fbdev/core/Makefile	2021-01-19 23:05:51.694607935 +0100
+diff -up linux-5.11/drivers/video/fbdev/core/Makefile.51~ linux-5.11/drivers/video/fbdev/core/Makefile
+--- linux-5.11/drivers/video/fbdev/core/Makefile.51~	2021-02-14 23:32:24.000000000 +0100
++++ linux-5.11/drivers/video/fbdev/core/Makefile	2021-02-25 16:12:55.889538384 +0100
 @@ -26,3 +26,6 @@ obj-$(CONFIG_FB_SYS_IMAGEBLIT) += sysimg
  obj-$(CONFIG_FB_SYS_FOPS)      += fb_sys_fops.o
  obj-$(CONFIG_FB_SVGALIB)       += svgalib.o
@@ -664,9 +664,9 @@ diff -up linux-5.10/drivers/video/fbdev/core/Makefile.59~ linux-5.10/drivers/vid
 +
 +obj-$(CONFIG_BOOTSPLASH)       += bootsplash.o bootsplash_render.o \
 +                                  dummyblit.o
-diff -up linux-5.10/include/linux/bootsplash.h.59~ linux-5.10/include/linux/bootsplash.h
---- linux-5.10/include/linux/bootsplash.h.59~	2021-01-19 23:05:51.697941328 +0100
-+++ linux-5.10/include/linux/bootsplash.h	2021-01-19 23:05:51.697941328 +0100
+diff -up linux-5.11/include/linux/bootsplash.h.51~ linux-5.11/include/linux/bootsplash.h
+--- linux-5.11/include/linux/bootsplash.h.51~	2021-02-25 16:12:55.890538399 +0100
++++ linux-5.11/include/linux/bootsplash.h	2021-02-25 16:12:55.890538399 +0100
 @@ -0,0 +1,43 @@
 +/*
 + * Kernel based bootsplash.
@@ -711,4 +711,21 @@ diff -up linux-5.10/include/linux/bootsplash.h.59~ linux-5.10/include/linux/boot
 +
 +
 +#endif
-diff -up linux-5.10/MAINTAINERS.59~ linux-5.10/MAINTAINERS
+diff -up linux-5.11/MAINTAINERS.51~ linux-5.11/MAINTAINERS
+--- linux-5.11/MAINTAINERS.51~	2021-02-25 16:12:55.889538384 +0100
++++ linux-5.11/MAINTAINERS	2021-02-25 16:17:46.798644040 +0100
+@@ -3249,6 +3249,14 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/iio/accel/bosch,bma400.yaml
+ F:	drivers/iio/accel/bma400*
+ 
++BOOTSPLASH
++M:	Max Staudt <mstaudt@suse.de>
++L:	linux-fbdev@vger.kernel.org
++S:	Maintained
++F:	drivers/video/fbdev/core/bootsplash*.*
++F:	drivers/video/fbdev/core/dummycon.c
++F:	include/linux/bootsplash.h
++
+ BPF (Safe dynamic programs and tools)
+ M:	Alexei Starovoitov <ast@kernel.org>
+ M:	Daniel Borkmann <daniel@iogearbox.net>

@@ -3,39 +3,39 @@ Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-23.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77B48C433E6
-	for <linux-kernel@archiver.kernel.org>; Fri, 25 Dec 2020 13:55:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4081C433E0
+	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:10:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 51B1123130
-	for <linux-kernel@archiver.kernel.org>; Fri, 25 Dec 2020 13:55:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3002F64DBD
+	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:10:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729363AbgLYNyu (ORCPT
-        <rfc822;linux-kernel@archiver.kernel.org>);
-        Fri, 25 Dec 2020 08:54:50 -0500
-Received: from relayfre-01.paragon-software.com ([176.12.100.13]:47316 "EHLO
+        id S231351AbhA1JK1 (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Thu, 28 Jan 2021 04:10:27 -0500
+Received: from relayfre-01.paragon-software.com ([176.12.100.13]:47882 "EHLO
         relayfre-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726291AbgLYNyL (ORCPT
+        by vger.kernel.org with ESMTP id S231838AbhA1JGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Dec 2020 08:54:11 -0500
+        Thu, 28 Jan 2021 04:06:17 -0500
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 8EB711D71;
-        Fri, 25 Dec 2020 16:53:27 +0300 (MSK)
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 5F00D1F86;
+        Thu, 28 Jan 2021 12:05:04 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1608904407;
-        bh=QVKUxaz4zmOd9xSGGms1ZNGnJjBJSjVXGoT9ebjYpyo=;
+        d=paragon-software.com; s=mail; t=1611824704;
+        bh=5MrskzEWYdIQwUYeFlQxfNZPXnrbm3pUehgrJmesp60=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Fs042elzVB0ZGPcuIkBFG0C95AkazF3CNA11bX2Ule5N3yM9hWVj3RTaqoXPsbJdc
-         tDdDxsXe9P1UE1dICCKGHEbGwFrPIP5+QYnU21Eu/bH6N3IqWB68YC8msDuU3QE08p
-         pWK0e+LfsROLhN2HJxqFvxUBDMuXedfyhpaWqcrE=
+        b=AGRMQqHucj3mCSB+HqLRrXGT36SNErR2OjzN3UvOh2Dyg9LPoqIhFUUldg9oC/6SU
+         ZV+5B3qe05uPZpCFuU1EZMRs9TnIDAEEMDySMwOm5SZ608THSm6ljkTMYgnN70KDi7
+         quKZsWMbTteMC/ZSIFZuiG/e/xbzk3NJseQ/8DsA=
 Received: from fsd-lkpg.ufsd.paragon-software.com (172.30.114.105) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Fri, 25 Dec 2020 16:53:27 +0300
+ 15.1.1847.3; Thu, 28 Jan 2021 12:05:03 +0300
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 To:     <linux-fsdevel@vger.kernel.org>
 CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
@@ -44,13 +44,14 @@ CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
         <mark@harmstone.com>, <nborisov@suse.com>,
         <linux-ntfs-dev@lists.sourceforge.net>, <anton@tuxera.com>,
         <dan.carpenter@oracle.com>, <hch@lst.de>, <ebiggers@kernel.org>,
+        <andy.lavr@gmail.com>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH v16 06/10] fs/ntfs3: Add compression
-Date:   Fri, 25 Dec 2020 16:51:15 +0300
-Message-ID: <20201225135119.3666763-7-almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH v19 06/10] fs/ntfs3: Add compression
+Date:   Thu, 28 Jan 2021 12:04:51 +0300
+Message-ID: <20210128090455.3576502-7-almaz.alexandrovich@paragon-software.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20201225135119.3666763-1-almaz.alexandrovich@paragon-software.com>
-References: <20201225135119.3666763-1-almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
+References: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -60,7 +61,7 @@ X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Archived-At: <https://lore.kernel.org/lkml/20201225135119.3666763-7-almaz.alexandrovich@paragon-software.com/>
+Archived-At: <https://lore.kernel.org/lkml/20210128090455.3576502-7-almaz.alexandrovich@paragon-software.com/>
 List-Archive: <https://lore.kernel.org/lkml/>
 List-Post: <mailto:linux-kernel@vger.kernel.org>
 
@@ -1669,7 +1670,7 @@ index 000000000000..3d98f36a981e
 +}
 diff --git a/fs/ntfs3/lznt.c b/fs/ntfs3/lznt.c
 new file mode 100644
-index 000000000000..edba953b754a
+index 000000000000..73dc108c3204
 --- /dev/null
 +++ b/fs/ntfs3/lznt.c
 @@ -0,0 +1,452 @@
@@ -1969,8 +1970,8 @@ index 000000000000..edba953b754a
 + */
 +struct lznt *get_lznt_ctx(int level)
 +{
-+	struct lznt *r = ntfs_alloc(
-+		level ? offsetof(struct lznt, hash) : sizeof(struct lznt), 1);
++	struct lznt *r = ntfs_zalloc(level ? offsetof(struct lznt, hash) :
++					     sizeof(struct lznt));
 +
 +	if (r)
 +		r->std = !level;
