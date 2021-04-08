@@ -22,7 +22,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	11
-%define sublevel	10
+%define sublevel	12
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -495,6 +495,10 @@ BuildRequires:	pahole
 
 # for perf
 %if %{with perf}
+# The Makefile prefers python2, python3, python in that
+# order. Unless and until we fix that, make sure we use
+# the right version by conflicting with the other.
+BuildConflicts:	python2
 BuildRequires:	asciidoc
 BuildRequires:	xmlto
 BuildRequires:	pkgconfig(audit)
@@ -1044,6 +1048,14 @@ CheckConfig() {
 	fi
 }
 
+VerifyConfig() {
+# (tpg) please add CONFIG that were carelessly enabled, while it is known these MUST be disabled
+    if grep -Fxq "CONFIG_RT_GROUP_SCHED=y" $(pwd)/.config $(pwd)/*-defconfig; then
+	printf '%s\n' "Please stop enabling CONFIG_RT_GROUP_SCHED - this option is not recommended with systemd systemd/systemd#553, killing the build."
+	exit 1
+    fi
+}
+
 clangify() {
 	sed -i \
 		-e '/^CONFIG_CC_VERSION_TEXT=/d' \
@@ -1246,6 +1258,7 @@ PrepareKernel() {
 	extension=$2
 	config_dir=%{_sourcedir}
 	printf '%s\n' "Make config for kernel $extension"
+	VerifyConfig
 	%make_build -s mrproper
 %ifarch znver1
 	CreateConfig %{_target_cpu} ${flavour}
