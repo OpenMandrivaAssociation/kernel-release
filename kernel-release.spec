@@ -1048,6 +1048,14 @@ CheckConfig() {
 	fi
 }
 
+VerifyConfig() {
+# (tpg) please add CONFIG that were carelessly enabled, while it is known these MUST be disabled
+    if grep -Fxq "CONFIG_RT_GROUP_SCHED=y" $(pwd)/.config $(pwd)/*-defconfig; then
+	printf '%s\n' "Please stop enabling CONFIG_RT_GROUP_SCHED - this option is not recommended with systemd systemd/systemd#553, killing the build."
+	exit 1
+    fi
+}
+
 clangify() {
 	sed -i \
 		-e '/^CONFIG_CC_VERSION_TEXT=/d' \
@@ -1250,6 +1258,7 @@ PrepareKernel() {
 	extension=$2
 	config_dir=%{_sourcedir}
 	printf '%s\n' "Make config for kernel $extension"
+	VerifyConfig
 	%make_build -s mrproper
 %ifarch znver1
 	CreateConfig %{_target_cpu} ${flavour}
