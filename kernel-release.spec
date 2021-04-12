@@ -13,7 +13,6 @@
 # let us try *old* way for kernel package(s)
 %global _build_id_links alldebug
 
-
 %bcond_without gcc
 %bcond_without clang
 
@@ -264,6 +263,10 @@ Patch40:	kernel-5.8-aarch64-gcc-10.2-workaround.patch
 # using binutils 2.35, https://sourceware.org/bugzilla/show_bug.cgi?id=26378
 # Let's revert it for now until there's a good fix.
 Patch41:	workaround-aarch64-module-loader.patch
+%if %{with clang}
+# (tpg) https://github.com/ClangBuiltLinux/linux/issues/1341
+Patch42:	linux-5.11-disable-ICF-for-CONFIG_UNWINDER_ORC.patch
+%endif
 
 # (tpg)
 # The Ultra Kernel Same Page Deduplication
