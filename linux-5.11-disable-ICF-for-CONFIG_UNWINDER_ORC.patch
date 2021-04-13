@@ -4,7 +4,7 @@
  HOSTCFLAGS_sorttable.o += -I$(srctree)/tools/arch/x86/include
  HOSTCFLAGS_sorttable.o += -DUNWINDER_ORC_ENABLED
  HOSTLDLIBS_sorttable = -lpthread
-+HOSTLDFLAGS_sorttable = --icf=none
++HOSTLDFLAGS_sorttable.o = --icf=none
  endif
  
  # The following programs are only built on demand
