@@ -343,31 +343,56 @@ Patch226:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871
 # Fix perf
 Patch230:	linux-5.11-perf-compile.patch
 
-# (tpg) Pine64 RockPro64 sbc patches
-Patch240:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/board-rockpro64-fix-emmc.patch
-Patch241:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/board-rockpro64-fix-spi1-flash-speed.patch
-Patch242:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/board-rockpro64-work-led-heartbeat.patch
-Patch243:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/general-fix-mmc-signal-voltage-before-reboot.patch
-Patch244:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/rk3399-bump-voltages-for-low-opps.patch
-Patch245:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/rk3399-unlock-temperature.patch
+# (tpg) Armbian ARM Patches
+Patch240:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/board-rockpro64-fix-emmc.patch
+Patch241:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/board-rockpro64-fix-spi1-flash-speed.patch
+Patch242:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/board-rockpro64-work-led-heartbeat.patch
+Patch243:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/general-fix-mmc-signal-voltage-before-reboot.patch
+Patch244:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/rk3399-bump-voltages-for-low-opps.patch
+Patch245:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/rk3399-unlock-temperature.patch
 Patch246:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/general-increasing_DMA_block_memory_allocation_to_2048.patch
 Patch247:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/general-rk808-configurable-switch-voltage-steps.patch
-Patch248:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-arm64-dts-rockchip-modify-pcie-node-rockpro64.patch
-Patch249:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0014-arm64-rockchip-add-DP-ALT-rockpro64.patch
-Patch250:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0015-ayufan-drm-rockchip-add-support-for-modeline-32MHz-e.patch
+Patch248:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/rk3399-sd-drive-level-8ma.patch
+Patch249:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/rk3399-pci-rockchip-support-ep-gpio-undefined-case.patch
+Patch250:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/board-rockpi4-FixMMCFreq.patch
+
+# (tpg) Manjaro ARM Patches
+Patch260:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-net-smsc95xx-Allow-mac-address-to-be-set-as-a-parame.patch
+Patch261:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-arm64-dts-rockchip-add-usb3-controller-node-for-RK33.patch
+Patch262:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-dts-rockchip-enable-usb3-nodes-on-rk3328-rock6.patch
+Patch263:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-dts-rockchip-add-HDMI-sound-node-for-rk3328-ro.patch
+Patch264:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0006-arm64-dts-allwinner-add-ohci-ehci-to-h5-nanopi.patch
+Patch265:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0007-drm-bridge-analogix_dp-Add-enable_psr-param.patch
+Patch266:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0008-gpu-drm-add-new-display-resolution-2560x1440.patch
+Patch267:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0009-nuumio-panfrost-Silence-Panfrost-gem-shrinker-loggin.patch
+Patch268:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0015-ayufan-drm-rockchip-add-support-for-modeline-32MHz-e.patch
+Patch269:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0016-rk3399-rp64-pcie-Reimplement-rockchip-PCIe-bus-scan-delay.patch
+
+# (tpg) Pinebook Pro patches
+Patch276:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0017-tty-serdev-support-shutdown-op.patch
+Patch277:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0018-bluetooth-hci_serdev-Clear-registered-bit-on-unregister.patch
+Patch278:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0019-bluetooth-hci_bcm-disable-power-on-shutdown.patch
+Patch279:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0020-mmc-core-pwrseq_simple-disable-mmc-power-on-shutdown.patch
+Patch280:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0021-usb-typec-bus-Catch-crash-due-to-partner-NULL-value.patch
+Patch281:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0022-phy-rockchip-typec-Set-extcon-capabilities.patch
+Patch282:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0023-usb-typec-altmodes-displayport-Add-hacky-generic-altmode.patch
+Patch283:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0024-sound-soc-codecs-es8316-Run-micdetect-only-if-jack-status.patch
+Patch284:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0025-ASoC-soc-jack.c-supported-inverted-jack-detect-GPIOs.patch
+Patch285:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0026-arm64-dts-rockchip-add-typec-extcon-hack.patch
+Patch286:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0027-arm64-dts-rockchip-setup-USB-type-c-port-as-dual-data-role.patch
+
+# (tpg) # Pinebook, PinePhone and PineTab patches
+Patch287:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0028-revert-arm64-dts-allwinner-a64-Add-I2S2-node.patch
+Patch288:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-Bluetooth-Add-new-quirk-for-broken-local-ext-features.patch
+Patch289:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-allwinner-a64-enable-Bluetooth-On-Pinebook.patch
+Patch290:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0005-dt-bindings-arm-sunxi-add-PineTab-Early-Adopter-edition.patch
+Patch291:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0006-staging-add-rtl8723cs-driver.patch
+
 # (tpg) patches taken from https://github.com/OpenMandrivaSoftware/os-image-builder/tree/master/device/rockchip/generic/kernel-patches
-Patch251:	add-board-orangepi-4.patch
-Patch252:	board-rockpi4-0002-arm64-dts-leds.patch
-#Patch253:	board-rockpi4-0005-arm64-dts-enable-es8316-audio.patch rediff ?
-#Patch254:	general-add-xtx-spi-nor-chips.patch rediff ?
-Patch255:	general-btsdio-ignore-uart-devs.patch
-Patch256:	general-emmc-hs400es-init-tweak.patch
-Patch257:	general-fix-es8316-kernel-panic.patch
-#Patch258:	general-rkvdec_nv15.patch rediff?
-Patch259:	panfrost-less-debug-spewage.patch
-Patch260:	rk3399-add-sclk-i2sout-src-clock.patch
-#Patch261:	rk3399-pci-rockchip-support-ep-gpio-undefined-case.patch rediff?
-Patch262:	rk3399-sd-drive-level-8ma.patch
+Patch295:	add-board-orangepi-4.patch
+Patch299:	general-btsdio-ignore-uart-devs.patch
+Patch300:	general-emmc-hs400es-init-tweak.patch
+Patch301:	rk3399-add-sclk-i2sout-src-clock.patch
 
 # NTFS kernel patches
 # https://lore.kernel.org/lkml/20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com/
@@ -375,16 +400,16 @@ Patch262:	rk3399-sd-drive-level-8ma.patch
 # version number until nothing is found -- short of always keeping track of the mailing lists,
 # there doesn't seem to be a better way to always have the current version)
 # Versions > 19 require kernel 5.12+
-Patch300:	PATCH-v19-01-10-fs-ntfs3-Add-headers-and-misc-files.patch
-Patch301:	PATCH-v19-02-10-fs-ntfs3-Add-initialization-of-super-block.patch
-Patch302:	PATCH-v19-03-10-fs-ntfs3-Add-bitmap.patch
-Patch303:	PATCH-v19-04-10-fs-ntfs3-Add-file-operations-and-implementation.patch
-Patch304:	PATCH-v19-05-10-fs-ntfs3-Add-attrib-operations.patch
-Patch305:	PATCH-v19-06-10-fs-ntfs3-Add-compression.patch
-Patch306:	PATCH-v19-07-10-fs-ntfs3-Add-NTFS-journal.patch
-Patch307:	PATCH-v19-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
-Patch308:	PATCH-v19-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
-Patch309:	PATCH-v19-10-10-fs-ntfs3-Add-MAINTAINERS.patch
+Patch350:	PATCH-v19-01-10-fs-ntfs3-Add-headers-and-misc-files.patch
+Patch351:	PATCH-v19-02-10-fs-ntfs3-Add-initialization-of-super-block.patch
+Patch352:	PATCH-v19-03-10-fs-ntfs3-Add-bitmap.patch
+Patch353:	PATCH-v19-04-10-fs-ntfs3-Add-file-operations-and-implementation.patch
+Patch354:	PATCH-v19-05-10-fs-ntfs3-Add-attrib-operations.patch
+Patch355:	PATCH-v19-06-10-fs-ntfs3-Add-compression.patch
+Patch356:	PATCH-v19-07-10-fs-ntfs3-Add-NTFS-journal.patch
+Patch357:	PATCH-v19-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
+Patch358:	PATCH-v19-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
+Patch359:	PATCH-v19-10-10-fs-ntfs3-Add-MAINTAINERS.patch
 
 # Bootsplash support
 # based on https://gitlab.manjaro.org/packages/core/linux511/-/tree/master
