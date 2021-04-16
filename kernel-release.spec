@@ -16,6 +16,15 @@
 %bcond_without gcc
 %bcond_without clang
 
+%if %{with clang}
+# https://github.com/ClangBuiltLinux/linux/issues/1341
+# As of kernel 5.10-rc1, llvm 11, clang-built kernels linked with
+# lld result in "inconsistent ORC unwind table entries in file: vmlinux"
+# on x86_64
+# (tpg) fix is here https://github.com/OpenMandrivaSoftware/distro-release/pull/1
+%bcond_without ld_workaround
+%endif
+
 # IMPORTANT
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
@@ -502,7 +511,9 @@ BuildRequires:	hostname
 %if %{with clang}
 BuildRequires:	clang
 BuildRequires:	llvm
+%if %{without ld_workaround}
 BuildRequires:	lld
+%endif
 %endif
 %if %{with gcc}
 BuildRequires:	gcc
@@ -1140,7 +1151,12 @@ CreateConfig() {
 	if echo $type |grep -q clang; then
 		CC=clang
 		CXX=clang++
+		%if %{with ld_workaround}
+		BUILD_LD="ld.bfd"
+		BUILD_KBUILD_LDFLAGS="-fuse-ld=bfd"
+		%else
 		BUILD_LD="ld.lld"
+		%endif
 		BUILD_KBUILD_LDFLAGS="-Wl,--icf=none -Wl,--no-gc-sections"
 		BUILD_TOOLS='LLVM=1 LLVM_IAS=1'
 	else
@@ -1317,7 +1333,12 @@ BuildKernel() {
 	if echo $1 |grep -q clang; then
 		CC=clang
 		CXX=clang++
+		%if %{with ld_workaround}
+		BUILD_LD="ld.bfd"
+		BUILD_KBUILD_LDFLAGS="-fuse-ld=bfd"
+		%else
 		BUILD_LD="ld.lld"
+		%endif
 		BUILD_KBUILD_LDFLAGS="-Wl,--icf=none -Wl,--no-gc-sections"
 		BUILD_TOOLS='LLVM=1 LLVM_IAS=1'
 	else
