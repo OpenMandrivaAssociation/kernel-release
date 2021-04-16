@@ -1143,7 +1143,7 @@ CreateConfig() {
 		BUILD_LD="ld.lld"
 		BUILD_KBUILD_LDFLAGS="-Wl,--icf=none -Wl,--no-gc-sections"
 # https://github.com/OpenMandrivaSoftware/distro-release/pull/1
-		sed -i -e 's/^CONFIG_UNWINDER_ORC=.*/# CONFIG_UNWINDER_ORC is not set/g" .config
+		sed -i -e 's/^CONFIG_UNWINDER_ORC=.*/# CONFIG_UNWINDER_ORC is not set/g' .config
 		BUILD_TOOLS='LLVM=1 LLVM_IAS=1'
 	else
 		CC=gcc
