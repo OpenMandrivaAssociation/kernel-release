@@ -1115,6 +1115,7 @@ clangify() {
 		-e '/^CONFIG_LD_VERSION=/d' \
 		-e '/^CONFIG_LD_IS_LLD=/d' \
 		-e '/^CONFIG_GCC_PLUGINS=/d' \
+		-e '/^CONFIG_UNWINDER_ORC=/d' \
 		"$1"
 	cat >>"$1" <<'EOF'
 CONFIG_CC_IS_CLANG=y
@@ -1142,8 +1143,6 @@ CreateConfig() {
 		CXX=clang++
 		BUILD_LD="ld.lld"
 		BUILD_KBUILD_LDFLAGS="-Wl,--icf=none -Wl,--no-gc-sections"
-# https://github.com/OpenMandrivaSoftware/distro-release/pull/1
-		sed -i -e 's/^CONFIG_UNWINDER_ORC=.*/# CONFIG_UNWINDER_ORC is not set/g' .config
 		BUILD_TOOLS='LLVM=1 LLVM_IAS=1'
 	else
 		CC=gcc
