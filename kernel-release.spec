@@ -386,7 +386,6 @@ Patch287:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/maste
 Patch288:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-Bluetooth-Add-new-quirk-for-broken-local-ext-features.patch
 Patch289:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-allwinner-a64-enable-Bluetooth-On-Pinebook.patch
 Patch290:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0005-dt-bindings-arm-sunxi-add-PineTab-Early-Adopter-edition.patch
-Patch291:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0006-staging-add-rtl8723cs-driver.patch
 
 # (tpg) patches taken from https://github.com/OpenMandrivaSoftware/os-image-builder/tree/master/device/rockchip/generic/kernel-patches
 Patch295:	add-board-orangepi-4.patch
