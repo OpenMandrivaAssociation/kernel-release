@@ -1115,7 +1115,6 @@ clangify() {
 		-e '/^CONFIG_LD_VERSION=/d' \
 		-e '/^CONFIG_LD_IS_LLD=/d' \
 		-e '/^CONFIG_GCC_PLUGINS=/d' \
-		-e '/^CONFIG_UNWINDER_ORC=/d' \
 		"$1"
 	cat >>"$1" <<'EOF'
 CONFIG_CC_IS_CLANG=y
