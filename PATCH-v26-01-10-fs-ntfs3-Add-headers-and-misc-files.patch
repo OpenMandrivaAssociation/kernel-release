@@ -3,38 +3,38 @@ Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37A1CC433E6
-	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:08:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21C27C43461
+	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B9DEB64DD9
-	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:08:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CCFC961163
+	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232084AbhA1JIO (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Thu, 28 Jan 2021 04:08:14 -0500
-Received: from relayfre-01.paragon-software.com ([176.12.100.13]:47782 "EHLO
-        relayfre-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231766AbhA1JGK (ORCPT
+        id S236376AbhDBPyA (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Fri, 2 Apr 2021 11:54:00 -0400
+Received: from relaydlg-01.paragon-software.com ([81.5.88.159]:44597 "EHLO
+        relaydlg-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234968AbhDBPx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jan 2021 04:06:10 -0500
+        Fri, 2 Apr 2021 11:53:56 -0400
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 9077E1D7C;
-        Thu, 28 Jan 2021 12:05:02 +0300 (MSK)
+        by relaydlg-01.paragon-software.com (Postfix) with ESMTPS id 3184F820A9;
+        Fri,  2 Apr 2021 18:53:53 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1611824702;
-        bh=/Ll+fAeRkLUfDElu8ZCtygU2fGro9EVUROQ7gP1eDeM=;
+        d=paragon-software.com; s=mail; t=1617378833;
+        bh=B1AutJGGPavvCGjevP4mGcZkpPXgeNuyFi9KT+17/0g=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=LF/fOfUop4eO3krTnUud23YzWQ+jTl5d4rzJxVpo4Hc0WKKt3nBpy7x0ODvICYuJi
-         hQJ7rhRr4esVfhMWZ6mfCr0a5vzwxlvqPJWTNl8AUc5PfwHCQOK/scvzphQtIgt6O/
-         +x0o8qTQif326xWthgqDt21zxn+gh9zL4w1IBpxo=
+        b=lE6/5R4Nuvz+KKRDO9KDUJtcHa6n7w+ycNeJ2j1J0SFyLlio6U3iC1zubMMpSR8J/
+         RdwAuYhRSeNFWvGuwpjSr1Cltz45Pp6tj51fM1lgGOwxuDid0O/IQnokda7jEohA6W
+         f5bO6CEMhyooLcJsc0SMMfBkCuEjxKNUKqwXkVhE=
 Received: from fsd-lkpg.ufsd.paragon-software.com (172.30.114.105) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Thu, 28 Jan 2021 12:05:01 +0300
+ 15.1.2176.2; Fri, 2 Apr 2021 18:53:52 +0300
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 To:     <linux-fsdevel@vger.kernel.org>
 CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
@@ -43,14 +43,15 @@ CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
         <mark@harmstone.com>, <nborisov@suse.com>,
         <linux-ntfs-dev@lists.sourceforge.net>, <anton@tuxera.com>,
         <dan.carpenter@oracle.com>, <hch@lst.de>, <ebiggers@kernel.org>,
-        <andy.lavr@gmail.com>,
+        <andy.lavr@gmail.com>, <kari.argillander@gmail.com>,
+        <oleksandr@natalenko.name>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH v19 01/10] fs/ntfs3: Add headers and misc files
-Date:   Thu, 28 Jan 2021 12:04:46 +0300
-Message-ID: <20210128090455.3576502-2-almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH v26 01/10] fs/ntfs3: Add headers and misc files
+Date:   Fri, 2 Apr 2021 18:53:38 +0300
+Message-ID: <20210402155347.64594-2-almaz.alexandrovich@paragon-software.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
-References: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
+References: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -60,7 +61,7 @@ X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Archived-At: <https://lore.kernel.org/lkml/20210128090455.3576502-2-almaz.alexandrovich@paragon-software.com/>
+Archived-At: <https://lore.kernel.org/lkml/20210402155347.64594-2-almaz.alexandrovich@paragon-software.com/>
 List-Archive: <https://lore.kernel.org/lkml/>
 List-Post: <mailto:linux-kernel@vger.kernel.org>
 
@@ -68,11 +69,11 @@ This adds headers and misc files
 
 Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 ---
- fs/ntfs3/debug.h   |   62 +++
+ fs/ntfs3/debug.h   |   64 +++
  fs/ntfs3/ntfs.h    | 1238 ++++++++++++++++++++++++++++++++++++++++++++
- fs/ntfs3/ntfs_fs.h | 1065 +++++++++++++++++++++++++++++++++++++
- fs/ntfs3/upcase.c  |  100 ++++
- 4 files changed, 2465 insertions(+)
+ fs/ntfs3/ntfs_fs.h | 1085 ++++++++++++++++++++++++++++++++++++++
+ fs/ntfs3/upcase.c  |  105 ++++
+ 4 files changed, 2492 insertions(+)
  create mode 100644 fs/ntfs3/debug.h
  create mode 100644 fs/ntfs3/ntfs.h
  create mode 100644 fs/ntfs3/ntfs_fs.h
@@ -80,14 +81,14 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
 diff --git a/fs/ntfs3/debug.h b/fs/ntfs3/debug.h
 new file mode 100644
-index 000000000000..41893421081a
+index 000000000..dfaa4c79d
 --- /dev/null
 +++ b/fs/ntfs3/debug.h
-@@ -0,0 +1,62 @@
+@@ -0,0 +1,64 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + * useful functions for debuging
 + */
@@ -143,19 +144,21 @@ index 000000000000..41893421081a
 +
 +#define ntfs_malloc(s)		kmalloc(s, GFP_NOFS)
 +#define ntfs_zalloc(s)		kzalloc(s, GFP_NOFS)
++#define ntfs_vmalloc(s)		kvmalloc(s, GFP_KERNEL)
 +#define ntfs_free(p)		kfree(p)
++#define ntfs_vfree(p)		kvfree(p)
 +#define ntfs_memdup(src, len)	kmemdup(src, len, GFP_NOFS)
 +// clang-format on
 diff --git a/fs/ntfs3/ntfs.h b/fs/ntfs3/ntfs.h
 new file mode 100644
-index 000000000000..19aac05ff3d1
+index 000000000..40398e6c3
 --- /dev/null
 +++ b/fs/ntfs3/ntfs.h
 @@ -0,0 +1,1238 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + * on-disk ntfs structs
 + */
@@ -190,7 +193,7 @@ index 000000000000..19aac05ff3d1
 + * Logical and virtual cluster number
 + * If needed, may be redefined to use 64 bit value
 + */
-+//#define NTFS3_64BIT_CLUSTER
++//#define CONFIG_NTFS3_64BIT_CLUSTER
 +
 +#define NTFS_LZNT_MAX_CLUSTER	4096
 +#define NTFS_LZNT_CUNIT		4
@@ -218,12 +221,12 @@ index 000000000000..19aac05ff3d1
 +struct le_str {
 +	u8 len;
 +	u8 unused;
-+	__le16 name[1];
++	__le16 name[];
 +};
 +
 +static_assert(SECTOR_SHIFT == 9);
 +
-+#ifdef NTFS3_64BIT_CLUSTER
++#ifdef CONFIG_NTFS3_64BIT_CLUSTER
 +typedef u64 CLST;
 +static_assert(sizeof(size_t) == 8);
 +#else
@@ -341,7 +344,7 @@ index 000000000000..19aac05ff3d1
 +
 +static inline CLST ino_get(const struct MFT_REF *ref)
 +{
-+#ifdef NTFS3_64BIT_CLUSTER
++#ifdef CONFIG_NTFS3_64BIT_CLUSTER
 +	return le32_to_cpu(ref->low) | ((u64)le16_to_cpu(ref->high) << 32);
 +#else
 +	return le32_to_cpu(ref->low);
@@ -439,7 +442,7 @@ index 000000000000..19aac05ff3d1
 +
 +	__le16 res;		// 0x2A: High part of mft record?
 +	__le32 mft_record;	// 0x2C: Current mft record number
-+	__le16 fixups[1];	// 0x30:
++	__le16 fixups[];	// 0x30:
 +};
 +
 +#define MFTRECORD_FIXUP_OFFSET_1 offsetof(struct MFT_REC, res)
@@ -579,7 +582,7 @@ index 000000000000..19aac05ff3d1
 +	return !attr->non_res && (attr->res.flags & RESIDENT_FLAG_INDEXED);
 +}
 +
-+static const inline __le16 *attr_name(const struct ATTRIB *attr)
++static inline __le16 const *attr_name(const struct ATTRIB *attr)
 +{
 +	return Add2Ptr(attr, le16_to_cpu(attr->name_off));
 +}
@@ -696,7 +699,7 @@ index 000000000000..19aac05ff3d1
 +		       le->name_len * sizeof(short)));
 +}
 +
-+static const inline __le16 *le_name(const struct ATTR_LIST_ENTRY *le)
++static inline __le16 const *le_name(const struct ATTR_LIST_ENTRY *le)
 +{
 +	return Add2Ptr(le, le->name_off);
 +}
@@ -726,7 +729,7 @@ index 000000000000..19aac05ff3d1
 +	struct NTFS_DUP_INFO dup;// 0x08
 +	u8 name_len;		// 0x40: File name length in words
 +	u8 type;		// 0x41: File name type
-+	__le16 name[1];		// 0x42: File name
++	__le16 name[];		// 0x42: File name
 +};
 +
 +static_assert(sizeof(((struct ATTR_FILE_NAME *)NULL)->dup) == 0x38);
@@ -741,6 +744,7 @@ index 000000000000..19aac05ff3d1
 +
 +static inline u16 fname_full_size(const struct ATTR_FILE_NAME *fname)
 +{
++	// don't return struct_size(fname, name, fname->name_len);
 +	return offsetof(struct ATTR_FILE_NAME, name) +
 +	       fname->name_len * sizeof(short);
 +}
@@ -946,7 +950,7 @@ index 000000000000..19aac05ff3d1
 +	enum ATTR_TYPE type;	// 0x00: The type of attribute to index on
 +	enum COLLATION_RULE rule; // 0x04: The rule
 +	__le32 index_block_size;// 0x08: The size of index record
-+	u8 index_block_clst;	// 0x0C: The number of clusters per index
++	u8 index_block_clst;	// 0x0C: The number of clusters or sectors per index
 +	u8 res[3];
 +	struct INDEX_HDR ihdr;	// 0x10:
 +};
@@ -1291,7 +1295,7 @@ index 000000000000..19aac05ff3d1
 +			__le16 SubstituteNameLength; // 0x0A
 +			__le16 PrintNameOffset;      // 0x0C
 +			__le16 PrintNameLength;      // 0x0E
-+			__le16 PathBuffer[1];	     // 0x10
++			__le16 PathBuffer[];	     // 0x10
 +		} MountPointReparseBuffer;
 +
 +		// If ReparseTag == 0xA000000C (IO_REPARSE_TAG_SYMLINK)
@@ -1303,7 +1307,7 @@ index 000000000000..19aac05ff3d1
 +			__le16 PrintNameLength;      // 0x0E
 +			// 0-absolute path 1- relative path, SYMLINK_FLAG_RELATIVE
 +			__le32 Flags;		     // 0x10
-+			__le16 PathBuffer[1];	     // 0x14
++			__le16 PathBuffer[];	     // 0x14
 +		} SymbolicLinkReparseBuffer;
 +
 +		// If ReparseTag == 0x80000017U
@@ -1343,14 +1347,13 @@ index 000000000000..19aac05ff3d1
 +	u8 flags;		// 0x04
 +	u8 name_len;		// 0x05
 +	__le16 elength;		// 0x06
-+	u8 name[1];		// 0x08
++	u8 name[];		// 0x08
 +};
 +
 +static_assert(offsetof(struct EA_FULL, name) == 8);
 +
-+#define MAX_EA_DATA_SIZE (256 * 1024)
-+
-+#define ACL_REVISION 2
++#define ACL_REVISION	2
++#define ACL_REVISION_DS 4
 +
 +#define SE_SELF_RELATIVE cpu_to_le16(0x8000)
 +
@@ -1385,21 +1388,21 @@ index 000000000000..19aac05ff3d1
 +	u8 Revision;
 +	u8 SubAuthorityCount;
 +	u8 IdentifierAuthority[6];
-+	__le32 SubAuthority[1];
++	__le32 SubAuthority[];
 +};
 +static_assert(offsetof(struct SID, SubAuthority) == 8);
 +
 +// clang-format on
 diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
 new file mode 100644
-index 000000000000..09e183f95bd1
+index 000000000..5e1dd628d
 --- /dev/null
 +++ b/fs/ntfs3/ntfs_fs.h
-@@ -0,0 +1,1065 @@
+@@ -0,0 +1,1085 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + */
 +
@@ -1419,7 +1422,12 @@ index 000000000000..09e183f95bd1
 +
 +/* sbi->flags */
 +#define NTFS_FLAGS_NODISCARD		0x00000001
++/* Set when LogFile is replaying */
++#define NTFS_FLAGS_LOG_REPLAYING	0x00000008
++/* Set when we changed first MFT's which copy must be updated in $MftMirr */
++#define NTFS_FLAGS_MFTMIRR		0x00001000
 +#define NTFS_FLAGS_NEED_REPLAY		0x04000000
++
 +
 +/* ni->ni_flags */
 +/*
@@ -1466,7 +1474,7 @@ index 000000000000..09e183f95bd1
 +
 +/* TODO: use rb tree instead of array */
 +struct runs_tree {
-+	struct ntfs_run *runs_;
++	struct ntfs_run *runs;
 +	size_t count; // Currently used size a ntfs_run storage.
 +	size_t allocated; // Currently allocated ntfs_run storage size.
 +};
@@ -1496,8 +1504,6 @@ index 000000000000..09e183f95bd1
 +
 +	struct runs_tree run;
 +	size_t nbits;
-+
-+	u16 free_holder[8]; // holder for free_bits
 +
 +	size_t total_zeroes; // total number of free bits
 +	u16 *free_bits; // free bits in each window
@@ -1538,7 +1544,7 @@ index 000000000000..09e183f95bd1
 +	INDEX_MUTEX_TOTAL
 +};
 +
-+/* This struct works with indexes */
++/* ntfs_index - allocation unit inside directory */
 +struct ntfs_index {
 +	struct runs_tree bitmap_run;
 +	struct runs_tree alloc_run;
@@ -1553,12 +1559,6 @@ index 000000000000..09e183f95bd1
 +	u8 vbn2vbo_bits; // index_block_size < cluster? 9 : cluster_bits
 +	u8 type; // index_mutex_classed
 +};
-+
-+/* Set when $LogFile is replaying */
-+#define NTFS_FLAGS_LOG_REPLAYING 0x00000008
-+
-+/* Set when we changed first MFT's which copy must be updated in $MftMirr */
-+#define NTFS_FLAGS_MFTMIRR 0x00001000
 +
 +/* Minimum mft zone */
 +#define NTFS_MIN_MFT_ZONE 100
@@ -1602,6 +1602,7 @@ index 000000000000..09e183f95bd1
 +
 +	struct ATTR_DEF_ENTRY *def_table; // attribute definition table
 +	u32 def_entries;
++	u32 ea_max_size;
 +
 +	struct MFT_REC *new_rec;
 +
@@ -1611,10 +1612,15 @@ index 000000000000..09e183f95bd1
 +		u64 lbo, lbo2;
 +		struct ntfs_inode *ni;
 +		struct wnd_bitmap bitmap; // $MFT::Bitmap
-+		ulong reserved_bitmap;
++		/*
++		 * MFT records [11-24) used to expand MFT itself
++		 * They always marked as used in $MFT::Bitmap
++		 * 'reserved_bitmap' contains real bitmap of these records
++		 */
++		ulong reserved_bitmap; // bitmap of used records [11 - 24)
 +		size_t next_free; // The next record to allocate from
-+		size_t used;
-+		u32 recs_mirr; // Number of records MFTMirr
++		size_t used; // mft valid size in records
++		u32 recs_mirr; // Number of records in MFTMirr
 +		u8 next_reserved;
 +		u8 reserved_bitmap_inited;
 +	} mft;
@@ -1629,7 +1635,7 @@ index 000000000000..09e183f95bd1
 +		u64 blocks; // in blocks
 +		u64 ser_num;
 +		struct ntfs_inode *ni;
-+		__le16 flags; // see VOLUME_FLAG_XXX
++		__le16 flags; // cached current VOLUME_INFO::flags, VOLUME_FLAG_DIRTY
 +		u8 major_ver;
 +		u8 minor_ver;
 +		char label[65];
@@ -1848,11 +1854,12 @@ index 000000000000..09e183f95bd1
 +extern const struct file_operations ntfs_dir_operations;
 +
 +/* globals from file.c*/
-+int ntfs_getattr(const struct path *path, struct kstat *stat, u32 request_mask,
-+		 u32 flags);
++int ntfs_getattr(struct user_namespace *mnt_userns, const struct path *path,
++		 struct kstat *stat, u32 request_mask, u32 flags);
 +void ntfs_sparse_cluster(struct inode *inode, struct page *page0, CLST vcn,
 +			 CLST len);
-+int ntfs3_setattr(struct dentry *dentry, struct iattr *attr);
++int ntfs3_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
++		  struct iattr *attr);
 +int ntfs_file_open(struct inode *inode, struct file *file);
 +int ntfs_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
 +		__u64 start, __u64 len);
@@ -1918,7 +1925,7 @@ index 000000000000..09e183f95bd1
 +		   u32 pages_per_frame);
 +
 +/* globals from fslog.c */
-+int log_replay(struct ntfs_inode *ni);
++int log_replay(struct ntfs_inode *ni, bool *initialized);
 +
 +/* globals from fsntfs.c */
 +bool ntfs_fix_pre_write(struct NTFS_RECORD_HEADER *rhdr, size_t bytes);
@@ -1933,7 +1940,7 @@ index 000000000000..09e183f95bd1
 +			     enum ALLOCATE_OPT opt);
 +int ntfs_look_free_mft(struct ntfs_sb_info *sbi, CLST *rno, bool mft,
 +		       struct ntfs_inode *ni, struct mft_inode **mi);
-+void ntfs_mark_rec_free(struct ntfs_sb_info *sbi, CLST nRecord);
++void ntfs_mark_rec_free(struct ntfs_sb_info *sbi, CLST rno);
 +int ntfs_clear_mft_tail(struct ntfs_sb_info *sbi, size_t from, size_t to);
 +int ntfs_refresh_zone(struct ntfs_sb_info *sbi);
 +int ntfs_update_mftmirr(struct ntfs_sb_info *sbi, int wait);
@@ -2038,10 +2045,11 @@ index 000000000000..09e183f95bd1
 +int ntfs_flush_inodes(struct super_block *sb, struct inode *i1,
 +		      struct inode *i2);
 +int inode_write_data(struct inode *inode, const void *data, size_t bytes);
-+int ntfs_create_inode(struct inode *dir, struct dentry *dentry,
-+		      const struct cpu_str *uni, umode_t mode, dev_t dev,
-+		      const char *symname, u32 size, int excl,
-+		      struct ntfs_fnd *fnd, struct inode **new_inode);
++struct inode *ntfs_create_inode(struct user_namespace *mnt_userns,
++				struct inode *dir, struct dentry *dentry,
++				const struct cpu_str *uni, umode_t mode,
++				dev_t dev, const char *symname, u32 size,
++				int excl, struct ntfs_fnd *fnd);
 +int ntfs_link_inode(struct inode *inode, struct dentry *dentry);
 +int ntfs_unlink_inode(struct inode *dir, const struct dentry *dentry);
 +void ntfs_evict_inode(struct inode *inode);
@@ -2092,11 +2100,22 @@ index 000000000000..09e183f95bd1
 +	if (ref->seq != mi->mrec->seq)
 +		return false;
 +
-+#ifdef NTFS3_64BIT_CLUSTER
++#ifdef CONFIG_NTFS3_64BIT_CLUSTER
 +	return le16_to_cpu(ref->high) == (mi->rno >> 32);
 +#else
 +	return !ref->high;
 +#endif
++}
++
++static inline void mi_get_ref(const struct mft_inode *mi, struct MFT_REF *ref)
++{
++	ref->low = cpu_to_le32(mi->rno);
++#ifdef CONFIG_NTFS3_64BIT_CLUSTER
++	ref->high = cpu_to_le16(mi->rno >> 32);
++#else
++	ref->high = 0;
++#endif
++	ref->seq = mi->mrec->seq;
 +}
 +
 +/* globals from run.c */
@@ -2134,7 +2153,9 @@ index 000000000000..09e183f95bd1
 +void ntfs_unmap_meta(struct super_block *sb, CLST lcn, CLST len);
 +int ntfs_discard(struct ntfs_sb_info *sbi, CLST Lcn, CLST Len);
 +
-+/* globals from ubitmap.c*/
++/* globals from bitmap.c*/
++int __init ntfs3_init_bitmap(void);
++void ntfs3_exit_bitmap(void);
 +void wnd_close(struct wnd_bitmap *wnd);
 +static inline size_t wnd_zeroes(const struct wnd_bitmap *wnd)
 +{
@@ -2164,15 +2185,18 @@ index 000000000000..09e183f95bd1
 +/* globals from xattr.c */
 +#ifdef CONFIG_NTFS3_FS_POSIX_ACL
 +struct posix_acl *ntfs_get_acl(struct inode *inode, int type);
-+int ntfs_set_acl(struct inode *inode, struct posix_acl *acl, int type);
-+int ntfs_init_acl(struct inode *inode, struct inode *dir);
++int ntfs_set_acl(struct user_namespace *mnt_userns, struct inode *inode,
++		 struct posix_acl *acl, int type);
++int ntfs_init_acl(struct user_namespace *mnt_userns, struct inode *inode,
++		  struct inode *dir);
 +#else
 +#define ntfs_get_acl NULL
 +#define ntfs_set_acl NULL
 +#endif
 +
-+int ntfs_acl_chmod(struct inode *inode);
-+int ntfs_permission(struct inode *inode, int mask);
++int ntfs_acl_chmod(struct user_namespace *mnt_userns, struct inode *inode);
++int ntfs_permission(struct user_namespace *mnt_userns, struct inode *inode,
++		    int mask);
 +ssize_t ntfs_listxattr(struct dentry *dentry, char *buffer, size_t size);
 +extern const struct xattr_handler *ntfs_xattr_handlers[];
 +
@@ -2235,7 +2259,7 @@ index 000000000000..09e183f95bd1
 +
 +static inline void run_init(struct runs_tree *run)
 +{
-+	run->runs_ = NULL;
++	run->runs = NULL;
 +	run->count = 0;
 +	run->allocated = 0;
 +}
@@ -2247,14 +2271,14 @@ index 000000000000..09e183f95bd1
 +
 +static inline void run_close(struct runs_tree *run)
 +{
-+	ntfs_free(run->runs_);
++	ntfs_vfree(run->runs);
 +	memset(run, 0, sizeof(*run));
 +}
 +
 +static inline void run_free(struct runs_tree *run)
 +{
 +	if (run) {
-+		ntfs_free(run->runs_);
++		ntfs_vfree(run->runs);
 +		ntfs_free(run);
 +	}
 +}
@@ -2332,9 +2356,8 @@ index 000000000000..09e183f95bd1
 +static inline struct buffer_head *ntfs_bread(struct super_block *sb,
 +					     sector_t block)
 +{
-+	struct buffer_head *bh;
++	struct buffer_head *bh = sb_bread(sb, block);
 +
-+	bh = sb_bread(sb, block);
 +	if (bh)
 +		return bh;
 +
@@ -2463,14 +2486,14 @@ index 000000000000..09e183f95bd1
 +}
 diff --git a/fs/ntfs3/upcase.c b/fs/ntfs3/upcase.c
 new file mode 100644
-index 000000000000..57a03731b75a
+index 000000000..9617382ac
 --- /dev/null
 +++ b/fs/ntfs3/upcase.c
-@@ -0,0 +1,100 @@
+@@ -0,0 +1,105 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + */
 +#include <linux/blkdev.h>
@@ -2493,7 +2516,16 @@ index 000000000000..57a03731b75a
 +	return upcase[chr];
 +}
 +
-+/* Thanks Kari Argillander <kari.argillander@gmail.com> for idea and implementation 'bothcase' */
++/*
++ * Thanks Kari Argillander <kari.argillander@gmail.com> for idea and implementation 'bothcase'
++ *
++ * Straigth way to compare names:
++ * - case insensitive
++ * - if name equals and 'bothcases' then
++ * - case sensitive
++ * 'Straigth way' code scans input names twice in worst case
++ * Optimized code scans input names only once
++ */
 +int ntfs_cmp_names(const __le16 *s1, size_t l1, const __le16 *s2, size_t l2,
 +		   const u16 *upcase, bool bothcase)
 +{
@@ -2523,10 +2555,8 @@ index 000000000000..57a03731b75a
 +			return diff2;
 +	}
 +
-+	if (bothcase && diff1)
-+		return diff1;
-+
-+	return l1 - l2;
++	diff2 = l1 - l2;
++	return diff2 ? diff2 : diff1;
 +}
 +
 +int ntfs_cmp_names_cpu(const struct cpu_str *uni1, const struct le_str *uni2,
@@ -2562,10 +2592,8 @@ index 000000000000..57a03731b75a
 +			return diff2;
 +	}
 +
-+	if (bothcase && diff1)
-+		return diff1;
-+
-+	return l1 - l2;
++	diff2 = l1 - l2;
++	return diff2 ? diff2 : diff1;
 +}
 -- 
 2.25.4

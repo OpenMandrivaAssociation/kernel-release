@@ -29,8 +29,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	11
-%define sublevel	16
+%define patchlevel	12
+%define sublevel	0
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -283,7 +283,7 @@ Patch42:	linux-5.11-disable-ICF-for-CONFIG_UNWINDER_ORC.patch
 # sources can be found here https://github.com/dolohow/uksm
 %if %{with uksm}
 # breaks armx builds
-Patch43:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.11.patch
+Patch43:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.12.patch
 %endif
 
 # (crazy) see: https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
@@ -342,9 +342,6 @@ Patch211:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patche
 Patch212:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
 Patch213:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
 
-# k10temp fixes
-Patch221:	k10temp-ryzen-zen3.patch
-
 # Fix CPU frequency governor mess caused by recent Intel patches
 Patch225:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/0001-Revert-cpufreq-Avoid-configuring-old-governors-as-de.patch
 Patch226:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/revert-parts-of-a00ec3874e7d326ab2dffbed92faddf6a77a84e9-no-Intel-NO.patch
@@ -369,7 +366,8 @@ Patch250:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/ar
 Patch260:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-net-smsc95xx-Allow-mac-address-to-be-set-as-a-parame.patch
 Patch261:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-arm64-dts-rockchip-add-usb3-controller-node-for-RK33.patch
 Patch262:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-dts-rockchip-enable-usb3-nodes-on-rk3328-rock6.patch
-Patch263:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-dts-rockchip-add-HDMI-sound-node-for-rk3328-ro.patch
+# FIXME port
+#Patch263:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-dts-rockchip-add-HDMI-sound-node-for-rk3328-ro.patch
 Patch264:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0006-arm64-dts-allwinner-add-ohci-ehci-to-h5-nanopi.patch
 Patch265:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0007-drm-bridge-analogix_dp-Add-enable_psr-param.patch
 Patch266:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0008-gpu-drm-add-new-display-resolution-2560x1440.patch
@@ -394,7 +392,8 @@ Patch286:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/maste
 Patch287:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0028-revert-arm64-dts-allwinner-a64-Add-I2S2-node.patch
 Patch288:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-Bluetooth-Add-new-quirk-for-broken-local-ext-features.patch
 Patch289:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-allwinner-a64-enable-Bluetooth-On-Pinebook.patch
-Patch290:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0005-dt-bindings-arm-sunxi-add-PineTab-Early-Adopter-edition.patch
+# FIXME verify this is 100% merged
+#Patch290:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0005-dt-bindings-arm-sunxi-add-PineTab-Early-Adopter-edition.patch
 
 # (tpg) patches taken from https://github.com/OpenMandrivaSoftware/os-image-builder/tree/master/device/rockchip/generic/kernel-patches
 Patch295:	add-board-orangepi-4.patch
@@ -403,21 +402,21 @@ Patch300:	general-emmc-hs400es-init-tweak.patch
 Patch301:	rk3399-add-sclk-i2sout-src-clock.patch
 
 # NTFS kernel patches
-# https://lore.kernel.org/lkml/20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com/
-# (when losing track of what the latest version is, google "PATCH v22" NTFS and increase the
+# https://lore.kernel.org/lkml/20210402155347.64594-1-almaz.alexandrovich@paragon-software.com/
+# (when losing track of what the latest version is, google "PATCH v26" NTFS and increase the
 # version number until nothing is found -- short of always keeping track of the mailing lists,
 # there doesn't seem to be a better way to always have the current version)
 # Versions > 19 require kernel 5.12+
-Patch350:	PATCH-v19-01-10-fs-ntfs3-Add-headers-and-misc-files.patch
-Patch351:	PATCH-v19-02-10-fs-ntfs3-Add-initialization-of-super-block.patch
-Patch352:	PATCH-v19-03-10-fs-ntfs3-Add-bitmap.patch
-Patch353:	PATCH-v19-04-10-fs-ntfs3-Add-file-operations-and-implementation.patch
-Patch354:	PATCH-v19-05-10-fs-ntfs3-Add-attrib-operations.patch
-Patch355:	PATCH-v19-06-10-fs-ntfs3-Add-compression.patch
-Patch356:	PATCH-v19-07-10-fs-ntfs3-Add-NTFS-journal.patch
-Patch357:	PATCH-v19-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
-Patch358:	PATCH-v19-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
-Patch359:	PATCH-v19-10-10-fs-ntfs3-Add-MAINTAINERS.patch
+Patch350:	PATCH-v26-01-10-fs-ntfs3-Add-headers-and-misc-files.patch
+Patch351:	PATCH-v26-02-10-fs-ntfs3-Add-initialization-of-super-block.patch
+Patch352:	PATCH-v26-03-10-fs-ntfs3-Add-bitmap.patch
+Patch353:	PATCH-v26-04-10-fs-ntfs3-Add-file-operations-and-implementation.patch
+Patch354:	PATCH-v26-05-10-fs-ntfs3-Add-attrib-operations.patch
+Patch355:	PATCH-v26-06-10-fs-ntfs3-Add-compression.patch
+Patch356:	PATCH-v26-07-10-fs-ntfs3-Add-NTFS-journal.patch
+Patch357:	PATCH-v26-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
+Patch358:	PATCH-v26-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
+Patch359:	PATCH-v26-10-10-fs-ntfs3-Add-MAINTAINERS.patch
 
 # Bootsplash support
 # based on https://gitlab.manjaro.org/packages/core/linux511/-/tree/master
@@ -1126,6 +1125,7 @@ clangify() {
 		-e '/^CONFIG_LD_VERSION=/d' \
 		-e '/^CONFIG_LD_IS_LLD=/d' \
 		-e '/^CONFIG_GCC_PLUGINS=/d' \
+		-e '/^CONFIG_UNWINDER_ORC=/d' \
 		"$1"
 	cat >>"$1" <<'EOF'
 CONFIG_CC_IS_CLANG=y
@@ -1137,6 +1137,8 @@ CONFIG_INIT_STACK_NONE=y
 
 # CONFIG_KCSAN is not set
 # CONFIG_SHADOW_CALL_STACK is not set
+# CONFIG_UNWINDER_ORC is not set
+CONFIG_UNWINDER_FRAME_POINTER=y
 EOF
 }
 

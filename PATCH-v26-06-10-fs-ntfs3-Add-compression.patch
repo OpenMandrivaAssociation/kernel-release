@@ -3,39 +3,38 @@ Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4081C433E0
-	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:10:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B38ABC433ED
+	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3002F64DBD
-	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:10:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6AA16610CC
+	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbhA1JK1 (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Thu, 28 Jan 2021 04:10:27 -0500
-Received: from relayfre-01.paragon-software.com ([176.12.100.13]:47882 "EHLO
+        id S236411AbhDBPy0 (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Fri, 2 Apr 2021 11:54:26 -0400
+Received: from relayfre-01.paragon-software.com ([176.12.100.13]:47834 "EHLO
         relayfre-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231838AbhA1JGR (ORCPT
+        by vger.kernel.org with ESMTP id S236045AbhDBPx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jan 2021 04:06:17 -0500
+        Fri, 2 Apr 2021 11:53:58 -0400
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 5F00D1F86;
-        Thu, 28 Jan 2021 12:05:04 +0300 (MSK)
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 97E801D79;
+        Fri,  2 Apr 2021 18:53:54 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1611824704;
-        bh=5MrskzEWYdIQwUYeFlQxfNZPXnrbm3pUehgrJmesp60=;
+        d=paragon-software.com; s=mail; t=1617378834;
+        bh=xPk1pj72lwpo61MvinyFCH3352ZDbC5qyAuqdqZnPb8=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=AGRMQqHucj3mCSB+HqLRrXGT36SNErR2OjzN3UvOh2Dyg9LPoqIhFUUldg9oC/6SU
-         ZV+5B3qe05uPZpCFuU1EZMRs9TnIDAEEMDySMwOm5SZ608THSm6ljkTMYgnN70KDi7
-         quKZsWMbTteMC/ZSIFZuiG/e/xbzk3NJseQ/8DsA=
+        b=YkJXypUGQMSwEESiv2kiehC7Fy646afMf6mkDpekxSzVt+4oBMx5h4PeF5nfE6eh3
+         dWSafoVd1dNi/wjXEnM34b6P04mBkC0haWOjaHlUUUNMdNjPPuv8IW3NQwSt2ilP4e
+         K+cR/2IuekSf8g/BgTq92vLttZnqntijatkISlZs=
 Received: from fsd-lkpg.ufsd.paragon-software.com (172.30.114.105) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Thu, 28 Jan 2021 12:05:03 +0300
+ 15.1.2176.2; Fri, 2 Apr 2021 18:53:53 +0300
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 To:     <linux-fsdevel@vger.kernel.org>
 CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
@@ -44,14 +43,15 @@ CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
         <mark@harmstone.com>, <nborisov@suse.com>,
         <linux-ntfs-dev@lists.sourceforge.net>, <anton@tuxera.com>,
         <dan.carpenter@oracle.com>, <hch@lst.de>, <ebiggers@kernel.org>,
-        <andy.lavr@gmail.com>,
+        <andy.lavr@gmail.com>, <kari.argillander@gmail.com>,
+        <oleksandr@natalenko.name>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH v19 06/10] fs/ntfs3: Add compression
-Date:   Thu, 28 Jan 2021 12:04:51 +0300
-Message-ID: <20210128090455.3576502-7-almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH v26 06/10] fs/ntfs3: Add compression
+Date:   Fri, 2 Apr 2021 18:53:43 +0300
+Message-ID: <20210402155347.64594-7-almaz.alexandrovich@paragon-software.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
-References: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
+References: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -61,7 +61,7 @@ X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Archived-At: <https://lore.kernel.org/lkml/20210128090455.3576502-7-almaz.alexandrovich@paragon-software.com/>
+Archived-At: <https://lore.kernel.org/lkml/20210402155347.64594-7-almaz.alexandrovich@paragon-software.com/>
 List-Archive: <https://lore.kernel.org/lkml/>
 List-Post: <mailto:linux-kernel@vger.kernel.org>
 
@@ -92,7 +92,7 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
 diff --git a/fs/ntfs3/lib/decompress_common.c b/fs/ntfs3/lib/decompress_common.c
 new file mode 100644
-index 000000000000..83c9e93aea77
+index 000000000..83c9e93ae
 --- /dev/null
 +++ b/fs/ntfs3/lib/decompress_common.c
 @@ -0,0 +1,332 @@
@@ -430,7 +430,7 @@ index 000000000000..83c9e93aea77
 +}
 diff --git a/fs/ntfs3/lib/decompress_common.h b/fs/ntfs3/lib/decompress_common.h
 new file mode 100644
-index 000000000000..66297f398403
+index 000000000..66297f398
 --- /dev/null
 +++ b/fs/ntfs3/lib/decompress_common.h
 @@ -0,0 +1,352 @@
@@ -788,7 +788,7 @@ index 000000000000..66297f398403
 +}
 diff --git a/fs/ntfs3/lib/lib.h b/fs/ntfs3/lib/lib.h
 new file mode 100644
-index 000000000000..f508fbad2e71
+index 000000000..f508fbad2
 --- /dev/null
 +++ b/fs/ntfs3/lib/lib.h
 @@ -0,0 +1,26 @@
@@ -820,7 +820,7 @@ index 000000000000..f508fbad2e71
 +		   size_t uncompressed_size);
 diff --git a/fs/ntfs3/lib/lzx_decompress.c b/fs/ntfs3/lib/lzx_decompress.c
 new file mode 100644
-index 000000000000..77a381a693d1
+index 000000000..77a381a69
 --- /dev/null
 +++ b/fs/ntfs3/lib/lzx_decompress.c
 @@ -0,0 +1,683 @@
@@ -1509,7 +1509,7 @@ index 000000000000..77a381a693d1
 +}
 diff --git a/fs/ntfs3/lib/xpress_decompress.c b/fs/ntfs3/lib/xpress_decompress.c
 new file mode 100644
-index 000000000000..3d98f36a981e
+index 000000000..3d98f36a9
 --- /dev/null
 +++ b/fs/ntfs3/lib/xpress_decompress.c
 @@ -0,0 +1,155 @@
@@ -1670,14 +1670,14 @@ index 000000000000..3d98f36a981e
 +}
 diff --git a/fs/ntfs3/lznt.c b/fs/ntfs3/lznt.c
 new file mode 100644
-index 000000000000..73dc108c3204
+index 000000000..ead9ab7d6
 --- /dev/null
 +++ b/fs/ntfs3/lznt.c
 @@ -0,0 +1,452 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + */
 +#include <linux/blkdev.h>
@@ -1970,8 +1970,8 @@ index 000000000000..73dc108c3204
 + */
 +struct lznt *get_lznt_ctx(int level)
 +{
-+	struct lznt *r = ntfs_zalloc(level ? offsetof(struct lznt, hash) :
-+					     sizeof(struct lznt));
++	struct lznt *r = ntfs_zalloc(level ? offsetof(struct lznt, hash)
++					   : sizeof(struct lznt));
 +
 +	if (r)
 +		r->std = !level;
@@ -2067,9 +2067,9 @@ index 000000000000..73dc108c3204
 +			unc_use = err;
 +		} else {
 +			/* This chunk does not contain compressed data */
-+			unc_use = unc_chunk + LZNT_CHUNK_SIZE > unc_end ?
-+					  unc_end - unc_chunk :
-+					  LZNT_CHUNK_SIZE;
++			unc_use = unc_chunk + LZNT_CHUNK_SIZE > unc_end
++					  ? unc_end - unc_chunk
++					  : LZNT_CHUNK_SIZE;
 +
 +			if (cmpr_chunk + sizeof(chunk_hdr) + unc_use >
 +			    cmpr_end) {

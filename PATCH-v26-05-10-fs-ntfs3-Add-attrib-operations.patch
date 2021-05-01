@@ -3,38 +3,38 @@ Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30FDFC433E0
-	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:09:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81B67C433B4
+	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF97D64DDC
-	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:09:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3FCE261164
+	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232253AbhA1JJm (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Thu, 28 Jan 2021 04:09:42 -0500
-Received: from relayfre-01.paragon-software.com ([176.12.100.13]:47856 "EHLO
-        relayfre-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231819AbhA1JGP (ORCPT
+        id S236429AbhDBPyK (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Fri, 2 Apr 2021 11:54:10 -0400
+Received: from relaydlg-01.paragon-software.com ([81.5.88.159]:44619 "EHLO
+        relaydlg-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235797AbhDBPx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jan 2021 04:06:15 -0500
+        Fri, 2 Apr 2021 11:53:57 -0400
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 39F661F7F;
-        Thu, 28 Jan 2021 12:05:04 +0300 (MSK)
+        by relaydlg-01.paragon-software.com (Postfix) with ESMTPS id 42E7B8220C;
+        Fri,  2 Apr 2021 18:53:54 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1611824704;
-        bh=nApD0MTUPm9F7X0wj1p0Lp4uizCUF/vwXbfNSdBLhhQ=;
+        d=paragon-software.com; s=mail; t=1617378834;
+        bh=RmNNWWM4dbR8Wvita4eEJsm9CW+bEv0iXTZtSy7fuuM=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=P3Sg7F8hfmgGN5Bv3FeWjtbCB2wp/4MQsu3lmH0OULMYwgKfvy3q6ljYvRV3+TgLG
-         UWlEpK+8us/Wil3KElWENDiZGMSUd7jAzSnRzAA1HQJ17Vcv4rgSa63WLv0SvRzylt
-         4cObr5f4f8AU214EOGLzZL4pwBpvFyDyzTImbdx8=
+        b=X+H9rAyjfgxvN5T2StLxyS0fPfuVMsxUshaE3sM0aGfnicctAULXqdOILs8CUPXBp
+         7LBAyMLe4rXjBq4kLMdcWar0b0xdxWRsMlaJ7WFLnAi29EeIUNcZxawu/WS48hI1hR
+         M078RS2GXopy3C/5cjzl+b/SxEFr7f9E3VyxYW8c=
 Received: from fsd-lkpg.ufsd.paragon-software.com (172.30.114.105) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Thu, 28 Jan 2021 12:05:03 +0300
+ 15.1.2176.2; Fri, 2 Apr 2021 18:53:53 +0300
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 To:     <linux-fsdevel@vger.kernel.org>
 CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
@@ -43,14 +43,15 @@ CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
         <mark@harmstone.com>, <nborisov@suse.com>,
         <linux-ntfs-dev@lists.sourceforge.net>, <anton@tuxera.com>,
         <dan.carpenter@oracle.com>, <hch@lst.de>, <ebiggers@kernel.org>,
-        <andy.lavr@gmail.com>,
+        <andy.lavr@gmail.com>, <kari.argillander@gmail.com>,
+        <oleksandr@natalenko.name>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH v19 05/10] fs/ntfs3: Add attrib operations
-Date:   Thu, 28 Jan 2021 12:04:50 +0300
-Message-ID: <20210128090455.3576502-6-almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH v26 05/10] fs/ntfs3: Add attrib operations
+Date:   Fri, 2 Apr 2021 18:53:42 +0300
+Message-ID: <20210402155347.64594-6-almaz.alexandrovich@paragon-software.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
-References: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
+References: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -60,7 +61,7 @@ X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Archived-At: <https://lore.kernel.org/lkml/20210128090455.3576502-6-almaz.alexandrovich@paragon-software.com/>
+Archived-At: <https://lore.kernel.org/lkml/20210402155347.64594-6-almaz.alexandrovich@paragon-software.com/>
 List-Archive: <https://lore.kernel.org/lkml/>
 List-Post: <mailto:linux-kernel@vger.kernel.org>
 
@@ -68,24 +69,24 @@ This adds attrib operations
 
 Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 ---
- fs/ntfs3/attrib.c   | 2085 +++++++++++++++++++++++++++++++++++++++++++
- fs/ntfs3/attrlist.c |  457 ++++++++++
- fs/ntfs3/xattr.c    | 1072 ++++++++++++++++++++++
- 3 files changed, 3614 insertions(+)
+ fs/ntfs3/attrib.c   | 2082 +++++++++++++++++++++++++++++++++++++++++++
+ fs/ntfs3/attrlist.c |  456 ++++++++++
+ fs/ntfs3/xattr.c    | 1046 ++++++++++++++++++++++
+ 3 files changed, 3584 insertions(+)
  create mode 100644 fs/ntfs3/attrib.c
  create mode 100644 fs/ntfs3/attrlist.c
  create mode 100644 fs/ntfs3/xattr.c
 
 diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
 new file mode 100644
-index 000000000000..79360d94498d
+index 000000000..bca85e7b6
 --- /dev/null
 +++ b/fs/ntfs3/attrib.c
-@@ -0,0 +1,2085 @@
+@@ -0,0 +1,2082 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + * TODO: merge attr_set_size/attr_data_get_block/attr_allocate_frame?
 + */
@@ -542,12 +543,12 @@ index 000000000000..79360d94498d
 +	is_ext = is_attr_ext(attr_b);
 +
 +again_1:
++	align = sbi->cluster_size;
++
 +	if (is_ext) {
-+		align = 1u << (attr_b->nres.c_unit + cluster_bits);
++		align <<= attr_b->nres.c_unit;
 +		if (is_attr_sparsed(attr_b))
 +			keep_prealloc = false;
-+	} else {
-+		align = sbi->cluster_size;
 +	}
 +
 +	old_valid = le64_to_cpu(attr_b->nres.valid_size);
@@ -663,8 +664,8 @@ index 000000000000..79360d94498d
 +			err = attr_allocate_clusters(
 +				sbi, run, vcn, lcn, to_allocate, &pre_alloc,
 +				is_mft ? ALLOCATE_MFT : 0, &alen,
-+				is_mft ? 0 :
-+					 (sbi->record_size -
++				is_mft ? 0
++				       : (sbi->record_size -
 +					  le32_to_cpu(rec->used) + 8) /
 +							 3 +
 +						 1,
@@ -915,7 +916,7 @@ index 000000000000..79360d94498d
 +	struct ATTR_LIST_ENTRY *le, *le_b;
 +	struct mft_inode *mi, *mi_b;
 +	CLST hint, svcn, to_alloc, evcn1, next_svcn, asize, end;
-+	u64 new_size, total_size;
++	u64 total_size;
 +	u32 clst_per_frame;
 +	bool ok;
 +
@@ -939,7 +940,6 @@ index 000000000000..79360d94498d
 +
 +	sbi = ni->mi.sbi;
 +	cluster_bits = sbi->cluster_bits;
-+	new_size = ((u64)vcn + clen) << cluster_bits;
 +
 +	ni_lock(ni);
 +	down_write(&ni->file.run_lock);
@@ -1007,7 +1007,6 @@ index 000000000000..79360d94498d
 +
 +		if (ok && clen > *len) {
 +			clen = *len;
-+			new_size = ((u64)vcn + clen) << cluster_bits;
 +			to_alloc = (clen + clst_per_frame - 1) &
 +				   ~(clst_per_frame - 1);
 +		}
@@ -1804,17 +1803,16 @@ index 000000000000..79360d94498d
 +
 +	if (is_attr_ext(attr_b)) {
 +		total_size = le64_to_cpu(attr_b->nres.total_size);
-+		mask = (1u << (attr_b->nres.c_unit + sbi->cluster_bits)) - 1;
++		mask = (sbi->cluster_size << attr_b->nres.c_unit) - 1;
 +	} else {
 +		total_size = alloc_size;
 +		mask = sbi->cluster_mask;
 +	}
 +
-+	if (vbo & mask)
++	if ((vbo & mask) || (bytes & mask)) {
++		/* allow to collapse only cluster aligned ranges */
 +		return -EINVAL;
-+
-+	if (bytes & mask)
-+		return -EINVAL;
++	}
 +
 +	if (vbo > data_size)
 +		return -EINVAL;
@@ -2169,14 +2167,14 @@ index 000000000000..79360d94498d
 +}
 diff --git a/fs/ntfs3/attrlist.c b/fs/ntfs3/attrlist.c
 new file mode 100644
-index 000000000000..4a97e259d377
+index 000000000..ea561361b
 --- /dev/null
 +++ b/fs/ntfs3/attrlist.c
-@@ -0,0 +1,457 @@
+@@ -0,0 +1,456 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + */
 +
@@ -2276,8 +2274,8 @@ index 000000000000..4a97e259d377
 +/*
 + * al_enumerate
 + *
-+ * Returns the next list le
-+ * if le is NULL then returns the first le
++ * Returns the next list 'le'
++ * if 'le' is NULL then returns the first 'le'
 + */
 +struct ATTR_LIST_ENTRY *al_enumerate(struct ntfs_inode *ni,
 +				     struct ATTR_LIST_ENTRY *le)
@@ -2290,7 +2288,7 @@ index 000000000000..4a97e259d377
 +	} else {
 +		sz = le16_to_cpu(le->size);
 +		if (sz < sizeof(struct ATTR_LIST_ENTRY)) {
-+			/* Impossible 'cause we should not return such le */
++			/* Impossible 'cause we should not return such 'le' */
 +			return NULL;
 +		}
 +		le = Add2Ptr(le, sz);
@@ -2305,7 +2303,7 @@ index 000000000000..4a97e259d377
 +
 +	sz = le16_to_cpu(le->size);
 +
-+	/* Check le for errors */
++	/* Check 'le' for errors */
 +	if (sz < sizeof(struct ATTR_LIST_ENTRY) ||
 +	    off + sz > ni->attr_list.size ||
 +	    sz < le->name_off + le->name_len * sizeof(short)) {
@@ -2318,7 +2316,7 @@ index 000000000000..4a97e259d377
 +/*
 + * al_find_le
 + *
-+ * finds the first le in the list which matches type, name and vcn
++ * finds the first 'le' in the list which matches type, name and vcn
 + * Returns NULL if not found
 + */
 +struct ATTR_LIST_ENTRY *al_find_le(struct ntfs_inode *ni,
@@ -2334,7 +2332,7 @@ index 000000000000..4a97e259d377
 +/*
 + * al_find_ex
 + *
-+ * finds the first le in the list which matches type, name and vcn
++ * finds the first 'le' in the list which matches type, name and vcn
 + * Returns NULL if not found
 + */
 +struct ATTR_LIST_ENTRY *al_find_ex(struct ntfs_inode *ni,
@@ -2452,15 +2450,14 @@ index 000000000000..4a97e259d377
 +	typeof(ni->attr_list) *al = &ni->attr_list;
 +
 +	/*
-+	 * Compute the size of the new le and the new length of the
-+	 * list with al le added.
++	 * Compute the size of the new 'le'
 +	 */
 +	sz = le_size(name_len);
 +	new_size = al->size + sz;
 +	asize = al_aligned(al->size);
 +	new_asize = al_aligned(new_size);
 +
-+	/* Scan forward to the point at which the new le should be inserted. */
++	/* Scan forward to the point at which the new 'le' should be inserted. */
 +	le = al_find_le_to_insert(ni, type, name, name_len, svcn);
 +	off = PtrOffset(al->le, le);
 +
@@ -2524,7 +2521,7 @@ index 000000000000..4a97e259d377
 +	if (!al_is_valid_le(ni, le))
 +		return false;
 +
-+	/* Save on stack the size of le */
++	/* Save on stack the size of 'le' */
 +	size = le16_to_cpu(le->size);
 +	off = PtrOffset(al->le, le);
 +
@@ -2539,7 +2536,7 @@ index 000000000000..4a97e259d377
 +/*
 + * al_delete_le
 + *
-+ * deletes from the list the first le which matches its parameters.
++ * deletes from the list the first 'le' which matches its parameters.
 + */
 +bool al_delete_le(struct ntfs_inode *ni, enum ATTR_TYPE type, CLST vcn,
 +		  const __le16 *name, size_t name_len,
@@ -2550,7 +2547,7 @@ index 000000000000..4a97e259d377
 +	size_t off;
 +	typeof(ni->attr_list) *al = &ni->attr_list;
 +
-+	/* Scan forward to the first le that matches the input */
++	/* Scan forward to the first 'le' that matches the input */
 +	le = al_find_ex(ni, NULL, type, name, name_len, &vcn);
 +	if (!le)
 +		return false;
@@ -2581,9 +2578,9 @@ index 000000000000..4a97e259d377
 +		goto next;
 +	}
 +
-+	/* Save on stack the size of le */
++	/* Save on stack the size of 'le' */
 +	size = le16_to_cpu(le->size);
-+	/* Delete the le. */
++	/* Delete 'le'. */
 +	memmove(le, Add2Ptr(le, size), al->size - (off + size));
 +
 +	al->size -= size;
@@ -2632,14 +2629,14 @@ index 000000000000..4a97e259d377
 +}
 diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
 new file mode 100644
-index 000000000000..cc69295eb9cf
+index 000000000..759df507c
 --- /dev/null
 +++ b/fs/ntfs3/xattr.c
-@@ -0,0 +1,1072 @@
+@@ -0,0 +1,1046 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + */
 +
@@ -2659,21 +2656,21 @@ index 000000000000..cc69295eb9cf
 +#define SYSTEM_DOS_ATTRIB    "system.dos_attrib"
 +#define SYSTEM_NTFS_ATTRIB   "system.ntfs_attrib"
 +#define SYSTEM_NTFS_SECURITY "system.ntfs_security"
-+#define USER_DOSATTRIB       "user.DOSATTRIB"
 +// clang-format on
 +
 +static inline size_t unpacked_ea_size(const struct EA_FULL *ea)
 +{
-+	return !ea->size ? DwordAlign(offsetof(struct EA_FULL, name) + 1 +
-+				      ea->name_len + le16_to_cpu(ea->elength)) :
-+			   le32_to_cpu(ea->size);
++	return ea->size ? le32_to_cpu(ea->size)
++			: DwordAlign(struct_size(
++				  ea, name,
++				  1 + ea->name_len + le16_to_cpu(ea->elength)));
 +}
 +
 +static inline size_t packed_ea_size(const struct EA_FULL *ea)
 +{
-+	return offsetof(struct EA_FULL, name) + 1 -
-+	       offsetof(struct EA_FULL, flags) + ea->name_len +
-+	       le16_to_cpu(ea->elength);
++	return struct_size(ea, name,
++			   1 + ea->name_len + le16_to_cpu(ea->elength)) -
++	       offsetof(struct EA_FULL, flags);
 +}
 +
 +/*
@@ -2741,8 +2738,11 @@ index 000000000000..cc69295eb9cf
 +
 +	/* Check Ea limit */
 +	size = le32_to_cpu((*info)->size);
-+	if (size > MAX_EA_DATA_SIZE || size + add_bytes > MAX_EA_DATA_SIZE)
-+		return -EINVAL;
++	if (size > ni->mi.sbi->ea_max_size)
++		return -EFBIG;
++
++	if (attr_size(attr_ea) > ni->mi.sbi->ea_max_size)
++		return -EFBIG;
 +
 +	/* Allocate memory for packed Ea */
 +	ea_p = ntfs_malloc(size + add_bytes);
@@ -2783,21 +2783,23 @@ index 000000000000..cc69295eb9cf
 +}
 +
 +/*
-+ * ntfs_listxattr_hlp
++ * ntfs_list_ea
 + *
 + * copy a list of xattrs names into the buffer
 + * provided, or compute the buffer size required
++ *
++ * Returns a negative error number on failure, or the number of bytes
++ * used / required on success.
 + */
-+static int ntfs_listxattr_hlp(struct ntfs_inode *ni, char *buffer,
-+			      size_t bytes_per_buffer, size_t *bytes)
++static ssize_t ntfs_list_ea(struct ntfs_inode *ni, char *buffer,
++			    size_t bytes_per_buffer)
 +{
 +	const struct EA_INFO *info;
 +	struct EA_FULL *ea_all = NULL;
 +	const struct EA_FULL *ea;
 +	u32 off, size;
 +	int err;
-+
-+	*bytes = 0;
++	size_t ret;
 +
 +	err = ntfs_read_ea(ni, &ea_all, 0, &info);
 +	if (err)
@@ -2809,42 +2811,44 @@ index 000000000000..cc69295eb9cf
 +	size = le32_to_cpu(info->size);
 +
 +	/* Enumerate all xattrs */
-+	for (off = 0; off < size; off += unpacked_ea_size(ea)) {
++	for (ret = 0, off = 0; off < size; off += unpacked_ea_size(ea)) {
 +		ea = Add2Ptr(ea_all, off);
 +
 +		if (buffer) {
-+			if (*bytes + ea->name_len + 1 > bytes_per_buffer) {
++			if (ret + ea->name_len + 1 > bytes_per_buffer) {
 +				err = -ERANGE;
 +				goto out;
 +			}
 +
-+			memcpy(buffer + *bytes, ea->name, ea->name_len);
-+			buffer[*bytes + ea->name_len] = 0;
++			memcpy(buffer + ret, ea->name, ea->name_len);
++			buffer[ret + ea->name_len] = 0;
 +		}
 +
-+		*bytes += ea->name_len + 1;
++		ret += ea->name_len + 1;
 +	}
 +
 +out:
 +	ntfs_free(ea_all);
-+	return err;
++	return err ? err : ret;
 +}
 +
-+/*
-+ * ntfs_get_ea
-+ *
-+ * reads xattr
-+ */
-+static int ntfs_get_ea(struct ntfs_inode *ni, const char *name, size_t name_len,
-+		       void *buffer, size_t bytes_per_buffer, u32 *len)
++static int ntfs_get_ea(struct inode *inode, const char *name, size_t name_len,
++		       void *buffer, size_t size, size_t *required)
 +{
++	struct ntfs_inode *ni = ntfs_i(inode);
 +	const struct EA_INFO *info;
 +	struct EA_FULL *ea_all = NULL;
 +	const struct EA_FULL *ea;
-+	u32 off;
++	u32 off, len;
 +	int err;
 +
-+	*len = 0;
++	if (!(ni->ni_flags & NI_FLAG_EA))
++		return -ENODATA;
++
++	if (!required)
++		ni_lock(ni);
++
++	len = 0;
 +
 +	if (name_len > 255) {
 +		err = -ENAMETOOLONG;
@@ -2865,54 +2869,33 @@ index 000000000000..cc69295eb9cf
 +	}
 +	ea = Add2Ptr(ea_all, off);
 +
-+	*len = le16_to_cpu(ea->elength);
++	len = le16_to_cpu(ea->elength);
 +	if (!buffer) {
 +		err = 0;
 +		goto out;
 +	}
 +
-+	if (*len > bytes_per_buffer) {
++	if (len > size) {
 +		err = -ERANGE;
++		if (required)
++			*required = len;
 +		goto out;
 +	}
-+	memcpy(buffer, ea->name + ea->name_len + 1, *len);
++
++	memcpy(buffer, ea->name + ea->name_len + 1, len);
 +	err = 0;
 +
 +out:
 +	ntfs_free(ea_all);
-+
-+	return err;
-+}
-+
-+static noinline int ntfs_getxattr_hlp(struct inode *inode, const char *name,
-+				      void *value, size_t size,
-+				      size_t *required)
-+{
-+	struct ntfs_inode *ni = ntfs_i(inode);
-+	int err;
-+	u32 len;
-+
-+	if (!(ni->ni_flags & NI_FLAG_EA))
-+		return -ENODATA;
-+
-+	if (!required)
-+		ni_lock(ni);
-+
-+	err = ntfs_get_ea(ni, name, strlen(name), value, size, &len);
-+	if (!err)
-+		err = len;
-+	else if (-ERANGE == err && required)
-+		*required = len;
-+
 +	if (!required)
 +		ni_unlock(ni);
 +
-+	return err;
++	return err ? err : len;
 +}
 +
 +static noinline int ntfs_set_ea(struct inode *inode, const char *name,
-+				const void *value, size_t val_size, int flags,
-+				int locked)
++				size_t name_len, const void *value,
++				size_t val_size, int flags, int locked)
 +{
 +	struct ntfs_inode *ni = ntfs_i(inode);
 +	struct ntfs_sb_info *sbi = ni->mi.sbi;
@@ -2921,7 +2904,7 @@ index 000000000000..cc69295eb9cf
 +	const struct EA_INFO *info;
 +	struct EA_FULL *new_ea;
 +	struct EA_FULL *ea_all = NULL;
-+	size_t name_len, add;
++	size_t add, new_pack;
 +	u32 off, size;
 +	__le16 size_pack;
 +	struct ATTRIB *attr;
@@ -2935,15 +2918,13 @@ index 000000000000..cc69295eb9cf
 +		ni_lock(ni);
 +
 +	run_init(&ea_run);
-+	name_len = strlen(name);
 +
 +	if (name_len > 255) {
 +		err = -ENAMETOOLONG;
 +		goto out;
 +	}
 +
-+	add = DwordAlign(offsetof(struct EA_FULL, name) + 1 + name_len +
-+			 val_size);
++	add = DwordAlign(struct_size(ea_all, name, 1 + name_len + val_size));
 +
 +	err = ntfs_read_ea(ni, &ea_all, add, &info);
 +	if (err)
@@ -3010,9 +2991,21 @@ index 000000000000..cc69295eb9cf
 +	memcpy(new_ea->name, name, name_len);
 +	new_ea->name[name_len] = 0;
 +	memcpy(new_ea->name + name_len + 1, value, val_size);
++	new_pack = le16_to_cpu(ea_info.size_pack) + packed_ea_size(new_ea);
 +
-+	le16_add_cpu(&ea_info.size_pack, packed_ea_size(new_ea));
++	/* should fit into 16 bits */
++	if (new_pack > 0xffff) {
++		err = -EFBIG; // -EINVAL?
++		goto out;
++	}
++	ea_info.size_pack = cpu_to_le16(new_pack);
++
++	/* new size of ATTR_EA */
 +	size += add;
++	if (size > sbi->ea_max_size) {
++		err = -EFBIG; // -EINVAL?
++		goto out;
++	}
 +	ea_info.size = cpu_to_le32(size);
 +
 +update_ea:
@@ -3088,17 +3081,15 @@ index 000000000000..cc69295eb9cf
 +		mi->dirty = true;
 +	}
 +
++	/* Check if we delete the last xattr */
++	if (size)
++		ni->ni_flags |= NI_FLAG_EA;
++	else
++		ni->ni_flags &= ~NI_FLAG_EA;
++
 +	if (ea_info.size_pack != size_pack)
 +		ni->ni_flags |= NI_FLAG_UPDATE_PARENT;
 +	mark_inode_dirty(&ni->vfs_inode);
-+
-+	/* Check if we delete the last xattr */
-+	if (val_size || flags != XATTR_REPLACE ||
-+	    ntfs_listxattr_hlp(ni, NULL, 0, &val_size) || val_size) {
-+		ni->ni_flags |= NI_FLAG_EA;
-+	} else {
-+		ni->ni_flags &= ~NI_FLAG_EA;
-+	}
 +
 +out:
 +	if (!locked)
@@ -3117,11 +3108,13 @@ index 000000000000..cc69295eb9cf
 +		kfree(acl);
 +}
 +
-+static struct posix_acl *ntfs_get_acl_ex(struct inode *inode, int type,
++static struct posix_acl *ntfs_get_acl_ex(struct user_namespace *mnt_userns,
++					 struct inode *inode, int type,
 +					 int locked)
 +{
 +	struct ntfs_inode *ni = ntfs_i(inode);
 +	const char *name;
++	size_t name_len;
 +	struct posix_acl *acl;
 +	size_t req;
 +	int err;
@@ -3133,20 +3126,25 @@ index 000000000000..cc69295eb9cf
 +		return ERR_PTR(-ENOMEM);
 +
 +	/* Possible values of 'type' was already checked above */
-+	name = type == ACL_TYPE_ACCESS ? XATTR_NAME_POSIX_ACL_ACCESS :
-+					 XATTR_NAME_POSIX_ACL_DEFAULT;
++	if (type == ACL_TYPE_ACCESS) {
++		name = XATTR_NAME_POSIX_ACL_ACCESS;
++		name_len = sizeof(XATTR_NAME_POSIX_ACL_ACCESS) - 1;
++	} else {
++		name = XATTR_NAME_POSIX_ACL_DEFAULT;
++		name_len = sizeof(XATTR_NAME_POSIX_ACL_DEFAULT) - 1;
++	}
 +
 +	if (!locked)
 +		ni_lock(ni);
 +
-+	err = ntfs_getxattr_hlp(inode, name, buf, PATH_MAX, &req);
++	err = ntfs_get_ea(inode, name, name_len, buf, PATH_MAX, &req);
 +
 +	if (!locked)
 +		ni_unlock(ni);
 +
 +	/* Translate extended attribute to acl */
 +	if (err > 0) {
-+		acl = posix_acl_from_xattr(&init_user_ns, buf, err);
++		acl = posix_acl_from_xattr(mnt_userns, buf, err);
 +		if (!IS_ERR(acl))
 +			set_cached_acl(inode, type, acl);
 +	} else {
@@ -3165,14 +3163,16 @@ index 000000000000..cc69295eb9cf
 + */
 +struct posix_acl *ntfs_get_acl(struct inode *inode, int type)
 +{
-+	return ntfs_get_acl_ex(inode, type, 0);
++	/* TODO: init_user_ns? */
++	return ntfs_get_acl_ex(&init_user_ns, inode, type, 0);
 +}
 +
-+static noinline int ntfs_set_acl_ex(struct inode *inode, struct posix_acl *acl,
++static noinline int ntfs_set_acl_ex(struct user_namespace *mnt_userns,
++				    struct inode *inode, struct posix_acl *acl,
 +				    int type, int locked)
 +{
 +	const char *name;
-+	size_t size;
++	size_t size, name_len;
 +	void *value = NULL;
 +	int err = 0;
 +
@@ -3203,12 +3203,14 @@ index 000000000000..cc69295eb9cf
 +			}
 +		}
 +		name = XATTR_NAME_POSIX_ACL_ACCESS;
++		name_len = sizeof(XATTR_NAME_POSIX_ACL_ACCESS) - 1;
 +		break;
 +
 +	case ACL_TYPE_DEFAULT:
 +		if (!S_ISDIR(inode->i_mode))
 +			return acl ? -EACCES : 0;
 +		name = XATTR_NAME_POSIX_ACL_DEFAULT;
++		name_len = sizeof(XATTR_NAME_POSIX_ACL_DEFAULT) - 1;
 +		break;
 +
 +	default:
@@ -3223,11 +3225,11 @@ index 000000000000..cc69295eb9cf
 +	if (!value)
 +		return -ENOMEM;
 +
-+	err = posix_acl_to_xattr(&init_user_ns, acl, value, size);
++	err = posix_acl_to_xattr(mnt_userns, acl, value, size);
 +	if (err)
 +		goto out;
 +
-+	err = ntfs_set_ea(inode, name, value, size, 0, locked);
++	err = ntfs_set_ea(inode, name, name_len, value, size, 0, locked);
 +	if (err)
 +		goto out;
 +
@@ -3247,19 +3249,20 @@ index 000000000000..cc69295eb9cf
 + *
 + * inode_operations::set_acl
 + */
-+int ntfs_set_acl(struct inode *inode, struct posix_acl *acl, int type)
++int ntfs_set_acl(struct user_namespace *mnt_userns, struct inode *inode,
++		 struct posix_acl *acl, int type)
 +{
-+	return ntfs_set_acl_ex(inode, acl, type, 0);
++	return ntfs_set_acl_ex(mnt_userns, inode, acl, type, 0);
 +}
 +
-+static int ntfs_xattr_get_acl(struct inode *inode, int type, void *buffer,
++static int ntfs_xattr_get_acl(struct user_namespace *mnt_userns,
++			      struct inode *inode, int type, void *buffer,
 +			      size_t size)
 +{
-+	struct super_block *sb = inode->i_sb;
 +	struct posix_acl *acl;
 +	int err;
 +
-+	if (!(sb->s_flags & SB_POSIXACL))
++	if (!(inode->i_sb->s_flags & SB_POSIXACL))
 +		return -EOPNOTSUPP;
 +
 +	acl = ntfs_get_acl(inode, type);
@@ -3269,39 +3272,39 @@ index 000000000000..cc69295eb9cf
 +	if (!acl)
 +		return -ENODATA;
 +
-+	err = posix_acl_to_xattr(&init_user_ns, acl, buffer, size);
++	err = posix_acl_to_xattr(mnt_userns, acl, buffer, size);
 +	ntfs_posix_acl_release(acl);
 +
 +	return err;
 +}
 +
-+static int ntfs_xattr_set_acl(struct inode *inode, int type, const void *value,
++static int ntfs_xattr_set_acl(struct user_namespace *mnt_userns,
++			      struct inode *inode, int type, const void *value,
 +			      size_t size)
 +{
-+	struct super_block *sb = inode->i_sb;
 +	struct posix_acl *acl;
 +	int err;
 +
-+	if (!(sb->s_flags & SB_POSIXACL))
++	if (!(inode->i_sb->s_flags & SB_POSIXACL))
 +		return -EOPNOTSUPP;
 +
-+	if (!inode_owner_or_capable(inode))
++	if (!inode_owner_or_capable(mnt_userns, inode))
 +		return -EPERM;
 +
 +	if (!value)
 +		return 0;
 +
-+	acl = posix_acl_from_xattr(&init_user_ns, value, size);
++	acl = posix_acl_from_xattr(mnt_userns, value, size);
 +	if (IS_ERR(acl))
 +		return PTR_ERR(acl);
 +
 +	if (acl) {
-+		err = posix_acl_valid(sb->s_user_ns, acl);
++		err = posix_acl_valid(mnt_userns, acl);
 +		if (err)
 +			goto release_and_out;
 +	}
 +
-+	err = ntfs_set_acl(inode, acl, type);
++	err = ntfs_set_acl(mnt_userns, inode, acl, type);
 +
 +release_and_out:
 +	ntfs_posix_acl_release(acl);
@@ -3311,7 +3314,8 @@ index 000000000000..cc69295eb9cf
 +/*
 + * Initialize the ACLs of a new inode. Called from ntfs_create_inode.
 + */
-+int ntfs_init_acl(struct inode *inode, struct inode *dir)
++int ntfs_init_acl(struct user_namespace *mnt_userns, struct inode *inode,
++		  struct inode *dir)
 +{
 +	struct posix_acl *default_acl, *acl;
 +	int err;
@@ -3322,7 +3326,7 @@ index 000000000000..cc69295eb9cf
 +	 */
 +	inode->i_default_acl = NULL;
 +
-+	default_acl = ntfs_get_acl_ex(dir, ACL_TYPE_DEFAULT, 1);
++	default_acl = ntfs_get_acl_ex(mnt_userns, dir, ACL_TYPE_DEFAULT, 1);
 +
 +	if (!default_acl || default_acl == ERR_PTR(-EOPNOTSUPP)) {
 +		inode->i_mode &= ~current_umask();
@@ -3350,12 +3354,14 @@ index 000000000000..cc69295eb9cf
 +	}
 +
 +	if (default_acl)
-+		err = ntfs_set_acl_ex(inode, default_acl, ACL_TYPE_DEFAULT, 1);
++		err = ntfs_set_acl_ex(mnt_userns, inode, default_acl,
++				      ACL_TYPE_DEFAULT, 1);
 +
 +	if (!acl)
 +		inode->i_acl = NULL;
 +	else if (!err)
-+		err = ntfs_set_acl_ex(inode, acl, ACL_TYPE_ACCESS, 1);
++		err = ntfs_set_acl_ex(mnt_userns, inode, acl, ACL_TYPE_ACCESS,
++				      1);
 +
 +	posix_acl_release(acl);
 +out1:
@@ -3371,7 +3377,7 @@ index 000000000000..cc69295eb9cf
 + *
 + * helper for 'ntfs3_setattr'
 + */
-+int ntfs_acl_chmod(struct inode *inode)
++int ntfs_acl_chmod(struct user_namespace *mnt_userns, struct inode *inode)
 +{
 +	struct super_block *sb = inode->i_sb;
 +
@@ -3381,7 +3387,7 @@ index 000000000000..cc69295eb9cf
 +	if (S_ISLNK(inode->i_mode))
 +		return -EOPNOTSUPP;
 +
-+	return posix_acl_chmod(inode, inode->i_mode);
++	return posix_acl_chmod(mnt_userns, inode, inode->i_mode);
 +}
 +
 +/*
@@ -3389,14 +3395,15 @@ index 000000000000..cc69295eb9cf
 + *
 + * inode_operations::permission
 + */
-+int ntfs_permission(struct inode *inode, int mask)
++int ntfs_permission(struct user_namespace *mnt_userns, struct inode *inode,
++		    int mask)
 +{
 +	if (ntfs_sb(inode->i_sb)->options.no_acs_rules) {
 +		/* "no access rules" mode - allow all changes */
 +		return 0;
 +	}
 +
-+	return generic_permission(inode, mask);
++	return generic_permission(mnt_userns, inode, mask);
 +}
 +
 +/*
@@ -3408,23 +3415,18 @@ index 000000000000..cc69295eb9cf
 +{
 +	struct inode *inode = d_inode(dentry);
 +	struct ntfs_inode *ni = ntfs_i(inode);
-+	ssize_t ret = -1;
-+	int err;
++	ssize_t ret;
 +
 +	if (!(ni->ni_flags & NI_FLAG_EA)) {
-+		ret = 0;
-+		goto out;
++		/* no xattr in file */
++		return 0;
 +	}
 +
 +	ni_lock(ni);
 +
-+	err = ntfs_listxattr_hlp(ni, buffer, size, (size_t *)&ret);
++	ret = ntfs_list_ea(ni, buffer, size);
 +
 +	ni_unlock(ni);
-+
-+	if (err)
-+		ret = err;
-+out:
 +
 +	return ret;
 +}
@@ -3462,21 +3464,6 @@ index 000000000000..cc69295eb9cf
 +		} else {
 +			err = sizeof(u32);
 +			*(u32 *)buffer = le32_to_cpu(ni->std_fa);
-+		}
-+		goto out;
-+	}
-+
-+	if (name_len == sizeof(USER_DOSATTRIB) - 1 &&
-+	    !memcmp(name, USER_DOSATTRIB, sizeof(USER_DOSATTRIB))) {
-+		/* user.DOSATTRIB */
-+		if (!buffer) {
-+			err = 5;
-+		} else if (size < 5) {
-+			err = -ENODATA;
-+		} else {
-+			err = sprintf((char *)buffer, "0x%x",
-+				      le32_to_cpu(ni->std_fa) & 0xff) +
-+			      1;
 +		}
 +		goto out;
 +	}
@@ -3528,17 +3515,18 @@ index 000000000000..cc69295eb9cf
 +	    (name_len == sizeof(XATTR_NAME_POSIX_ACL_DEFAULT) - 1 &&
 +	     !memcmp(name, XATTR_NAME_POSIX_ACL_DEFAULT,
 +		     sizeof(XATTR_NAME_POSIX_ACL_DEFAULT)))) {
++		/* TODO: init_user_ns? */
 +		err = ntfs_xattr_get_acl(
-+			inode,
-+			name_len == sizeof(XATTR_NAME_POSIX_ACL_ACCESS) - 1 ?
-+				ACL_TYPE_ACCESS :
-+				ACL_TYPE_DEFAULT,
++			&init_user_ns, inode,
++			name_len == sizeof(XATTR_NAME_POSIX_ACL_ACCESS) - 1
++				? ACL_TYPE_ACCESS
++				: ACL_TYPE_DEFAULT,
 +			buffer, size);
 +		goto out;
 +	}
 +#endif
 +	/* deal with ntfs extended attribute */
-+	err = ntfs_getxattr_hlp(inode, name, buffer, size, NULL);
++	err = ntfs_get_ea(inode, name, name_len, buffer, size, NULL);
 +
 +out:
 +	return err;
@@ -3550,6 +3538,7 @@ index 000000000000..cc69295eb9cf
 + * inode_operations::setxattr
 + */
 +static noinline int ntfs_setxattr(const struct xattr_handler *handler,
++				  struct user_namespace *mnt_userns,
 +				  struct dentry *de, struct inode *inode,
 +				  const char *name, const void *value,
 +				  size_t size, int flags)
@@ -3582,25 +3571,6 @@ index 000000000000..cc69295eb9cf
 +			if (err)
 +				goto out;
 +		}
-+		goto set_new_fa;
-+	}
-+
-+	if (name_len == sizeof(USER_DOSATTRIB) - 1 &&
-+	    !memcmp(name, USER_DOSATTRIB, sizeof(USER_DOSATTRIB))) {
-+		u32 attrib;
-+
-+		if (size < 4 || ((char *)value)[size - 1])
-+			goto out;
-+
-+		/*
-+		 * The input value must be string in form 0x%x with last zero
-+		 * This means that the 'size' must be 4, 5, ...
-+		 *  E.g: 0x1 - 4 bytes, 0x20 - 5 bytes
-+		 */
-+		if (sscanf((char *)value, "0x%x", &attrib) != 1)
-+			goto out;
-+
-+		new_fa = cpu_to_le32(attrib);
 +set_new_fa:
 +		/*
 +		 * Thanks Mark Harmstone:
@@ -3676,17 +3646,18 @@ index 000000000000..cc69295eb9cf
 +	    (name_len == sizeof(XATTR_NAME_POSIX_ACL_DEFAULT) - 1 &&
 +	     !memcmp(name, XATTR_NAME_POSIX_ACL_DEFAULT,
 +		     sizeof(XATTR_NAME_POSIX_ACL_DEFAULT)))) {
++		/* TODO: init_user_ns? */
 +		err = ntfs_xattr_set_acl(
-+			inode,
-+			name_len == sizeof(XATTR_NAME_POSIX_ACL_ACCESS) - 1 ?
-+				ACL_TYPE_ACCESS :
-+				ACL_TYPE_DEFAULT,
++			&init_user_ns, inode,
++			name_len == sizeof(XATTR_NAME_POSIX_ACL_ACCESS) - 1
++				? ACL_TYPE_ACCESS
++				: ACL_TYPE_DEFAULT,
 +			value, size);
 +		goto out;
 +	}
 +#endif
 +	/* deal with ntfs extended attribute */
-+	err = ntfs_set_ea(inode, name, value, size, flags, 0);
++	err = ntfs_set_ea(inode, name, name_len, value, size, flags, 0);
 +
 +out:
 +	return err;
@@ -3694,7 +3665,7 @@ index 000000000000..cc69295eb9cf
 +
 +static bool ntfs_xattr_user_list(struct dentry *dentry)
 +{
-+	return 1;
++	return true;
 +}
 +
 +static const struct xattr_handler ntfs_xattr_handler = {

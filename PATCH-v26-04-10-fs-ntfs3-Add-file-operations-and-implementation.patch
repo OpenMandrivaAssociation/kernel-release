@@ -3,38 +3,38 @@ Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C68AAC433DB
-	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:13:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84B55C43470
+	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2FD2F64DDA
-	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:13:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 11A636115B
+	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232246AbhA1JNN (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Thu, 28 Jan 2021 04:13:13 -0500
-Received: from relaydlg-01.paragon-software.com ([81.5.88.159]:37267 "EHLO
-        relaydlg-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231817AbhA1JGj (ORCPT
+        id S236494AbhDBPyT (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Fri, 2 Apr 2021 11:54:19 -0400
+Received: from relayfre-01.paragon-software.com ([176.12.100.13]:47806 "EHLO
+        relayfre-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236035AbhDBPx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jan 2021 04:06:39 -0500
+        Fri, 2 Apr 2021 11:53:58 -0400
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relaydlg-01.paragon-software.com (Postfix) with ESMTPS id DD1BD822FC;
-        Thu, 28 Jan 2021 12:05:03 +0300 (MSK)
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 718331D74;
+        Fri,  2 Apr 2021 18:53:54 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1611824703;
-        bh=MuAykMr+I0JyEmKxZxwpGdou+RL617+1qgqldUrCRf8=;
+        d=paragon-software.com; s=mail; t=1617378834;
+        bh=KuGO3KHVh8t8x199GTcfndocpJxNpKnT1CE7NMdLGjc=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ZP1zoeUee94s3hkDVA99eQNn4bhKwPXTGavfAFSnJqrl3x0AMVuJF5uQvVtk30YMl
-         KCqrPFLzqYG69tjmftVtletsQCW00+TUvxGP7B0B6Ne/cWLUZcuL2Ao3MYNaimIZu+
-         f0ja+SOqm81g6EMZQWdY7znZ6QJmO93EPfECdh5U=
+        b=llambnhUssn+xF0GsGQ10ZySokArW0mVMGB4L8JVzjPqTh+nVK5gmjEZwu0IPGTXB
+         iM2ejUxh66bIC1sBpuB3tzlch7CWjJdS1KBodn/1KfCmLaPT2rr4Ohcb2DQ3jY9IUq
+         njBQmnbgJDG5tnDGIKAl/v53cFclYolMh51yZeTo=
 Received: from fsd-lkpg.ufsd.paragon-software.com (172.30.114.105) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Thu, 28 Jan 2021 12:05:02 +0300
+ 15.1.2176.2; Fri, 2 Apr 2021 18:53:53 +0300
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 To:     <linux-fsdevel@vger.kernel.org>
 CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
@@ -43,14 +43,15 @@ CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
         <mark@harmstone.com>, <nborisov@suse.com>,
         <linux-ntfs-dev@lists.sourceforge.net>, <anton@tuxera.com>,
         <dan.carpenter@oracle.com>, <hch@lst.de>, <ebiggers@kernel.org>,
-        <andy.lavr@gmail.com>,
+        <andy.lavr@gmail.com>, <kari.argillander@gmail.com>,
+        <oleksandr@natalenko.name>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH v19 04/10] fs/ntfs3: Add file operations and implementation
-Date:   Thu, 28 Jan 2021 12:04:49 +0300
-Message-ID: <20210128090455.3576502-5-almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH v26 04/10] fs/ntfs3: Add file operations and implementation
+Date:   Fri, 2 Apr 2021 18:53:41 +0300
+Message-ID: <20210402155347.64594-5-almaz.alexandrovich@paragon-software.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
-References: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
+References: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
@@ -60,7 +61,7 @@ X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Archived-At: <https://lore.kernel.org/lkml/20210128090455.3576502-5-almaz.alexandrovich@paragon-software.com/>
+Archived-At: <https://lore.kernel.org/lkml/20210402155347.64594-5-almaz.alexandrovich@paragon-software.com/>
 List-Archive: <https://lore.kernel.org/lkml/>
 List-Post: <mailto:linux-kernel@vger.kernel.org>
 
@@ -68,13 +69,13 @@ This adds file operations and implementation
 
 Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 ---
- fs/ntfs3/dir.c     |  583 +++++++++
- fs/ntfs3/file.c    | 1132 ++++++++++++++++
- fs/ntfs3/frecord.c | 3083 ++++++++++++++++++++++++++++++++++++++++++++
- fs/ntfs3/namei.c   |  590 +++++++++
+ fs/ntfs3/dir.c     |  594 +++++++++
+ fs/ntfs3/file.c    | 1130 ++++++++++++++++
+ fs/ntfs3/frecord.c | 3071 ++++++++++++++++++++++++++++++++++++++++++++
+ fs/ntfs3/namei.c   |  578 +++++++++
  fs/ntfs3/record.c  |  609 +++++++++
- fs/ntfs3/run.c     | 1120 ++++++++++++++++
- 6 files changed, 7117 insertions(+)
+ fs/ntfs3/run.c     | 1111 ++++++++++++++++
+ 6 files changed, 7093 insertions(+)
  create mode 100644 fs/ntfs3/dir.c
  create mode 100644 fs/ntfs3/file.c
  create mode 100644 fs/ntfs3/frecord.c
@@ -84,14 +85,14 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
 diff --git a/fs/ntfs3/dir.c b/fs/ntfs3/dir.c
 new file mode 100644
-index 000000000000..f918c4b4c470
+index 000000000..9ec6012c4
 --- /dev/null
 +++ b/fs/ntfs3/dir.c
-@@ -0,0 +1,583 @@
+@@ -0,0 +1,594 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + *  directory handling functions for ntfs-based filesystems
 + *
@@ -112,7 +113,7 @@ index 000000000000..f918c4b4c470
 +int ntfs_utf16_to_nls(struct ntfs_sb_info *sbi, const struct le_str *uni,
 +		      u8 *buf, int buf_len)
 +{
-+	int ret, uni_len;
++	int ret, uni_len, warn;
 +	const __le16 *ip;
 +	u8 *op;
 +	struct nls_table *nls = sbi->options.nls;
@@ -130,10 +131,12 @@ index 000000000000..f918c4b4c470
 +	ip = uni->name;
 +	op = buf;
 +	uni_len = uni->len;
++	warn = 0;
 +
 +	while (uni_len--) {
 +		u16 ec;
 +		int charlen;
++		char dump[5];
 +
 +		if (buf_len < NLS_MAX_CHARSET_SIZE) {
 +			ntfs_warn(sbi->sb,
@@ -147,12 +150,21 @@ index 000000000000..f918c4b4c470
 +		if (charlen > 0) {
 +			op += charlen;
 +			buf_len -= charlen;
-+		} else {
-+			*op++ = ':';
-+			op = hex_byte_pack(op, ec >> 8);
-+			op = hex_byte_pack(op, ec);
-+			buf_len -= 5;
++			continue;
 +		}
++
++		*op++ = '_';
++		buf_len -= 1;
++		if (warn)
++			continue;
++
++		warn = 1;
++		hex_byte_pack(&dump[0], ec >> 8);
++		hex_byte_pack(&dump[2], ec);
++		dump[4] = 0;
++
++		ntfs_err(sbi->sb, "failed to convert \"%s\" to %s", dump,
++			 nls->charset);
 +	}
 +
 +	*op = '\0';
@@ -673,14 +685,14 @@ index 000000000000..f918c4b4c470
 +};
 diff --git a/fs/ntfs3/file.c b/fs/ntfs3/file.c
 new file mode 100644
-index 000000000000..bac5a10ac03d
+index 000000000..347baf674
 --- /dev/null
 +++ b/fs/ntfs3/file.c
-@@ -0,0 +1,1132 @@
+@@ -0,0 +1,1130 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + *  regular file handling primitives for ntfs-based filesystems
 + */
@@ -755,8 +767,8 @@ index 000000000000..bac5a10ac03d
 +/*
 + * inode_operations::getattr
 + */
-+int ntfs_getattr(const struct path *path, struct kstat *stat, u32 request_mask,
-+		 u32 flags)
++int ntfs_getattr(struct user_namespace *mnt_userns, const struct path *path,
++		 struct kstat *stat, u32 request_mask, u32 flags)
 +{
 +	struct inode *inode = d_inode(path->dentry);
 +	struct ntfs_inode *ni = ntfs_i(inode);
@@ -769,7 +781,7 @@ index 000000000000..bac5a10ac03d
 +
 +	stat->attributes_mask |= STATX_ATTR_COMPRESSED | STATX_ATTR_ENCRYPTED;
 +
-+	generic_fillattr(inode, stat);
++	generic_fillattr(mnt_userns, inode, stat);
 +
 +	stat->result_mask |= STATX_BTIME;
 +	stat->btime = ni->i_crtime;
@@ -905,8 +917,8 @@ index 000000000000..bac5a10ac03d
 +			continue;
 +
 +		page_off = (loff_t)idx << PAGE_SHIFT;
-+		to = (page_off + PAGE_SIZE) > end ? (end - page_off) :
-+						    PAGE_SIZE;
++		to = (page_off + PAGE_SIZE) > end ? (end - page_off)
++						  : PAGE_SIZE;
 +		partial = false;
 +
 +		if ((from || PAGE_SIZE != to) &&
@@ -1075,10 +1087,8 @@ index 000000000000..bac5a10ac03d
 +static int ntfs_truncate(struct inode *inode, loff_t new_size)
 +{
 +	struct super_block *sb = inode->i_sb;
-+	struct ntfs_sb_info *sbi = sb->s_fs_info;
 +	struct ntfs_inode *ni = ntfs_i(inode);
 +	int err, dirty = 0;
-+	u32 vcn;
 +	u64 new_valid;
 +
 +	if (!S_ISREG(inode->i_mode))
@@ -1094,7 +1104,6 @@ index 000000000000..bac5a10ac03d
 +			return err;
 +	}
 +
-+	vcn = bytes_to_cluster(sbi, new_size);
 +	new_valid = ntfs_up_block(sb, min_t(u64, ni->i_valid, new_size));
 +
 +	ni_lock(ni);
@@ -1263,7 +1272,7 @@ index 000000000000..bac5a10ac03d
 +				 * 1G of sparsed clusters + 1 cluster of data =>
 +				 * valid_size == 1G + 1 cluster
 +				 * fallocate(1G) will zero 1G and this can be very long
-+				 * xfstest 016/086 will fail whithout 'ntfs_sparse_cluster'
++				 * xfstest 016/086 will fail without 'ntfs_sparse_cluster'
 +				 */
 +				/*ntfs_sparse_cluster(inode, NULL, vcn,
 +				 *		    min(vcn_v - vcn, clen));
@@ -1296,7 +1305,8 @@ index 000000000000..bac5a10ac03d
 +/*
 + * inode_operations::setattr
 + */
-+int ntfs3_setattr(struct dentry *dentry, struct iattr *attr)
++int ntfs3_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
++		  struct iattr *attr)
 +{
 +	struct super_block *sb = dentry->d_sb;
 +	struct ntfs_sb_info *sbi = sb->s_fs_info;
@@ -1314,7 +1324,7 @@ index 000000000000..bac5a10ac03d
 +		ia_valid = attr->ia_valid;
 +	}
 +
-+	err = setattr_prepare(dentry, attr);
++	err = setattr_prepare(mnt_userns, dentry, attr);
 +	if (err)
 +		goto out;
 +
@@ -1339,10 +1349,10 @@ index 000000000000..bac5a10ac03d
 +		ni->ni_flags |= NI_FLAG_UPDATE_PARENT;
 +	}
 +
-+	setattr_copy(inode, attr);
++	setattr_copy(mnt_userns, inode, attr);
 +
 +	if (mode != inode->i_mode) {
-+		err = ntfs_acl_chmod(inode);
++		err = ntfs_acl_chmod(mnt_userns, inode);
 +		if (err)
 +			goto out;
 +
@@ -1697,8 +1707,8 @@ index 000000000000..bac5a10ac03d
 +	if (ret)
 +		goto out;
 +
-+	ret = is_compressed(ni) ? ntfs_compress_write(iocb, from) :
-+				  __generic_file_write_iter(iocb, from);
++	ret = is_compressed(ni) ? ntfs_compress_write(iocb, from)
++				: __generic_file_write_iter(iocb, from);
 +
 +out:
 +	inode_unlock(inode);
@@ -1811,14 +1821,14 @@ index 000000000000..bac5a10ac03d
 +};
 diff --git a/fs/ntfs3/frecord.c b/fs/ntfs3/frecord.c
 new file mode 100644
-index 000000000000..9f71fa4844c6
+index 000000000..c3121bf9c
 --- /dev/null
 +++ b/fs/ntfs3/frecord.c
-@@ -0,0 +1,3083 @@
+@@ -0,0 +1,3071 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + */
 +
@@ -1835,18 +1845,6 @@ index 000000000000..9f71fa4844c6
 +#ifdef CONFIG_NTFS3_LZX_XPRESS
 +#include "lib/lib.h"
 +#endif
-+
-+static inline void get_mi_ref(const struct mft_inode *mi, struct MFT_REF *ref)
-+{
-+#ifdef NTFS3_64BIT_CLUSTER
-+	ref->low = cpu_to_le32(mi->rno);
-+	ref->high = cpu_to_le16(mi->rno >> 32);
-+#else
-+	ref->low = cpu_to_le32(mi->rno);
-+	ref->high = 0;
-+#endif
-+	ref->seq = mi->mrec->seq;
-+}
 +
 +static struct mft_inode *ni_ins_mi(struct ntfs_inode *ni, struct rb_root *tree,
 +				   CLST ino, struct rb_node *ins)
@@ -1915,8 +1913,8 @@ index 000000000000..9f71fa4844c6
 +	const struct ATTRIB *attr;
 +
 +	attr = mi_find_attr(&ni->mi, NULL, ATTR_STD, NULL, 0, NULL);
-+	return attr ? resident_data_ex(attr, sizeof(struct ATTR_STD_INFO)) :
-+		      NULL;
++	return attr ? resident_data_ex(attr, sizeof(struct ATTR_STD_INFO))
++		    : NULL;
 +}
 +
 +/*
@@ -1930,8 +1928,8 @@ index 000000000000..9f71fa4844c6
 +
 +	attr = mi_find_attr(&ni->mi, NULL, ATTR_STD, NULL, 0, NULL);
 +
-+	return attr ? resident_data_ex(attr, sizeof(struct ATTR_STD_INFO5)) :
-+		      NULL;
++	return attr ? resident_data_ex(attr, sizeof(struct ATTR_STD_INFO5))
++		    : NULL;
 +}
 +
 +/*
@@ -2226,7 +2224,7 @@ index 000000000000..9f71fa4844c6
 +		return false;
 +	}
 +
-+	get_mi_ref(&ni->mi, &m->mrec->parent_ref);
++	mi_get_ref(&ni->mi, &m->mrec->parent_ref);
 +
 +	ni_add_mi(ni, m);
 +	*mi = m;
@@ -2319,7 +2317,7 @@ index 000000000000..9f71fa4844c6
 +	bool le_added = false;
 +	struct MFT_REF ref;
 +
-+	get_mi_ref(mi, &ref);
++	mi_get_ref(mi, &ref);
 +
 +	if (type != ATTR_LIST && !le && ni->attr_list.size) {
 +		err = al_add_le(ni, type, name, name_len, svcn, cpu_to_le16(-1),
@@ -2476,7 +2474,7 @@ index 000000000000..9f71fa4844c6
 +	}
 +
 +	if (err) {
-+		ntfs_inode_warn(&ni->vfs_inode, "there is a problem");
++		ntfs_inode_warn(&ni->vfs_inode, "repack problem");
 +		ntfs_set_state(sbi, NTFS_DIRTY_ERROR);
 +
 +		/* Pack loaded but not packed runs */
@@ -2520,7 +2518,7 @@ index 000000000000..9f71fa4844c6
 +
 +	/* free space in primary record without attribute list */
 +	free = sbi->record_size - le32_to_cpu(ni->mi.mrec->used) + asize;
-+	get_mi_ref(&ni->mi, &ref);
++	mi_get_ref(&ni->mi, &ref);
 +
 +	le = NULL;
 +	while ((le = al_enumerate(ni, le))) {
@@ -2622,7 +2620,7 @@ index 000000000000..9f71fa4844c6
 +		goto out;
 +	}
 +
-+	get_mi_ref(&ni->mi, &le->ref);
++	mi_get_ref(&ni->mi, &le->ref);
 +	ni->attr_list.le = le;
 +
 +	attr = NULL;
@@ -2688,7 +2686,7 @@ index 000000000000..9f71fa4844c6
 +				      b->name_len, asize, name_off);
 +		WARN_ON(!attr);
 +
-+		get_mi_ref(mi, &le_b[nb]->ref);
++		mi_get_ref(mi, &le_b[nb]->ref);
 +		le_b[nb]->id = attr->id;
 +
 +		/* copy all except id */
@@ -3152,7 +3150,7 @@ index 000000000000..9f71fa4844c6
 +	bool is_mft = ni->mi.rno == MFT_REC_MFT;
 +	struct MFT_REF ref;
 +
-+	get_mi_ref(&ni->mi, &ref);
++	mi_get_ref(&ni->mi, &ref);
 +	le = NULL;
 +
 +	while ((le = al_enumerate(ni, le))) {
@@ -3362,7 +3360,7 @@ index 000000000000..9f71fa4844c6
 +		if (!nt3 || attr->name_len) {
 +			;
 +		} else if (attr->type == ATTR_REPARSE) {
-+			get_mi_ref(&ni->mi, &ref);
++			mi_get_ref(&ni->mi, &ref);
 +			ntfs_remove_reparse(sbi, 0, &ref);
 +		} else if (attr->type == ATTR_ID && !attr->non_res &&
 +			   le32_to_cpu(attr->res.data_size) >=
@@ -3533,9 +3531,9 @@ index 000000000000..9f71fa4844c6
 +	}
 +
 +	/* resize nonresident empty attribute in-place only*/
-+	new_asize = (new_aflags & (ATTR_FLAG_COMPRESSED | ATTR_FLAG_SPARSED)) ?
-+			    (SIZEOF_NONRESIDENT_EX + 8) :
-+			    (SIZEOF_NONRESIDENT + 8);
++	new_asize = (new_aflags & (ATTR_FLAG_COMPRESSED | ATTR_FLAG_SPARSED))
++			    ? (SIZEOF_NONRESIDENT_EX + 8)
++			    : (SIZEOF_NONRESIDENT + 8);
 +
 +	if (!mi_resize_attr(mi, attr, new_asize - le32_to_cpu(attr->size)))
 +		return -EOPNOTSUPP;
@@ -4042,7 +4040,7 @@ index 000000000000..9f71fa4844c6
 +		if (attr->type == ATTR_REPARSE) {
 +			struct MFT_REF ref;
 +
-+			get_mi_ref(&ni->mi, &ref);
++			mi_get_ref(&ni->mi, &ref);
 +			ntfs_remove_reparse(sbi, 0, &ref);
 +		}
 +
@@ -4685,9 +4683,9 @@ index 000000000000..9f71fa4844c6
 +			u64 data_size = le64_to_cpu(attr->nres.data_size);
 +			__le64 valid_le;
 +
-+			dup->alloc_size = is_attr_ext(attr) ?
-+						  attr->nres.total_size :
-+						  attr->nres.alloc_size;
++			dup->alloc_size = is_attr_ext(attr)
++						  ? attr->nres.total_size
++						  : attr->nres.alloc_size;
 +			dup->data_size = attr->nres.data_size;
 +
 +			if (new_valid > data_size)
@@ -4900,14 +4898,14 @@ index 000000000000..9f71fa4844c6
 +}
 diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
 new file mode 100644
-index 000000000000..700d4fc4f24f
+index 000000000..f5db12cd3
 --- /dev/null
 +++ b/fs/ntfs3/namei.c
-@@ -0,0 +1,590 @@
+@@ -0,0 +1,578 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + */
 +
@@ -4935,7 +4933,7 @@ index 000000000000..700d4fc4f24f
 +	u16 data_size;
 +	struct ATTR_FILE_NAME *fname = (struct ATTR_FILE_NAME *)(e + 1);
 +
-+#ifndef NTFS3_64BIT_CLUSTER
++#ifndef CONFIG_NTFS3_64BIT_CLUSTER
 +	e->ref.high = fname->home.high = 0;
 +#endif
 +	if (uni) {
@@ -5008,21 +5006,20 @@ index 000000000000..700d4fc4f24f
 + *
 + * inode_operations::create
 + */
-+static int ntfs_create(struct inode *dir, struct dentry *dentry, umode_t mode,
-+		       bool excl)
++static int ntfs_create(struct user_namespace *mnt_userns, struct inode *dir,
++		       struct dentry *dentry, umode_t mode, bool excl)
 +{
-+	int err;
 +	struct ntfs_inode *ni = ntfs_i(dir);
 +	struct inode *inode;
 +
 +	ni_lock_dir(ni);
 +
-+	err = ntfs_create_inode(dir, dentry, NULL, S_IFREG | mode, 0, NULL, 0,
-+				excl, NULL, &inode);
++	inode = ntfs_create_inode(mnt_userns, dir, dentry, NULL, S_IFREG | mode,
++				  0, NULL, 0, excl, NULL);
 +
 +	ni_unlock(ni);
 +
-+	return err;
++	return IS_ERR(inode) ? PTR_ERR(inode) : 0;
 +}
 +
 +/*
@@ -5091,22 +5088,21 @@ index 000000000000..700d4fc4f24f
 + *
 + * inode_operations::symlink
 + */
-+static int ntfs_symlink(struct inode *dir, struct dentry *dentry,
-+			const char *symname)
++static int ntfs_symlink(struct user_namespace *mnt_userns, struct inode *dir,
++			struct dentry *dentry, const char *symname)
 +{
-+	int err;
 +	u32 size = strlen(symname);
 +	struct inode *inode;
 +	struct ntfs_inode *ni = ntfs_i(dir);
 +
 +	ni_lock_dir(ni);
 +
-+	err = ntfs_create_inode(dir, dentry, NULL, S_IFLNK | 0777, 0, symname,
-+				size, 0, NULL, &inode);
++	inode = ntfs_create_inode(mnt_userns, dir, dentry, NULL, S_IFLNK | 0777,
++				  0, symname, size, 0, NULL);
 +
 +	ni_unlock(ni);
 +
-+	return err;
++	return IS_ERR(inode) ? PTR_ERR(inode) : 0;
 +}
 +
 +/*
@@ -5114,20 +5110,20 @@ index 000000000000..700d4fc4f24f
 + *
 + * inode_operations::mkdir
 + */
-+static int ntfs_mkdir(struct inode *dir, struct dentry *dentry, umode_t mode)
++static int ntfs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
++		      struct dentry *dentry, umode_t mode)
 +{
-+	int err;
 +	struct inode *inode;
 +	struct ntfs_inode *ni = ntfs_i(dir);
 +
 +	ni_lock_dir(ni);
 +
-+	err = ntfs_create_inode(dir, dentry, NULL, S_IFDIR | mode, 0, NULL, -1,
-+				0, NULL, &inode);
++	inode = ntfs_create_inode(mnt_userns, dir, dentry, NULL, S_IFDIR | mode,
++				  0, NULL, -1, 0, NULL);
 +
 +	ni_unlock(ni);
 +
-+	return err;
++	return IS_ERR(inode) ? PTR_ERR(inode) : 0;
 +}
 +
 +/*
@@ -5154,9 +5150,9 @@ index 000000000000..700d4fc4f24f
 + *
 + * inode_operations::rename
 + */
-+static int ntfs_rename(struct inode *old_dir, struct dentry *old_dentry,
-+		       struct inode *new_dir, struct dentry *new_dentry,
-+		       u32 flags)
++static int ntfs_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
++		       struct dentry *old_dentry, struct inode *new_dir,
++		       struct dentry *new_dentry, u32 flags)
 +{
 +	int err;
 +	struct super_block *sb = old_dir->i_sb;
@@ -5237,11 +5233,7 @@ index 000000000000..700d4fc4f24f
 +	ni_lock_dir(old_dir_ni);
 +	ni_lock(old_ni);
 +
-+	old_name->home.low = cpu_to_le32(old_dir->i_ino);
-+#ifdef NTFS3_64BIT_CLUSTER
-+	old_name->home.high = cpu_to_le16(old_dir->i_ino >> 32);
-+#endif
-+	old_name->home.seq = old_dir_ni->mi.mrec->seq;
++	mi_get_ref(&old_dir_ni->mi, &old_name->home);
 +
 +	/*get pointer to file_name in mft*/
 +	fname = ni_fname_name(old_ni, (struct cpu_str *)&old_name->name_len,
@@ -5294,15 +5286,8 @@ index 000000000000..700d4fc4f24f
 +	}
 +
 +	/* Add new name */
-+	new_de->ref.low = cpu_to_le32(old_inode->i_ino);
-+#ifdef NTFS3_64BIT_CLUSTER
-+	new_de->ref.high = cpu_to_le16(old_inode->i_ino >> 32);
-+	new_name->home.high = cpu_to_le16(new_dir->i_ino >> 32);
-+#endif
-+	new_de->ref.seq = old_ni->mi.mrec->seq;
-+
-+	new_name->home.low = cpu_to_le32(new_dir->i_ino);
-+	new_name->home.seq = ntfs_i(new_dir)->mi.mrec->seq;
++	mi_get_ref(&old_ni->mi, &new_de->ref);
++	mi_get_ref(&ntfs_i(new_dir)->mi, &new_name->home);
 +
 +	new_de_key_size = le16_to_cpu(new_de->key_size);
 +
@@ -5438,10 +5423,11 @@ index 000000000000..700d4fc4f24f
 +	file->f_mode |= FMODE_CREATED;
 +
 +	/*fnd contains tree's path to insert to*/
-+	err = ntfs_create_inode(dir, dentry, uni, mode, 0, NULL, 0, excl, fnd,
-+				&inode);
-+	if (!err)
-+		err = finish_open(file, dentry, ntfs_file_open);
++	/* TODO: init_user_ns? */
++	inode = ntfs_create_inode(&init_user_ns, dir, dentry, uni, mode, 0,
++				  NULL, 0, excl, fnd);
++	err = IS_ERR(inode) ? PTR_ERR(inode)
++			    : finish_open(file, dentry, ntfs_file_open);
 +	dput(d);
 +
 +out2:
@@ -5496,14 +5482,14 @@ index 000000000000..700d4fc4f24f
 +};
 diff --git a/fs/ntfs3/record.c b/fs/ntfs3/record.c
 new file mode 100644
-index 000000000000..7727e5081358
+index 000000000..0d4a6251b
 --- /dev/null
 +++ b/fs/ntfs3/record.c
 @@ -0,0 +1,609 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + */
 +
@@ -6111,15 +6097,16 @@ index 000000000000..7727e5081358
 +}
 diff --git a/fs/ntfs3/run.c b/fs/ntfs3/run.c
 new file mode 100644
-index 000000000000..27efd0ad56c7
+index 000000000..5cdf6efe6
 --- /dev/null
 +++ b/fs/ntfs3/run.c
-@@ -0,0 +1,1120 @@
+@@ -0,0 +1,1111 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
++ * TODO: try to use extents tree (instead of array)
 + */
 +
 +#include <linux/blkdev.h>
@@ -6163,7 +6150,7 @@ index 000000000000..27efd0ad56c7
 +	max_idx = run->count - 1;
 +
 +	/* Check boundary cases specially, 'cause they cover the often requests */
-+	r = run->runs_;
++	r = run->runs;
 +	if (vcn < r->vcn) {
 +		*index = 0;
 +		return false;
@@ -6187,7 +6174,7 @@ index 000000000000..27efd0ad56c7
 +
 +	do {
 +		mid_idx = min_idx + ((max_idx - min_idx) >> 1);
-+		r = run->runs_ + mid_idx;
++		r = run->runs + mid_idx;
 +
 +		if (vcn < r->vcn) {
 +			max_idx = mid_idx - 1;
@@ -6213,7 +6200,7 @@ index 000000000000..27efd0ad56c7
 +static void run_consolidate(struct runs_tree *run, size_t index)
 +{
 +	size_t i;
-+	struct ntfs_run *r = run->runs_ + index;
++	struct ntfs_run *r = run->runs + index;
 +
 +	while (index + 1 < run->count) {
 +		/*
@@ -6289,8 +6276,8 @@ index 000000000000..27efd0ad56c7
 +	if (!run_lookup(run, svcn, &i))
 +		return false;
 +
-+	end = run->runs_ + run->count;
-+	r = run->runs_ + i;
++	end = run->runs + run->count;
++	r = run->runs + i;
 +
 +	for (;;) {
 +		next_vcn = r->vcn + r->len;
@@ -6313,13 +6300,13 @@ index 000000000000..27efd0ad56c7
 +	struct ntfs_run *r;
 +
 +	/* Fail immediately if nrun was not touched yet. */
-+	if (!run->runs_)
++	if (!run->runs)
 +		return false;
 +
 +	if (!run_lookup(run, vcn, &idx))
 +		return false;
 +
-+	r = run->runs_ + idx;
++	r = run->runs + idx;
 +
 +	if (vcn >= r->vcn + r->len)
 +		return false;
@@ -6349,7 +6336,7 @@ index 000000000000..27efd0ad56c7
 +	struct ntfs_run *r;
 +
 +	if (run_lookup(run, vcn, &index)) {
-+		r = run->runs_ + index;
++		r = run->runs + index;
 +
 +		if (vcn > r->vcn) {
 +			CLST dlen = vcn - r->vcn;
@@ -6363,14 +6350,14 @@ index 000000000000..27efd0ad56c7
 +		if (!index)
 +			return;
 +	}
-+	r = run->runs_;
++	r = run->runs;
 +	memmove(r, r + index, sizeof(*r) * (run->count - index));
 +
 +	run->count -= index;
 +
 +	if (!run->count) {
-+		ntfs_free(run->runs_);
-+		run->runs_ = NULL;
++		ntfs_vfree(run->runs);
++		run->runs = NULL;
 +		run->allocated = 0;
 +	}
 +}
@@ -6391,7 +6378,7 @@ index 000000000000..27efd0ad56c7
 +	 * then it will entirely be removed.
 +	 */
 +	if (run_lookup(run, vcn, &index)) {
-+		struct ntfs_run *r = run->runs_ + index;
++		struct ntfs_run *r = run->runs + index;
 +
 +		r->len = vcn - r->vcn;
 +
@@ -6408,8 +6395,8 @@ index 000000000000..27efd0ad56c7
 +
 +	/* Do not reallocate array 'runs'. Only free if possible */
 +	if (!index) {
-+		ntfs_free(run->runs_);
-+		run->runs_ = NULL;
++		ntfs_vfree(run->runs);
++		run->runs = NULL;
 +		run->allocated = 0;
 +	}
 +}
@@ -6420,7 +6407,7 @@ index 000000000000..27efd0ad56c7
 +	run_truncate_head(run, vcn);
 +
 +	if (run->count >= NTFS3_RUN_MAX_BYTES / sizeof(struct ntfs_run) / 2)
-+		run_truncate(run, (run->runs_ + (run->count >> 1))->vcn);
++		run_truncate(run, (run->runs + (run->count >> 1))->vcn);
 +}
 +
 +/*
@@ -6455,7 +6442,7 @@ index 000000000000..27efd0ad56c7
 +	 * existing range as my start point.
 +	 */
 +	if (!inrange && index > 0) {
-+		struct ntfs_run *t = run->runs_ + index - 1;
++		struct ntfs_run *t = run->runs + index - 1;
 +
 +		if (t->vcn + t->len == vcn &&
 +		    (t->lcn == SPARSE_LCN) == (lcn == SPARSE_LCN) &&
@@ -6503,25 +6490,25 @@ index 000000000000..27efd0ad56c7
 +
 +			WARN_ON(!is_mft && bytes > NTFS3_RUN_MAX_BYTES);
 +
-+			new_ptr = ntfs_malloc(bytes);
++			new_ptr = ntfs_vmalloc(bytes);
 +
 +			if (!new_ptr)
 +				return false;
 +
 +			r = new_ptr + index;
-+			memcpy(new_ptr, run->runs_,
++			memcpy(new_ptr, run->runs,
 +			       index * sizeof(struct ntfs_run));
-+			memcpy(r + 1, run->runs_ + index,
++			memcpy(r + 1, run->runs + index,
 +			       sizeof(struct ntfs_run) * (run->count - index));
 +
-+			ntfs_free(run->runs_);
-+			run->runs_ = new_ptr;
++			ntfs_vfree(run->runs);
++			run->runs = new_ptr;
 +			run->allocated = bytes;
 +
 +		} else {
 +			size_t i = run->count - index;
 +
-+			r = run->runs_ + index;
++			r = run->runs + index;
 +
 +			/* memmove appears to be a bottle neck here... */
 +			if (i > 0)
@@ -6533,7 +6520,7 @@ index 000000000000..27efd0ad56c7
 +		r->len = len;
 +		run->count += 1;
 +	} else {
-+		r = run->runs_ + index;
++		r = run->runs + index;
 +
 +		/*
 +		 * If one of ranges was not allocated
@@ -6550,9 +6537,9 @@ index 000000000000..27efd0ad56c7
 +			should_add_tail = Tovcn < r->len;
 +
 +			if (should_add_tail) {
-+				tail_lcn = r->lcn == SPARSE_LCN ?
-+						   SPARSE_LCN :
-+						   (r->lcn + Tovcn);
++				tail_lcn = r->lcn == SPARSE_LCN
++						   ? SPARSE_LCN
++						   : (r->lcn + Tovcn);
 +				tail_vcn = r->vcn + Tovcn;
 +				tail_len = r->len - Tovcn;
 +			}
@@ -6608,8 +6595,8 @@ index 000000000000..27efd0ad56c7
 +	if (WARN_ON(!run_lookup(run, vcn, &index)))
 +		return true; /* should never be here */
 +
-+	e = run->runs_ + run->count;
-+	r = run->runs_ + index;
++	e = run->runs + run->count;
++	r = run->runs + index;
 +	end = vcn + len;
 +
 +	if (vcn > r->vcn) {
@@ -6673,7 +6660,7 @@ index 000000000000..27efd0ad56c7
 +	if (index >= run->count)
 +		return false;
 +
-+	r = run->runs_ + index;
++	r = run->runs + index;
 +
 +	if (!r->len)
 +		return false;
@@ -6717,7 +6704,7 @@ index 000000000000..27efd0ad56c7
 +		if (!(p[0] & 0x80))
 +			p -= 1;
 +	}
-+	return (const u8 *)n + sizeof(n) - p;
++	return (const u8 *)&n + sizeof(n) - p;
 +}
 +
 +/* full trusted function. It does not check 'size' for errors */
@@ -7061,13 +7048,13 @@ index 000000000000..27efd0ad56c7
 +		if (next_vcn > evcn + 1)
 +			return -EINVAL;
 +
-+#ifndef NTFS3_64BIT_CLUSTER
++#ifndef CONFIG_NTFS3_64BIT_CLUSTER
 +		if (next_vcn > 0x100000000ull || (lcn + len) > 0x100000000ull) {
 +			ntfs_err(
 +				sbi->sb,
-+				"This driver is compiled whitout NTFS3_64BIT_CLUSTER (like windows driver).\n"
++				"This driver is compiled whitout CONFIG_NTFS3_64BIT_CLUSTER (like windows driver).\n"
 +				"Volume contains 64 bits run: vcn %llx, lcn %llx, len %llx.\n"
-+				"Activate NTFS3_64BIT_CLUSTER to process this case",
++				"Activate CONFIG_NTFS3_64BIT_CLUSTER to process this case",
 +				vcn64, lcn, len);
 +			return -EOPNOTSUPP;
 +		}
@@ -7124,7 +7111,7 @@ index 000000000000..27efd0ad56c7
 +	struct wnd_bitmap *wnd;
 +
 +	ret = run_unpack(run, sbi, ino, svcn, evcn, vcn, run_buf, run_buf_size);
-+	if (ret < 0)
++	if (ret <= 0)
 +		return ret;
 +
 +	if (!sbi->used.bitmap.sb || !run || run == RUN_DEALLOCATE)
@@ -7139,8 +7126,6 @@ index 000000000000..27efd0ad56c7
 +	for (ok = run_lookup_entry(run, vcn, &lcn, &len, &index);
 +	     next_vcn <= evcn;
 +	     ok = run_get_entry(run, ++index, &vcn, &lcn, &len)) {
-+		CLST real_free, i;
-+
 +		if (!ok || next_vcn != vcn)
 +			return -EINVAL;
 +
@@ -7152,7 +7137,6 @@ index 000000000000..27efd0ad56c7
 +		if (sbi->flags & NTFS_FLAGS_NEED_REPLAY)
 +			continue;
 +
-+next:
 +		down_read_nested(&wnd->rw_lock, BITMAP_MUTEX_CLUSTERS);
 +		/* Check for free blocks */
 +		ok = wnd_is_used(wnd, lcn, len);
@@ -7160,40 +7144,33 @@ index 000000000000..27efd0ad56c7
 +		if (ok)
 +			continue;
 +
++		/* Looks like volume is corrupted */
 +		ntfs_set_state(sbi, NTFS_DIRTY_ERROR);
 +
-+		if (!down_write_trylock(&wnd->rw_lock))
-+			continue;
++		if (down_write_trylock(&wnd->rw_lock)) {
++			/* mark all zero bits as used in range [lcn, lcn+len) */
++			CLST i, lcn_f = 0, len_f = 0;
 +
-+		/* Find first free */
-+		real_free = len;
-+		while (real_free && !wnd_is_free(wnd, lcn, 1)) {
-+			lcn += 1;
-+			real_free -= 1;
-+		}
++			err = 0;
++			for (i = 0; i < len; i++) {
++				if (wnd_is_free(wnd, lcn + i, 1)) {
++					if (!len_f)
++						lcn_f = lcn + i;
++					len_f += 1;
++				} else if (len_f) {
++					err = wnd_set_used(wnd, lcn_f, len_f);
++					len_f = 0;
++					if (err)
++						break;
++				}
++			}
 +
-+		if (!real_free) {
++			if (len_f)
++				err = wnd_set_used(wnd, lcn_f, len_f);
++
 +			up_write(&wnd->rw_lock);
-+			continue;
-+		}
-+
-+		/* Find total free */
-+		i = 1;
-+		while (i < real_free && wnd_is_free(wnd, lcn + i, 1))
-+			i += 1;
-+
-+		real_free = i;
-+
-+		err = wnd_set_used(wnd, lcn, real_free);
-+		up_write(&wnd->rw_lock);
-+
-+		if (err)
-+			return err;
-+
-+		if (len != real_free) {
-+			len -= real_free + 1;
-+			lcn += real_free + 1;
-+			goto next;
++			if (err)
++				return err;
 +		}
 +	}
 +
@@ -7226,7 +7203,7 @@ index 000000000000..27efd0ad56c7
 +		run_buf += size_size + offset_size;
 +		vcn64 += len;
 +
-+#ifndef NTFS3_64BIT_CLUSTER
++#ifndef CONFIG_NTFS3_64BIT_CLUSTER
 +		if (vcn64 > 0x100000000ull)
 +			return -EINVAL;
 +#endif

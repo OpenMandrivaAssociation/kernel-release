@@ -3,38 +3,38 @@ Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADD31C433E0
-	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:09:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BB50C433ED
+	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 449D064DD9
-	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:09:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 193B16115B
+	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbhA1JIy (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Thu, 28 Jan 2021 04:08:54 -0500
-Received: from relaydlg-01.paragon-software.com ([81.5.88.159]:37252 "EHLO
-        relaydlg-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231745AbhA1JGN (ORCPT
+        id S236407AbhDBPyG (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Fri, 2 Apr 2021 11:54:06 -0400
+Received: from relayfre-01.paragon-software.com ([176.12.100.13]:47776 "EHLO
+        relayfre-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235789AbhDBPx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jan 2021 04:06:13 -0500
+        Fri, 2 Apr 2021 11:53:56 -0400
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relaydlg-01.paragon-software.com (Postfix) with ESMTPS id 0A88582269;
-        Thu, 28 Jan 2021 12:05:03 +0300 (MSK)
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id EFAE61D60;
+        Fri,  2 Apr 2021 18:53:53 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1611824703;
-        bh=Ld/myPzfyWTIKU6F/349QXz9FIwOD/3wFvrKLw9xnno=;
+        d=paragon-software.com; s=mail; t=1617378833;
+        bh=H7yweSxMpppQTISu58aZ4ZkjdqC3ey8BMUOyqLjRlRI=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=o4v0tUvqoc/tcyfJ5YXJbpkZn95AsXykHn3lksx9KzclsKLpqKWhJFoG5ifszgtLy
-         jReLNftGmW5ohUJqzdqPifTKaAa1o5qDr9P9cQb0mfqkLqcMvRG5ObqO1ZbFIiJkFk
-         rYEj5fgCh45EyN37OoJvhu3OZsTuRMMKH8EI7v+o=
+        b=DAZZHNY8rSoJy/8i2gHf7yLKxmwAPP6+XV2KK7kGYDwaRzdPt6LRnKwJxrEb4yATt
+         ruBOcu0S3Vi9Yl4aTffXQvhBwbCRFiklsg7149HlG3oqVcCgpVPQg7irLIXtltkG1c
+         r9sFS41iD1q0pOcXDy/h7VWVKuKEKoQcNugt+6Mk=
 Received: from fsd-lkpg.ufsd.paragon-software.com (172.30.114.105) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Thu, 28 Jan 2021 12:05:02 +0300
+ 15.1.2176.2; Fri, 2 Apr 2021 18:53:53 +0300
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 To:     <linux-fsdevel@vger.kernel.org>
 CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
@@ -43,14 +43,15 @@ CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
         <mark@harmstone.com>, <nborisov@suse.com>,
         <linux-ntfs-dev@lists.sourceforge.net>, <anton@tuxera.com>,
         <dan.carpenter@oracle.com>, <hch@lst.de>, <ebiggers@kernel.org>,
-        <andy.lavr@gmail.com>,
+        <andy.lavr@gmail.com>, <kari.argillander@gmail.com>,
+        <oleksandr@natalenko.name>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH v19 03/10] fs/ntfs3: Add bitmap
-Date:   Thu, 28 Jan 2021 12:04:48 +0300
-Message-ID: <20210128090455.3576502-4-almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH v26 03/10] fs/ntfs3: Add bitmap
+Date:   Fri, 2 Apr 2021 18:53:40 +0300
+Message-ID: <20210402155347.64594-4-almaz.alexandrovich@paragon-software.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
-References: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
+References: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -60,7 +61,7 @@ X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Archived-At: <https://lore.kernel.org/lkml/20210128090455.3576502-4-almaz.alexandrovich@paragon-software.com/>
+Archived-At: <https://lore.kernel.org/lkml/20210402155347.64594-4-almaz.alexandrovich@paragon-software.com/>
 List-Archive: <https://lore.kernel.org/lkml/>
 List-Post: <mailto:linux-kernel@vger.kernel.org>
 
@@ -69,21 +70,21 @@ This adds bitmap
 Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 ---
  fs/ntfs3/bitfunc.c |  135 ++++
- fs/ntfs3/bitmap.c  | 1506 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 1641 insertions(+)
+ fs/ntfs3/bitmap.c  | 1519 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 1654 insertions(+)
  create mode 100644 fs/ntfs3/bitfunc.c
  create mode 100644 fs/ntfs3/bitmap.c
 
 diff --git a/fs/ntfs3/bitfunc.c b/fs/ntfs3/bitfunc.c
 new file mode 100644
-index 000000000000..2d43d718d645
+index 000000000..2de5faef2
 --- /dev/null
 +++ b/fs/ntfs3/bitfunc.c
 @@ -0,0 +1,135 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + */
 +#include <linux/blkdev.h>
@@ -217,14 +218,19 @@ index 000000000000..2d43d718d645
 +}
 diff --git a/fs/ntfs3/bitmap.c b/fs/ntfs3/bitmap.c
 new file mode 100644
-index 000000000000..1a4d65a6aac1
+index 000000000..32aab0031
 --- /dev/null
 +++ b/fs/ntfs3/bitmap.c
-@@ -0,0 +1,1506 @@
+@@ -0,0 +1,1519 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
++ *
++ * This code builds two trees of free clusters extents.
++ * Trees are sorted by start of extent and by length of extent.
++ * NTFS_MAX_WND_EXTENTS defines the maximum number of elements in trees.
++ * In extreme case code reads on-disk bitmap to find free clusters
 + *
 + */
 +
@@ -236,6 +242,11 @@ index 000000000000..1a4d65a6aac1
 +#include "debug.h"
 +#include "ntfs.h"
 +#include "ntfs_fs.h"
++
++/*
++ * Maximum number of extents in tree.
++ */
++#define NTFS_MAX_WND_EXTENTS (32u * 1024u)
 +
 +struct rb_node_key {
 +	struct rb_node node;
@@ -253,6 +264,21 @@ index 000000000000..1a4d65a6aac1
 +static int wnd_rescan(struct wnd_bitmap *wnd);
 +static struct buffer_head *wnd_map(struct wnd_bitmap *wnd, size_t iw);
 +static bool wnd_is_free_hlp(struct wnd_bitmap *wnd, size_t bit, size_t bits);
++
++static struct kmem_cache *ntfs_enode_cachep;
++
++int __init ntfs3_init_bitmap(void)
++{
++	ntfs_enode_cachep =
++		kmem_cache_create("ntfs3_enode_cache", sizeof(struct e_node), 0,
++				  SLAB_RECLAIM_ACCOUNT, NULL);
++	return ntfs_enode_cachep ? 0 : -ENOMEM;
++}
++
++void ntfs3_exit_bitmap(void)
++{
++	kmem_cache_destroy(ntfs_enode_cachep);
++}
 +
 +static inline u32 wnd_bits(const struct wnd_bitmap *wnd, size_t i)
 +{
@@ -325,14 +351,13 @@ index 000000000000..1a4d65a6aac1
 +/*
 + * wnd_close
 + *
-+ *
++ * Frees all resources
 + */
 +void wnd_close(struct wnd_bitmap *wnd)
 +{
 +	struct rb_node *node, *next;
 +
-+	if (wnd->free_bits != wnd->free_holder)
-+		ntfs_free(wnd->free_bits);
++	ntfs_free(wnd->free_bits);
 +	run_close(&wnd->run);
 +
 +	node = rb_first(&wnd->start_tree);
@@ -340,7 +365,8 @@ index 000000000000..1a4d65a6aac1
 +	while (node) {
 +		next = rb_next(node);
 +		rb_erase(node, &wnd->start_tree);
-+		ntfs_free(rb_entry(node, struct e_node, start.node));
++		kmem_cache_free(ntfs_enode_cachep,
++				rb_entry(node, struct e_node, start.node));
 +		node = next;
 +	}
 +}
@@ -405,7 +431,7 @@ index 000000000000..1a4d65a6aac1
 +/*
 + * inline bool rb_insert_start
 + *
-+ * Helper function to insert special kind of 'count' tree
++ * Helper function to insert special kind of 'start' tree
 + */
 +static inline bool rb_insert_start(struct rb_root *root, struct e_node *e)
 +{
@@ -433,8 +459,6 @@ index 000000000000..1a4d65a6aac1
 +	rb_insert_color(&e->start.node, root);
 +	return true;
 +}
-+
-+#define NTFS_MAX_WND_EXTENTS (32u * 1024u)
 +
 +/*
 + * wnd_add_free_ext
@@ -495,15 +519,15 @@ index 000000000000..1a4d65a6aac1
 +			if (!e0)
 +				e0 = e;
 +			else
-+				ntfs_free(e);
++				kmem_cache_free(ntfs_enode_cachep, e);
 +		}
 +
 +		if (wnd->uptodated != 1) {
 +			/* Check bits before 'bit' */
 +			ib = wnd->zone_bit == wnd->zone_end ||
-+					     bit < wnd->zone_end ?
-+				     0 :
-+				     wnd->zone_end;
++					     bit < wnd->zone_end
++				     ? 0
++				     : wnd->zone_end;
 +
 +			while (bit > ib && wnd_is_free_hlp(wnd, bit - 1, 1)) {
 +				bit -= 1;
@@ -512,9 +536,9 @@ index 000000000000..1a4d65a6aac1
 +
 +			/* Check bits after 'end_in' */
 +			ib = wnd->zone_bit == wnd->zone_end ||
-+					     end_in > wnd->zone_bit ?
-+				     wnd->nbits :
-+				     wnd->zone_bit;
++					     end_in > wnd->zone_bit
++				     ? wnd->nbits
++				     : wnd->zone_bit;
 +
 +			while (end_in < ib && wnd_is_free_hlp(wnd, end_in, 1)) {
 +				end_in += 1;
@@ -525,7 +549,7 @@ index 000000000000..1a4d65a6aac1
 +	/* Insert new fragment */
 +	if (wnd->count >= NTFS_MAX_WND_EXTENTS) {
 +		if (e0)
-+			ntfs_free(e0);
++			kmem_cache_free(ntfs_enode_cachep, e0);
 +
 +		wnd->uptodated = -1;
 +
@@ -549,7 +573,7 @@ index 000000000000..1a4d65a6aac1
 +		rb_erase(&e->count.node, &wnd->count_tree);
 +		wnd->count -= 1;
 +	} else {
-+		e = e0 ? e0 : ntfs_malloc(sizeof(struct e_node));
++		e = e0 ? e0 : kmem_cache_alloc(ntfs_enode_cachep, GFP_ATOMIC);
 +		if (!e) {
 +			wnd->uptodated = -1;
 +			goto out;
@@ -628,14 +652,14 @@ index 000000000000..1a4d65a6aac1
 +			rb_erase(&e3->start.node, &wnd->start_tree);
 +			rb_erase(&e3->count.node, &wnd->count_tree);
 +			wnd->count -= 1;
-+			ntfs_free(e3);
++			kmem_cache_free(ntfs_enode_cachep, e3);
 +		}
 +		if (!bmax)
 +			return;
 +		n3 = rb_first(&wnd->count_tree);
 +		wnd->extent_max =
-+			n3 ? rb_entry(n3, struct e_node, count.node)->count.key :
-+			     0;
++			n3 ? rb_entry(n3, struct e_node, count.node)->count.key
++			   : 0;
 +		return;
 +	}
 +
@@ -664,7 +688,7 @@ index 000000000000..1a4d65a6aac1
 +			rb_erase(&e->start.node, &wnd->start_tree);
 +			rb_erase(&e->count.node, &wnd->count_tree);
 +			wnd->count -= 1;
-+			ntfs_free(e);
++			kmem_cache_free(ntfs_enode_cachep, e);
 +		}
 +		goto out;
 +	}
@@ -689,7 +713,7 @@ index 000000000000..1a4d65a6aac1
 +		rb_erase(&e->count.node, &wnd->count_tree);
 +		wnd->count -= 1;
 +	} else {
-+		e = ntfs_malloc(sizeof(struct e_node));
++		e = kmem_cache_alloc(ntfs_enode_cachep, GFP_ATOMIC);
 +		if (!e)
 +			wnd->uptodated = -1;
 +	}
@@ -883,13 +907,9 @@ index 000000000000..1a4d65a6aac1
 +	if (!wnd->bits_last)
 +		wnd->bits_last = wbits;
 +
-+	if (wnd->nwnd <= ARRAY_SIZE(wnd->free_holder)) {
-+		wnd->free_bits = wnd->free_holder;
-+	} else {
-+		wnd->free_bits = ntfs_zalloc(wnd->nwnd * sizeof(u16));
-+		if (!wnd->free_bits)
-+			return -ENOMEM;
-+	}
++	wnd->free_bits = ntfs_zalloc(wnd->nwnd * sizeof(u16));
++	if (!wnd->free_bits)
++		return -ENOMEM;
 +
 +	err = wnd_rescan(wnd);
 +	if (err)
@@ -1558,22 +1578,16 @@ index 000000000000..1a4d65a6aac1
 +		new_last = wbits;
 +
 +	if (new_wnd != wnd->nwnd) {
-+		if (new_wnd <= ARRAY_SIZE(wnd->free_holder)) {
-+			new_free = wnd->free_holder;
-+		} else {
-+			new_free = ntfs_malloc(new_wnd * sizeof(u16));
-+			if (!new_free)
-+				return -ENOMEM;
-+		}
++		new_free = ntfs_malloc(new_wnd * sizeof(u16));
++		if (!new_free)
++			return -ENOMEM;
 +
 +		if (new_free != wnd->free_bits)
 +			memcpy(new_free, wnd->free_bits,
 +			       wnd->nwnd * sizeof(short));
 +		memset(new_free + wnd->nwnd, 0,
 +		       (new_wnd - wnd->nwnd) * sizeof(short));
-+		if (wnd->free_bits != wnd->free_holder)
-+			ntfs_free(wnd->free_bits);
-+
++		ntfs_free(wnd->free_bits);
 +		wnd->free_bits = new_free;
 +	}
 +

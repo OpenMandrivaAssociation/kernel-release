@@ -3,38 +3,38 @@ Return-Path: <linux-kernel-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52532C433DB
-	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:11:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD747C43461
+	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D128D64DDC
-	for <linux-kernel@archiver.kernel.org>; Thu, 28 Jan 2021 09:10:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52A8661163
+	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbhA1JKv (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Thu, 28 Jan 2021 04:10:51 -0500
-Received: from relayfre-01.paragon-software.com ([176.12.100.13]:47828 "EHLO
+        id S236462AbhDBPyO (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Fri, 2 Apr 2021 11:54:14 -0400
+Received: from relayfre-01.paragon-software.com ([176.12.100.13]:47748 "EHLO
         relayfre-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231749AbhA1JGT (ORCPT
+        by vger.kernel.org with ESMTP id S235617AbhDBPx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jan 2021 04:06:19 -0500
+        Fri, 2 Apr 2021 11:53:57 -0400
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 373CF1E80;
-        Thu, 28 Jan 2021 12:05:03 +0300 (MSK)
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id B9A1D1D39;
+        Fri,  2 Apr 2021 18:53:53 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1611824703;
-        bh=v1nLxGoVBtbft/OKRDTLqnXhbGDZMOT3okjkJDJLLB4=;
+        d=paragon-software.com; s=mail; t=1617378833;
+        bh=dYIt1EzjK55nl2vsCwc9KTZSrxZdwULDjGMy0ArwLlU=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=i+UUN6Wj8S+3TmO1vqBpkSuWBReSZP/HbRMI4T2sYJs5JtMeT5SdS6LNvWstIeSYu
-         r+ZfCXtBBwK7p/kMTU7GW1M8GgljjaIMqbttHbyynTVzKZaV/4G2qxLMKU639cpJGe
-         6pryG0fSAqCOO0MU0eW5RF+2YaU8AgTP0fJswlYw=
+        b=layGQ5XSSeTHV/u4ie5cljfoGPq1/23Mn4RQjVW8/n9UOUL8SQX3OP1+9OUdv3AMu
+         4Fms3uP5EYPe1kP3qqPRXR7JhPBaUo7TRJ8DoKxZpUOA3m3C1FiWxS4q1H9JmFZxSB
+         CZAhkBIinHHAhM3I05RcW1q24wBR20WeGBh69lpM=
 Received: from fsd-lkpg.ufsd.paragon-software.com (172.30.114.105) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Thu, 28 Jan 2021 12:05:02 +0300
+ 15.1.2176.2; Fri, 2 Apr 2021 18:53:52 +0300
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 To:     <linux-fsdevel@vger.kernel.org>
 CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
@@ -43,14 +43,15 @@ CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
         <mark@harmstone.com>, <nborisov@suse.com>,
         <linux-ntfs-dev@lists.sourceforge.net>, <anton@tuxera.com>,
         <dan.carpenter@oracle.com>, <hch@lst.de>, <ebiggers@kernel.org>,
-        <andy.lavr@gmail.com>,
+        <andy.lavr@gmail.com>, <kari.argillander@gmail.com>,
+        <oleksandr@natalenko.name>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH v19 02/10] fs/ntfs3: Add initialization of super block
-Date:   Thu, 28 Jan 2021 12:04:47 +0300
-Message-ID: <20210128090455.3576502-3-almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH v26 02/10] fs/ntfs3: Add initialization of super block
+Date:   Fri, 2 Apr 2021 18:53:39 +0300
+Message-ID: <20210402155347.64594-3-almaz.alexandrovich@paragon-software.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
-References: <20210128090455.3576502-1-almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
+References: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -60,7 +61,7 @@ X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Archived-At: <https://lore.kernel.org/lkml/20210128090455.3576502-3-almaz.alexandrovich@paragon-software.com/>
+Archived-At: <https://lore.kernel.org/lkml/20210402155347.64594-3-almaz.alexandrovich@paragon-software.com/>
 List-Archive: <https://lore.kernel.org/lkml/>
 List-Post: <mailto:linux-kernel@vger.kernel.org>
 
@@ -68,11 +69,11 @@ This adds initialization of super block
 
 Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 ---
- fs/ntfs3/fsntfs.c | 2535 ++++++++++++++++++++++++++++++++++++++++++
- fs/ntfs3/index.c  | 2662 +++++++++++++++++++++++++++++++++++++++++++++
- fs/ntfs3/inode.c  | 2050 ++++++++++++++++++++++++++++++++++
- fs/ntfs3/super.c  | 1479 +++++++++++++++++++++++++
- 4 files changed, 8726 insertions(+)
+ fs/ntfs3/fsntfs.c | 2542 +++++++++++++++++++++++++++++++++++++++++++
+ fs/ntfs3/index.c  | 2641 +++++++++++++++++++++++++++++++++++++++++++++
+ fs/ntfs3/inode.c  | 2033 ++++++++++++++++++++++++++++++++++
+ fs/ntfs3/super.c  | 1500 +++++++++++++++++++++++++
+ 4 files changed, 8716 insertions(+)
  create mode 100644 fs/ntfs3/fsntfs.c
  create mode 100644 fs/ntfs3/index.c
  create mode 100644 fs/ntfs3/inode.c
@@ -80,14 +81,14 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
 diff --git a/fs/ntfs3/fsntfs.c b/fs/ntfs3/fsntfs.c
 new file mode 100644
-index 000000000000..eae477bd5c4a
+index 000000000..327356b08
 --- /dev/null
 +++ b/fs/ntfs3/fsntfs.c
-@@ -0,0 +1,2535 @@
+@@ -0,0 +1,2542 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + */
 +
@@ -237,8 +238,8 @@ index 000000000000..eae477bd5c4a
 +	u16 sample, fo, fn;
 +
 +	fo = le16_to_cpu(rhdr->fix_off);
-+	fn = simple ? ((bytes >> SECTOR_SHIFT) + 1) :
-+		      le16_to_cpu(rhdr->fix_num);
++	fn = simple ? ((bytes >> SECTOR_SHIFT) + 1)
++		    : le16_to_cpu(rhdr->fix_num);
 +
 +	/* Check errors */
 +	if ((fo & 1) || fo + fn * sizeof(short) > SECTOR_SIZE || !fn-- ||
@@ -343,12 +344,13 @@ index 000000000000..eae477bd5c4a
 +{
 +	int err = 0;
 +	struct super_block *sb = sbi->sb;
-+	struct inode *inode = &ni->vfs_inode;
++	bool initialized = false;
 +	struct MFT_REF ref;
++	struct inode *inode;
 +
 +	/* Check for 4GB */
-+	if (inode->i_size >= 0x100000000ull) {
-+		ntfs_err(sb, "$LogFile is too big");
++	if (ni->vfs_inode.i_size >= 0x100000000ull) {
++		ntfs_err(sb, "\x24LogFile is too big");
 +		err = -EINVAL;
 +		goto out;
 +	}
@@ -383,9 +385,10 @@ index 000000000000..eae477bd5c4a
 +
 +	sbi->mft.ni = ntfs_i(inode);
 +
++	/* LogFile should not contains attribute list */
 +	err = ni_load_all_mi(sbi->mft.ni);
 +	if (!err)
-+		err = log_replay(ni);
++		err = log_replay(ni, &initialized);
 +
 +	iput(inode);
 +	sbi->mft.ni = NULL;
@@ -398,9 +401,10 @@ index 000000000000..eae477bd5c4a
 +		goto out;
 +	}
 +
-+	if (sb_rdonly(sb))
++	if (sb_rdonly(sb) || !initialized)
 +		goto out;
 +
++	/* fill LogFile by '-1' if it is initialized */
 +	err = ntfs_bio_fill_1(sbi, &ni->file.run);
 +
 +out:
@@ -1267,7 +1271,7 @@ index 000000000000..eae477bd5c4a
 +	struct buffer_head *bh;
 +
 +	if (!run) {
-+		/* first reading of $Volume + $MFTMirr + $LogFile goes here*/
++		/* first reading of $Volume + $MFTMirr + LogFile goes here*/
 +		if (vbo > MFT_REC_VOL * sbi->record_size) {
 +			err = -ENOENT;
 +			goto out;
@@ -1703,7 +1707,7 @@ index 000000000000..eae477bd5c4a
 +		lbo = (u64)lcn << cluster_bits;
 +		len = (u64)clen << cluster_bits;
 +new_bio:
-+		new = ntfs_alloc_bio(BIO_MAX_PAGES);
++		new = ntfs_alloc_bio(BIO_MAX_VECS);
 +		if (!new) {
 +			err = -ENOMEM;
 +			break;
@@ -1811,8 +1815,7 @@ index 000000000000..eae477bd5c4a
 +
 +static inline u32 sid_length(const struct SID *sid)
 +{
-+	return offsetof(struct SID, SubAuthority[0]) +
-+	       (sid->SubAuthorityCount * sizeof(u32));
++	return struct_size(sid, SubAuthority, sid->SubAuthorityCount);
 +}
 +
 +/*
@@ -1824,8 +1827,15 @@ index 000000000000..eae477bd5c4a
 +	u32 i;
 +	u16 ace_count, ace_size;
 +
-+	if (acl->AclRevision != ACL_REVISION)
++	if (acl->AclRevision != ACL_REVISION &&
++	    acl->AclRevision != ACL_REVISION_DS) {
++		/*
++		 * This value should be ACL_REVISION, unless the ACL contains an
++		 * object-specific ACE, in which case this value must be ACL_REVISION_DS.
++		 * All ACEs in an ACL must be at the same revision level.
++		 */
 +		return false;
++	}
 +
 +	if (acl->Sbz1)
 +		return false;
@@ -1837,7 +1847,6 @@ index 000000000000..eae477bd5c4a
 +		return false;
 +
 +	len -= sizeof(struct ACL);
-+
 +	ace = (struct ACE_HEADER *)&acl[1];
 +	ace_count = le16_to_cpu(acl->AceCount);
 +
@@ -1850,7 +1859,6 @@ index 000000000000..eae477bd5c4a
 +			return false;
 +
 +		len -= ace_size;
-+
 +		ace = Add2Ptr(ace, ace_size);
 +	}
 +
@@ -2621,14 +2629,14 @@ index 000000000000..eae477bd5c4a
 +}
 diff --git a/fs/ntfs3/index.c b/fs/ntfs3/index.c
 new file mode 100644
-index 000000000000..df2969248816
+index 000000000..931a7241e
 --- /dev/null
 +++ b/fs/ntfs3/index.c
-@@ -0,0 +1,2662 @@
+@@ -0,0 +1,2641 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + */
 +
@@ -2655,12 +2663,14 @@ index 000000000000..df2969248816
 + * if l1 != 0
 + *   both names are little endian on-disk ATTR_FILE_NAME structs
 + * else
-+ *   f1 - cpu_str, f2 - ATTR_FILE_NAME
++ *   key1 - cpu_str, key2 - ATTR_FILE_NAME
 + */
-+static int cmp_fnames(const struct ATTR_FILE_NAME *f1, size_t l1,
-+		      const struct ATTR_FILE_NAME *f2, size_t l2,
-+		      const struct ntfs_sb_info *sbi)
++static int cmp_fnames(const void *key1, size_t l1, const void *key2, size_t l2,
++		      const void *data)
 +{
++	const struct ATTR_FILE_NAME *f2 = key2;
++	const struct ntfs_sb_info *sbi = data;
++	const struct ATTR_FILE_NAME *f1;
 +	u16 fsize2;
 +	bool both_case;
 +
@@ -2673,24 +2683,27 @@ index 000000000000..df2969248816
 +
 +	both_case = f2->type != FILE_NAME_DOS /*&& !sbi->options.nocase*/;
 +	if (!l1) {
-+		const struct cpu_str *s1 = (struct cpu_str *)f1;
 +		const struct le_str *s2 = (struct le_str *)&f2->name_len;
 +
 +		/*
 +		 * If names are equal (case insensitive)
 +		 * try to compare it case sensitive
 +		 */
-+		return ntfs_cmp_names_cpu(s1, s2, sbi->upcase, both_case);
++		return ntfs_cmp_names_cpu(key1, s2, sbi->upcase, both_case);
 +	}
 +
++	f1 = key1;
 +	return ntfs_cmp_names(f1->name, f1->name_len, f2->name, f2->name_len,
 +			      sbi->upcase, both_case);
 +}
 +
 +/* $SII of $Secure and $Q of Quota */
-+static int cmp_uint(const u32 *k1, size_t l1, const u32 *k2, size_t l2,
-+		    const void *p)
++static int cmp_uint(const void *key1, size_t l1, const void *key2, size_t l2,
++		    const void *data)
 +{
++	const u32 *k1 = key1;
++	const u32 *k2 = key2;
++
 +	if (l2 < sizeof(u32))
 +		return -1;
 +
@@ -2702,9 +2715,11 @@ index 000000000000..df2969248816
 +}
 +
 +/* $SDH of $Secure */
-+static int cmp_sdh(const struct SECURITY_KEY *k1, size_t l1,
-+		   const struct SECURITY_KEY *k2, size_t l2, const void *p)
++static int cmp_sdh(const void *key1, size_t l1, const void *key2, size_t l2,
++		   const void *data)
 +{
++	const struct SECURITY_KEY *k1 = key1;
++	const struct SECURITY_KEY *k2 = key2;
 +	u32 t1, t2;
 +
 +	if (l2 < sizeof(struct SECURITY_KEY))
@@ -2720,7 +2735,7 @@ index 000000000000..df2969248816
 +		return 1;
 +
 +	/* Second value is security Id */
-+	if (p) {
++	if (data) {
 +		t1 = le32_to_cpu(k1->sec_id);
 +		t2 = le32_to_cpu(k2->sec_id);
 +		if (t1 < t2)
@@ -2733,12 +2748,14 @@ index 000000000000..df2969248816
 +}
 +
 +/* $O of ObjId and "$R" for Reparse */
-+static int cmp_uints(const __le32 *k1, size_t l1, const __le32 *k2, size_t l2,
-+		     const void *p)
++static int cmp_uints(const void *key1, size_t l1, const void *key2, size_t l2,
++		     const void *data)
 +{
++	const __le32 *k1 = key1;
++	const __le32 *k2 = key2;
 +	size_t count;
 +
-+	if ((size_t)p == 1) {
++	if ((size_t)data == 1) {
 +		/*
 +		 * ni_delete_all -> ntfs_remove_reparse -> delete all with this reference
 +		 * k1, k2 - pointers to REPARSE_KEY
@@ -2780,16 +2797,16 @@ index 000000000000..df2969248816
 +	switch (root->type) {
 +	case ATTR_NAME:
 +		if (root->rule == NTFS_COLLATION_TYPE_FILENAME)
-+			return (NTFS_CMP_FUNC)&cmp_fnames;
++			return &cmp_fnames;
 +		break;
 +	case ATTR_ZERO:
 +		switch (root->rule) {
 +		case NTFS_COLLATION_TYPE_UINT:
-+			return (NTFS_CMP_FUNC)&cmp_uint;
++			return &cmp_uint;
 +		case NTFS_COLLATION_TYPE_SECURITY_HASH:
-+			return (NTFS_CMP_FUNC)&cmp_sdh;
++			return &cmp_sdh;
 +		case NTFS_COLLATION_TYPE_UINTS:
-+			return (NTFS_CMP_FUNC)&cmp_uints;
++			return &cmp_uints;
 +		default:
 +			break;
 +		}
@@ -3042,9 +3059,8 @@ index 000000000000..df2969248816
 +		if (vbo + blocksize > data_size)
 +			nbits = 8 * (data_size - vbo);
 +
-+		ok = nbits > from ?
-+			     (*fn)((ulong *)bh->b_data, from, nbits, ret) :
-+			     false;
++		ok = nbits > from ? (*fn)((ulong *)bh->b_data, from, nbits, ret)
++				  : false;
 +		put_bh(bh);
 +
 +		if (ok) {
@@ -3170,7 +3186,7 @@ index 000000000000..df2969248816
 + * be split.
 + * NOTE: This function should never return 'END' entry NULL returns on error
 + */
-+static const inline struct NTFS_DE *hdr_find_split(const struct INDEX_HDR *hdr)
++static const struct NTFS_DE *hdr_find_split(const struct INDEX_HDR *hdr)
 +{
 +	size_t o;
 +	const struct NTFS_DE *e = hdr_first_de(hdr);
@@ -3201,8 +3217,8 @@ index 000000000000..df2969248816
 + * inserts some entries at the beginning of the buffer.
 + * It is used to insert entries into a newly-created buffer.
 + */
-+static const inline struct NTFS_DE *
-+hdr_insert_head(struct INDEX_HDR *hdr, const void *ins, u32 ins_bytes)
++static const struct NTFS_DE *hdr_insert_head(struct INDEX_HDR *hdr,
++					     const void *ins, u32 ins_bytes)
 +{
 +	u32 to_move;
 +	struct NTFS_DE *e = hdr_first_de(hdr);
@@ -4024,8 +4040,8 @@ index 000000000000..df2969248816
 +	struct ntfs_sb_info *sbi = ni->mi.sbi;
 +	struct ATTRIB *bitmap;
 +	struct ATTRIB *alloc;
-+	u32 alloc_size = ntfs_up_cluster(sbi, 1u << indx->index_bits);
-+	u32 bmp_size = QuadAlign(((alloc_size >> indx->index_bits) + 7) >> 3);
++	u32 data_size = 1u << indx->index_bits;
++	u32 alloc_size = ntfs_up_cluster(sbi, data_size);
 +	CLST len = alloc_size >> sbi->cluster_bits;
 +	const struct INDEX_NAMES *in = &s_index_names[indx->type];
 +	CLST alen;
@@ -4043,17 +4059,21 @@ index 000000000000..df2969248816
 +	if (err)
 +		goto out1;
 +
-+	err = ni_insert_resident(ni, bmp_size, ATTR_BITMAP, in->name,
++	alloc->nres.valid_size = alloc->nres.data_size = cpu_to_le64(data_size);
++
++	err = ni_insert_resident(ni, bitmap_size(1), ATTR_BITMAP, in->name,
 +				 in->name_len, &bitmap, NULL);
 +	if (err)
 +		goto out2;
 +
++	if (in->name == I30_NAME) {
++		ni->vfs_inode.i_size = data_size;
++		inode_set_bytes(&ni->vfs_inode, alloc_size);
++	}
++
 +	memcpy(&indx->alloc_run, &run, sizeof(run));
 +
 +	*vbn = 0;
-+
-+	if (in->name == I30_NAME)
-+		ni->vfs_inode.i_size = alloc_size;
 +
 +	return 0;
 +
@@ -4077,7 +4097,7 @@ index 000000000000..df2969248816
 +{
 +	int err;
 +	size_t bit;
-+	u64 data_size, alloc_size;
++	u64 data_size;
 +	u64 bmp_size, bmp_size_v;
 +	struct ATTRIB *bmp, *alloc;
 +	struct mft_inode *mi;
@@ -4101,15 +4121,12 @@ index 000000000000..df2969248816
 +	}
 +
 +	data_size = (u64)(bit + 1) << indx->index_bits;
-+	alloc_size = ntfs_up_cluster(ni->mi.sbi, data_size);
 +
 +	if (bmp) {
-+		u64 bits = ((alloc_size >> indx->index_bits) + 7) >> 3;
-+
 +		/* Increase bitmap */
 +		err = attr_set_size(ni, ATTR_BITMAP, in->name, in->name_len,
-+				    &indx->bitmap_run, QuadAlign(bits), NULL,
-+				    true, NULL);
++				    &indx->bitmap_run, bitmap_size(bit + 1),
++				    NULL, true, NULL);
 +		if (err)
 +			goto out1;
 +	}
@@ -4122,23 +4139,14 @@ index 000000000000..df2969248816
 +		goto out1;
 +	}
 +
-+	if (alloc_size > le64_to_cpu(alloc->nres.alloc_size)) {
-+		/* Increase allocation */
-+		err = attr_set_size(ni, ATTR_ALLOC, in->name, in->name_len,
-+				    &indx->alloc_run, alloc_size, &alloc_size,
-+				    true, NULL);
-+		if (err) {
-+			if (bmp)
-+				goto out2;
-+			goto out1;
-+		}
-+
-+		if (in->name == I30_NAME)
-+			ni->vfs_inode.i_size = alloc_size;
-+	} else if (data_size > le64_to_cpu(alloc->nres.data_size)) {
-+		alloc->nres.data_size = alloc->nres.valid_size =
-+			cpu_to_le64(data_size);
-+		mi->dirty = true;
++	/* Increase allocation */
++	err = attr_set_size(ni, ATTR_ALLOC, in->name, in->name_len,
++			    &indx->alloc_run, data_size, &data_size, true,
++			    NULL);
++	if (err) {
++		if (bmp)
++			goto out2;
++		goto out1;
 +	}
 +
 +	*vbn = bit << indx->idx2vbn_bits;
@@ -4175,10 +4183,9 @@ index 000000000000..df2969248816
 +	CLST new_vbn;
 +	__le64 *sub_vbn, t_vbn;
 +	u16 new_de_size;
-+	u32 hdr_used, hdr_total, asize, tail, used, aoff, to_move;
++	u32 hdr_used, hdr_total, asize, used, to_move;
 +	u32 root_size, new_root_size;
 +	struct ntfs_sb_info *sbi;
-+	char *next;
 +	int ds_root;
 +	struct INDEX_ROOT *root, *a_root = NULL;
 +
@@ -4194,30 +4201,23 @@ index 000000000000..df2969248816
 +	hdr = &root->ihdr;
 +	sbi = ni->mi.sbi;
 +	rec = mi->mrec;
-+	aoff = PtrOffset(rec, attr);
 +	used = le32_to_cpu(rec->used);
 +	new_de_size = le16_to_cpu(new_de->size);
 +	hdr_used = le32_to_cpu(hdr->used);
 +	hdr_total = le32_to_cpu(hdr->total);
 +	asize = le32_to_cpu(attr->size);
-+	next = Add2Ptr(attr, asize);
-+	tail = used - aoff - asize;
 +	root_size = le32_to_cpu(attr->res.data_size);
 +
 +	ds_root = new_de_size + hdr_used - hdr_total;
 +
 +	if (used + ds_root < sbi->max_bytes_per_attr) {
 +		/* make a room for new elements */
-+		memmove(next + ds_root, next, used - aoff - asize);
++		mi_resize_attr(mi, attr, ds_root);
 +		hdr->total = cpu_to_le32(hdr_total + ds_root);
 +		e = hdr_insert_de(indx, hdr, new_de, root_de, ctx);
 +		WARN_ON(!e);
 +		fnd_clear(fnd);
 +		fnd->root_de = e;
-+		attr->size = cpu_to_le32(asize + ds_root);
-+		attr->res.data_size = cpu_to_le32(root_size + ds_root);
-+		rec->used = cpu_to_le32(used + ds_root);
-+		mi->dirty = true;
 +
 +		return 0;
 +	}
@@ -4272,15 +4272,8 @@ index 000000000000..df2969248816
 +		goto out;
 +	}
 +
-+	if (ds_root) {
-+		memmove(next + ds_root, next, tail);
-+		used += ds_root;
-+		asize += ds_root;
-+		rec->used = cpu_to_le32(used);
-+		attr->size = cpu_to_le32(asize);
-+		attr->res.data_size = cpu_to_le32(new_root_size);
-+		mi->dirty = true;
-+	}
++	if (ds_root)
++		mi_resize_attr(mi, attr, ds_root);
 +
 +	/* Fill first entry (vcn will be set later) */
 +	e = (struct NTFS_DE *)(root + 1);
@@ -4296,26 +4289,27 @@ index 000000000000..df2969248816
 +	mi->dirty = true;
 +
 +	/* Create alloc and bitmap attributes (if not) */
-+	if (run_is_empty(&indx->alloc_run)) {
-+		err = indx_create_allocate(indx, ni, &new_vbn);
-+		if (err) {
-+			/* restore root after 'indx_create_allocate' */
-+			memmove(next - ds_root, next, tail);
-+			used -= ds_root;
-+			rec->used = cpu_to_le32(used);
-+			memcpy(attr, a_root, asize);
-+			goto out1;
-+		}
-+	} else {
-+		err = indx_add_allocate(indx, ni, &new_vbn);
-+		if (err)
-+			goto out1;
-+	}
++	err = run_is_empty(&indx->alloc_run)
++		      ? indx_create_allocate(indx, ni, &new_vbn)
++		      : indx_add_allocate(indx, ni, &new_vbn);
 +
 +	/* layout of record may be changed, so rescan root */
 +	root = indx_get_root(indx, ni, &attr, &mi);
 +	if (!root) {
++		/* bug? */
++		ntfs_set_state(sbi, NTFS_DIRTY_ERROR);
 +		err = -EINVAL;
++		goto out1;
++	}
++
++	if (err) {
++		/* restore root */
++		if (mi_resize_attr(mi, attr, -ds_root))
++			memcpy(attr, a_root, asize);
++		else {
++			/* bug? */
++			ntfs_set_state(sbi, NTFS_DIRTY_ERROR);
++		}
 +		goto out1;
 +	}
 +
@@ -4477,9 +4471,9 @@ index 000000000000..df2969248816
 +	hdr_insert_de(indx,
 +		      (*indx->cmp)(new_de + 1, le16_to_cpu(new_de->key_size),
 +				   up_e + 1, le16_to_cpu(up_e->key_size),
-+				   ctx) < 0 ?
-+			      hdr2 :
-+			      hdr1,
++				   ctx) < 0
++			      ? hdr2
++			      : hdr1,
 +		      new_de, NULL, ctx);
 +
 +	indx_mark_used(indx, ni, new_vbn >> indx->idx2vbn_bits);
@@ -4637,7 +4631,7 @@ index 000000000000..df2969248816
 +		       size_t bit)
 +{
 +	int err = 0;
-+	u64 bpb, new_alloc;
++	u64 bpb, new_data;
 +	size_t nbits;
 +	struct ATTRIB *b;
 +	struct ATTR_LIST_ENTRY *le = NULL;
@@ -4677,16 +4671,12 @@ index 000000000000..df2969248816
 +			return 0;
 +	}
 +
-+	new_alloc = (u64)bit << indx->index_bits;
++	new_data = (u64)bit << indx->index_bits;
 +
 +	err = attr_set_size(ni, ATTR_ALLOC, in->name, in->name_len,
-+			    &indx->alloc_run, new_alloc, &new_alloc, false,
-+			    NULL);
++			    &indx->alloc_run, new_data, &new_data, false, NULL);
 +	if (err)
 +		return err;
-+
-+	if (in->name == I30_NAME)
-+		ni->vfs_inode.i_size = new_alloc;
 +
 +	bpb = bitmap_size(bit);
 +	if (bpb * 8 == nbits)
@@ -4942,8 +4932,8 @@ index 000000000000..df2969248816
 +			err = level ? indx_insert_into_buffer(indx, ni, root,
 +							      re, ctx,
 +							      fnd->level - 1,
-+							      fnd) :
-+				      indx_insert_into_root(indx, ni, re, e,
++							      fnd)
++				    : indx_insert_into_root(indx, ni, re, e,
 +							    ctx, fnd);
 +			ntfs_free(re);
 +
@@ -5209,9 +5199,6 @@ index 000000000000..df2969248816
 +		hdr->used = hdr->total = cpu_to_le32(
 +			new_root_size - offsetof(struct INDEX_ROOT, ihdr));
 +		mi->dirty = true;
-+
-+		if (in->name == I30_NAME)
-+			ni->vfs_inode.i_size = 0;
 +	}
 +
 +out:
@@ -5289,14 +5276,14 @@ index 000000000000..df2969248816
 +}
 diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
 new file mode 100644
-index 000000000000..4b97065be284
+index 000000000..9e836c192
 --- /dev/null
 +++ b/fs/ntfs3/inode.c
-@@ -0,0 +1,2050 @@
+@@ -0,0 +1,2033 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + */
 +
@@ -5538,8 +5525,8 @@ index 000000000000..4b97065be284
 +		if (!attr->nres.alloc_size)
 +			goto next_attr;
 +
-+		run = ino == MFT_REC_BITMAP ? &sbi->used.bitmap.run :
-+					      &ni->file.run;
++		run = ino == MFT_REC_BITMAP ? &sbi->used.bitmap.run
++					    : &ni->file.run;
 +		break;
 +
 +	case ATTR_ROOT:
@@ -5566,9 +5553,9 @@ index 000000000000..4b97065be284
 +		if (err)
 +			goto out;
 +
-+		mode = sb->s_root ?
-+			       (S_IFDIR | (0777 & sbi->options.fs_dmask_inv)) :
-+			       (S_IFDIR | 0777);
++		mode = sb->s_root
++			       ? (S_IFDIR | (0777 & sbi->options.fs_dmask_inv))
++			       : (S_IFDIR | 0777);
 +		goto next_attr;
 +
 +	case ATTR_ALLOC:
@@ -5587,7 +5574,7 @@ index 000000000000..4b97065be284
 +		if (ino == MFT_REC_MFT) {
 +			if (!attr->non_res)
 +				goto out;
-+#ifndef NTFS3_64BIT_CLUSTER
++#ifndef CONFIG_NTFS3_64BIT_CLUSTER
 +			/* 0x20000000 = 2^32 / 8 */
 +			if (le64_to_cpu(attr->nres.alloc_size) >= 0x20000000)
 +				goto out;
@@ -5760,15 +5747,18 @@ index 000000000000..4b97065be284
 +}
 +
 +/* returns 1 if match */
-+static int ntfs_test_inode(struct inode *inode, const struct MFT_REF *ref)
++static int ntfs_test_inode(struct inode *inode, void *data)
 +{
++	struct MFT_REF *ref = data;
++
 +	return ino_get(ref) == inode->i_ino;
 +}
 +
-+static int ntfs_set_inode(struct inode *inode, const struct MFT_REF *ref)
++static int ntfs_set_inode(struct inode *inode, void *data)
 +{
-+	inode->i_ino = ino_get(ref);
++	const struct MFT_REF *ref = data;
 +
++	inode->i_ino = ino_get(ref);
 +	return 0;
 +}
 +
@@ -5777,9 +5767,7 @@ index 000000000000..4b97065be284
 +{
 +	struct inode *inode;
 +
-+	inode = iget5_locked(sb, ino_get(ref),
-+			     (int (*)(struct inode *, void *))ntfs_test_inode,
-+			     (int (*)(struct inode *, void *))ntfs_set_inode,
++	inode = iget5_locked(sb, ino_get(ref), ntfs_test_inode, ntfs_set_inode,
 +			     (void *)ref);
 +	if (unlikely(!inode))
 +		return ERR_PTR(-ENOMEM);
@@ -6056,8 +6044,8 @@ index 000000000000..4b97065be284
 +	}
 +
 +	ret = blockdev_direct_IO(iocb, inode, iter,
-+				 wr ? ntfs_get_block_direct_IO_W :
-+				      ntfs_get_block_direct_IO_R);
++				 wr ? ntfs_get_block_direct_IO_W
++				    : ntfs_get_block_direct_IO_R);
 +	valid = ni->i_valid;
 +	if (wr) {
 +		if (ret <= 0)
@@ -6470,10 +6458,11 @@ index 000000000000..4b97065be284
 +	return ERR_PTR(err);
 +}
 +
-+int ntfs_create_inode(struct inode *dir, struct dentry *dentry,
-+		      const struct cpu_str *uni, umode_t mode, dev_t dev,
-+		      const char *symname, u32 size, int excl,
-+		      struct ntfs_fnd *fnd, struct inode **new_inode)
++struct inode *ntfs_create_inode(struct user_namespace *mnt_userns,
++				struct inode *dir, struct dentry *dentry,
++				const struct cpu_str *uni, umode_t mode,
++				dev_t dev, const char *symname, u32 size,
++				int excl, struct ntfs_fnd *fnd)
 +{
 +	int err;
 +	struct super_block *sb = dir->i_sb;
@@ -6503,16 +6492,23 @@ index 000000000000..4b97065be284
 +		     S_ISSOCK(mode);
 +
 +	if (is_sp)
-+		return -EOPNOTSUPP;
++		return ERR_PTR(-EOPNOTSUPP);
 +
 +	dir_root = indx_get_root(&dir_ni->dir, dir_ni, NULL, NULL);
 +	if (!dir_root)
-+		return -EINVAL;
++		return ERR_PTR(-EINVAL);
 +
 +	if (is_dir) {
 +		/* use parent's directory attributes */
 +		fa = dir_ni->std_fa | FILE_ATTRIBUTE_DIRECTORY |
 +		     FILE_ATTRIBUTE_ARCHIVE;
++		/*
++		 * By default child directory inherits parent attributes
++		 * root directory is hidden + system
++		 * Make an exception for children in root
++		 */
++		if (dir->i_ino == MFT_REC_ROOT)
++			fa &= ~(FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
 +	} else if (is_link) {
 +		/* It is good idea that link should be the same type (file/dir) as target */
 +		fa = FILE_ATTRIBUTE_REPARSE_POINT;
@@ -6632,18 +6628,10 @@ index 000000000000..4b97065be284
 +	if (err)
 +		goto out4;
 +
++	mi_get_ref(&ni->mi, &new_de->ref);
++
 +	fname = (struct ATTR_FILE_NAME *)(new_de + 1);
-+
-+	new_de->ref.low = cpu_to_le32(ino);
-+#ifdef NTFS3_64BIT_CLUSTER
-+	new_de->ref.high = cpu_to_le16(ino >> 32);
-+	fname->home.high = cpu_to_le16(dir->i_ino >> 32);
-+#endif
-+	new_de->ref.seq = rec->seq;
-+
-+	fname->home.low = cpu_to_le32(dir->i_ino & 0xffffffff);
-+	fname->home.seq = dir_ni->mi.mrec->seq;
-+
++	mi_get_ref(&dir_ni->mi, &fname->home);
 +	fname->dup.cr_time = fname->dup.m_time = fname->dup.c_time =
 +		fname->dup.a_time = std5->cr_time;
 +	fname->dup.alloc_size = fname->dup.data_size = 0;
@@ -6843,10 +6831,9 @@ index 000000000000..4b97065be284
 +
 +	/* Fill vfs inode fields */
 +	inode->i_uid = sbi->options.uid ? sbi->options.fs_uid : current_fsuid();
-+	inode->i_gid =
-+		sbi->options.gid ?
-+			sbi->options.fs_gid :
-+			(dir->i_mode & S_ISGID) ? dir->i_gid : current_fsgid();
++	inode->i_gid = sbi->options.gid		 ? sbi->options.fs_gid
++		       : (dir->i_mode & S_ISGID) ? dir->i_gid
++						 : current_fsgid();
 +	inode->i_generation = le16_to_cpu(rec->seq);
 +
 +	dir->i_mtime = dir->i_ctime = inode->i_atime;
@@ -6872,7 +6859,7 @@ index 000000000000..4b97065be284
 +
 +#ifdef CONFIG_NTFS3_FS_POSIX_ACL
 +	if (!is_link && (sb->s_flags & SB_POSIXACL)) {
-+		err = ntfs_init_acl(inode, dir);
++		err = ntfs_init_acl(mnt_userns, inode, dir);
 +		if (err)
 +			goto out6;
 +	} else
@@ -6926,12 +6913,11 @@ index 000000000000..4b97065be284
 +
 +out1:
 +	if (err)
-+		return err;
++		return ERR_PTR(err);
 +
 +	unlock_new_inode(inode);
 +
-+	*new_inode = inode;
-+	return 0;
++	return inode;
 +}
 +
 +int ntfs_link_inode(struct inode *inode, struct dentry *dentry)
@@ -6967,22 +6953,14 @@ index 000000000000..4b97065be284
 +		goto out;
 +
 +	key_size = le16_to_cpu(new_de->key_size);
-+	fname = (struct ATTR_FILE_NAME *)(new_de + 1);
-+
 +	err = ni_insert_resident(ni, key_size, ATTR_NAME, NULL, 0, &attr, NULL);
 +	if (err)
 +		goto out;
 +
-+	new_de->ref.low = cpu_to_le32(inode->i_ino);
-+#ifdef NTFS3_64BIT_CLUSTER
-+	new_de->ref.high = cpu_to_le16(inode->i_ino >> 32);
-+	fname->home.high = cpu_to_le16(dir->i_ino >> 32);
-+#endif
-+	new_de->ref.seq = ni->mi.mrec->seq;
++	mi_get_ref(&ni->mi, &new_de->ref);
 +
-+	fname->home.low = cpu_to_le32(dir->i_ino & 0xffffffff);
-+	fname->home.seq = dir_ni->mi.mrec->seq;
-+
++	fname = (struct ATTR_FILE_NAME *)(new_de + 1);
++	mi_get_ref(&dir_ni->mi, &fname->home);
 +	fname->dup.cr_time = fname->dup.m_time = fname->dup.c_time =
 +		fname->dup.a_time = kernel2nt(&inode->i_ctime);
 +	fname->dup.alloc_size = fname->dup.data_size = 0;
@@ -7054,20 +7032,13 @@ index 000000000000..4b97065be284
 +	err = ntfs_nls_to_utf16(sbi, name->name, name->len, uni, NTFS_NAME_LEN,
 +				UTF16_HOST_ENDIAN);
 +	if (err < 0)
-+		goto out4;
++		goto out2;
 +
 +	/*mark rw ntfs as dirty. it will be cleared at umount*/
 +	ntfs_set_state(sbi, NTFS_DIRTY_DIRTY);
 +
 +	/* find name in record */
-+#ifdef NTFS3_64BIT_CLUSTER
-+	ref.low = cpu_to_le32(dir->i_ino & 0xffffffff);
-+	ref.high = cpu_to_le16(dir->i_ino >> 32);
-+#else
-+	ref.low = cpu_to_le32(dir->i_ino & 0xffffffff);
-+	ref.high = 0;
-+#endif
-+	ref.seq = dir_ni->mi.mrec->seq;
++	mi_get_ref(&dir_ni->mi, &ref);
 +
 +	le = NULL;
 +	fname = ni_fname_name(ni, uni, &ref, &le);
@@ -7081,7 +7052,7 @@ index 000000000000..4b97065be284
 +	err = indx_delete_entry(indx, dir_ni, fname, fname_full_size(fname),
 +				sbi);
 +	if (err)
-+		goto out4;
++		goto out3;
 +
 +	/* Then remove name from mft */
 +	ni_remove_attr_le(ni, attr_from_name(fname), le);
@@ -7096,15 +7067,14 @@ index 000000000000..4b97065be284
 +			err = indx_delete_entry(indx, dir_ni, fname,
 +						fname_full_size(fname), sbi);
 +			if (err)
-+				goto out4;
++				goto out3;
 +
 +			ni_remove_attr_le(ni, attr_from_name(fname), le);
 +
 +			le16_add_cpu(&ni->mi.mrec->hard_links, -1);
 +		}
 +	}
-+
-+out4:
++out3:
 +	switch (err) {
 +	case 0:
 +		drop_nlink(inode);
@@ -7122,7 +7092,7 @@ index 000000000000..4b97065be284
 +	if (inode->i_nlink)
 +		mark_inode_dirty(inode);
 +
-+out3:
++out2:
 +	__putname(uni);
 +out1:
 +	ni_unlock(ni);
@@ -7345,27 +7315,31 @@ index 000000000000..4b97065be284
 +};
 diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
 new file mode 100644
-index 000000000000..9d9e597c307d
+index 000000000..c56343124
 --- /dev/null
 +++ b/fs/ntfs3/super.c
-@@ -0,0 +1,1479 @@
+@@ -0,0 +1,1500 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Copyright (C) 2019-2020 Paragon Software GmbH, All rights reserved.
++ * Copyright (C) 2019-2021 Paragon Software GmbH, All rights reserved.
 + *
 + *
 + *                 terminology
 + *
-+ * vcn - virtual cluster number - offset inside the file in clusters
-+ * vbo - virtual byte offset    - offset inside the file in bytes
-+ * lcn - logical cluster number - 0 based cluster in clusters heap
-+ * lbo - logical byte offset    - absolute position inside volume
-+ * run - maps vcn to lcn        - stored in attributes in packed form
-+ * attr - attribute segment     - std/name/data etc records inside MFT
-+ * mi  - mft inode              - one MFT record(usually 1024 bytes), consists of attributes
-+ * ni  - ntfs inode             - extends linux inode. consists of one or more mft inodes
++ * cluster - allocation unit     - 512,1K,2K,4K,...,2M
++ * vcn - virtual cluster number  - offset inside the file in clusters
++ * vbo - virtual byte offset     - offset inside the file in bytes
++ * lcn - logical cluster number  - 0 based cluster in clusters heap
++ * lbo - logical byte offset     - absolute position inside volume
++ * run - maps vcn to lcn         - stored in attributes in packed form
++ * attr - attribute segment      - std/name/data etc records inside MFT
++ * mi  - mft inode               - one MFT record(usually 1024 bytes or 4K), consists of attributes
++ * ni  - ntfs inode              - extends linux inode. consists of one or more mft inodes
++ * index - unit inside directory - 2K, 4K, <=page size, does not depend on cluster size
 + *
++ * TODO: Implement
++ * https://docs.microsoft.com/en-us/windows/wsl/file-permissions
 + */
 +
 +#include <linux/backing-dev.h>
@@ -7429,26 +7403,24 @@ index 000000000000..9d9e597c307d
 +	if (!___ratelimit(&sbi->msg_ratelimit, "ntfs3"))
 +		return;
 +
-+	if (atomic_dec_and_test(&s_name_buf_cnt)) {
-+		/* use static allocated buffer */
-+		name = s_name_buf;
-+	} else {
-+		name = kmalloc(sizeof(s_name_buf), GFP_NOFS);
-+	}
++	/* use static allocated buffer, if possible */
++	name = atomic_dec_and_test(&s_name_buf_cnt)
++		       ? s_name_buf
++		       : kmalloc(sizeof(s_name_buf), GFP_NOFS);
 +
 +	if (name) {
-+		struct dentry *dentry = d_find_alias(inode);
++		struct dentry *de = d_find_alias(inode);
 +		const u32 name_len = ARRAY_SIZE(s_name_buf) - 1;
 +
-+		if (dentry) {
-+			spin_lock(&dentry->d_lock);
-+			snprintf(name, name_len, "%s", dentry->d_name.name);
-+			spin_unlock(&dentry->d_lock);
-+			dput(dentry);
++		if (de) {
++			spin_lock(&de->d_lock);
++			snprintf(name, name_len, " \"%s\"", de->d_name.name);
++			spin_unlock(&de->d_lock);
 +			name[name_len] = 0; /* to be sure*/
 +		} else {
 +			name[0] = 0;
 +		}
++		dput(de); /* cocci warns if placed in branch "if (de)" */
 +	}
 +
 +	va_start(args, fmt);
@@ -7457,7 +7429,7 @@ index 000000000000..9d9e597c307d
 +	vaf.fmt = printk_skip_level(fmt);
 +	vaf.va = &args;
 +
-+	printk("%c%cntfs3: %s: ino=%lx, \"%s\" %pV\n", KERN_SOH_ASCII, level,
++	printk("%c%cntfs3: %s: ino=%lx,%s %pV\n", KERN_SOH_ASCII, level,
 +	       sb->s_id, inode->i_ino, name ? name : "", &vaf);
 +
 +	va_end(args);
@@ -7738,17 +7710,13 @@ index 000000000000..9d9e597c307d
 +	if (err)
 +		goto restore_opts;
 +
-+	ro_rw = 0;
-+	if (sb_rdonly(sb) && !(*flags & SB_RDONLY)) {
-+		/* ro -> rw */
-+		ro_rw = 1;
-+		if (sbi->flags & NTFS_FLAGS_NEED_REPLAY) {
-+			ntfs_warn(
-+				sb,
-+				"Couldn't remount rw because journal is not replayed. Please umount/remount instead\n");
-+			err = -EINVAL;
-+			goto restore_opts;
-+		}
++	ro_rw = sb_rdonly(sb) && !(*flags & SB_RDONLY);
++	if (ro_rw && (sbi->flags & NTFS_FLAGS_NEED_REPLAY)) {
++		ntfs_warn(
++			sb,
++			"Couldn't remount rw because journal is not replayed. Please umount/remount instead\n");
++		err = -EINVAL;
++		goto restore_opts;
 +	}
 +
 +	sync_filesystem(sb);
@@ -7819,7 +7787,7 @@ index 000000000000..9d9e597c307d
 +static noinline void put_ntfs(struct ntfs_sb_info *sbi)
 +{
 +	ntfs_free(sbi->new_rec);
-+	ntfs_free(ntfs_put_shared(sbi->upcase));
++	ntfs_vfree(ntfs_put_shared(sbi->upcase));
 +	ntfs_free(sbi->def_table);
 +
 +	wnd_close(&sbi->mft.bitmap);
@@ -7891,13 +7859,14 @@ index 000000000000..9d9e597c307d
 +	struct super_block *sb = root->d_sb;
 +	struct ntfs_sb_info *sbi = sb->s_fs_info;
 +	struct ntfs_mount_options *opts = &sbi->options;
++	struct user_namespace *user_ns = seq_user_ns(m);
 +
 +	if (opts->uid)
 +		seq_printf(m, ",uid=%u",
-+			   from_kuid_munged(&init_user_ns, opts->fs_uid));
++			   from_kuid_munged(user_ns, opts->fs_uid));
 +	if (opts->gid)
 +		seq_printf(m, ",gid=%u",
-+			   from_kgid_munged(&init_user_ns, opts->fs_gid));
++			   from_kgid_munged(user_ns, opts->fs_gid));
 +	if (opts->fmask)
 +		seq_printf(m, ",fmask=%04o", ~opts->fs_fmask_inv);
 +	if (opts->dmask)
@@ -7989,7 +7958,7 @@ index 000000000000..9d9e597c307d
 +	struct inode *inode;
 +
 +	ref.low = cpu_to_le32(ino);
-+#ifdef NTFS3_64BIT_CLUSTER
++#ifdef CONFIG_NTFS3_64BIT_CLUSTER
 +	ref.high = cpu_to_le16(ino >> 32);
 +#else
 +	ref.high = 0;
@@ -8048,9 +8017,9 @@ index 000000000000..9d9e597c307d
 +
 +static u32 true_sectors_per_clst(const struct NTFS_BOOT *boot)
 +{
-+	return boot->sectors_per_clusters <= 0x80 ?
-+		       boot->sectors_per_clusters :
-+		       (1u << (0 - boot->sectors_per_clusters));
++	return boot->sectors_per_clusters <= 0x80
++		       ? boot->sectors_per_clusters
++		       : (1u << (0 - boot->sectors_per_clusters));
 +}
 +
 +/* inits internal info from on-disk boot sector*/
@@ -8146,10 +8115,10 @@ index 000000000000..9d9e597c307d
 +
 +	sbi->cluster_mask = sbi->cluster_size - 1;
 +	sbi->cluster_mask_inv = ~(u64)sbi->cluster_mask;
-+	sbi->record_size = record_size = boot->record_size < 0 ?
-+						 1 << (-boot->record_size) :
-+						 (u32)boot->record_size
-+							 << sbi->cluster_bits;
++	sbi->record_size = record_size = boot->record_size < 0
++						 ? 1 << (-boot->record_size)
++						 : (u32)boot->record_size
++							   << sbi->cluster_bits;
 +
 +	if (record_size > MAXIMUM_BYTES_PER_MFT)
 +		goto out;
@@ -8162,9 +8131,9 @@ index 000000000000..9d9e597c307d
 +		QuadAlign(((record_size >> SECTOR_SHIFT) * sizeof(short))) -
 +		QuadAlign(sizeof(enum ATTR_TYPE));
 +
-+	sbi->index_size = boot->index_size < 0 ?
-+				  1u << (-boot->index_size) :
-+				  (u32)boot->index_size << sbi->cluster_bits;
++	sbi->index_size = boot->index_size < 0
++				  ? 1u << (-boot->index_size)
++				  : (u32)boot->index_size << sbi->cluster_bits;
 +
 +	sbi->volume.ser_num = le64_to_cpu(boot->serial_num);
 +	sbi->volume.size = sectors << sbi->sector_bits;
@@ -8182,11 +8151,7 @@ index 000000000000..9d9e597c307d
 +	}
 +
 +	clusters = sbi->volume.size >> sbi->cluster_bits;
-+#ifdef NTFS3_64BIT_CLUSTER
-+#if BITS_PER_LONG < 64
-+#error "NTFS3_64BIT_CLUSTER incompatible in 32 bit OS"
-+#endif
-+#else
++#ifndef CONFIG_NTFS3_64BIT_CLUSTER
 +	/* 32 bits per cluster */
 +	if (clusters >> 32) {
 +		ntfs_notice(
@@ -8195,6 +8160,8 @@ index 000000000000..9d9e597c307d
 +			gb, mb);
 +		goto out;
 +	}
++#elif BITS_PER_LONG < 64
++#error "CONFIG_NTFS3_64BIT_CLUSTER incompatible in 32 bit OS"
 +#endif
 +
 +	sbi->used.bitmap.nbits = clusters;
@@ -8226,7 +8193,7 @@ index 000000000000..9d9e597c307d
 +	/* Maximum size for normal files */
 +	sbi->maxbytes = (clusters << sbi->cluster_bits) - 1;
 +
-+#ifdef NTFS3_64BIT_CLUSTER
++#ifdef CONFIG_NTFS3_64BIT_CLUSTER
 +	if (clusters >= (1ull << (64 - sbi->cluster_bits)))
 +		sbi->maxbytes = -1;
 +	sbi->maxbytes_sparse = -1;
@@ -8278,7 +8245,6 @@ index 000000000000..9d9e597c307d
 +	sb->s_export_op = &ntfs_export_ops;
 +	sb->s_time_gran = NTFS_TIME_GRAN; // 100 nsec
 +	sb->s_xattr = ntfs_xattr_handlers;
-+	sb->s_maxbytes = MAX_LFS_FILESIZE;
 +
 +	ratelimit_state_init(&sbi->msg_ratelimit, DEFAULT_RATELIMIT_INTERVAL,
 +			     DEFAULT_RATELIMIT_BURST);
@@ -8303,6 +8269,12 @@ index 000000000000..9d9e597c307d
 +	if (err)
 +		goto out;
 +
++#ifdef CONFIG_NTFS3_64BIT_CLUSTER
++	sb->s_maxbytes = MAX_LFS_FILESIZE;
++#else
++	sb->s_maxbytes = 0xFFFFFFFFull << sbi->cluster_bits;
++#endif
++
 +	mutex_init(&sbi->compress.mtx_lznt);
 +#ifdef CONFIG_NTFS3_LZX_XPRESS
 +	mutex_init(&sbi->compress.mtx_xpress);
@@ -8310,7 +8282,7 @@ index 000000000000..9d9e597c307d
 +#endif
 +
 +	/*
-+	 * Load $Volume. This should be done before $LogFile
++	 * Load $Volume. This should be done before LogFile
 +	 * 'cause 'sbi->volume.ni' is used 'ntfs_set_state'
 +	 */
 +	ref.low = cpu_to_le32(MFT_REC_VOL);
@@ -8379,13 +8351,13 @@ index 000000000000..9d9e597c307d
 +
 +	iput(inode);
 +
-+	/* Load $LogFile to replay */
++	/* Load LogFile to replay */
 +	ref.low = cpu_to_le32(MFT_REC_LOG);
 +	ref.seq = cpu_to_le16(MFT_REC_LOG);
 +	inode = ntfs_iget5(sb, &ref, &NAME_LOGFILE);
 +	if (IS_ERR(inode)) {
 +		err = PTR_ERR(inode);
-+		ntfs_err(sb, "Failed to load $LogFile.");
++		ntfs_err(sb, "Failed to load \x24LogFile.");
 +		inode = NULL;
 +		goto out;
 +	}
@@ -8484,7 +8456,7 @@ index 000000000000..9d9e597c307d
 +
 +	ni = ntfs_i(inode);
 +
-+#ifndef NTFS3_64BIT_CLUSTER
++#ifndef CONFIG_NTFS3_64BIT_CLUSTER
 +	if (inode->i_size >> 32) {
 +		err = -EINVAL;
 +		goto out;
@@ -8555,15 +8527,19 @@ index 000000000000..9d9e597c307d
 +	sbi->def_entries = 1;
 +	done = sizeof(struct ATTR_DEF_ENTRY);
 +	sbi->reparse.max_size = MAXIMUM_REPARSE_DATA_BUFFER_SIZE;
++	sbi->ea_max_size = 0x10000; /* default formater value */
 +
 +	while (done + sizeof(struct ATTR_DEF_ENTRY) <= bytes) {
 +		u32 t32 = le32_to_cpu(t->type);
++		u64 sz = le64_to_cpu(t->max_sz);
 +
 +		if ((t32 & 0xF) || le32_to_cpu(t[-1].type) >= t32)
 +			break;
 +
 +		if (t->type == ATTR_REPARSE)
-+			sbi->reparse.max_size = le64_to_cpu(t->max_sz);
++			sbi->reparse.max_size = sz;
++		else if (t->type == ATTR_EA)
++			sbi->ea_max_size = sz;
 +
 +		done += sizeof(struct ATTR_DEF_ENTRY);
 +		t += 1;
@@ -8577,7 +8553,7 @@ index 000000000000..9d9e597c307d
 +	inode = ntfs_iget5(sb, &ref, &NAME_UPCASE);
 +	if (IS_ERR(inode)) {
 +		err = PTR_ERR(inode);
-+		ntfs_err(sb, "Failed to load $LogFile.");
++		ntfs_err(sb, "Failed to load \x24LogFile.");
 +		inode = NULL;
 +		goto out;
 +	}
@@ -8589,7 +8565,7 @@ index 000000000000..9d9e597c307d
 +		goto out;
 +	}
 +
-+	sbi->upcase = upcase = ntfs_malloc(0x10000 * sizeof(short));
++	sbi->upcase = upcase = ntfs_vmalloc(0x10000 * sizeof(short));
 +	if (!upcase) {
 +		err = -ENOMEM;
 +		goto out;
@@ -8619,7 +8595,7 @@ index 000000000000..9d9e597c307d
 +	shared = ntfs_set_shared(upcase, 0x10000 * sizeof(short));
 +	if (shared && upcase != shared) {
 +		sbi->upcase = shared;
-+		ntfs_free(upcase);
++		ntfs_vfree(upcase);
 +	}
 +
 +	iput(inode);
@@ -8648,7 +8624,6 @@ index 000000000000..9d9e597c307d
 +	}
 +
 +load_root:
-+
 +	/* Load root */
 +	ref.low = cpu_to_le32(MFT_REC_ROOT);
 +	ref.seq = cpu_to_le16(MFT_REC_ROOT);
@@ -8771,26 +8746,25 @@ index 000000000000..9d9e597c307d
 +{
 +	int err;
 +
-+#ifdef NTFS3_INDEX_BINARY_SEARCH
-+	pr_notice("ntfs3: +index binary search\n");
-+#endif
++	pr_notice("ntfs3: Index binary search\n");
++	pr_notice("ntfs3: Hot fix free clusters\n");
++	pr_notice("ntfs3: Max link count %u\n", NTFS_LINK_MAX);
 +
-+#ifdef NTFS3_CHECK_FREE_CLST
-+	pr_notice("ntfs3: +check free clusters\n");
++#ifdef CONFIG_NTFS3_FS_POSIX_ACL
++	pr_notice("ntfs3: Enabled Linux POSIX ACLs support\n");
 +#endif
-+
-+#if NTFS_LINK_MAX < 0xffff
-+	pr_notice("ntfs3: max link count %u\n", NTFS_LINK_MAX);
-+#endif
-+
-+#ifdef NTFS3_64BIT_CLUSTER
-+	pr_notice("ntfs3: 64 bits per cluster\n");
++#ifdef CONFIG_NTFS3_64BIT_CLUSTER
++	pr_notice("ntfs3: Activated 64 bits per cluster\n");
 +#else
-+	pr_notice("ntfs3: 32 bits per cluster\n");
++	pr_notice("ntfs3: Activated 32 bits per cluster\n");
 +#endif
 +#ifdef CONFIG_NTFS3_LZX_XPRESS
-+	pr_notice("ntfs3: read-only lzx/xpress compression included\n");
++	pr_notice("ntfs3: Read-only lzx/xpress compression included\n");
 +#endif
++
++	err = ntfs3_init_bitmap();
++	if (err)
++		return err;
 +
 +	ntfs_inode_cachep = kmem_cache_create(
 +		"ntfs_inode_cache", sizeof(struct ntfs_inode), 0,
@@ -8798,16 +8772,18 @@ index 000000000000..9d9e597c307d
 +		init_once);
 +	if (!ntfs_inode_cachep) {
 +		err = -ENOMEM;
-+		goto failed;
++		goto out1;
 +	}
 +
 +	err = register_filesystem(&ntfs_fs_type);
-+	if (!err)
-+		return 0;
++	if (err)
++		goto out;
 +
++	return 0;
++out:
 +	kmem_cache_destroy(ntfs_inode_cachep);
-+
-+failed:
++out1:
++	ntfs3_exit_bitmap();
 +	return err;
 +}
 +
@@ -8819,10 +8795,25 @@ index 000000000000..9d9e597c307d
 +	}
 +
 +	unregister_filesystem(&ntfs_fs_type);
++	ntfs3_exit_bitmap();
 +}
 +
 +MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("ntfs3 filesystem");
++MODULE_DESCRIPTION("ntfs3 read/write filesystem");
++MODULE_INFO(behaviour, "Index binary search");
++MODULE_INFO(behaviour, "Hot fix free clusters");
++#ifdef CONFIG_NTFS3_FS_POSIX_ACL
++MODULE_INFO(behaviour, "Enabled Linux POSIX ACLs support");
++#endif
++#ifdef CONFIG_NTFS3_64BIT_CLUSTER
++MODULE_INFO(cluster, "Activated 64 bits per cluster");
++#else
++MODULE_INFO(cluster, "Activated 32 bits per cluster");
++#endif
++#ifdef CONFIG_NTFS3_LZX_XPRESS
++MODULE_INFO(compression, "Read-only lzx/xpress compression included");
++#endif
++
 +MODULE_AUTHOR("Konstantin Komarov");
 +MODULE_ALIAS_FS("ntfs3");
 +
