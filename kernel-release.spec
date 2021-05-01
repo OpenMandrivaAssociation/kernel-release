@@ -16,15 +16,6 @@
 %bcond_without gcc
 %bcond_without clang
 
-%if %{with clang}
-# https://github.com/ClangBuiltLinux/linux/issues/1341
-# As of kernel 5.10-rc1, llvm 11, clang-built kernels linked with
-# lld result in "inconsistent ORC unwind table entries in file: vmlinux"
-# on x86_64
-# (tpg) fix is here https://github.com/OpenMandrivaSoftware/distro-release/pull/1
-%bcond_without ld_workaround
-%endif
-
 # IMPORTANT
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
@@ -44,7 +35,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		2
+%define rpmrel		3
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -513,9 +504,7 @@ BuildRequires:	hostname
 %if %{with clang}
 BuildRequires:	clang
 BuildRequires:	llvm
-%if %{without ld_workaround}
 BuildRequires:	lld
-%endif
 %endif
 %if %{with gcc}
 BuildRequires:	gcc
@@ -1128,7 +1117,6 @@ clangify() {
 		-e '/^CONFIG_LD_VERSION=/d' \
 		-e '/^CONFIG_LD_IS_LLD=/d' \
 		-e '/^CONFIG_GCC_PLUGINS=/d' \
-		-e '/^CONFIG_UNWINDER_ORC=/d' \
 		"$1"
 	cat >>"$1" <<'EOF'
 CONFIG_CC_IS_CLANG=y
@@ -1140,8 +1128,9 @@ CONFIG_INIT_STACK_NONE=y
 
 # CONFIG_KCSAN is not set
 # CONFIG_SHADOW_CALL_STACK is not set
-# CONFIG_UNWINDER_ORC is not set
-CONFIG_UNWINDER_FRAME_POINTER=y
+# CONFIG_LTO_NONE is not set
+CONFIG_LTO_CLANG_FULL=y
+# CONFIG_LTO_CLANG_THIN is not set
 EOF
 }
 
@@ -1156,12 +1145,7 @@ CreateConfig() {
 	if echo $type |grep -q clang; then
 		CC=clang
 		CXX=clang++
-		%if %{with ld_workaround}
-		BUILD_LD="ld.bfd"
-		BUILD_KBUILD_LDFLAGS="-fuse-ld=bfd"
-		%else
-		BUILD_LD="ld.lld"
-		%endif
+		BUILD_LD="ld.lld --icf=none --no-gc-sections"
 		BUILD_KBUILD_LDFLAGS="-Wl,--icf=none -Wl,--no-gc-sections"
 		BUILD_TOOLS='LLVM=1 LLVM_IAS=1'
 	else
@@ -1338,12 +1322,7 @@ BuildKernel() {
 	if echo $1 |grep -q clang; then
 		CC=clang
 		CXX=clang++
-		%if %{with ld_workaround}
-		BUILD_LD="ld.bfd"
-		BUILD_KBUILD_LDFLAGS="-fuse-ld=bfd"
-		%else
-		BUILD_LD="ld.lld"
-		%endif
+		BUILD_LD="ld.lld --icf=none --no-gc-sections"
 		BUILD_KBUILD_LDFLAGS="-Wl,--icf=none -Wl,--no-gc-sections"
 		BUILD_TOOLS='LLVM=1 LLVM_IAS=1'
 	else
