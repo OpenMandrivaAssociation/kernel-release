@@ -65,6 +65,18 @@
 %define _enable_debug_packages	%{nil}
 %define debug_package		%{nil}
 
+# Common target directories
+%define _kerneldir /usr/src/linux-%{kversion}-%{buildrpmrel}
+%define _bootdir /boot
+%define _modulesdir /lib/modules
+%define _efidir %{_bootdir}/efi/EFI/openmandriva
+
+# Directories definition needed for building
+%define temp_root %{build_dir}/temp-root
+%define temp_source %{temp_root}%{_kerneldir}
+%define temp_boot %{temp_root}%{_bootdir}
+%define temp_modules %{temp_root}%{_modulesdir}
+
 # Build defines
 %bcond_with build_doc
 # UKSM disabled for 5.11-rc as it needs rebasing
@@ -698,6 +710,69 @@ needs debugging info from the kernel, this package may help. \
 							\
 %files -n %{kname}-%{1} -f kernel_files.%{1} 		\
 							\
+%package -n %{kname}-%{1}-modules-appletalk		\
+Summary:	AppleTalk modules for kernel %{kname}-%{1}	\
+Group:		System/Kernel and hardware		\
+%description -n %{kname}-%{1}-modules-appletalk		\
+AppleTalk modules for kernel %{kname}-%{1}		\
+AppleTalk is an obsolete protocol for networking Apple	\
+devices. If you don't know what this is, you don't	\
+need it.						\
+%files -n %{kname}-%{1}-modules-appletalk		\
+%{_modulesdir}/%{kversion}-%{1}-%{buildrpmrel}/kernel/net/appletalk \
+							\
+%package -n %{kname}-%{1}-modules-arcnet		\
+Summary:	ARCNET modules for kernel %{kname}-%{1}	\
+Group:		System/Kernel and hardware		\
+%description -n %{kname}-%{1}-modules-arcnet		\
+ARCNET modules for kernel %{kname}-%{1}			\
+ARCNET is an obsolete networking protocol.		\
+If you don't know what this is, you don't need it.	\
+%files -n %{kname}-%{1}-modules-arcnet		\
+%{_modulesdir}/%{kversion}-%{1}-%{buildrpmrel}/kernel/drivers/net/arcnet \
+							\
+%package -n %{kname}-%{1}-modules-decnet		\
+Summary:	DECnet modules for kernel %{kname}-%{1}	\
+Group:		System/Kernel and hardware		\
+%description -n %{kname}-%{1}-modules-decnet		\
+DECnet modules for kernel %{kname}-%{1}			\
+DECnet is an obsolete networking protocol.		\
+If you don't know what this is, you don't need it.	\
+%files -n %{kname}-%{1}-modules-decnet			\
+%{_modulesdir}/%{kversion}-%{1}-%{buildrpmrel}/kernel/net/decnet \
+							\
+%package -n %{kname}-%{1}-modules-fddi			\
+Summary:	FDDI modules for kernel %{kname}-%{1}	\
+Group:		System/Kernel and hardware		\
+%description -n %{kname}-%{1}-modules-fddi		\
+FDDI modules for kernel %{kname}-%{1}			\
+FDDI is an obsolete networking protocol.		\
+If you don't know what this is, you don't need it.	\
+%files -n %{kname}-%{1}-modules-fddi		\
+%{_modulesdir}/%{kversion}-%{1}-%{buildrpmrel}/kernel/drivers/net/fddi \
+							\
+%package -n %{kname}-%{1}-modules-infiniband		\
+Summary:	Infiniband modules for kernel %{kname}-%{1}	\
+Group:		System/Kernel and hardware		\
+%description -n %{kname}-%{1}-modules-infiniband	\
+Infiniband modules for kernel %{kname}-%{1}		\
+Infiniband is an alternative to Ethernet commonly used	\
+for communication between supercomputers. If you don't	\
+know what it is, you don't need it.			\
+%files -n %{kname}-%{1}-modules-infiniband		\
+%{_modulesdir}/%{kversion}-%{1}-%{buildrpmrel}/kernel/drivers/infiniband \
+							\
+%package -n %{kname}-%{1}-modules-isdn			\
+Summary:	ISDN modules for kernel %{kname}-%{1}	\
+Group:		System/Kernel and hardware		\
+%description -n %{kname}-%{1}-modules-isdn		\
+ISDN modules for kernel %{kname}-%{1}			\
+ISDN (also known as RNIS in France) is an obsolete-ish	\
+telephony network interface. If you don't know what it	\
+is, you don't need it.					\
+%files -n %{kname}-%{1}-modules-isdn			\
+%{_modulesdir}/%{kversion}-%{1}-%{buildrpmrel}/kernel/drivers/isdn \
+							\
 %if %{with build_devel}					\
 %files -n %{kname}-%{1}-devel -f kernel_devel_files.%{1} \
 %endif							\
@@ -1078,19 +1153,6 @@ chmod 755 tools/objtool/sync-check.sh
 ############################################################
 ###  Linker end2 > Check point to build for omv or rosa ###
 ############################################################
-# Common target directories
-%define _kerneldir /usr/src/linux-%{kversion}-%{buildrpmrel}
-%define _bootdir /boot
-%define _modulesdir /lib/modules
-%define _efidir %{_bootdir}/efi/EFI/openmandriva
-
-# Directories definition needed for building
-%define temp_root %{build_dir}/temp-root
-%define temp_source %{temp_root}%{_kerneldir}
-%define temp_boot %{temp_root}%{_bootdir}
-%define temp_modules %{temp_root}%{_modulesdir}
-
-
 CheckConfig() {
 
 	if [ ! -e $(pwd)/.config ]; then
@@ -1574,6 +1636,12 @@ CreateFiles() {
 %{_bootdir}/$ker-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %dir %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/
 %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/kernel
+%exclude %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/kernel/net/appletalk
+%exclude %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/kernel/net/decnet
+%exclude %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/kernel/drivers/infiniband
+%exclude %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/kernel/drivers/isdn
+%exclude %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/kernel/drivers/net/arcnet
+%exclude %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/kernel/drivers/net/fddi
 %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/modules.*
 # device tree binary
 %ifarch %{armx}
