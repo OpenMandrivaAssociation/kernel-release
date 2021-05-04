@@ -720,6 +720,7 @@ need it.						\
 %files -n %{kname}-%{1}-modules-appletalk		\
 %{_modulesdir}/%{kversion}-%{1}-%{buildrpmrel}/kernel/net/appletalk \
 							\
+%ifnarch %{armx}					\
 %package -n %{kname}-%{1}-modules-arcnet		\
 Summary:	ARCNET modules for kernel %{kname}-%{1}	\
 Group:		System/Kernel and hardware		\
@@ -727,8 +728,9 @@ Group:		System/Kernel and hardware		\
 ARCNET modules for kernel %{kname}-%{1}			\
 ARCNET is an obsolete networking protocol.		\
 If you don't know what this is, you don't need it.	\
-%files -n %{kname}-%{1}-modules-arcnet		\
+%files -n %{kname}-%{1}-modules-arcnet			\
 %{_modulesdir}/%{kversion}-%{1}-%{buildrpmrel}/kernel/drivers/net/arcnet \
+%endif							\
 							\
 %package -n %{kname}-%{1}-modules-decnet		\
 Summary:	DECnet modules for kernel %{kname}-%{1}	\
@@ -747,9 +749,10 @@ Group:		System/Kernel and hardware		\
 FDDI modules for kernel %{kname}-%{1}			\
 FDDI is an obsolete networking protocol.		\
 If you don't know what this is, you don't need it.	\
-%files -n %{kname}-%{1}-modules-fddi		\
+%files -n %{kname}-%{1}-modules-fddi			\
 %{_modulesdir}/%{kversion}-%{1}-%{buildrpmrel}/kernel/drivers/net/fddi \
 							\
+%ifnarch %{armx}					\
 %package -n %{kname}-%{1}-modules-infiniband		\
 Summary:	Infiniband modules for kernel %{kname}-%{1}	\
 Group:		System/Kernel and hardware		\
@@ -771,6 +774,7 @@ telephony network interface. If you don't know what it	\
 is, you don't need it.					\
 %files -n %{kname}-%{1}-modules-isdn			\
 %{_modulesdir}/%{kversion}-%{1}-%{buildrpmrel}/kernel/drivers/isdn \
+%endif							\
 							\
 %if %{with build_devel}					\
 %files -n %{kname}-%{1}-devel -f kernel_devel_files.%{1} \
@@ -1162,7 +1166,7 @@ CheckConfig() {
 
 VerifyConfig() {
 # (tpg) please add CONFIG that were carelessly enabled, while it is known these MUST be disabled
-    if grep -Fxq "CONFIG_RT_GROUP_SCHED=y" $(pwd)/.config $(pwd)/*-defconfig; then
+    if grep -Fxq "CONFIG_RT_GROUP_SCHED=y" .config kernel/configs/omv-*config; then
 	printf '%s\n' "Please stop enabling CONFIG_RT_GROUP_SCHED - this option is not recommended with systemd systemd/systemd#553, killing the build."
 	exit 1
     fi
@@ -1400,7 +1404,7 @@ BuildKernel() {
 %ifarch %{aarch64}
 	TARGETS="$TARGETS dtbs"
 %endif
-	%make_build ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 $TARGETS
+	%make_build ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" $TARGETS
 
 	# Start installing stuff
 	install -d %{temp_boot}
@@ -1424,13 +1428,13 @@ BuildKernel() {
 
 	# modules
 	install -d %{temp_modules}/$KernelVer
-	%make_build INSTALL_MOD_PATH=%{temp_root} ARCH=%{target_arch} SRCARCH=%{target_arch} KERNELRELEASE=$KernelVer CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 INSTALL_MOD_STRIP=1 modules_install
+	%make_build INSTALL_MOD_PATH=%{temp_root} ARCH=%{target_arch} SRCARCH=%{target_arch} KERNELRELEASE=$KernelVer CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" INSTALL_MOD_STRIP=1 modules_install
 
 	# headers
 	%make_build INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer ARCH=%{target_arch} SRCARCH=%{target_arch} headers_install
 
 %ifarch %{armx} %{ppc}
-	%make_build ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
+	%make_build ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
 %endif
 
 	# remove /lib/firmware, we use a separate kernel-firmware
@@ -1868,9 +1872,7 @@ mkdir -p %{temp_root}%{_bindir} %{temp_root}%{_mandir}/man8
 %if %{with bpftool}
 # FIXME As of lld 12.0 and kernel 5.11, lld results in unresolved symbols, ld.bfd works
 %make_build -C tools/lib/bpf CC=clang LD=ld.bfd HOSTCC=clang HOSTLD=ld.bfd libbpf.a libbpf.pc libbpf.so -j1
-#cd tools/bpf/bpftool
 %make_build -C tools/bpf/bpftool CC=clang LD=ld.bfd HOSTCC=clang HOSTLD=ld.bfd bpftool -j1
-#cd -
 %make_install -C tools/lib/bpf install_headers DESTDIR=%{temp_root} prefix=%{_prefix} libdir=%{_libdir} CC=clang CXX=clang++ LD=ld.bfd HOSTLD=ld.bfd
 %make_install -C tools/bpf/bpftool CC=clang CXX=clang++ LD=ld.bfd HOSTCC=clang HOSTLD=ld.bfd DESTDIR=%{temp_root} prefix=%{_prefix} bash_compdir=%{_sysconfdir}/bash_completion.d/ mandir=%{_mandir}
 %endif
@@ -1914,16 +1916,16 @@ done
 # we really need the depmod -ae here
 pushd %{target_modules}
 for i in *; do
-	/sbin/depmod -ae -b %{buildroot} -F %{target_boot}/System.map-"$i" "$i"
-	echo $?
+    /sbin/depmod -ae -b %{buildroot} -F %{target_boot}/System.map-"$i" "$i"
+    echo $?
 done
 
 for i in *; do
-	pushd $i
-	printf '%s\n' "Creating modules.description for $i"
-	modules=$(find . -name "*.ko.[gxz]*[z|st]")
-	echo $modules | %kxargs /sbin/modinfo | perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
-	popd
+    pushd $i
+    printf '%s\n' "Creating modules.description for $i"
+    modules=$(find . -name "*.ko.[gxz]*[z|st]")
+    echo $modules | %kxargs /sbin/modinfo | perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
+    popd
 done
 popd
 
