@@ -79,7 +79,6 @@
 
 # Build defines
 %bcond_with build_doc
-# UKSM disabled for 5.11-rc as it needs rebasing
 %ifarch %{ix86} %{x86_64}
 %bcond_without uksm
 %else
@@ -1178,12 +1177,13 @@ clangify() {
 		-e '/^CONFIG_CLANG_VERSION=/d' \
 		-e '/^CONFIG_LD_VERSION=/d' \
 		-e '/^CONFIG_LD_IS_LLD=/d' \
+		-e '/^CONFIG_LD_IS_BFD=/d' \
 		-e '/^CONFIG_GCC_PLUGINS=/d' \
 		"$1"
 	cat >>"$1" <<'EOF'
 CONFIG_CC_IS_CLANG=y
 CONFIG_CC_HAS_ASM_GOTO_OUTPUT=y
-
+CONFIG_LD_IS_LLD=y
 CONFIG_INIT_STACK_NONE=y
 # CONFIG_INIT_STACK_ALL_PATTERN is not set
 # CONFIG_INIT_STACK_ALL_ZERO is not set
