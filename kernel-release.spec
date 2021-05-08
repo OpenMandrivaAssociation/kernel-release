@@ -61,10 +61,6 @@
 
 %define build_dir	${RPM_BUILD_DIR}/%{top_dir_name}
 
-# Disable useless debug rpms...
-%define _enable_debug_packages	%{nil}
-%define debug_package		%{nil}
-
 # Common target directories
 %define _kerneldir /usr/src/linux-%{kversion}-%{buildrpmrel}
 %define _bootdir /boot
