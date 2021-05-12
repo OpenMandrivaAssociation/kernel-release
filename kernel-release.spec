@@ -568,6 +568,9 @@ BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(babeltrace)
+%ifarch %{x86_64} %{aarch64}
+BuildRequires:	pkgconfig(numa)
+%endif
 BuildRequires:	jdk-current
 BuildRequires:	perl-devel
 BuildRequires:	perl(ExtUtils::Embed)
