@@ -4,6 +4,13 @@
 #end
 %define _disable_ld_no_undefined 1
 
+%ifarch %{aarch64}
+# FIXME this is a workaround for some debug files being created
+# but not making it to the debug file lists.
+# This should be fixed properly...
+%define _unpackaged_files_terminate_build 0
+%endif
+
 ## STOP: Adding weird and unsupported upstream kernel C/LD flags of any sort
 ## yes , including ftlo . O3 and whatever else
 
@@ -830,57 +837,6 @@ CFS cpu scheduler and BFQ i/o scheduler, PERFORMANCE governor.
 %endif
 
 #
-# kernel-source
-#
-%if %{with build_source}
-%package -n %{kname}-source
-Version:	%{kversion}
-Release:	%{rpmrel}
-Requires:	glibc-devel
-Requires:	ncurses-devel
-Requires:	make
-Requires:	gcc >= 7.2.1_2017.11-3
-Requires:	perl
-Requires:	diffutils
-Summary:	The Linux source code for %{kname}-%{buildrel}
-Group:		Development/Kernel
-Autoreqprov:	no
-Provides:	kernel-source = %{kverrel}
-Provides:	kernel-source-%{buildrel}
-Provides:	installonlypkg(kernel)
-Conflicts:	%{kname}-source-latest <= %{kversion}-%{rpmrel}
-Obsoletes:	%{kname}-source-latest <= %{kversion}-%{rpmrel}
-Buildarch:	noarch
-
-%description -n %{kname}-source
-The %{kname}-source package contains the source code files for the OpenMandriva
-kernel. These source files are only needed if you want to build your own
-custom kernel that is better tuned to your particular hardware.
-
-If you only want the files needed to build 3rdparty (nVidia, Ati, dkms-*,...)
-drivers against, install the *-devel rpm that is matching your kernel.
-%endif
-
-#
-# kernel-doc: documentation for the Linux kernel
-#
-%if %with build_doc
-%package -n %{kname}-doc
-Version:	%{kversion}
-Release:	%{rpmrel}
-Summary:	Various documentation bits found in the %{kname} source
-Group:		Documentation
-Buildarch:	noarch
-
-%description -n %{kname}-doc
-This package contains documentation files from the %{kname} source.
-Various bits of information about the Linux kernel and the device drivers
-shipped with it are documented in these files. You also might want install
-this package if you need a reference to the options that can be passed to
-Linux kernel modules at load time.
-%endif
-
-#
 # kernel/tools
 #
 %if %{with perf}
@@ -1026,6 +982,57 @@ ${i} targets.
 EOF
 done
 )
+%endif
+
+#
+# kernel-source
+#
+%if %{with build_source}
+%package -n %{kname}-source
+Version:	%{kversion}
+Release:	%{rpmrel}
+Requires:	glibc-devel
+Requires:	ncurses-devel
+Requires:	make
+Requires:	gcc >= 7.2.1_2017.11-3
+Requires:	perl
+Requires:	diffutils
+Summary:	The Linux source code for %{kname}-%{buildrel}
+Group:		Development/Kernel
+Autoreqprov:	no
+Provides:	kernel-source = %{kverrel}
+Provides:	kernel-source-%{buildrel}
+Provides:	installonlypkg(kernel)
+Conflicts:	%{kname}-source-latest <= %{kversion}-%{rpmrel}
+Obsoletes:	%{kname}-source-latest <= %{kversion}-%{rpmrel}
+Buildarch:	noarch
+
+%description -n %{kname}-source
+The %{kname}-source package contains the source code files for the OpenMandriva
+kernel. These source files are only needed if you want to build your own
+custom kernel that is better tuned to your particular hardware.
+
+If you only want the files needed to build 3rdparty (nVidia, Ati, dkms-*,...)
+drivers against, install the *-devel rpm that is matching your kernel.
+%endif
+
+#
+# kernel-doc: documentation for the Linux kernel
+#
+%if %with build_doc
+%package -n %{kname}-doc
+Version:	%{kversion}
+Release:	%{rpmrel}
+Summary:	Various documentation bits found in the %{kname} source
+Group:		Documentation
+Buildarch:	noarch
+
+%description -n %{kname}-doc
+This package contains documentation files from the %{kname} source.
+Various bits of information about the Linux kernel and the device drivers
+shipped with it are documented in these files. You also might want install
+this package if you need a reference to the options that can be passed to
+Linux kernel modules at load time.
 %endif
 
 #
