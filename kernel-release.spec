@@ -252,9 +252,6 @@ Source1002:	revert-9d55bebd9816903b821a403a69a94190442ac043.patch
 # we default to ZSTD
 Patch1:		compress-modules-zstd.patch
 
-# (crazy) That is always a error on Ryzen platform, which is not fatal
-# just different, lower to info since it breaks the splash
-Patch2:		amd_iommu_init_info.patch
 # (crazy) I really need to send that upstream soon
 Patch10:	iwlwifi-fix-5e003982b07ae.patch
 Patch30:	linux-5.6-fix-disassembler-4args-detection.patch
