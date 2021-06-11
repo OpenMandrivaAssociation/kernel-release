@@ -468,16 +468,6 @@ Patch914:	0120-use-lfence-instead-of-rep-and-nop.patch
 ##Patch915:	0122-locking-rwsem-spin-faster.patch not needed
 %endif
 
-# Upstream git patches
-#https://cgit.freedesktop.org/drm/drm-misc/patch/drivers/video/fbdev/efifb.c?id=a6c0fd3d5a8bac08b0d79301be23f961e9038d60
-Patch1001:	c00697b59251f795fa5278cfe4d81407f76a450b..a6c0fd3d5a8bac08b0d79301be23f961e9038d60.patch
-#https://cgit.freedesktop.org/drm/drm-misc/patch/drivers/video/fbdev/efifb.c?id=d510c88cfbb294d2b1e2d0b71576e9b79d0e2e83
-Patch1002:	6a3608eae6d33a478a29348eb5e9ca330a528ae6..d510c88cfbb294d2b1e2d0b71576e9b79d0e2e83.patch
-#https://cgit.freedesktop.org/drm/drm-misc/patch/drivers/gpu/drm/rockchip?id=2818c20871e6b9cec806ba546faf90ae3a079e22
-Patch1003:	162ba3bd9dce61889eb739adf2923811dcbeff94..3c1ed51a43183ff976bd0ae37a19e038f967966a.patch
-#https://cgit.freedesktop.org/drm/drm-misc/patch/drivers/gpu/drm/rockchip?id=046e0db975695540c9d9898cdbf0b60533d28afb
-Patch1004:	d099fa672cbe8766d9182e0fd04c65058200128a..046e0db975695540c9d9898cdbf0b60533d28afb.patch
-
 # Defines for the things that are needed for all the kernels
 #
 %define common_desc_kernel The kernel package contains the Linux kernel (vmlinuz), the core of your \
