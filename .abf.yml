@@ -3,4 +3,4 @@ sources:
   linux-5.12.tar.sign: 333ed2e4d9e6eb146c386881a781e9e3e3c58a13
   linux-5.12.tar.xz: 3d5a920f1db8fce3dcfd0e0ae18884770f7fb56d
   saa716x-driver.tar.xz: f9b6ef1cd6f1f71f53d9a8aadfba2cf6b5c3d7b6
-  patch-5.12.9.xz: 95c6915b1ce181a4254f4d35d7dae0c87652dcf4
+  patch-5.12.10.xz: 61e21fe7b46ab4f37671dae5aa93d520d239492d
