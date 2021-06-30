@@ -1,18 +1,9 @@
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 3091c2ca60df..f027bc7d2534 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -325,6 +325,7 @@ int map_kernel_range(unsigned long start, unsigned long size, pgprot_t prot,
- 	flush_cache_vmap(start, start + size);
- 	return ret;
- }
-+EXPORT_SYMBOL(map_kernel_range);
- 
- int is_vmalloc_or_module_addr(const void *x)
- {
-@@ -2130,6 +2131,7 @@ struct vm_struct *__get_vm_area_caller(unsigned long size, unsigned long flags,
- 	return __get_vm_area_node(size, 1, flags, start, end, NUMA_NO_NODE,
- 				  GFP_KERNEL, caller);
+diff -up linux-5.13/mm/vmalloc.c.30~ linux-5.13/mm/vmalloc.c
+--- linux-5.13/mm/vmalloc.c.30~	2021-06-30 02:05:21.596002648 +0200
++++ linux-5.13/mm/vmalloc.c	2021-06-30 02:07:22.121226062 +0200
+@@ -2388,6 +2388,7 @@ struct vm_struct *__get_vm_area_caller(u
+ 	return __get_vm_area_node(size, 1, PAGE_SHIFT, flags, start, end,
+ 				  NUMA_NO_NODE, GFP_KERNEL, caller);
  }
 +EXPORT_SYMBOL(__get_vm_area_caller);
  
