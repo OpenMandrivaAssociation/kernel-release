@@ -28,7 +28,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	13
-%define sublevel	0
+%define sublevel	1
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -359,36 +359,38 @@ Patch250:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/ar
 
 # (tpg) Manjaro ARM Patches
 Patch260:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-net-smsc95xx-Allow-mac-address-to-be-set-as-a-parame.patch
-Patch261:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-arm64-dts-rockchip-add-usb3-controller-node-for-RK33.patch
-Patch262:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-dts-rockchip-enable-usb3-nodes-on-rk3328-rock6.patch
-# FIXME port
-#Patch263:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-dts-rockchip-add-HDMI-sound-node-for-rk3328-ro.patch
-Patch264:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0006-arm64-dts-allwinner-add-ohci-ehci-to-h5-nanopi.patch
-Patch265:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0007-drm-bridge-analogix_dp-Add-enable_psr-param.patch
-Patch266:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0008-gpu-drm-add-new-display-resolution-2560x1440.patch
-Patch267:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0009-nuumio-panfrost-Silence-Panfrost-gem-shrinker-loggin.patch
-Patch268:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0015-ayufan-drm-rockchip-add-support-for-modeline-32MHz-e.patch
-Patch269:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0016-rk3399-rp64-pcie-Reimplement-rockchip-PCIe-bus-scan-delay.patch
-
-# (tpg) Pinebook Pro patches
-Patch276:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0017-tty-serdev-support-shutdown-op.patch
-Patch277:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0018-bluetooth-hci_serdev-Clear-registered-bit-on-unregister.patch
-Patch278:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0019-bluetooth-hci_bcm-disable-power-on-shutdown.patch
-Patch279:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0020-mmc-core-pwrseq_simple-disable-mmc-power-on-shutdown.patch
-Patch280:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0021-usb-typec-bus-Catch-crash-due-to-partner-NULL-value.patch
-Patch281:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0022-phy-rockchip-typec-Set-extcon-capabilities.patch
-Patch282:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0023-usb-typec-altmodes-displayport-Add-hacky-generic-altmode.patch
-Patch283:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0024-sound-soc-codecs-es8316-Run-micdetect-only-if-jack-status.patch
-Patch284:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0025-ASoC-soc-jack.c-supported-inverted-jack-detect-GPIOs.patch
-Patch285:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0026-arm64-dts-rockchip-add-typec-extcon-hack.patch
-Patch286:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0027-arm64-dts-rockchip-setup-USB-type-c-port-as-dual-data-role.patch
-
-# (tpg) # Pinebook, PinePhone and PineTab patches
-Patch287:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0028-revert-arm64-dts-allwinner-a64-Add-I2S2-node.patch
-Patch288:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-Bluetooth-Add-new-quirk-for-broken-local-ext-features.patch
-Patch289:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-allwinner-a64-enable-Bluetooth-On-Pinebook.patch
-# FIXME verify this is 100% merged
-#Patch290:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0005-dt-bindings-arm-sunxi-add-PineTab-Early-Adopter-edition.patch
+Patch261:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-arm64-dts-rockchip-add-usb3-node-to-roc-cc-rock64.patch
+#Patch262:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-dts-allwinner-add-hdmi-sound-to-pine-devices.patch
+Patch263:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-dts-allwinner-add-ohci-ehci-to-h5-nanopi.patch
+Patch264:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0005-drm-bridge-analogix_dp-Add-enable_psr-param.patch
+Patch265:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0006-gpu-drm-add-new-display-resolution-2560x1440.patch
+Patch266:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0007-nuumio-panfrost-Silence-Panfrost-gem-shrinker-loggin.patch
+#Patch267:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0008-arm64-dts-rockchip-Add-Firefly-Station-p1-support.patch
+Patch268:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0009-typec-displayport-some-devices-have-pin-assignments-reversed.patch
+Patch269:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0010-usb-typec-add-extcon-to-tcpm.patch
+Patch270:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0011-arm64-rockchip-add-DP-ALT-rockpro64.patch
+Patch271:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0012-ayufan-drm-rockchip-add-support-for-modeline-32MHz-e.patch
+Patch272:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0013-rk3399-rp64-pcie-Reimplement-rockchip-PCIe-bus-scan-delay.patch
+Patch273:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0014-drm-meson-add-YUV422-output-support.patch
+#Patch274:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0015-arm64-dts-meson-add-initial-Beelink-GT1-Ultimate-dev.patch
+Patch275:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0016-add-ugoos-device.patch
+Patch276:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0017-drm-meson-fix-green-pink-color-distortion-set-from-u.patch
+Patch277:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0018-drm-bridge-dw-hdmi-disable-loading-of-DW-HDMI-CEC-sub-driver.patch
+Patch278:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0019-drm-panfrost-Handle-failure-in-panfrost_job_hw_submit.patch
+Patch279:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-phy-rockchip-typec-Set-extcon-capabilities.patch
+Patch280:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-usb-typec-altmodes-displayport-Add-hacky-generic-altmode.patch
+Patch281:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-dts-rockchip-add-typec-extcon-hack.patch
+Patch282:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-dts-rockchip-setup-USB-type-c-port-as-dual-data-role.patch
+Patch283:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-revert-arm64-dts-allwinner-a64-Add-I2S2-node.patch
+Patch284:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-Bluetooth-Add-new-quirk-for-broken-local-ext-features.patch
+Patch285:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-Bluetooth-btrtl-add-support-for-the-RTL8723CS.patch
+Patch286:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-allwinner-a64-enable-Bluetooth-On-Pinebook.patch
+#Patch287:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0005-arm64-dts-allwinner-enable-bluetooth-pinetab-pinepho.patch
+Patch288:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0006-staging-add-rtl8723cs-driver.patch
+Patch289:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0007-pinetab-accelerometer.patch
+Patch290:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0008-enable-jack-detection-pinetab.patch
+#Patch291:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0009-enable-hdmi-output-pinetab.patch
+Patch292:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0010-drm-panel-fix-PineTab-display.patch
 
 # (tpg) patches taken from https://github.com/OpenMandrivaSoftware/os-image-builder/tree/master/device/rockchip/generic/kernel-patches
 Patch295:	add-board-orangepi-4.patch
@@ -573,8 +575,10 @@ BuildRequires:	perl(ExtUtils::Embed)
 BuildRequires:	uboot-mkimage
 %endif
 
+%ifnarch %{armx} %{riscv}
 # might be useful too:
 Suggests:	microcode-intel
+%endif
 
 # Let's pull in some of the most commonly used DKMS modules
 # so end users don't have to install compilers (and worse,
