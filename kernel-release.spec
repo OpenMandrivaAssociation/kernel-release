@@ -28,7 +28,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	13
-%define sublevel	1
+%define sublevel	2
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -453,11 +453,8 @@ Patch907:	0108-smpboot-reuse-timer-calibration.patch
 Patch908:	0109-initialize-ata-before-graphics.patch
 Patch909:	0110-give-rdrand-some-credit.patch
 Patch910:	0111-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
-##Patch911:	0112-kernel-time-reduce-ntp-wakeups.patch not needed
-##Patch912:	0113-init-wait-for-partition-and-retry-scan.patch not needed
 Patch913:	0117-migrate-some-systemd-defaults-to-the-kernel-defaults.patch
 Patch914:	0120-use-lfence-instead-of-rep-and-nop.patch
-##Patch915:	0122-locking-rwsem-spin-faster.patch not needed
 %endif
 
 # Defines for the things that are needed for all the kernels
