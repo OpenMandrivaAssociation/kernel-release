@@ -28,7 +28,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	13
-%define sublevel	2
+%define sublevel	4
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -372,7 +372,7 @@ Patch268:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/maste
 Patch269:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0010-usb-typec-add-extcon-to-tcpm.patch
 Patch270:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0011-arm64-rockchip-add-DP-ALT-rockpro64.patch
 Patch271:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0012-ayufan-drm-rockchip-add-support-for-modeline-32MHz-e.patch
-Patch272:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0013-rk3399-rp64-pcie-Reimplement-rockchip-PCIe-bus-scan-delay.patch
+#Patch272:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0013-rk3399-rp64-pcie-Reimplement-rockchip-PCIe-bus-scan-delay.patch
 Patch273:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0014-drm-meson-add-YUV422-output-support.patch
 #Patch274:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0015-arm64-dts-meson-add-initial-Beelink-GT1-Ultimate-dev.patch
 Patch275:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0016-add-ugoos-device.patch
@@ -519,7 +519,7 @@ BuildRequires:	git-core
 BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	pkgconfig(libkmod)
 
-%ifarch %{x86_64}
+%ifarch %{x86_64} %{aarch64}
 BuildRequires:	numa-devel
 %endif
 
@@ -1149,7 +1149,7 @@ chmod 755 tools/objtool/sync-check.sh
 %set_build_flags
 
 ############################################################
-###  Linker end2 > Check point to build for omv or rosa ###
+###  Linker end2 > Check point to build for omv          ###
 ############################################################
 CheckConfig() {
 
@@ -1510,8 +1510,8 @@ SaveDevel() {
 
 	kernel_devel_files=kernel_devel_files.$devel_flavour
 
-	### Create the kernel_devel_files.*
-	cat > $kernel_devel_files <<EOF
+### Create the kernel_devel_files.*
+cat > $kernel_devel_files <<EOF
 %dir $DevelRoot
 %dir $DevelRoot/arch
 %dir $DevelRoot/include
@@ -1578,29 +1578,24 @@ $DevelRoot/Module.symvers
 $DevelRoot/arch/Kconfig
 EOF
 
-	### Create -devel Post script on the fly
-	cat > $kernel_devel_files-post <<EOF
-if [ -d /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel} ]; then
-	rm -f /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/{build,source}
-	ln -sf $DevelRoot /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/build
-	ln -sf $DevelRoot /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/source
+### Create -devel Post script on the fly
+cat > $kernel_devel_files-post <<EOF
+if [ -d %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel} ]; then
+    rm -f %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel}/{build,source} ||:
+    ln -sf $DevelRoot %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel}/build
+    ln -sf $DevelRoot %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel}/source
 fi
 EOF
 
-
-	### Create -devel Preun script on the fly
-	cat > $kernel_devel_files-preun <<EOF
-if [ -L /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/build ]; then
-	rm -f /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/build
-fi
-if [ -L /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/source ]; then
-	rm -f /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/source
-fi
+### Create -devel Preun script on the fly
+cat > $kernel_devel_files-preun <<EOF
+[ -L %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel}/build ] && rm -f %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel}/build ||:
+[ -L %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel}/source ] && rm -f %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel}/source ||:
 exit 0
 EOF
 
-	### Create -devel Postun script on the fly
-	cat > $kernel_devel_files-postun <<EOF
+### Create -devel Postun script on the fly
+cat > $kernel_devel_files-postun <<EOF
 rm -rf /usr/src/linux-%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
 EOF
 }
@@ -1649,11 +1644,11 @@ CreateFiles() {
 EOF
 
 %if %{with build_debug}
-	cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
+    cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
 %endif
 
 ### Create kernel Post script
-	cat > $kernel_files-post <<EOF
+    cat > $kernel_files-post <<EOF
 %ifnarch %{armx} %{riscv}
 %if %{with dracut_all_initrd}
 [ -x /sbin/dracut ] && /sbin/dracut -f --regenerate-all
@@ -1664,67 +1659,51 @@ EOF
 %endif
 
 ## cleanup some werid symlinks we never used anyway
-rm -rf vmlinuz-{server,desktop} initrd0.img initrd-{server,desktop}
+rm -rf vmlinuz-{server,desktop} initrd0.img initrd-{server,desktop} ||:
 
 # run update-grub2
 [ -x /usr/sbin/update-grub2 ] && /usr/sbin/update-grub2
 
-cd - > /dev/null
 %if %{with build_devel}
 # create kernel-devel symlinks if matching -devel- rpm is installed
 if [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
-	rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/{build,source}
-	ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
-	ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source
+    rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/{build,source}
+    ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
+    ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source
 fi
 %endif
 EOF
 
-	### Create kernel Posttrans script
-	cat > $kernel_files-posttrans <<EOF
+### Create kernel Posttrans script
+    cat > $kernel_files-posttrans <<EOF
 if [ -x /usr/sbin/dkms_autoinstaller ] && [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
-	/usr/sbin/dkms_autoinstaller start %{kversion}-$kernel_flavour-%{buildrpmrel}
+    /usr/sbin/dkms_autoinstaller start %{kversion}-$kernel_flavour-%{buildrpmrel}
 fi
 
 if [ -x %{_sbindir}/dkms ] && [ -e %{_unitdir}/dkms.service ] && [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
-	/bin/systemctl --quiet restart dkms.service
-	/bin/systemctl --quiet try-restart loadmodules.service
-	%{_sbindir}/dkms autoinstall --verbose --kernelver %{kversion}-$kernel_flavour-%{buildrpmrel}
+    /bin/systemctl --quiet restart dkms.service
+    /bin/systemctl --quiet try-restart loadmodules.service
+    %{_sbindir}/dkms autoinstall --verbose --kernelver %{kversion}-$kernel_flavour-%{buildrpmrel}
 fi
 EOF
 
 ### Create kernel Postun script on the fly
 cat > $kernel_files-postun <<EOF
+rm -rf %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/modules.{alias{,.bin},builtin.bin,dep{,.bin},devname,softdep,symbols{,.bin}} ||:
+[ -e %{_bootdir}/vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} ] && rm -rf %{_bootdir}/vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} ||:
+[ -e %{_bootdir}/initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ] && rm -rf %{_bootdir}/initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ||:
+rm -rf %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel} 2> /dev/null
 
-rm -rf /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/modules.{alias{,.bin},builtin.bin,dep{,.bin},devname,softdep,symbols{,.bin}} ||:
-cd /boot > /dev/null
-
-if [ -e vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
-	rm -rf vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}
-fi
-
-if [ -e initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ]; then
-	rm -rf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img
-fi
-
-
-cd - > /dev/null
-
-rm -rf /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel} >/dev/null
 if [ -d /var/lib/dkms ]; then
-	rm -f /var/lib/dkms/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
-	rm -rf /var/lib/dkms/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
-	rm -f /var/lib/dkms-binary/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
-	rm -rf /var/lib/dkms-binary/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
+    rm -f /var/lib/dkms/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
+    rm -rf /var/lib/dkms/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
+    rm -f /var/lib/dkms-binary/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
+    rm -rf /var/lib/dkms-binary/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
 fi
 
 %if %{with build_devel}
-if [ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build ]; then
-	rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
-fi
-if [ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source ]; then
-	rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source
-fi
+[ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build ] && rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build ||:
+[ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source ] && rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source ||:
 %endif
 exit 0
 EOF
@@ -1836,7 +1815,7 @@ CreateKernel server
 sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 
 ############################################################
-### Linker start3 > Check point to build for omv or rosa ###
+### Linker start3 > Check point to build for omv         ###
 ############################################################
 
 # We install all tools here too (rather than in %%install
@@ -1879,7 +1858,7 @@ mkdir -p %{temp_root}%{_bindir} %{temp_root}%{_mandir}/man8
 %endif
 
 ############################################################
-###  Linker end3 > Check point to build for omv or rosa  ###
+###  Linker end3 > Check point to build for omv          ###
 ############################################################
 
 # We don't make to repeat the depend code at the install phase
@@ -1904,7 +1883,7 @@ cp -a %{temp_root} %{buildroot}
 # We used to have a copy of PrepareKernel here
 # Now, we make sure that the thing in the linux dir is what we want it to be
 for i in %{target_modules}/*; do
-	rm -f $i/build $i/source
+    rm -f $i/build $i/source
 done
 
 # sniff, if we compressed all the modules, we change the stamp :(
@@ -1928,7 +1907,7 @@ popd
 sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 
 ############################################################
-### Linker start4 > Check point to build for omv or rosa ###
+### Linker start4 > Check point to build for omv         ###
 ############################################################
 %if %{with build_cpupower}
 rm -f %{buildroot}%{_libdir}/*.{a,la}
@@ -1977,18 +1956,17 @@ find -iname ".gitignore" -delete
 rm -f .cache.mk
 # Drop script binaries that can be rebuilt
 find tools scripts -executable |while read r; do
-	if file $r |grep -q ELF; then
-		rm -f $r
-	fi
+    if file $r |grep -q ELF; then
+	rm -f $r
+    fi
 done
 cd -
 
 #endif %{with build_source}
 %endif
 
-
 ############################################################
-### Linker start4 > Check point to build for omv or rosa ###
+### Linker start4 > Check point to build for omv         ###
 ############################################################
 
 %if %{with build_source}
