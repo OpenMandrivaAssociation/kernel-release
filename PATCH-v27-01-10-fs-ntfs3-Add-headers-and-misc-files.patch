@@ -5,36 +5,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21C27C43461
-	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC29BC432BE
+	for <linux-kernel@archiver.kernel.org>; Thu, 29 Jul 2021 14:08:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CCFC961163
-	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1E2F6054F
+	for <linux-kernel@archiver.kernel.org>; Thu, 29 Jul 2021 14:08:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236376AbhDBPyA (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Fri, 2 Apr 2021 11:54:00 -0400
-Received: from relaydlg-01.paragon-software.com ([81.5.88.159]:44597 "EHLO
-        relaydlg-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234968AbhDBPx4 (ORCPT
+        id S238807AbhG2OHx (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Thu, 29 Jul 2021 10:07:53 -0400
+Received: from relayfre-01.paragon-software.com ([176.12.100.13]:56922 "EHLO
+        relayfre-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238220AbhG2OAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Apr 2021 11:53:56 -0400
+        Thu, 29 Jul 2021 10:00:12 -0400
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relaydlg-01.paragon-software.com (Postfix) with ESMTPS id 3184F820A9;
-        Fri,  2 Apr 2021 18:53:53 +0300 (MSK)
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id BACE21D16;
+        Thu, 29 Jul 2021 16:49:49 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1617378833;
+        d=paragon-software.com; s=mail; t=1627566590;
         bh=B1AutJGGPavvCGjevP4mGcZkpPXgeNuyFi9KT+17/0g=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=lE6/5R4Nuvz+KKRDO9KDUJtcHa6n7w+ycNeJ2j1J0SFyLlio6U3iC1zubMMpSR8J/
-         RdwAuYhRSeNFWvGuwpjSr1Cltz45Pp6tj51fM1lgGOwxuDid0O/IQnokda7jEohA6W
-         f5bO6CEMhyooLcJsc0SMMfBkCuEjxKNUKqwXkVhE=
+        b=pm6BUZZJQU+SqiwJywkw/jwGejvCr+7wkQ2Sl7howPUiJvUHJ6RKBzSPt/t6dquO7
+         K0bdkhYP9wfidwzCO9bBL9mvWIo/W+AiyOF784IzqECanm3TFQt/uz/8sv/+joTW2R
+         Uc06fM14nt6YF0J+t3bHRiDKlV5tVbBRhroKUs/4=
 Received: from fsd-lkpg.ufsd.paragon-software.com (172.30.114.105) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 2 Apr 2021 18:53:52 +0300
+ 15.1.2176.2; Thu, 29 Jul 2021 16:49:48 +0300
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 To:     <linux-fsdevel@vger.kernel.org>
 CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
@@ -46,12 +46,12 @@ CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
         <andy.lavr@gmail.com>, <kari.argillander@gmail.com>,
         <oleksandr@natalenko.name>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH v26 01/10] fs/ntfs3: Add headers and misc files
-Date:   Fri, 2 Apr 2021 18:53:38 +0300
-Message-ID: <20210402155347.64594-2-almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH v27 01/10] fs/ntfs3: Add headers and misc files
+Date:   Thu, 29 Jul 2021 16:49:34 +0300
+Message-ID: <20210729134943.778917-2-almaz.alexandrovich@paragon-software.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
-References: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210729134943.778917-1-almaz.alexandrovich@paragon-software.com>
+References: <20210729134943.778917-1-almaz.alexandrovich@paragon-software.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -61,9 +61,6 @@ X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Archived-At: <https://lore.kernel.org/lkml/20210402155347.64594-2-almaz.alexandrovich@paragon-software.com/>
-List-Archive: <https://lore.kernel.org/lkml/>
-List-Post: <mailto:linux-kernel@vger.kernel.org>
 
 This adds headers and misc files
 

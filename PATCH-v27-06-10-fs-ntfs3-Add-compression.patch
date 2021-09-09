@@ -6,35 +6,36 @@ X-Spam-Level:
 X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B38ABC433ED
-	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34760C43214
+	for <linux-kernel@archiver.kernel.org>; Thu, 29 Jul 2021 14:08:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6AA16610CC
-	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 165B16054E
+	for <linux-kernel@archiver.kernel.org>; Thu, 29 Jul 2021 14:08:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236411AbhDBPy0 (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Fri, 2 Apr 2021 11:54:26 -0400
-Received: from relayfre-01.paragon-software.com ([176.12.100.13]:47834 "EHLO
+        id S238928AbhG2OIS (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Thu, 29 Jul 2021 10:08:18 -0400
+Received: from relayfre-01.paragon-software.com ([176.12.100.13]:56934 "EHLO
         relayfre-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236045AbhDBPx6 (ORCPT
+        by vger.kernel.org with ESMTP id S238258AbhG2OAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Apr 2021 11:53:58 -0400
+        Thu, 29 Jul 2021 10:00:13 -0400
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 97E801D79;
-        Fri,  2 Apr 2021 18:53:54 +0300 (MSK)
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 0A99C1D2D;
+        Thu, 29 Jul 2021 16:49:51 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1617378834;
+        d=paragon-software.com; s=mail; t=1627566591;
         bh=xPk1pj72lwpo61MvinyFCH3352ZDbC5qyAuqdqZnPb8=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=YkJXypUGQMSwEESiv2kiehC7Fy646afMf6mkDpekxSzVt+4oBMx5h4PeF5nfE6eh3
-         dWSafoVd1dNi/wjXEnM34b6P04mBkC0haWOjaHlUUUNMdNjPPuv8IW3NQwSt2ilP4e
-         K+cR/2IuekSf8g/BgTq92vLttZnqntijatkISlZs=
+        b=nDOpjWREg+afF9b7GISjzZxScbPxlZ8uqBlnPz2OIYorPFK8iaHNqhEq+8iB7lW79
+         1Uho30sWzi6OnFQurk4DUzC/lyHBXiWdUDpVGZ3e1lVTYODLkaH3jsrgfeIH8WLevh
+         S+A62Nd1mhXRbUz/ucx23C8td9bgCoZfJZvNsk98=
 Received: from fsd-lkpg.ufsd.paragon-software.com (172.30.114.105) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 2 Apr 2021 18:53:53 +0300
+ 15.1.2176.2; Thu, 29 Jul 2021 16:49:50 +0300
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 To:     <linux-fsdevel@vger.kernel.org>
 CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
@@ -46,12 +47,12 @@ CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
         <andy.lavr@gmail.com>, <kari.argillander@gmail.com>,
         <oleksandr@natalenko.name>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH v26 06/10] fs/ntfs3: Add compression
-Date:   Fri, 2 Apr 2021 18:53:43 +0300
-Message-ID: <20210402155347.64594-7-almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH v27 06/10] fs/ntfs3: Add compression
+Date:   Thu, 29 Jul 2021 16:49:39 +0300
+Message-ID: <20210729134943.778917-7-almaz.alexandrovich@paragon-software.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
-References: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210729134943.778917-1-almaz.alexandrovich@paragon-software.com>
+References: <20210729134943.778917-1-almaz.alexandrovich@paragon-software.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -61,9 +62,6 @@ X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Archived-At: <https://lore.kernel.org/lkml/20210402155347.64594-7-almaz.alexandrovich@paragon-software.com/>
-List-Archive: <https://lore.kernel.org/lkml/>
-List-Post: <mailto:linux-kernel@vger.kernel.org>
 
 This patch adds different types of NTFS-applicable compressions:
 - lznt

@@ -5,36 +5,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD747C43461
-	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32EECC19F39
+	for <linux-kernel@archiver.kernel.org>; Thu, 29 Jul 2021 14:08:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 52A8661163
-	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 065716054E
+	for <linux-kernel@archiver.kernel.org>; Thu, 29 Jul 2021 14:08:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236462AbhDBPyO (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Fri, 2 Apr 2021 11:54:14 -0400
-Received: from relayfre-01.paragon-software.com ([176.12.100.13]:47748 "EHLO
+        id S239493AbhG2OIr (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Thu, 29 Jul 2021 10:08:47 -0400
+Received: from relayfre-01.paragon-software.com ([176.12.100.13]:56940 "EHLO
         relayfre-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235617AbhDBPx5 (ORCPT
+        by vger.kernel.org with ESMTP id S238307AbhG2OAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Apr 2021 11:53:57 -0400
+        Thu, 29 Jul 2021 10:00:13 -0400
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id B9A1D1D39;
-        Fri,  2 Apr 2021 18:53:53 +0300 (MSK)
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 361CE1D29;
+        Thu, 29 Jul 2021 16:49:50 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1617378833;
-        bh=dYIt1EzjK55nl2vsCwc9KTZSrxZdwULDjGMy0ArwLlU=;
+        d=paragon-software.com; s=mail; t=1627566590;
+        bh=nGPBdiEqk4bWUuFPMkyJx7qvpsL40GWLD3+vQprPr5o=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=layGQ5XSSeTHV/u4ie5cljfoGPq1/23Mn4RQjVW8/n9UOUL8SQX3OP1+9OUdv3AMu
-         4Fms3uP5EYPe1kP3qqPRXR7JhPBaUo7TRJ8DoKxZpUOA3m3C1FiWxS4q1H9JmFZxSB
-         CZAhkBIinHHAhM3I05RcW1q24wBR20WeGBh69lpM=
+        b=b02SluBgR49sU26wsMV1btGLeThaTzyVmY+Or9qJlnsEc5xhGuNgP8QalqCQ1VWJ4
+         R4TX9FUUnAtzI3NNhasji5MqeMjCZjo+gZLMQTJSKhi5QUHzb0ei6s1WFrp2mEz55/
+         JWNcB3Gxb7ruBlzCoL37HXFamlQgGvcjFe2EEkmo=
 Received: from fsd-lkpg.ufsd.paragon-software.com (172.30.114.105) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 2 Apr 2021 18:53:52 +0300
+ 15.1.2176.2; Thu, 29 Jul 2021 16:49:49 +0300
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 To:     <linux-fsdevel@vger.kernel.org>
 CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
@@ -46,12 +46,12 @@ CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
         <andy.lavr@gmail.com>, <kari.argillander@gmail.com>,
         <oleksandr@natalenko.name>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH v26 02/10] fs/ntfs3: Add initialization of super block
-Date:   Fri, 2 Apr 2021 18:53:39 +0300
-Message-ID: <20210402155347.64594-3-almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH v27 02/10] fs/ntfs3: Add initialization of super block
+Date:   Thu, 29 Jul 2021 16:49:35 +0300
+Message-ID: <20210729134943.778917-3-almaz.alexandrovich@paragon-software.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
-References: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210729134943.778917-1-almaz.alexandrovich@paragon-software.com>
+References: <20210729134943.778917-1-almaz.alexandrovich@paragon-software.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -61,9 +61,6 @@ X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Archived-At: <https://lore.kernel.org/lkml/20210402155347.64594-3-almaz.alexandrovich@paragon-software.com/>
-List-Archive: <https://lore.kernel.org/lkml/>
-List-Post: <mailto:linux-kernel@vger.kernel.org>
 
 This adds initialization of super block
 
@@ -71,9 +68,9 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 ---
  fs/ntfs3/fsntfs.c | 2542 +++++++++++++++++++++++++++++++++++++++++++
  fs/ntfs3/index.c  | 2641 +++++++++++++++++++++++++++++++++++++++++++++
- fs/ntfs3/inode.c  | 2033 ++++++++++++++++++++++++++++++++++
+ fs/ntfs3/inode.c  | 2034 ++++++++++++++++++++++++++++++++++
  fs/ntfs3/super.c  | 1500 +++++++++++++++++++++++++
- 4 files changed, 8716 insertions(+)
+ 4 files changed, 8717 insertions(+)
  create mode 100644 fs/ntfs3/fsntfs.c
  create mode 100644 fs/ntfs3/index.c
  create mode 100644 fs/ntfs3/inode.c
@@ -5276,10 +5273,10 @@ index 000000000..931a7241e
 +}
 diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
 new file mode 100644
-index 000000000..9e836c192
+index 000000000..3e2056c95
 --- /dev/null
 +++ b/fs/ntfs3/inode.c
-@@ -0,0 +1,2033 @@
+@@ -0,0 +1,2034 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
@@ -7307,6 +7304,7 @@ index 000000000..9e836c192
 +	.write_end = ntfs_write_end,
 +	.direct_IO = ntfs_direct_IO,
 +	.bmap = ntfs_bmap,
++	.set_page_dirty = __set_page_dirty_buffers,
 +};
 +
 +const struct address_space_operations ntfs_aops_cmpr = {

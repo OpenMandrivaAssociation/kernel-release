@@ -5,36 +5,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57D37C433B4
-	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E75CAC432BE
+	for <linux-kernel@archiver.kernel.org>; Thu, 29 Jul 2021 14:00:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 23B0861155
-	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBF7C6101C
+	for <linux-kernel@archiver.kernel.org>; Thu, 29 Jul 2021 14:00:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236588AbhDBPyo (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Fri, 2 Apr 2021 11:54:44 -0400
-Received: from relaydlg-01.paragon-software.com ([81.5.88.159]:44651 "EHLO
+        id S238151AbhG2OAM (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Thu, 29 Jul 2021 10:00:12 -0400
+Received: from relaydlg-01.paragon-software.com ([81.5.88.159]:35320 "EHLO
         relaydlg-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236214AbhDBPyA (ORCPT
+        by vger.kernel.org with ESMTP id S238178AbhG2N6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Apr 2021 11:54:00 -0400
+        Thu, 29 Jul 2021 09:58:17 -0400
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relaydlg-01.paragon-software.com (Postfix) with ESMTPS id 5218A82232;
-        Fri,  2 Apr 2021 18:53:55 +0300 (MSK)
+        by relaydlg-01.paragon-software.com (Postfix) with ESMTPS id C83C98227C;
+        Thu, 29 Jul 2021 16:49:51 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1617378835;
+        d=paragon-software.com; s=mail; t=1627566591;
         bh=H4956qLVxXljVatXFBlBQ7U5IPKsa7TlX6VLWPRC11M=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=nbio4KhziZotfVI43FRGb0dUI805W62FDjc2RW3A0/kS7cCusvy/R5PW3BI+2YkI3
-         hbv+ueiu611A2lDj553tDfKUOEhxAoO4zbLtbGx27YWbx7s+wf6rH2k+q6nMni/zwJ
-         dxTn70ZdpWFMg4w0/QdDubs94TC2wWTYjYkR4KFQ=
+        b=XSePsT6f/XQ9lctytrgHaARKKBQvgKPnXa0F5kmzFZrZy6VMtPaa6Ju00XBZwHFHY
+         a5Wa8bxlJN4UuBSVYWXqk9xiGhzuBtvrrUQw716gOXqyX0iqMpYy0Ysegql50B1MfP
+         xP2mCmzh3K3laF2IHM2TiJr/I9MSKze69I9qtRNU=
 Received: from fsd-lkpg.ufsd.paragon-software.com (172.30.114.105) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 2 Apr 2021 18:53:54 +0300
+ 15.1.2176.2; Thu, 29 Jul 2021 16:49:50 +0300
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 To:     <linux-fsdevel@vger.kernel.org>
 CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
@@ -46,12 +46,12 @@ CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
         <andy.lavr@gmail.com>, <kari.argillander@gmail.com>,
         <oleksandr@natalenko.name>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH v26 07/10] fs/ntfs3: Add NTFS journal
-Date:   Fri, 2 Apr 2021 18:53:44 +0300
-Message-ID: <20210402155347.64594-8-almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH v27 07/10] fs/ntfs3: Add NTFS journal
+Date:   Thu, 29 Jul 2021 16:49:40 +0300
+Message-ID: <20210729134943.778917-8-almaz.alexandrovich@paragon-software.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
-References: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210729134943.778917-1-almaz.alexandrovich@paragon-software.com>
+References: <20210729134943.778917-1-almaz.alexandrovich@paragon-software.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -61,9 +61,6 @@ X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Archived-At: <https://lore.kernel.org/lkml/20210402155347.64594-8-almaz.alexandrovich@paragon-software.com/>
-List-Archive: <https://lore.kernel.org/lkml/>
-List-Post: <mailto:linux-kernel@vger.kernel.org>
 
 This adds NTFS journal
 

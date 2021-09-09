@@ -8,33 +8,33 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81B67C433B4
-	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DC66C432BE
+	for <linux-kernel@archiver.kernel.org>; Thu, 29 Jul 2021 13:59:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3FCE261164
-	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6A59260F4A
+	for <linux-kernel@archiver.kernel.org>; Thu, 29 Jul 2021 13:59:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236429AbhDBPyK (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Fri, 2 Apr 2021 11:54:10 -0400
-Received: from relaydlg-01.paragon-software.com ([81.5.88.159]:44619 "EHLO
+        id S238023AbhG2N7U (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Thu, 29 Jul 2021 09:59:20 -0400
+Received: from relaydlg-01.paragon-software.com ([81.5.88.159]:35306 "EHLO
         relaydlg-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235797AbhDBPx5 (ORCPT
+        by vger.kernel.org with ESMTP id S237956AbhG2N6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Apr 2021 11:53:57 -0400
+        Thu, 29 Jul 2021 09:58:17 -0400
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relaydlg-01.paragon-software.com (Postfix) with ESMTPS id 42E7B8220C;
-        Fri,  2 Apr 2021 18:53:54 +0300 (MSK)
+        by relaydlg-01.paragon-software.com (Postfix) with ESMTPS id D8D3B8227A;
+        Thu, 29 Jul 2021 16:49:50 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1617378834;
+        d=paragon-software.com; s=mail; t=1627566590;
         bh=RmNNWWM4dbR8Wvita4eEJsm9CW+bEv0iXTZtSy7fuuM=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=X+H9rAyjfgxvN5T2StLxyS0fPfuVMsxUshaE3sM0aGfnicctAULXqdOILs8CUPXBp
-         7LBAyMLe4rXjBq4kLMdcWar0b0xdxWRsMlaJ7WFLnAi29EeIUNcZxawu/WS48hI1hR
-         M078RS2GXopy3C/5cjzl+b/SxEFr7f9E3VyxYW8c=
+        b=DQiPtdY0yGJVCIaAJSqGqPktwwvGLYg3tCcLA3+e6sEFpPR8YyZItAElW2sGhspiL
+         vPs6vxiAD7MEhxgdrZtSx9ybHkPfeIomoJijHjJtBrNaQJpjokfh1hVNkAVE/S3Hin
+         hAdp3zvlHhdNyEDM5Tt/MpVwonsaG0Om77AoVwS4=
 Received: from fsd-lkpg.ufsd.paragon-software.com (172.30.114.105) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 2 Apr 2021 18:53:53 +0300
+ 15.1.2176.2; Thu, 29 Jul 2021 16:49:50 +0300
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 To:     <linux-fsdevel@vger.kernel.org>
 CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
@@ -46,12 +46,12 @@ CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
         <andy.lavr@gmail.com>, <kari.argillander@gmail.com>,
         <oleksandr@natalenko.name>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH v26 05/10] fs/ntfs3: Add attrib operations
-Date:   Fri, 2 Apr 2021 18:53:42 +0300
-Message-ID: <20210402155347.64594-6-almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH v27 05/10] fs/ntfs3: Add attrib operations
+Date:   Thu, 29 Jul 2021 16:49:38 +0300
+Message-ID: <20210729134943.778917-6-almaz.alexandrovich@paragon-software.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
-References: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210729134943.778917-1-almaz.alexandrovich@paragon-software.com>
+References: <20210729134943.778917-1-almaz.alexandrovich@paragon-software.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -61,9 +61,6 @@ X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Archived-At: <https://lore.kernel.org/lkml/20210402155347.64594-6-almaz.alexandrovich@paragon-software.com/>
-List-Archive: <https://lore.kernel.org/lkml/>
-List-Post: <mailto:linux-kernel@vger.kernel.org>
 
 This adds attrib operations
 

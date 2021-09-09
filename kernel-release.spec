@@ -23,7 +23,7 @@
 # Work around incomplete debug packages
 %global _empty_manifest_terminate_build 0
 
-%bcond_with gcc
+%bcond_without gcc
 %bcond_without clang
 
 # IMPORTANT
@@ -45,7 +45,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		4
+%define rpmrel		1
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -91,8 +91,13 @@
 %bcond_with uksm
 %endif
 
+%if 0%{relc}
 %bcond_with build_source
 %bcond_with build_devel
+%else
+%bcond_without build_source
+%bcond_without build_devel
+%endif
 %bcond_without cross_headers
 
 %bcond_with lazy_developer
@@ -400,24 +405,20 @@ Patch300:	general-emmc-hs400es-init-tweak.patch
 Patch301:	rk3399-add-sclk-i2sout-src-clock.patch
 
 # NTFS kernel patches
-# https://lore.kernel.org/lkml/20210402155347.64594-1-almaz.alexandrovich@paragon-software.com/
-# (when losing track of what the latest version is, google "PATCH v26" NTFS and increase the
+# https://lore.kernel.org/lkml/20210729162459.GA3601405@magnolia/T/
+# (when losing track of what the latest version is, google "PATCH v27" NTFS and increase the
 # version number until nothing is found -- short of always keeping track of the mailing lists,
 # there doesn't seem to be a better way to always have the current version)
-# Versions > 19 require kernel 5.12+
-# (tpg) does not compile as of 2021-07-18
-%if 0
-Patch350:	PATCH-v26-01-10-fs-ntfs3-Add-headers-and-misc-files.patch
-Patch351:	PATCH-v26-02-10-fs-ntfs3-Add-initialization-of-super-block.patch
-Patch352:	PATCH-v26-03-10-fs-ntfs3-Add-bitmap.patch
-Patch353:	PATCH-v26-04-10-fs-ntfs3-Add-file-operations-and-implementation.patch
-Patch354:	PATCH-v26-05-10-fs-ntfs3-Add-attrib-operations.patch
-Patch355:	PATCH-v26-06-10-fs-ntfs3-Add-compression.patch
-Patch356:	PATCH-v26-07-10-fs-ntfs3-Add-NTFS-journal.patch
-Patch357:	PATCH-v26-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
-Patch358:	PATCH-v26-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
-Patch359:	PATCH-v26-10-10-fs-ntfs3-Add-MAINTAINERS.patch
-%endif
+Patch350:	PATCH-v27-01-10-fs-ntfs3-Add-headers-and-misc-files.patch
+Patch351:	PATCH-v27-02-10-fs-ntfs3-Add-initialization-of-super-block.patch
+Patch352:	PATCH-v27-03-10-fs-ntfs3-Add-bitmap.patch
+Patch353:	PATCH-v27-04-10-fs-ntfs3-Add-file-operations-and-implementation.patch
+Patch354:	PATCH-v27-05-10-fs-ntfs3-Add-attrib-operations.patch
+Patch355:	PATCH-v27-06-10-fs-ntfs3-Add-compression.patch
+Patch356:	PATCH-v27-07-10-fs-ntfs3-Add-NTFS-journal.patch
+Patch357:	PATCH-v27-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
+Patch358:	PATCH-v27-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
+Patch359:	PATCH-v27-10-10-fs-ntfs3-Add-MAINTAINERS.patch
 
 # Bootsplash support
 # based on https://gitlab.manjaro.org/packages/core/linux511/-/tree/master

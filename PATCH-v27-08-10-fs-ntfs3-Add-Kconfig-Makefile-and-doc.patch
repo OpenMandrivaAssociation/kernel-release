@@ -5,36 +5,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BBAFC433B4
-	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DC12C4320E
+	for <linux-kernel@archiver.kernel.org>; Thu, 29 Jul 2021 14:00:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 37D07610CC
-	for <linux-kernel@archiver.kernel.org>; Fri,  2 Apr 2021 15:54:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 130BF6101C
+	for <linux-kernel@archiver.kernel.org>; Thu, 29 Jul 2021 14:00:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236541AbhDBPyd (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
-        Fri, 2 Apr 2021 11:54:33 -0400
-Received: from relaydlg-01.paragon-software.com ([81.5.88.159]:44637 "EHLO
+        id S238300AbhG2N72 (ORCPT <rfc822;linux-kernel@archiver.kernel.org>);
+        Thu, 29 Jul 2021 09:59:28 -0400
+Received: from relaydlg-01.paragon-software.com ([81.5.88.159]:35300 "EHLO
         relaydlg-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236211AbhDBPx7 (ORCPT
+        by vger.kernel.org with ESMTP id S238247AbhG2N6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Apr 2021 11:53:59 -0400
+        Thu, 29 Jul 2021 09:58:17 -0400
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relaydlg-01.paragon-software.com (Postfix) with ESMTPS id 462F182231;
-        Fri,  2 Apr 2021 18:53:55 +0300 (MSK)
+        by relaydlg-01.paragon-software.com (Postfix) with ESMTPS id 5A5448227B;
+        Thu, 29 Jul 2021 16:49:51 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1617378835;
-        bh=UgGZ+ozlOBDo/q+9JOoKTt6JKQ52MQiBDhQXkWubfzs=;
+        d=paragon-software.com; s=mail; t=1627566591;
+        bh=S0XEIMbXsSIH6xsUoiCBADfu4swwBBtFyJX5p1j2Mm8=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ml+di5KJgHNI1dHlO+7U/gnD7q/wupspmQ0B8vieKks5MvcyZKjvHESBpnmtk05pJ
-         W9w2qq9m9iknBp5W6B2OHAmblcrsnvAfHEIviXRcqX4g5Y2vEkQ5lYnqoT2QAw6N/v
-         XYIgEm3aCWtsTdu5VhImt2y6QqBZ9N9pM3RYqbvY=
+        b=ZLcRURJRhJS5zsXqwWK+3zhI3Hfclts9GSV4vKC1Be+VxfEyrDF/vImYbYoNIkVbL
+         +EgIR9wE/Enr6wYhML772BnRct5lh+PRNPZrJQHEuG/uIaUom1PC649hL+hAsnmI13
+         YucQz4JtUKTHkoD2R/DcsNj9QDQkpxOP/8tGWmM8=
 Received: from fsd-lkpg.ufsd.paragon-software.com (172.30.114.105) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 2 Apr 2021 18:53:54 +0300
+ 15.1.2176.2; Thu, 29 Jul 2021 16:49:51 +0300
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 To:     <linux-fsdevel@vger.kernel.org>
 CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
@@ -46,12 +46,12 @@ CC:     <viro@zeniv.linux.org.uk>, <linux-kernel@vger.kernel.org>,
         <andy.lavr@gmail.com>, <kari.argillander@gmail.com>,
         <oleksandr@natalenko.name>,
         Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH v26 08/10] fs/ntfs3: Add Kconfig, Makefile and doc
-Date:   Fri, 2 Apr 2021 18:53:45 +0300
-Message-ID: <20210402155347.64594-9-almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH v27 08/10] fs/ntfs3: Add Kconfig, Makefile and doc
+Date:   Thu, 29 Jul 2021 16:49:41 +0300
+Message-ID: <20210729134943.778917-9-almaz.alexandrovich@paragon-software.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
-References: <20210402155347.64594-1-almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210729134943.778917-1-almaz.alexandrovich@paragon-software.com>
+References: <20210729134943.778917-1-almaz.alexandrovich@paragon-software.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -61,9 +61,6 @@ X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Archived-At: <https://lore.kernel.org/lkml/20210402155347.64594-9-almaz.alexandrovich@paragon-software.com/>
-List-Archive: <https://lore.kernel.org/lkml/>
-List-Post: <mailto:linux-kernel@vger.kernel.org>
 
 This adds Kconfig, Makefile and doc
 
@@ -71,8 +68,8 @@ Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 ---
  Documentation/filesystems/ntfs3.rst | 107 ++++++++++++++++++++++++++++
  fs/ntfs3/Kconfig                    |  46 ++++++++++++
- fs/ntfs3/Makefile                   |  34 +++++++++
- 3 files changed, 187 insertions(+)
+ fs/ntfs3/Makefile                   |  36 ++++++++++
+ 3 files changed, 189 insertions(+)
  create mode 100644 Documentation/filesystems/ntfs3.rst
  create mode 100644 fs/ntfs3/Kconfig
  create mode 100644 fs/ntfs3/Makefile
@@ -244,17 +241,19 @@ index 000000000..6e4cbc48a
 +	  If you don't know what Access Control Lists are, say N.
 diff --git a/fs/ntfs3/Makefile b/fs/ntfs3/Makefile
 new file mode 100644
-index 000000000..b06a06cc0
+index 000000000..279701b62
 --- /dev/null
 +++ b/fs/ntfs3/Makefile
-@@ -0,0 +1,34 @@
+@@ -0,0 +1,36 @@
 +# SPDX-License-Identifier: GPL-2.0
 +#
 +# Makefile for the ntfs3 filesystem support.
 +#
 +
 +# to check robot warnings
-+#ccflags-y += -Wunused-but-set-variable -Wold-style-declaration -Wint-to-pointer-cast
++ccflags-y += -Wint-to-pointer-cast \
++	$(call cc-option,-Wunused-but-set-variable,-Wunused-const-variable) \
++	$(call cc-option,-Wold-style-declaration,-Wout-of-line-declaration)
 +
 +obj-$(CONFIG_NTFS3_FS) += ntfs3.o
 +
