@@ -1,6 +1,5 @@
 sources:
-  linux-5.13.tar.xz: 6b79f1a6b6e047cc58509824177d361b4044768a
-  linux-5.13.tar.sign: 64f582898a6a98136bb8e44ad909bcff33e2fb48
   extra-wifi-drivers-20200301.tar.zst: 3390c738c7d91250714ce0f88d26371e93bc40b8
   saa716x-driver.tar.xz: f9b6ef1cd6f1f71f53d9a8aadfba2cf6b5c3d7b6
-  patch-5.13.12.xz: 361e105c3203470a0fa6452a45197c4ccb2ddee9
+  linux-5.14.tar.xz: 82c1b2888febfe12510a8e83e09b7652c606ffda
+  patch-5.14.2.xz: 3130049112489709554ddf503e484e226ed7905d

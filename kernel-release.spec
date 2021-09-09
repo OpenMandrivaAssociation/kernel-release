@@ -20,15 +20,18 @@
 # let us try *old* way for kernel package(s)
 %global _build_id_links alldebug
 
-%bcond_without gcc
+# Work around incomplete debug packages
+%global _empty_manifest_terminate_build 0
+
+%bcond_with gcc
 %bcond_without clang
 
 # IMPORTANT
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	13
-%define sublevel	12
+%define patchlevel	14
+%define sublevel	2
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -42,7 +45,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		1
+%define rpmrel		4
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -88,9 +91,10 @@
 %bcond_with uksm
 %endif
 
-%bcond_without build_source
-%bcond_without build_devel
+%bcond_with build_source
+%bcond_with build_devel
 %bcond_without cross_headers
+
 %bcond_with lazy_developer
 %bcond_with build_debug
 %bcond_with dracut_all_initrd
@@ -282,7 +286,7 @@ Patch42:	linux-5.11-disable-ICF-for-CONFIG_UNWINDER_ORC.patch
 # sources can be found here https://github.com/dolohow/uksm
 %if %{with uksm}
 # breaks armx builds
-Patch43:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.13.patch
+Patch43:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.14.patch
 %endif
 
 # (crazy) see: https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
@@ -326,9 +330,7 @@ Patch209:	extra-wifi-drivers-port-to-5.6.patch
 # virtualbox-kernel-module-sources package is copied around
 Source1005:	vbox-6.1-fix-build-on-znver1-hosts.patch
 Source1006:	vbox-5.10.patch
-Source1007:	vbox-clang12.patch
-# Re-export a few symbols vbox wants
-Patch210:	https://gitweb.frugalware.org/wip_kernel/raw/9d0e99ff5fef596388913549a8418c07d367a940/source/base/kernel/fix_virtualbox.patch
+Source1007:	vboxnet-clang.patch
 
 # Better support for newer x86 processors
 # More actively maintained for newer kernels
@@ -337,8 +339,8 @@ Patch211:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patche
 # Assorted fixes
 
 # Modular binder and ashmem -- let's try to make anbox happy
-Patch212:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
-Patch213:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
+#Patch212:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/android-enable-building-ashmem-and-binder-as-modules.patch
+#Patch213:	https://salsa.debian.org/kernel-team/linux/raw/master/debian/patches/debian/export-symbols-needed-by-android-drivers.patch
 
 # Fix CPU frequency governor mess caused by recent Intel patches
 Patch225:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871bb17b8e6b553799a203c6ae/source/base/kernel/0001-Revert-cpufreq-Avoid-configuring-old-governors-as-de.patch
@@ -348,50 +350,48 @@ Patch226:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871
 Patch230:	linux-5.11-perf-compile.patch
 
 # (tpg) Armbian ARM Patches
-Patch240:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/board-rockpro64-fix-emmc.patch
-Patch241:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/board-rockpro64-fix-spi1-flash-speed.patch
-Patch242:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/board-rockpro64-work-led-heartbeat.patch
-Patch243:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/general-fix-mmc-signal-voltage-before-reboot.patch
-Patch245:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/rk3399-unlock-temperature.patch
-Patch246:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/general-increasing_DMA_block_memory_allocation_to_2048.patch
-Patch247:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/general-rk808-configurable-switch-voltage-steps.patch
-Patch248:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/rk3399-sd-drive-level-8ma.patch
-Patch249:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/rk3399-pci-rockchip-support-ep-gpio-undefined-case.patch
-Patch250:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/board-rockpi4-FixMMCFreq.patch
+Patch240:       https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/board-rockpro64-fix-emmc.patch
+Patch241:       https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/board-rockpro64-fix-spi1-flash-speed.patch
+Patch242:       https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/board-rockpro64-work-led-heartbeat.patch
+Patch243:       https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/general-fix-mmc-signal-voltage-before-reboot.patch
+Patch245:       https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/rk3399-unlock-temperature.patch
+Patch246:       https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/general-increasing_DMA_block_memory_allocation_to_2048.patch
+Patch247:       https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/general-rk808-configurable-switch-voltage-steps.patch
+Patch248:       https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/rk3399-sd-drive-level-8ma.patch
+Patch249:       https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/rk3399-pci-rockchip-support-ep-gpio-undefined-case.patch
+Patch250:       https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/board-rockpi4-FixMMCFreq.patch
 
 # (tpg) Manjaro ARM Patches
-Patch260:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-net-smsc95xx-Allow-mac-address-to-be-set-as-a-parame.patch
-Patch261:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-arm64-dts-rockchip-add-usb3-node-to-roc-cc-rock64.patch
-#Patch262:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-dts-allwinner-add-hdmi-sound-to-pine-devices.patch
-Patch263:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-dts-allwinner-add-ohci-ehci-to-h5-nanopi.patch
-Patch264:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0005-drm-bridge-analogix_dp-Add-enable_psr-param.patch
-Patch265:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0006-gpu-drm-add-new-display-resolution-2560x1440.patch
-Patch266:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0007-nuumio-panfrost-Silence-Panfrost-gem-shrinker-loggin.patch
-#Patch267:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0008-arm64-dts-rockchip-Add-Firefly-Station-p1-support.patch
-Patch268:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0009-typec-displayport-some-devices-have-pin-assignments-reversed.patch
-Patch269:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0010-usb-typec-add-extcon-to-tcpm.patch
-Patch270:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0011-arm64-rockchip-add-DP-ALT-rockpro64.patch
-Patch271:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0012-ayufan-drm-rockchip-add-support-for-modeline-32MHz-e.patch
-#Patch272:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0013-rk3399-rp64-pcie-Reimplement-rockchip-PCIe-bus-scan-delay.patch
-Patch273:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0014-drm-meson-add-YUV422-output-support.patch
-#Patch274:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0015-arm64-dts-meson-add-initial-Beelink-GT1-Ultimate-dev.patch
-Patch275:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0016-add-ugoos-device.patch
-Patch276:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0017-drm-meson-fix-green-pink-color-distortion-set-from-u.patch
-Patch277:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0018-drm-bridge-dw-hdmi-disable-loading-of-DW-HDMI-CEC-sub-driver.patch
-Patch278:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0019-drm-panfrost-Handle-failure-in-panfrost_job_hw_submit.patch
-Patch279:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-phy-rockchip-typec-Set-extcon-capabilities.patch
-Patch280:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-usb-typec-altmodes-displayport-Add-hacky-generic-altmode.patch
-Patch281:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-dts-rockchip-add-typec-extcon-hack.patch
-Patch282:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-dts-rockchip-setup-USB-type-c-port-as-dual-data-role.patch
-Patch283:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-revert-arm64-dts-allwinner-a64-Add-I2S2-node.patch
-Patch284:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-Bluetooth-Add-new-quirk-for-broken-local-ext-features.patch
-Patch285:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-Bluetooth-btrtl-add-support-for-the-RTL8723CS.patch
-Patch286:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-allwinner-a64-enable-Bluetooth-On-Pinebook.patch
-#Patch287:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0005-arm64-dts-allwinner-enable-bluetooth-pinetab-pinepho.patch
-Patch289:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0007-pinetab-accelerometer.patch
-Patch290:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0008-enable-jack-detection-pinetab.patch
-#Patch291:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0009-enable-hdmi-output-pinetab.patch
-Patch292:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0010-drm-panel-fix-PineTab-display.patch
+Patch260:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-net-smsc95xx-Allow-mac-address-to-be-set-as-a-parame.patch
+Patch261:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-arm64-dts-rockchip-add-usb3-node-to-roc-cc-rock64.patch
+#Patch262:      https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-dts-allwinner-add-hdmi-sound-to-pine-devices.patch
+Patch263:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-dts-allwinner-add-ohci-ehci-to-h5-nanopi.patch
+Patch264:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0005-drm-bridge-analogix_dp-Add-enable_psr-param.patch
+Patch265:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0006-gpu-drm-add-new-display-resolution-2560x1440.patch
+Patch266:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0007-nuumio-panfrost-Silence-Panfrost-gem-shrinker-loggin.patch
+#Patch267:      https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0008-arm64-dts-rockchip-Add-Firefly-Station-p1-support.patch
+Patch268:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0009-typec-displayport-some-devices-have-pin-assignments-reversed.patch
+Patch269:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0010-usb-typec-add-extcon-to-tcpm.patch
+Patch270:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0011-arm64-rockchip-add-DP-ALT-rockpro64.patch
+Patch271:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0012-ayufan-drm-rockchip-add-support-for-modeline-32MHz-e.patch
+#Patch272:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0013-rk3399-rp64-pcie-Reimplement-rockchip-PCIe-bus-scan-delay.patch
+Patch273:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0014-drm-meson-add-YUV422-output-support.patch
+#Patch274:      https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0015-arm64-dts-meson-add-initial-Beelink-GT1-Ultimate-dev.patch
+Patch275:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0016-add-ugoos-device.patch
+Patch278:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0019-drm-panfrost-Handle-failure-in-panfrost_job_hw_submit.patch
+Patch279:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-phy-rockchip-typec-Set-extcon-capabilities.patch
+Patch280:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-usb-typec-altmodes-displayport-Add-hacky-generic-altmode.patch
+Patch281:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-dts-rockchip-add-typec-extcon-hack.patch
+Patch282:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-dts-rockchip-setup-USB-type-c-port-as-dual-data-role.patch
+Patch283:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-revert-arm64-dts-allwinner-a64-Add-I2S2-node.patch
+Patch284:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-Bluetooth-Add-new-quirk-for-broken-local-ext-features.patch
+#Patch285:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-Bluetooth-btrtl-add-support-for-the-RTL8723CS.patch
+Patch286:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-allwinner-a64-enable-Bluetooth-On-Pinebook.patch
+#Patch287:      https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0005-arm64-dts-allwinner-enable-bluetooth-pinetab-pinepho.patch
+Patch289:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0007-pinetab-accelerometer.patch
+Patch290:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0008-enable-jack-detection-pinetab.patch
+#Patch291:      https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0009-enable-hdmi-output-pinetab.patch
+Patch292:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0010-drm-panel-fix-PineTab-display.patch
 
 # (tpg) patches taken from https://github.com/OpenMandrivaSoftware/os-image-builder/tree/master/device/rockchip/generic/kernel-patches
 Patch295:	add-board-orangepi-4.patch
@@ -405,6 +405,8 @@ Patch301:	rk3399-add-sclk-i2sout-src-clock.patch
 # version number until nothing is found -- short of always keeping track of the mailing lists,
 # there doesn't seem to be a better way to always have the current version)
 # Versions > 19 require kernel 5.12+
+# (tpg) does not compile as of 2021-07-18
+%if 0
 Patch350:	PATCH-v26-01-10-fs-ntfs3-Add-headers-and-misc-files.patch
 Patch351:	PATCH-v26-02-10-fs-ntfs3-Add-initialization-of-super-block.patch
 Patch352:	PATCH-v26-03-10-fs-ntfs3-Add-bitmap.patch
@@ -415,6 +417,7 @@ Patch356:	PATCH-v26-07-10-fs-ntfs3-Add-NTFS-journal.patch
 Patch357:	PATCH-v26-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
 Patch358:	PATCH-v26-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
 Patch359:	PATCH-v26-10-10-fs-ntfs3-Add-MAINTAINERS.patch
+%endif
 
 # Bootsplash support
 # based on https://gitlab.manjaro.org/packages/core/linux511/-/tree/master
@@ -520,7 +523,7 @@ BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	pkgconfig(libkmod)
 
 %ifarch %{x86_64} %{aarch64}
-BuildRequires:	numa-devel
+BuildRequires:	pkgconfig(numa)
 %endif
 
 # for cpupower
@@ -561,9 +564,6 @@ BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(babeltrace)
-%ifarch %{x86_64} %{aarch64}
-BuildRequires:	pkgconfig(numa)
-%endif
 BuildRequires:	jdk-current
 BuildRequires:	perl-devel
 BuildRequires:	perl(ExtUtils::Embed)
@@ -825,6 +825,57 @@ CFS cpu scheduler and BFQ i/o scheduler, PERFORMANCE governor.
 %endif
 
 #
+# kernel-source
+#
+%if %{with build_source}
+%package -n %{kname}-source
+Version:	%{kversion}
+Release:	%{rpmrel}
+Requires:	glibc-devel
+Requires:	ncurses-devel
+Requires:	make
+Requires:	gcc >= 7.2.1_2017.11-3
+Requires:	perl
+Requires:	diffutils
+Summary:	The Linux source code for %{kname}-%{buildrel}
+Group:		Development/Kernel
+Autoreqprov:	no
+Provides:	kernel-source = %{kverrel}
+Provides:	kernel-source-%{buildrel}
+Provides:	installonlypkg(kernel)
+Conflicts:	%{kname}-source-latest <= %{kversion}-%{rpmrel}
+Obsoletes:	%{kname}-source-latest <= %{kversion}-%{rpmrel}
+Buildarch:	noarch
+
+%description -n %{kname}-source
+The %{kname}-source package contains the source code files for the OpenMandriva
+kernel. These source files are only needed if you want to build your own
+custom kernel that is better tuned to your particular hardware.
+
+If you only want the files needed to build 3rdparty (nVidia, Ati, dkms-*,...)
+drivers against, install the *-devel rpm that is matching your kernel.
+%endif
+
+#
+# kernel-doc: documentation for the Linux kernel
+#
+%if %with build_doc
+%package -n %{kname}-doc
+Version:	%{kversion}
+Release:	%{rpmrel}
+Summary:	Various documentation bits found in the %{kname} source
+Group:		Documentation
+Buildarch:	noarch
+
+%description -n %{kname}-doc
+This package contains documentation files from the %{kname} source.
+Various bits of information about the Linux kernel and the device drivers
+shipped with it are documented in these files. You also might want install
+this package if you need a reference to the options that can be passed to
+Linux kernel modules at load time.
+%endif
+
+#
 # kernel/tools
 #
 %if %{with perf}
@@ -973,57 +1024,6 @@ done
 %endif
 
 #
-# kernel-source
-#
-%if %{with build_source}
-%package -n %{kname}-source
-Version:	%{kversion}
-Release:	%{rpmrel}
-Requires:	glibc-devel
-Requires:	ncurses-devel
-Requires:	make
-Requires:	gcc >= 7.2.1_2017.11-3
-Requires:	perl
-Requires:	diffutils
-Summary:	The Linux source code for %{kname}-%{buildrel}
-Group:		Development/Kernel
-Autoreqprov:	no
-Provides:	kernel-source = %{kverrel}
-Provides:	kernel-source-%{buildrel}
-Provides:	installonlypkg(kernel)
-Conflicts:	%{kname}-source-latest <= %{kversion}-%{rpmrel}
-Obsoletes:	%{kname}-source-latest <= %{kversion}-%{rpmrel}
-Buildarch:	noarch
-
-%description -n %{kname}-source
-The %{kname}-source package contains the source code files for the OpenMandriva
-kernel. These source files are only needed if you want to build your own
-custom kernel that is better tuned to your particular hardware.
-
-If you only want the files needed to build 3rdparty (nVidia, Ati, dkms-*,...)
-drivers against, install the *-devel rpm that is matching your kernel.
-%endif
-
-#
-# kernel-doc: documentation for the Linux kernel
-#
-%if %with build_doc
-%package -n %{kname}-doc
-Version:	%{kversion}
-Release:	%{rpmrel}
-Summary:	Various documentation bits found in the %{kname} source
-Group:		Documentation
-Buildarch:	noarch
-
-%description -n %{kname}-doc
-This package contains documentation files from the %{kname} source.
-Various bits of information about the Linux kernel and the device drivers
-shipped with it are documented in these files. You also might want install
-this package if you need a reference to the options that can be passed to
-Linux kernel modules at load time.
-%endif
-
-#
 # End packages - here begins build stage
 #
 %prep
@@ -1149,7 +1149,7 @@ chmod 755 tools/objtool/sync-check.sh
 %set_build_flags
 
 ############################################################
-###  Linker end2 > Check point to build for omv          ###
+###  Linker end2 > Check point to build for omv ###
 ############################################################
 CheckConfig() {
 
@@ -1510,8 +1510,8 @@ SaveDevel() {
 
 	kernel_devel_files=kernel_devel_files.$devel_flavour
 
-### Create the kernel_devel_files.*
-cat > $kernel_devel_files <<EOF
+	### Create the kernel_devel_files.*
+	cat > $kernel_devel_files <<EOF
 %dir $DevelRoot
 %dir $DevelRoot/arch
 %dir $DevelRoot/include
@@ -1578,24 +1578,29 @@ $DevelRoot/Module.symvers
 $DevelRoot/arch/Kconfig
 EOF
 
-### Create -devel Post script on the fly
-cat > $kernel_devel_files-post <<EOF
-if [ -d %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel} ]; then
-    rm -f %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel}/{build,source} ||:
-    ln -sf $DevelRoot %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel}/build
-    ln -sf $DevelRoot %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel}/source
+	### Create -devel Post script on the fly
+	cat > $kernel_devel_files-post <<EOF
+if [ -d /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel} ]; then
+	rm -f /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/{build,source}
+	ln -sf $DevelRoot /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/build
+	ln -sf $DevelRoot /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/source
 fi
 EOF
 
-### Create -devel Preun script on the fly
-cat > $kernel_devel_files-preun <<EOF
-[ -L %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel}/build ] && rm -f %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel}/build ||:
-[ -L %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel}/source ] && rm -f %{_modulesdir}/%{kversion}-$devel_flavour-%{buildrpmrel}/source ||:
+
+	### Create -devel Preun script on the fly
+	cat > $kernel_devel_files-preun <<EOF
+if [ -L /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/build ]; then
+	rm -f /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/build
+fi
+if [ -L /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/source ]; then
+	rm -f /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/source
+fi
 exit 0
 EOF
 
-### Create -devel Postun script on the fly
-cat > $kernel_devel_files-postun <<EOF
+	### Create -devel Postun script on the fly
+	cat > $kernel_devel_files-postun <<EOF
 rm -rf /usr/src/linux-%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
 EOF
 }
@@ -1644,11 +1649,11 @@ CreateFiles() {
 EOF
 
 %if %{with build_debug}
-    cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
+	cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
 %endif
 
 ### Create kernel Post script
-    cat > $kernel_files-post <<EOF
+	cat > $kernel_files-post <<EOF
 %ifnarch %{armx} %{riscv}
 %if %{with dracut_all_initrd}
 [ -x /sbin/dracut ] && /sbin/dracut -f --regenerate-all
@@ -1659,51 +1664,67 @@ EOF
 %endif
 
 ## cleanup some werid symlinks we never used anyway
-rm -rf vmlinuz-{server,desktop} initrd0.img initrd-{server,desktop} ||:
+rm -rf vmlinuz-{server,desktop} initrd0.img initrd-{server,desktop}
 
 # run update-grub2
 [ -x /usr/sbin/update-grub2 ] && /usr/sbin/update-grub2
 
+cd - > /dev/null
 %if %{with build_devel}
 # create kernel-devel symlinks if matching -devel- rpm is installed
 if [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
-    rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/{build,source}
-    ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
-    ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source
+	rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/{build,source}
+	ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
+	ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source
 fi
 %endif
 EOF
 
-### Create kernel Posttrans script
-    cat > $kernel_files-posttrans <<EOF
+	### Create kernel Posttrans script
+	cat > $kernel_files-posttrans <<EOF
 if [ -x /usr/sbin/dkms_autoinstaller ] && [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
-    /usr/sbin/dkms_autoinstaller start %{kversion}-$kernel_flavour-%{buildrpmrel}
+	/usr/sbin/dkms_autoinstaller start %{kversion}-$kernel_flavour-%{buildrpmrel}
 fi
 
 if [ -x %{_sbindir}/dkms ] && [ -e %{_unitdir}/dkms.service ] && [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
-    /bin/systemctl --quiet restart dkms.service
-    /bin/systemctl --quiet try-restart loadmodules.service
-    %{_sbindir}/dkms autoinstall --verbose --kernelver %{kversion}-$kernel_flavour-%{buildrpmrel}
+	/bin/systemctl --quiet restart dkms.service
+	/bin/systemctl --quiet try-restart loadmodules.service
+	%{_sbindir}/dkms autoinstall --verbose --kernelver %{kversion}-$kernel_flavour-%{buildrpmrel}
 fi
 EOF
 
 ### Create kernel Postun script on the fly
 cat > $kernel_files-postun <<EOF
-rm -rf %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel}/modules.{alias{,.bin},builtin.bin,dep{,.bin},devname,softdep,symbols{,.bin}} ||:
-[ -e %{_bootdir}/vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} ] && rm -rf %{_bootdir}/vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} ||:
-[ -e %{_bootdir}/initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ] && rm -rf %{_bootdir}/initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ||:
-rm -rf %{_modulesdir}/%{kversion}-$kernel_flavour-%{buildrpmrel} 2> /dev/null
 
+rm -rf /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/modules.{alias{,.bin},builtin.bin,dep{,.bin},devname,softdep,symbols{,.bin}} ||:
+cd /boot > /dev/null
+
+if [ -e vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
+	rm -rf vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}
+fi
+
+if [ -e initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ]; then
+	rm -rf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img
+fi
+
+
+cd - > /dev/null
+
+rm -rf /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel} >/dev/null
 if [ -d /var/lib/dkms ]; then
-    rm -f /var/lib/dkms/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
-    rm -rf /var/lib/dkms/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
-    rm -f /var/lib/dkms-binary/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
-    rm -rf /var/lib/dkms-binary/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
+	rm -f /var/lib/dkms/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
+	rm -rf /var/lib/dkms/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
+	rm -f /var/lib/dkms-binary/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
+	rm -rf /var/lib/dkms-binary/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
 fi
 
 %if %{with build_devel}
-[ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build ] && rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build ||:
-[ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source ] && rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source ||:
+if [ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build ]; then
+	rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
+fi
+if [ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source ]; then
+	rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source
+fi
 %endif
 exit 0
 EOF
@@ -1883,7 +1904,7 @@ cp -a %{temp_root} %{buildroot}
 # We used to have a copy of PrepareKernel here
 # Now, we make sure that the thing in the linux dir is what we want it to be
 for i in %{target_modules}/*; do
-    rm -f $i/build $i/source
+	rm -f $i/build $i/source
 done
 
 # sniff, if we compressed all the modules, we change the stamp :(
@@ -1956,14 +1977,15 @@ find -iname ".gitignore" -delete
 rm -f .cache.mk
 # Drop script binaries that can be rebuilt
 find tools scripts -executable |while read r; do
-    if file $r |grep -q ELF; then
-	rm -f $r
-    fi
+	if file $r |grep -q ELF; then
+		rm -f $r
+	fi
 done
 cd -
 
 #endif %{with build_source}
 %endif
+
 
 ############################################################
 ### Linker start4 > Check point to build for omv         ###
