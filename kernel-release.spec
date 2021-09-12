@@ -31,7 +31,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	14
-%define sublevel	2
+%define sublevel	3
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -419,25 +419,6 @@ Patch356:	PATCH-v27-07-10-fs-ntfs3-Add-NTFS-journal.patch
 Patch357:	PATCH-v27-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
 Patch358:	PATCH-v27-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
 Patch359:	PATCH-v27-10-10-fs-ntfs3-Add-MAINTAINERS.patch
-
-# Bootsplash support
-# based on https://gitlab.manjaro.org/packages/core/linux511/-/tree/master
-Patch401:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0401-revert-fbcon-remove-now-unusued-softback_lines-cursor-argument.patch
-Patch402:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0402-revert-fbcon-remove-no-op-fbcon_set_origin.patch
-Patch403:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0403-revert-fbcon-remove-soft-scrollback-code.patch
-Patch501:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0501-bootsplash.patch
-Patch502:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0502-bootsplash.patch
-Patch503:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0503-bootsplash.patch
-Patch504:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0504-bootsplash.patch
-Patch505:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0505-bootsplash.patch
-Patch506:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0506-bootsplash.patch
-Patch507:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0507-bootsplash.patch
-Patch508:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0508-bootsplash.patch
-Patch509:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0509-bootsplash.patch
-Patch510:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0510-bootsplash.patch
-Patch511:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0511-bootsplash.patch
-Patch512:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0512-bootsplash.patch
-Source513:	https://gitlab.manjaro.org/packages/core/linux511/-/raw/master/0513-bootsplash.gitpatch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
