@@ -31,7 +31,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	14
-%define sublevel	3
+%define sublevel	6
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -1017,7 +1017,6 @@ xzcat %{SOURCE1000} |git apply - || git apply %{SOURCE1000}
 rm -rf .git
 %endif
 %autopatch -p1
-git apply %{S:513}
 
 %ifarch %{aarch64}
 # FIXME SynQuacer workaround
