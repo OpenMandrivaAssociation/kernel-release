@@ -23,8 +23,13 @@
 # Work around incomplete debug packages
 %global _empty_manifest_terminate_build 0
 
+%ifarch aarch64
+%bcond_with gcc
+%bcond_without clang
+%else
 %bcond_without gcc
 %bcond_without clang
+%endif
 
 # IMPORTANT
 # This is the place where you set kernel version i.e 4.5.0
@@ -75,7 +80,6 @@
 %define _kerneldir /usr/src/linux-%{kversion}-%{buildrpmrel}
 %define _bootdir /boot
 %define _modulesdir /lib/modules
-%define _efidir %{_bootdir}/efi/EFI/openmandriva
 
 # Directories definition needed for building
 %define temp_root %{build_dir}/temp-root
@@ -334,7 +338,6 @@ Patch209:	extra-wifi-drivers-port-to-5.6.patch
 # because they need to be applied after stuff from the
 # virtualbox-kernel-module-sources package is copied around
 Source1005:	vbox-6.1-fix-build-on-znver1-hosts.patch
-Source1006:	vbox-5.10.patch
 Source1007:	vboxnet-clang.patch
 
 # Better support for newer x86 processors
@@ -1114,7 +1117,6 @@ sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 %endif
 patch -p1 -z .1005~ -b <%{S:1005}
-patch -p1 -z .1006~ -b <%{S:1006}
 patch -p1 -z .1007~ -b <%{S:1007}
 %endif
 
