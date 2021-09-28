@@ -31,7 +31,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	14
-%define sublevel	7
+%define sublevel	8
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -85,7 +85,7 @@
 
 # Build defines
 %bcond_with build_doc
-%ifarch %{ix86} %{x86_64}
+%ifarch %{ix86} %{x86_64} aarch64
 %bcond_without uksm
 %else
 %bcond_with uksm
