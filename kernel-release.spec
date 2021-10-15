@@ -90,7 +90,7 @@
 # Build defines
 %bcond_with build_doc
 %ifarch %{ix86} %{x86_64} aarch64
-%bcond_without uksm
+%bcond_with uksm
 %else
 %bcond_with uksm
 %endif
