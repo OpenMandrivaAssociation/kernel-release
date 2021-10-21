@@ -3,4 +3,4 @@ sources:
   linux-5.14.tar.sign: 67d559384a438098ce20334076a82b33dfe90401
   linux-5.14.tar.xz: 82c1b2888febfe12510a8e83e09b7652c606ffda
   saa716x-driver.tar.xz: f9b6ef1cd6f1f71f53d9a8aadfba2cf6b5c3d7b6
-  patch-5.14.12.xz: 4b59a7cefadb1cf0d75594956b5e196f3e261767
+  patch-5.14.14.xz: 8f30a4cfed20158ce4515b6cbb32ee2bafad0e1f

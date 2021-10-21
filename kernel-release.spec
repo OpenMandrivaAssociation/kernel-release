@@ -36,7 +36,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	14
-%define sublevel	12
+%define sublevel	14
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -106,7 +106,6 @@
 
 %bcond_with lazy_developer
 %bcond_with build_debug
-%bcond_with dracut_all_initrd
 %bcond_without clr
 %bcond_with vbox_orig_mods
 # FIXME re-enable by default when the patches have been adapted to 5.8
@@ -676,7 +675,6 @@ needs debugging info from the kernel, this package may help. \
 							\
 %endif							\
 							\
-%post -n %{kname}-%{1} -f kernel_files.%{1}-post 	\
 %posttrans -n %{kname}-%{1} -f kernel_files.%{1}-posttrans \
 %postun -n %{kname}-%{1} -f kernel_files.%{1}-postun 	\
 							\
@@ -880,8 +878,6 @@ Version:	%{kversion}
 Release:	%{rpmrel}
 Summary:	The cpupower tools
 Group:		System/Kernel and hardware
-Requires(post):		rpm-helper >= 0.24.0-3
-Requires(preun):	rpm-helper >= 0.24.0-3
 Obsoletes:	cpufreq < 2.0-3
 Provides:	cpufreq = 2.0-3
 Obsoletes:	cpufrequtils < 008-6
@@ -1127,6 +1123,9 @@ find . -name "*.g*ignore" -delete
 
 # fix missing exec flag on file introduced in 4.14.10-rc1
 chmod 755 tools/objtool/sync-check.sh
+
+# (tpg) incerase ZSTD kernel module compression rate
+sed -i -e 's#$(ZSTD) \-T0#$(ZSTD) \--format=zstd \--ultra \-22 \-T0#g' scripts/Makefile.modinst
 
 %build
 %set_build_flags
@@ -1635,24 +1634,18 @@ EOF
 	cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
 %endif
 
-### Create kernel Post script
-	cat > $kernel_files-post <<EOF
-%ifnarch %{armx} %{riscv}
-%if %{with dracut_all_initrd}
-[ -x /sbin/dracut ] && /sbin/dracut -f --regenerate-all
-%endif
+### Create kernel Posttrans script
+	cat > $kernel_files-posttrans <<EOF
+[ -x /sbin/depmod ] && /sbin/depmod -a %{kversion}-$kernel_flavour-%{buildrpmrel}
 
-/sbin/depmod -a %{kversion}-$kernel_flavour-%{buildrpmrel}
+%ifnarch %{armx} %{riscv}
 [ -x /sbin/dracut ] && /sbin/dracut -f --kver %{kversion}-$kernel_flavour-%{buildrpmrel}
+[ -x /usr/sbin/update-grub2 ] && /usr/sbin/update-grub2
 %endif
 
 ## cleanup some werid symlinks we never used anyway
 rm -rf vmlinuz-{server,desktop} initrd0.img initrd-{server,desktop}
 
-# run update-grub2
-[ -x /usr/sbin/update-grub2 ] && /usr/sbin/update-grub2
-
-cd - > /dev/null
 %if %{with build_devel}
 # create kernel-devel symlinks if matching -devel- rpm is installed
 if [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
@@ -1661,10 +1654,7 @@ if [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
 	ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source
 fi
 %endif
-EOF
 
-	### Create kernel Posttrans script
-	cat > $kernel_files-posttrans <<EOF
 if [ -x /usr/sbin/dkms_autoinstaller ] && [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
 	/usr/sbin/dkms_autoinstaller start %{kversion}-$kernel_flavour-%{buildrpmrel}
 fi
@@ -1680,18 +1670,8 @@ EOF
 cat > $kernel_files-postun <<EOF
 
 rm -rf /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/modules.{alias{,.bin},builtin.bin,dep{,.bin},devname,softdep,symbols{,.bin}} ||:
-cd /boot > /dev/null
-
-if [ -e vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
-	rm -rf vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}
-fi
-
-if [ -e initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ]; then
-	rm -rf initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img
-fi
-
-
-cd - > /dev/null
+[ -e /boot/vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel} ] && rm -rf /boot/vmlinuz-%{kversion}-$kernel_flavour-%{buildrpmrel}
+[ -e /boot/initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img ] && rm -rf /boot/initrd-%{kversion}-$kernel_flavour-%{buildrpmrel}.img
 
 rm -rf /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel} >/dev/null
 if [ -d /var/lib/dkms ]; then
