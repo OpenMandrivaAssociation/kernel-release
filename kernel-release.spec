@@ -369,6 +369,7 @@ Patch247:       https://raw.githubusercontent.com/armbian/build/master/patch/ker
 Patch248:       https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/rk3399-sd-drive-level-8ma.patch
 Patch249:       https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/rk3399-pci-rockchip-support-ep-gpio-undefined-case.patch
 Patch250:       https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/board-rockpi4-FixMMCFreq.patch
+Patch251:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.14/add-rockchip-iep-driver.patch
 
 # (tpg) Manjaro ARM Patches
 Patch260:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-net-smsc95xx-Allow-mac-address-to-be-set-as-a-parame.patch
@@ -387,20 +388,20 @@ Patch271:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw
 Patch273:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0014-drm-meson-add-YUV422-output-support.patch
 #Patch274:      https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0015-arm64-dts-meson-add-initial-Beelink-GT1-Ultimate-dev.patch
 Patch275:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0016-add-ugoos-device.patch
-Patch278:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0019-drm-panfrost-Handle-failure-in-panfrost_job_hw_submit.patch
-Patch279:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-phy-rockchip-typec-Set-extcon-capabilities.patch
-Patch280:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-usb-typec-altmodes-displayport-Add-hacky-generic-altmode.patch
-Patch281:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-dts-rockchip-add-typec-extcon-hack.patch
-Patch282:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-dts-rockchip-setup-USB-type-c-port-as-dual-data-role.patch
-Patch283:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-revert-arm64-dts-allwinner-a64-Add-I2S2-node.patch
-Patch284:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-Bluetooth-Add-new-quirk-for-broken-local-ext-features.patch
-#Patch285:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-Bluetooth-btrtl-add-support-for-the-RTL8723CS.patch
-Patch286:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-allwinner-a64-enable-Bluetooth-On-Pinebook.patch
-#Patch287:      https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0005-arm64-dts-allwinner-enable-bluetooth-pinetab-pinepho.patch
+Patch278:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0021-drm-panfrost-scheduler-fix.patch
+Patch279:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0023-drm-rockchip-support-gamma-control-on-RK3399.patch
+Patch280:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-phy-rockchip-typec-Set-extcon-capabilities.patch
+Patch281:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-usb-typec-altmodes-displayport-Add-hacky-generic-altmode.patch
+Patch282:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-dts-rockchip-add-typec-extcon-hack.patch
+Patch283:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-dts-rockchip-setup-USB-type-c-port-as-dual-data-role.patch
+Patch284:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-revert-arm64-dts-allwinner-a64-Add-I2S2-node.patch
+Patch285:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-Bluetooth-Add-new-quirk-for-broken-local-ext-features.patch
+#Patch286:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-Bluetooth-btrtl-add-support-for-the-RTL8723CS.patch
+Patch287:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-arm64-allwinner-a64-enable-Bluetooth-On-Pinebook.patch
+#Patch288:      https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0005-arm64-dts-allwinner-enable-bluetooth-pinetab-pinepho.patch
 Patch289:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0007-pinetab-accelerometer.patch
 Patch290:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0008-enable-jack-detection-pinetab.patch
 #Patch291:      https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0009-enable-hdmi-output-pinetab.patch
-Patch292:       https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0010-drm-panel-fix-PineTab-display.patch
 
 # (tpg) patches taken from https://github.com/OpenMandrivaSoftware/os-image-builder/tree/master/device/rockchip/generic/kernel-patches
 Patch295:	add-board-orangepi-4.patch
