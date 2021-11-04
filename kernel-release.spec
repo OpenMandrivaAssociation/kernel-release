@@ -35,8 +35,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	14
-%define sublevel	16
+%define patchlevel	15
+%define sublevel	0
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -90,7 +90,7 @@
 # Build defines
 %bcond_with build_doc
 %ifarch %{ix86} %{x86_64} aarch64
-%bcond_without uksm
+%bcond_with uksm
 %else
 %bcond_with uksm
 %endif
@@ -262,7 +262,6 @@ Source1002:	revert-9d55bebd9816903b821a403a69a94190442ac043.patch
 
 # (crazy) I really need to send that upstream soon
 Patch10:	iwlwifi-fix-5e003982b07ae.patch
-Patch11:	linux-5.13-attribute-error.patch
 Patch30:	linux-5.6-fix-disassembler-4args-detection.patch
 Patch31:	die-floppy-die.patch
 Patch32:	0001-Add-support-for-Acer-Predator-macro-keys.patch
@@ -408,22 +407,6 @@ Patch295:	add-board-orangepi-4.patch
 Patch299:	general-btsdio-ignore-uart-devs.patch
 Patch300:	general-emmc-hs400es-init-tweak.patch
 Patch301:	rk3399-add-sclk-i2sout-src-clock.patch
-
-# NTFS kernel patches
-# https://lore.kernel.org/lkml/20210729162459.GA3601405@magnolia/T/
-# (when losing track of what the latest version is, google "PATCH v27" NTFS and increase the
-# version number until nothing is found -- short of always keeping track of the mailing lists,
-# there doesn't seem to be a better way to always have the current version)
-Patch350:	PATCH-v27-01-10-fs-ntfs3-Add-headers-and-misc-files.patch
-Patch351:	PATCH-v27-02-10-fs-ntfs3-Add-initialization-of-super-block.patch
-Patch352:	PATCH-v27-03-10-fs-ntfs3-Add-bitmap.patch
-Patch353:	PATCH-v27-04-10-fs-ntfs3-Add-file-operations-and-implementation.patch
-Patch354:	PATCH-v27-05-10-fs-ntfs3-Add-attrib-operations.patch
-Patch355:	PATCH-v27-06-10-fs-ntfs3-Add-compression.patch
-Patch356:	PATCH-v27-07-10-fs-ntfs3-Add-NTFS-journal.patch
-Patch357:	PATCH-v27-08-10-fs-ntfs3-Add-Kconfig-Makefile-and-doc.patch
-Patch358:	PATCH-v27-09-10-fs-ntfs3-Add-NTFS3-in-fs-Kconfig-and-fs-Makefile.patch
-Patch359:	PATCH-v27-10-10-fs-ntfs3-Add-MAINTAINERS.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
