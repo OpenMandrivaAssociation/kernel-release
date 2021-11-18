@@ -36,7 +36,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	15
-%define sublevel	2
+%define sublevel	3
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -293,7 +293,7 @@ Patch42:	linux-5.11-disable-ICF-for-CONFIG_UNWINDER_ORC.patch
 # sources can be found here https://github.com/dolohow/uksm
 %if %{with uksm}
 # breaks armx builds
-Patch43:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.14.patch
+Patch43:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.15.patch
 # And make it build with gcc 11
 Patch44:	uksm-5.14-gcc-11.patch
 %endif
