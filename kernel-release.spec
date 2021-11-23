@@ -36,7 +36,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	15
-%define sublevel	3
+%define sublevel	4
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -142,15 +142,7 @@
 %bcond_with bpftool
 %else
 %bcond_without perf
-# FIXME figure out why bpftool won't build on aarch64
-# as of 5.9.1, error is:
-# ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
-# FAILED: load BTF from vmlinux: Unknown error -2+ on_exit
-%ifarch %{aarch64}
-%bcond_with bpftool
-%else
 %bcond_without bpftool
-%endif
 %endif
 %bcond_without build_x86_energy_perf_policy
 %bcond_without build_turbostat
