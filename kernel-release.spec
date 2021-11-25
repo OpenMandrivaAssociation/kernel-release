@@ -36,7 +36,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	15
-%define sublevel	4
+%define sublevel	5
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -1807,10 +1807,10 @@ mkdir -p %{temp_root}%{_bindir} %{temp_root}%{_mandir}/man8
 
 %if %{with bpftool}
 # FIXME As of lld 12.0 and kernel 5.11, lld results in unresolved symbols, ld.bfd works
-%make_build -C tools/lib/bpf CC=clang LD=ld.bfd HOSTCC=clang HOSTLD=ld.bfd libbpf.a libbpf.pc libbpf.so -j1
-%make_build -C tools/bpf/bpftool CC=clang LD=ld.bfd HOSTCC=clang HOSTLD=ld.bfd bpftool -j1
-%make_install -C tools/lib/bpf install_headers DESTDIR=%{temp_root} prefix=%{_prefix} libdir=%{_libdir} CC=clang CXX=clang++ LD=ld.bfd HOSTLD=ld.bfd
-%make_install -C tools/bpf/bpftool CC=clang CXX=clang++ LD=ld.bfd HOSTCC=clang HOSTLD=ld.bfd DESTDIR=%{temp_root} prefix=%{_prefix} bash_compdir=%{_sysconfdir}/bash_completion.d/ mandir=%{_mandir}
+%make_build -C tools/lib/bpf CC=clang LD=ld.bfd HOSTCC=clang HOSTLD=ld.bfd VMLINUX_BPF=%{temp_root}%{_bootdir}/$ker-%{kversion}-desktop-%{buildrpmrel} libbpf.a libbpf.pc libbpf.so -j1
+%make_build -C tools/bpf/bpftool CC=clang LD=ld.bfd HOSTCC=clang HOSTLD=ld.bfd VMLINUX_BPF=%{temp_root}%{_bootdir}/$ker-%{kversion}-desktop-%{buildrpmrel} bpftool -j1
+%make_install -C tools/lib/bpf install_headers DESTDIR=%{temp_root} prefix=%{_prefix} libdir=%{_libdir} CC=clang CXX=clang++ LD=ld.bfd HOSTLD=ld.bfd VMLINUX_BPF=%{temp_root}%{_bootdir}/$ker-%{kversion}-desktop-%{buildrpmrel}
+%make_install -C tools/bpf/bpftool CC=clang CXX=clang++ LD=ld.bfd HOSTCC=clang HOSTLD=ld.bfd DESTDIR=%{temp_root} prefix=%{_prefix} bash_compdir=%{_sysconfdir}/bash_completion.d/ mandir=%{_mandir} VMLINUX_BPF=%{temp_root}%{_bootdir}/$ker-%{kversion}-desktop-%{buildrpmrel}
 %endif
 
 %if %{with perf}

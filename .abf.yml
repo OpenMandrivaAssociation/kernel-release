@@ -4,3 +4,4 @@ sources:
   "linux-5.15.tar.xz": ac61f2459040c09af1d5abd4ed100c3d316b443e
   "linux-5.15.tar.sign": de545dcf576adf7b3c364f3f2973f10180564607
   patch-5.15.4.xz: 856c790867092b538aff9e8e2fa78d2da81e1002 
+  patch-5.15.5.xz: b1f0d4d818e7f727819b82b0cb4069c3403a89d4
