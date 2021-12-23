@@ -1,4 +1,4 @@
-ommit ce71038e673ee8291c64631359e56c48c8616dc7 (HEAD -> perf/urgent)
+Commit ce71038e673ee8291c64631359e56c48c8616dc7 (HEAD -> perf/urgent)
 Author: Song Liu <songliubraving@xxxxxx>
 Date:   Fri Dec 3 19:32:34 2021 +0000
 
@@ -39,10 +39,9 @@ Date:   Fri Dec 3 19:32:34 2021 +0000
     Link: http://lore.kernel.org/lkml/CF175681-8101-43D1-ABDB-449E644BE986@xxxxxx
     Signed-off-by: Arnaldo Carvalho de Melo <acme@xxxxxxxxxx>
 
-diff --git a/tools/perf/util/bpf_skel/bperf_follower.bpf.c b/tools/perf/util/bpf_skel/bperf_follower.bpf.c
-index b8fa3cb2da230803..4a6acfde14937704 100644
---- a/tools/perf/util/bpf_skel/bperf_follower.bpf.c
-+++ b/tools/perf/util/bpf_skel/bperf_follower.bpf.c
+diff -Naur a/tools/perf/util/bpf_skel/bperf_follower.bpf.c b/tools/perf/util/bpf_skel/bperf_follower.bpf.c
+--- a/tools/perf/util/bpf_skel/bperf_follower.bpf.c	2021-12-23 11:53:44.970588590 +0000
++++ b/tools/perf/util/bpf_skel/bperf_follower.bpf.c	2021-12-23 14:26:07.466750581 +0000
 @@ -1,7 +1,6 @@
  // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
  // Copyright (c) 2021 Facebook
@@ -51,11 +50,10 @@ index b8fa3cb2da230803..4a6acfde14937704 100644
 +#include "vmlinux.h"
  #include <bpf/bpf_helpers.h>
  #include <bpf/bpf_tracing.h>
- #include "bperf.h"
-diff --git a/tools/perf/util/bpf_skel/bperf_leader.bpf.c b/tools/perf/util/bpf_skel/bperf_leader.bpf.c
-index 4f70d1459e86cb99..40d962b05863421e 100644
---- a/tools/perf/util/bpf_skel/bperf_leader.bpf.c
-+++ b/tools/perf/util/bpf_skel/bperf_leader.bpf.c
+ #include "bperf_u.h"
+diff -Naur a/tools/perf/util/bpf_skel/bperf_leader.bpf.c b/tools/perf/util/bpf_skel/bperf_leader.bpf.c
+--- a/tools/perf/util/bpf_skel/bperf_leader.bpf.c	2021-12-23 11:53:44.970588590 +0000
++++ b/tools/perf/util/bpf_skel/bperf_leader.bpf.c	2021-12-23 14:26:23.306682040 +0000
 @@ -1,7 +1,6 @@
  // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
  // Copyright (c) 2021 Facebook
@@ -64,11 +62,10 @@ index 4f70d1459e86cb99..40d962b05863421e 100644
 +#include "vmlinux.h"
  #include <bpf/bpf_helpers.h>
  #include <bpf/bpf_tracing.h>
- #include "bperf.h"
-diff --git a/tools/perf/util/bpf_skel/bpf_prog_profiler.bpf.c b/tools/perf/util/bpf_skel/bpf_prog_profiler.bpf.c
-index ab12b4c4ece21a9a..97037d3b3d9fa4cd 100644
---- a/tools/perf/util/bpf_skel/bpf_prog_profiler.bpf.c
-+++ b/tools/perf/util/bpf_skel/bpf_prog_profiler.bpf.c
+ 
+diff -Naur a/tools/perf/util/bpf_skel/bpf_prog_profiler.bpf.c b/tools/perf/util/bpf_skel/bpf_prog_profiler.bpf.c
+--- a/tools/perf/util/bpf_skel/bpf_prog_profiler.bpf.c	2021-10-31 20:53:10.000000000 +0000
++++ b/tools/perf/util/bpf_skel/bpf_prog_profiler.bpf.c	2021-12-23 14:26:42.276599822 +0000
 @@ -1,6 +1,6 @@
  // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
  // Copyright (c) 2020 Facebook
@@ -76,3 +73,4 @@ index ab12b4c4ece21a9a..97037d3b3d9fa4cd 100644
 +#include "vmlinux.h"
  #include <bpf/bpf_helpers.h>
  #include <bpf/bpf_tracing.h>
+ 
