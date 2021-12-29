@@ -24,7 +24,7 @@
 %global _empty_manifest_terminate_build 0
 
 %ifarch aarch64
-%bcond_without gcc
+%bcond_with gcc
 %bcond_without clang
 %else
 %bcond_without gcc
@@ -36,7 +36,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	15
-%define sublevel	11
+%define sublevel	12
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -1113,15 +1113,15 @@ sed -i -e 's#$(ZSTD) \-T0#$(ZSTD) \--format=zstd \--ultra \-22 \-T0#g' scripts/M
 ############################################################
 CheckConfig() {
 
-	if [ ! -e $(pwd)/.config ]; then
-		printf '%s\n' "Kernel config in $(pwd) missing, killing the build."
-		exit 1
-	fi
+    if [ ! -e $(pwd)/.config ]; then
+	printf '%s\n' "Kernel config in $(pwd) missing, killing the build."
+	exit 1
+    fi
 }
 
 VerifyConfig() {
 # (tpg) please add CONFIG that were carelessly enabled, while it is known these MUST be disabled
-    if grep -Fxq "CONFIG_RT_GROUP_SCHED=y" .config kernel/configs/omv-*config; then
+    if grep -Fxq "CONFIG_RT_GROUP_SCHED=y" kernel/configs/omv-*config; then
 	printf '%s\n' "Please stop enabling CONFIG_RT_GROUP_SCHED - this option is not recommended with systemd systemd/systemd#553, killing the build."
 	exit 1
     fi
@@ -1161,7 +1161,6 @@ CreateConfig() {
 	config_dir=%{_sourcedir}
 	CONFIGS=""
 	rm -fv .config
-
 
 	if echo $type |grep -q clang; then
 		CC=clang
