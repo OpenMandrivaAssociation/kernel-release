@@ -506,8 +506,10 @@ BuildRequires:	xmlto
 # for ORC unwinder and perf
 BuildRequires:	pkgconfig(libelf)
 
+%if %{with bpftool}
 # for bpf
 BuildRequires:	pahole
+%endif
 
 # for perf
 %if %{with perf}
@@ -898,6 +900,7 @@ Group:		System/Kernel and hardware
 Tool to report processor frequency and idle statistics.
 %endif
 
+%if %{with bpftool}
 %define bpf_major 0
 %define libbpf %mklibname bpf %{bpf_major}
 %define libbpfdevel %mklibname bpf -d
@@ -925,6 +928,7 @@ Requires:	%{libbpf} = %{EVRD}
 %description -n %{libbpfdevel}
 This package includes libraries and header files needed for development
 of applications which use bpf library from kernel sour
+%endif
 
 %package headers
 Version:	%{kversion}
@@ -1108,23 +1112,23 @@ sed -i -e 's#$(ZSTD) \-T0#$(ZSTD) \--format=zstd \--ultra \-22 \-T0#g' scripts/M
 %build
 %set_build_flags
 
-############################################################
-###  Linker end2 > Check point to build for omv ###
-############################################################
+###
+### Functions definitions needed to build kernel
+###
+
 CheckConfig() {
 
     if [ ! -e $(pwd)/.config ]; then
 	printf '%s\n' "Kernel config in $(pwd) missing, killing the build."
 	exit 1
     fi
-}
 
-VerifyConfig() {
 # (tpg) please add CONFIG that were carelessly enabled, while it is known these MUST be disabled
-    if grep -Fxq "CONFIG_RT_GROUP_SCHED=y" kernel/configs/omv-*config; then
+    if grep -Fxq "CONFIG_RT_GROUP_SCHED=y" .config ; then
 	printf '%s\n' "Please stop enabling CONFIG_RT_GROUP_SCHED - this option is not recommended with systemd systemd/systemd#553, killing the build."
 	exit 1
     fi
+
 }
 
 clangify() {
@@ -1162,6 +1166,7 @@ CreateConfig() {
 	CONFIGS=""
 	rm -fv .config
 
+	printf '%s\n' "<-- Creating config for kernel type ${type} for ${arch}"
 	if echo $type |grep -q clang; then
 		CC=clang
 		CXX=clang++
@@ -1177,7 +1182,7 @@ CreateConfig() {
 		BUILD_TOOLS=""
 	fi
 
-	# (crazy) do not use %{S:X} to copy, if someone messes up we end up with broken stuff again
+# (crazy) do not use %{S:X} to copy, if someone messes up we end up with broken stuff again
 	case ${arch} in
 	i?86)
 		case ${type} in
@@ -1280,7 +1285,7 @@ CreateConfig() {
 		;;
 	esac
 
-	# ( crazy) remove along with the old configs once ARM* and ppc* is finished
+# ( crazy) remove along with the old configs once ARM* and ppc* is finished
 	if [[ -n ${CONFIGS} ]]; then
 		for i in common common-${type}; do
 			[ -e kernel/configs/$i.config ] && CONFIGS="$CONFIGS $i.config"
@@ -1298,24 +1303,25 @@ CreateConfig() {
 		arch=powerpc
 	fi
 
-	# ( crazy) remove along with the old configs once ARM* and ppc* is finished
+# ( crazy) remove along with the old configs once ARM* and ppc* is finished
 	if [[ -n ${CONFIGS} ]]; then
 		make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 $CONFIGS
 	else
-		%if %{without lazy_developer}
-		## YES, intentionally, DIE on wrong config
+%if %{without lazy_developer}
+## YES, intentionally, DIE on wrong config
 		CheckConfig
 		make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 oldconfig
-		%else
+%else
 		printf '%s\n' "Lazy developer option is enabled!!. Don't be lazy!."
-		## that takes kernel defaults on missing or changed things
-		## olddefconfig is similar to yes ... but not that verbose
+## that takes kernel defaults on missing or changed things
+## olddefconfig is similar to yes ... but not that verbose
 		CheckConfig
 		yes "" | make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" oldconfig
-		%endif
+%endif
 	fi
+
 	scripts/config --set-val BUILD_SALT \"$(echo "$arch-$type-%{EVRD}"|sha1sum|awk '{ print $1; }')\"
-	# " <--- workaround for vim syntax highlighting bug, ignore
+# " <--- workaround for vim syntax highlighting bug, ignore
 	cp .config kernel/configs/omv-${cfgarch}-${type}.config
 }
 
@@ -1323,21 +1329,20 @@ PrepareKernel() {
 	name=$1
 	extension=$2
 	config_dir=%{_sourcedir}
-	printf '%s\n' "Make config for kernel $extension"
-	VerifyConfig
+	printf '%s\n' "<-- Preparing kernel $extension"
 	%make_build -s mrproper
 %ifarch znver1
 	CreateConfig %{_target_cpu} ${flavour}
 %else
 	CreateConfig %{target_arch} ${flavour}
 %endif
-	# make sure EXTRAVERSION says what we want it to say
+# make sure EXTRAVERSION says what we want it to say
 	sed -ri "s|^(EXTRAVERSION =).*|\1 -$extension|" Makefile
 }
 
 BuildKernel() {
 	KernelVer=$1
-	printf '%s\n' "Building kernel $KernelVer"
+	printf '%s\n' "<--- Building kernel $KernelVer"
 
 	if echo $1 |grep -q clang; then
 		CC=clang
@@ -1348,7 +1353,7 @@ BuildKernel() {
 	else
 		CC=gcc
 		CXX=g++
-		# force ld.bfd, Kbuild logic issues when ld is linked  to something else
+# force ld.bfd, Kbuild logic issues when ld is linked  to something else
 		BUILD_LD="%{_target_platform}-ld.bfd"
 		BUILD_KBUILD_LDFLAGS="-fuse-ld=bfd"
 		BUILD_TOOLS=""
@@ -1360,7 +1365,7 @@ BuildKernel() {
 %endif
 	%make_build ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" $TARGETS
 
-	# Start installing stuff
+# Start installing stuff
 	install -d %{temp_boot}
 	install -m 644 System.map %{temp_boot}/System.map-$KernelVer
 	install -m 644 .config %{temp_boot}/config-$KernelVer
@@ -1368,9 +1373,9 @@ BuildKernel() {
 
 %ifarch %{arm}
 	if [ -f arch/arm/boot/uImage ]; then
-		cp -f arch/arm/boot/uImage %{temp_boot}/uImage-$KernelVer
+	    cp -f arch/arm/boot/uImage %{temp_boot}/uImage-$KernelVer
 	else
-		cp -f arch/arm/boot/zImage %{temp_boot}/vmlinuz-$KernelVer
+	    cp -f arch/arm/boot/zImage %{temp_boot}/vmlinuz-$KernelVer
 	fi
 %else
 %ifarch %{aarch64}
@@ -1380,18 +1385,18 @@ BuildKernel() {
 %endif
 %endif
 
-	# modules
+# modules
 	install -d %{temp_modules}/$KernelVer
 	%make_build INSTALL_MOD_PATH=%{temp_root} ARCH=%{target_arch} SRCARCH=%{target_arch} KERNELRELEASE=$KernelVer CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" INSTALL_MOD_STRIP=1 modules_install
 
-	# headers
+# headers
 	%make_build INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer ARCH=%{target_arch} SRCARCH=%{target_arch} headers_install
 
 %ifarch %{armx} %{ppc}
 	%make_build ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
 %endif
 
-	# remove /lib/firmware, we use a separate kernel-firmware
+# remove /lib/firmware, we use a separate kernel-firmware
 	rm -rf %{temp_root}/lib/firmware
 }
 
@@ -1405,7 +1410,7 @@ SaveDevel() {
 	for i in $(find . -name 'Makefile*'); do cp -R --parents $i $TempDevelRoot;done
 	for i in $(find . -name 'Kconfig*' -o -name 'Kbuild*'); do cp -R --parents $i $TempDevelRoot;done
 	cp -fR include $TempDevelRoot
-	# ln -s ../generated/uapi/linux/version.h $TempDevelRoot/include/linux/version.h
+#	ln -s ../generated/uapi/linux/version.h $TempDevelRoot/include/linux/version.h
 	cp -fR scripts $TempDevelRoot
 	cp -fR kernel/time/timeconst.bc $TempDevelRoot/kernel/time/
 	cp -fR kernel/bounds.c $TempDevelRoot/kernel
@@ -1428,18 +1433,18 @@ SaveDevel() {
 
 	cp -fR .config Module.symvers $TempDevelRoot
 
-	# Needed for truecrypt build (Danny)
+# Needed for truecrypt build (Danny)
 	cp -fR drivers/md/dm.h $TempDevelRoot/drivers/md/
 
-	# Needed for lirc_gpio (#39004)
+# Needed for lirc_gpio (#39004)
 	cp -fR drivers/media/pci/bt8xx/bttv{,p}.h $TempDevelRoot/drivers/media/pci/bt8xx/
 	cp -fR drivers/media/pci/bt8xx/bt848.h $TempDevelRoot/drivers/media/pci/bt8xx/
 	cp -fR drivers/media/common/btcx-risc.h $TempDevelRoot/drivers/media/common/
 
-	# Needed for external dvb tree (#41418)
+# Needed for external dvb tree (#41418)
 	cp -fR drivers/media/dvb-frontends/lgdt330x.h $TempDevelRoot/drivers/media/dvb-frontends/
 
-	# orc unwinder needs theese
+# orc unwinder needs theese
 	cp -fR tools/build/Build{,.include} $TempDevelRoot/tools/build
 	cp -fR tools/build/fixdep.c $TempDevelRoot/tools/build
 	cp -fR tools/lib/{str_error_r.c,string.c} $TempDevelRoot/tools/lib
@@ -1447,7 +1452,7 @@ SaveDevel() {
 	cp -fR tools/objtool/* $TempDevelRoot/tools/objtool
 	cp -fR tools/scripts/utilities.mak $TempDevelRoot/tools/scripts
 
-	# Make clean fails on the include statements in the Makefiles - and the drivers aren't relevant for -devel
+# Make clean fails on the include statements in the Makefiles - and the drivers aren't relevant for -devel
 	rm -rf $TempDevelRoot/drivers/net/wireless/rtl8*
 	sed -i -e '/rtl8.*/d' $TempDevelRoot/drivers/net/wireless/{Makefile,Kconfig}
 
@@ -1456,20 +1461,20 @@ SaveDevel() {
 		rm -rf $TempDevelRoot/arch/$i
 	done
 
-	# Clean the scripts tree, and make sure everything is ok (sanity check)
-	# running prepare+scripts (tree was already "prepared" in build)
+# Clean the scripts tree, and make sure everything is ok (sanity check)
+# running prepare+scripts (tree was already "prepared" in build)
 	cd $TempDevelRoot >/dev/null
 	%make_build ARCH=%{target_arch} clean
 	cd - >/dev/null
 
 	rm -f $TempDevelRoot/.config.old
 
-	# fix permissions
+# fix permissions
 	chmod -R a+rX $TempDevelRoot
 
 	kernel_devel_files=kernel_devel_files.$devel_flavour
 
-	### Create the kernel_devel_files.*
+### Create the kernel_devel_files.*
 	cat > $kernel_devel_files <<EOF
 %dir $DevelRoot
 %dir $DevelRoot/arch
@@ -1537,7 +1542,7 @@ $DevelRoot/Module.symvers
 $DevelRoot/arch/Kconfig
 EOF
 
-	### Create -devel Post script on the fly
+### Create -devel Post script on the fly
 	cat > $kernel_devel_files-post <<EOF
 if [ -d /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel} ]; then
 	rm -f /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/{build,source}
@@ -1547,7 +1552,7 @@ fi
 EOF
 
 
-	### Create -devel Preun script on the fly
+### Create -devel Preun script on the fly
 	cat > $kernel_devel_files-preun <<EOF
 if [ -L /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/build ]; then
 	rm -f /lib/modules/%{kversion}-$devel_flavour-%{buildrpmrel}/build
@@ -1558,7 +1563,7 @@ fi
 exit 0
 EOF
 
-	### Create -devel Postun script on the fly
+### Create -devel Postun script on the fly
 	cat > $kernel_devel_files-postun <<EOF
 rm -rf /usr/src/linux-%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
 EOF
@@ -1587,7 +1592,7 @@ CreateFiles() {
 	kernel_files=kernel_files.$kernel_flavour
 
 	ker="vmlinuz"
-	### Create the kernel_files.*
+### Create the kernel_files.*
 	cat > $kernel_files <<EOF
 %{_bootdir}/System.map-%{kversion}-$kernel_flavour-%{buildrpmrel}
 %{_bootdir}/config-%{kversion}-$kernel_flavour-%{buildrpmrel}
@@ -1608,7 +1613,7 @@ CreateFiles() {
 EOF
 
 %if %{with build_debug}
-	cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
+    cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
 %endif
 
 ### Create kernel Posttrans script
@@ -1626,20 +1631,20 @@ rm -rf vmlinuz-{server,desktop} initrd0.img initrd-{server,desktop}
 %if %{with build_devel}
 # create kernel-devel symlinks if matching -devel- rpm is installed
 if [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
-	rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/{build,source}
-	ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
-	ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source
+    rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/{build,source}
+    ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
+    ln -sf /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source
 fi
 %endif
 
 if [ -x /usr/sbin/dkms_autoinstaller ] && [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
-	/usr/sbin/dkms_autoinstaller start %{kversion}-$kernel_flavour-%{buildrpmrel}
+    /usr/sbin/dkms_autoinstaller start %{kversion}-$kernel_flavour-%{buildrpmrel}
 fi
 
 if [ -x %{_sbindir}/dkms ] && [ -e %{_unitdir}/dkms.service ] && [ -d /usr/src/linux-%{kversion}-$kernel_flavour-%{buildrpmrel} ]; then
-	/bin/systemctl --quiet restart dkms.service
-	/bin/systemctl --quiet try-restart loadmodules.service
-	%{_sbindir}/dkms autoinstall --verbose --kernelver %{kversion}-$kernel_flavour-%{buildrpmrel}
+    /bin/systemctl --quiet restart dkms.service
+    /bin/systemctl --quiet try-restart loadmodules.service
+    %{_sbindir}/dkms autoinstall --verbose --kernelver %{kversion}-$kernel_flavour-%{buildrpmrel}
 fi
 EOF
 
@@ -1652,18 +1657,18 @@ rm -rf /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/modules.{alias{,.
 
 rm -rf /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel} >/dev/null
 if [ -d /var/lib/dkms ]; then
-	rm -f /var/lib/dkms/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
-	rm -rf /var/lib/dkms/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
-	rm -f /var/lib/dkms-binary/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
-	rm -rf /var/lib/dkms-binary/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
+    rm -f /var/lib/dkms/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
+    rm -rf /var/lib/dkms/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
+    rm -f /var/lib/dkms-binary/*/kernel-%{kversion}-$devel_flavour-%{buildrpmrel}-%{_target_cpu} >/dev/null
+    rm -rf /var/lib/dkms-binary/*/*/%{kversion}-$devel_flavour-%{buildrpmrel} >/dev/null
 fi
 
 %if %{with build_devel}
 if [ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build ]; then
-	rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
+    rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/build
 fi
 if [ -L /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source ]; then
-	rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source
+    rm -f /lib/modules/%{kversion}-$kernel_flavour-%{buildrpmrel}/source
 fi
 %endif
 exit 0
@@ -1690,8 +1695,9 @@ rm -rf %{temp_root}
 install -d %{temp_root}
 
 ###
-# DO it...
+### Let's build some kernel
 ###
+
 # Build the configs for every arch we care about
 # that way, we can be sure all *.config files have the right additions
 for a in arm arm64 i386 x86_64 znver1 powerpc riscv; do
@@ -1701,14 +1707,14 @@ for a in arm arm64 i386 x86_64 znver1 powerpc riscv; do
 		[ "$ARCH" = "znver1" ] && export ARCH=x86
 %if %{with cross_headers}
 		if [ "$t" = "desktop" ]; then
-			# While we have a kernel configured for it, let's package
-			# headers for crosscompilers...
-			# Done in a for loop because we may have to install the same
-			# headers multiple times, e.g.
-			# aarch64-linux-gnu, aarch64-linux-musl, aarch64-linux-android
-			# all share the same kernel headers.
-			# This is a little ugly because the kernel's arch names don't match
-			# triplets...
+# While we have a kernel configured for it, let's package
+# headers for crosscompilers...
+# Done in a for loop because we may have to install the same
+# headers multiple times, e.g.
+# aarch64-linux-gnu, aarch64-linux-musl, aarch64-linux-android
+# all share the same kernel headers.
+# This is a little ugly because the kernel's arch names don't match
+# triplets...
 			for i in %{long_cross_header_archs}; do
 				[ "$i" = "%{_target_platform}" ] && continue
 				TripletArch=$(echo ${i} |cut -d- -f1)
@@ -1740,7 +1746,7 @@ for a in arm arm64 i386 x86_64 znver1 powerpc riscv; do
 					[ "$a" != "$TripletArch" ] && continue
 					;;
 				esac
-				%make_build ARCH=${a} SRCARCH=${SARCH}  INSTALL_HDR_PATH=%{temp_root}%{_prefix}/${i} headers_install
+				%make_build V=0 VERBOSE=0 ARCH=${a} SRCARCH=${SARCH} INSTALL_HDR_PATH=%{temp_root}%{_prefix}/${i} headers_install
 			done
 		fi
 %endif
@@ -1831,6 +1837,7 @@ PrepareKernel "" %{buildrpmrel}custom
 ###
 ### install
 ###
+
 %install
 # Directories definition needed for installing
 %define target_source %{buildroot}%{_kerneldir}
@@ -1844,7 +1851,7 @@ cp -a %{temp_root} %{buildroot}
 # We used to have a copy of PrepareKernel here
 # Now, we make sure that the thing in the linux dir is what we want it to be
 for i in %{target_modules}/*; do
-	rm -f $i/build $i/source
+    rm -f $i/build $i/source
 done
 
 # sniff, if we compressed all the modules, we change the stamp :(
@@ -1896,7 +1903,7 @@ rm -f %{target_source}/*_files.* %{target_source}/README.kernel-sources
 # first architecture files
 for i in alpha arc avr32 blackfin c6x cris csky frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
 	mips nds32 nios2 openrisc parisc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
-	rm -rf %{target_source}/arch/$i
+    rm -rf %{target_source}/arch/$i
 done
 
 # other misc files
@@ -1917,15 +1924,14 @@ find -iname ".gitignore" -delete
 rm -f .cache.mk
 # Drop script binaries that can be rebuilt
 find tools scripts -executable |while read r; do
-	if file $r |grep -q ELF; then
-		rm -f $r
-	fi
+    if file $r |grep -q ELF; then
+	rm -f $r
+    fi
 done
 cd -
 
 #endif %{with build_source}
 %endif
-
 
 ############################################################
 ### Linker start4 > Check point to build for omv         ###
@@ -2025,7 +2031,7 @@ cd -
 %endif
 %dir %{_prefix}/libexec/perf-core
 %{_prefix}/libexec/perf-core/*
-%{_mandir}/man[1-8]/perf*
+%doc %{_mandir}/man[1-8]/perf*
 %{_sysconfdir}/bash_completion.d/perf
 %{_prefix}/lib/perf
 %ifarch %{x86_64}
@@ -2043,7 +2049,7 @@ cd -
 %{_libdir}/libcpupower.so.0
 %{_libdir}/libcpupower.so.0.0.1
 %{_unitdir}/cpupower.service
-%{_mandir}/man[1-8]/cpupower*
+%doc %{_mandir}/man[1-8]/cpupower*
 %{_datadir}/bash-completion/completions/cpupower
 %config(noreplace) %{_sysconfdir}/sysconfig/cpupower
 
@@ -2056,13 +2062,13 @@ cd -
 %if %{with build_x86_energy_perf_policy}
 %files -n x86_energy_perf_policy
 %{_bindir}/x86_energy_perf_policy
-%{_mandir}/man8/x86_energy_perf_policy.8*
+%doc %{_mandir}/man8/x86_energy_perf_policy.8*
 %endif
 
 %if %{with build_turbostat}
 %files -n turbostat
 %{_bindir}/turbostat
-%{_mandir}/man8/turbostat.8*
+%doc %{_mandir}/man8/turbostat.8*
 %endif
 %endif
 
