@@ -36,7 +36,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	15
-%define sublevel	12
+%define sublevel	13
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -348,7 +348,7 @@ Patch226:	https://gitweb.frugalware.org/frugalware-current/raw/50690405717979871
 
 # Fix perf
 Patch230:	linux-5.11-perf-compile.patch
-Patch231:	ce71038e673ee8291c64631359e56c48c8616dc7.patch
+#Patch231:	ce71038e673ee8291c64631359e56c48c8616dc7.patch
 
 # (tpg) Armbian ARM Patches
 Patch240:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/board-rockpro64-fix-emmc.patch
@@ -847,7 +847,7 @@ Summary:	perf tool and the supporting documentation
 Group:		System/Kernel and hardware
 
 %description -n perf
-the perf tool and the supporting documentation.
+The perf tool and the supporting documentation.
 %endif
 
 %if %{with build_cpupower}
