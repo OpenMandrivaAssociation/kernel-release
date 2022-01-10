@@ -1,10 +1,11 @@
-diff -up linux-5.4/drivers/nvme/host/core.c.35~ linux-5.4/drivers/nvme/host/core.c
---- linux-5.4/drivers/nvme/host/core.c.35~	2019-12-18 20:23:29.167152525 +0100
-+++ linux-5.4/drivers/nvme/host/core.c	2019-12-18 20:34:05.573121649 +0100
-@@ -2406,6 +2406,15 @@ static const struct nvme_core_quirk_entr
- 		.vid = 0x14a4,
- 		.fr = "22301111",
- 		.quirks = NVME_QUIRK_SIMPLE_SUSPEND,
+diff -up linux-5.16/drivers/nvme/host/core.c.12~ linux-5.16/drivers/nvme/host/core.c
+--- linux-5.16/drivers/nvme/host/core.c.12~	2022-01-10 11:23:40.255182494 +0100
++++ linux-5.16/drivers/nvme/host/core.c	2022-01-10 11:25:22.607566090 +0100
+@@ -2504,7 +2504,16 @@ static const struct nvme_core_quirk_entr
+ 		.vid = 0x1e0f,
+ 		.mn = "KCD6XVUL6T40",
+ 		.quirks = NVME_QUIRK_NO_APST,
+-	}
 +	},
 +        {
 +		/* https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
@@ -14,6 +15,7 @@ diff -up linux-5.4/drivers/nvme/host/core.c.35~ linux-5.4/drivers/nvme/host/core
 +		.vid = 0x1c5c,
 +		.mn = "HFM128GDHTNG-8310B",
 +		.quirks = NVME_QUIRK_NO_APST,
- 	}
++ 	}
  };
  
+ /* match is null-terminated but idstr is space-padded. */
