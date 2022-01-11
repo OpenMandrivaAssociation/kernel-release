@@ -25,7 +25,7 @@ Signed-off-by: Furkan Kardame <f.kardame@manjaro.org>
 
 --- /dev/null	2021-12-01 22:35:57.786902813 +0300
 +++ b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts	2021-12-01 22:48:58.540217879 +0300
-@@ -0,0 +1,542 @@
+@@ -0,0 +1,534 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
@@ -542,14 +542,6 @@ Signed-off-by: Furkan Kardame <f.kardame@manjaro.org>
 +
 +&u2phy1_otg {
 +	phy-supply = <&vcc5v0_host>;
-+	status = "okay";
-+};
-+
-+&usb2phy0 {
-+	status = "okay";
-+};
-+
-+&usb2phy1 {
 +	status = "okay";
 +};
 +
