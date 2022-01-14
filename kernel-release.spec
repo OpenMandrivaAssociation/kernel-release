@@ -410,6 +410,10 @@ Patch302:	general-emmc-hs400es-init-tweak.patch
 Patch303:	rk3399-add-sclk-i2sout-src-clock.patch
 Patch304:	rtl8723cs-compile.patch
 
+# (tpg) patches taken from LibreELEC
+Patch400:	https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/master/projects/Rockchip/patches/linux/default/linux-2000-v4l-wip-rkvdec-vp9.patch
+Patch401:	https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/master/projects/Rockchip/patches/linux/default/linux-2001-v4l-wip-rkvdec-hevc.patch
+
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
 # being touched aren't in the tree at the time %%autopatch -p1
