@@ -411,8 +411,8 @@ Patch303:	rk3399-add-sclk-i2sout-src-clock.patch
 Patch304:	rtl8723cs-compile.patch
 
 # (tpg) patches taken from LibreELEC
-Patch400:	https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/master/projects/Rockchip/patches/linux/default/linux-2000-v4l-wip-rkvdec-vp9.patch
-Patch401:	https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/master/projects/Rockchip/patches/linux/default/linux-2001-v4l-wip-rkvdec-hevc.patch
+#Patch400:	https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/master/projects/Rockchip/patches/linux/default/linux-2000-v4l-wip-rkvdec-vp9.patch
+#Patch401:	https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/master/projects/Rockchip/patches/linux/default/linux-2001-v4l-wip-rkvdec-hevc.patch
 
 # Patches to external modules
 # Marked SourceXXX instead of PatchXXX because the modules
@@ -1112,15 +1112,10 @@ patch -p1 -z .1007~ -b <%{S:1007}
 %endif
 
 # get rid of unwanted files
-find . -name '*~' -o -name '*.orig' -o -name '*.append' -delete
-# wipe all .gitignore/.get_maintainer.ignore files
-find . -name "*.g*ignore" -delete
+find . -name '*~' -o -name '*.orig' -o -name '*.append' -o -name '*.g*ignore' | %kxargs rm -f
 
 # fix missing exec flag on file introduced in 4.14.10-rc1
 chmod 755 tools/objtool/sync-check.sh
-
-# (tpg) incerase ZSTD kernel module compression rate
-sed -i -e 's#$(ZSTD) \-T0#$(ZSTD) \--format=zstd \--ultra \-22 \-T0#g' scripts/Makefile.modinst
 
 %build
 %set_build_flags
@@ -1141,7 +1136,11 @@ CheckConfig() {
 	printf '%s\n' "Please stop enabling CONFIG_RT_GROUP_SCHED - this option is not recommended with systemd systemd/systemd#553, killing the build."
 	exit 1
     fi
-
+# (tpg) kernel modules are compresed manually inside spec file
+    if ! grep -Fxq "CONFIG_MODULE_COMPRESS_NONE=y" .config ; then
+	printf '%s\n' "Please do not disable CONFIG_MODULE_COMPRESS_NONE=y or set any other module compression inside .config, as this will bloat main package instead of debuginfo subpackage, killing the build."
+	exit 1
+    fi
 }
 
 clangify() {
@@ -1868,6 +1867,9 @@ for i in %{target_modules}/*; do
     rm -f $i/build $i/source
 done
 
+# (tpg) let's compress all modules
+find %{target_modules} -name "*.ko" | %kxargs zstd --format=zstd --ultra -22 -T0 --rm -f -q
+
 # sniff, if we compressed all the modules, we change the stamp :(
 # we really need the depmod -ae here
 pushd %{target_modules}
@@ -1878,9 +1880,9 @@ done
 
 for i in *; do
     pushd $i
-    printf '%s\n' "Creating modules.description for $i"
-    modules=$(find . -name "*.ko.[gxz]*[z|st]")
-    echo $modules | %kxargs /sbin/modinfo | perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
+	printf '%s\n' "Creating modules.description for $i"
+	modules=$(find . -name "*.ko.[gxz]*[z|st]")
+	echo $modules | %kxargs /sbin/modinfo | perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
     popd
 done
 popd
