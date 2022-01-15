@@ -50,7 +50,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -105,7 +105,7 @@
 %bcond_without cross_headers
 
 %bcond_with lazy_developer
-%bcond_with build_debug
+%bcond_without build_debug
 %bcond_without clr
 %bcond_with vbox_orig_mods
 # FIXME re-enable by default when the patches have been adapted to 5.8
@@ -155,7 +155,7 @@
 
 # ARM builds
 %ifarch %{armx}
-%bcond_without build_desktop
+%bcond_with build_desktop
 %bcond_without build_server
 %endif
 
@@ -454,7 +454,6 @@ very current hardware.
 %endif
 # (crazy) it needs kmod >= 27-3 bc ZSTD support
 %define requires3	kmod >= 27-3
-%define requires4	sysfsutils >=  2.1.0-12
 %define requires5	kernel-firmware
 
 %define kprovides1	%{kname} = %{kverrel}
@@ -585,7 +584,7 @@ Release:	%{rpmrel}				\
 Provides:	%kprovides1 %kprovides2			\
 %{expand:%%{?kprovides_%{1}:Provides: %{kprovides_%{1}}}} \
 Provides:	%{kname}-%{1}-%{buildrel}		\
-Requires(pre):	%requires3 %requires4			\
+Requires(pre):	%requires3				\
 Requires:	%requires5				\
 Obsoletes:	%kobsoletes1 %kobsoletes2 %kobsoletes3	\
 Conflicts:	%kconflicts1 %kconflicts2 %kconflicts3	\
@@ -1022,7 +1021,7 @@ rm -rf .git
 # merge SAA716x DVB driver from extra tarball
 sed -i -e '/saa7164/isource "drivers/media/pci/saa716x/Kconfig"' drivers/media/pci/Kconfig
 sed -i -e '/saa7164/iobj-$(CONFIG_SAA716X_CORE) += saa716x/' drivers/media/pci/Makefile
-find drivers/media/tuners drivers/media/dvb-frontends -name "*.c" -o -name "*.h" |xargs sed -i -e 's,"dvb_frontend.h",<media/dvb_frontend.h>,g'
+find drivers/media/tuners drivers/media/dvb-frontends -name "*.c" -o -name "*.h" -type f | xargs sed -i -e 's,"dvb_frontend.h",<media/dvb_frontend.h>,g'
 %endif
 
 %if %{with rtl8821ce}
@@ -1033,12 +1032,6 @@ sed -i -e '/quantenna\/Kconfig/asource "drivers/net/wireless/rtl8723de/Kconfig' 
 sed -i -e '/QUANTENNA/aobj-$(CONFIG_RTL8821CE) += rtl8821ce/' Makefile
 sed -i -e '/QUANTENNA/aobj-$(CONFIG_RTL8723DE) += rtl8723de/' Makefile
 cd -
-%endif
-
-%if %{with build_debug}
-%define debug --debug
-%else
-%define debug --no-debug
 %endif
 
 # make sure the kernel has the sublevel we know it has...
@@ -1382,20 +1375,16 @@ BuildKernel() {
 	install -m 644 System.map %{temp_boot}/System.map-$KernelVer
 	install -m 644 .config %{temp_boot}/config-$KernelVer
 
-
 %ifarch %{arm}
-	if [ -f arch/arm/boot/uImage ]; then
-	    cp -f arch/arm/boot/uImage %{temp_boot}/uImage-$KernelVer
-	else
-	    cp -f arch/arm/boot/zImage %{temp_boot}/vmlinuz-$KernelVer
-	fi
+	IMAGE=zImage
 %else
 %ifarch %{aarch64}
-	cp -f arch/arm64/boot/Image.gz %{temp_boot}/vmlinuz-$KernelVer
+	IMAGE=Image.gz
 %else
-	cp -f arch/%{target_arch}/boot/bzImage %{temp_boot}/vmlinuz-$KernelVer
+	IMAGE=bzImage
 %endif
 %endif
+	cp -f arch/%{target_arch}/boot/$IMAGE %{temp_boot}/vmlinuz-$KernelVer
 
 # modules
 	install -d %{temp_modules}/$KernelVer
@@ -1422,7 +1411,6 @@ SaveDevel() {
 	for i in $(find . -name 'Makefile*'); do cp -R --parents $i $TempDevelRoot;done
 	for i in $(find . -name 'Kconfig*' -o -name 'Kbuild*'); do cp -R --parents $i $TempDevelRoot;done
 	cp -fR include $TempDevelRoot
-#	ln -s ../generated/uapi/linux/version.h $TempDevelRoot/include/linux/version.h
 	cp -fR scripts $TempDevelRoot
 	cp -fR kernel/time/timeconst.bc $TempDevelRoot/kernel/time/
 	cp -fR kernel/bounds.c $TempDevelRoot/kernel
@@ -1586,17 +1574,18 @@ SaveDebug() {
 	debug_flavour=$1
 
 	install -m 644 vmlinux %{temp_boot}/vmlinux-%{kversion}-$debug_flavour-%{buildrpmrel}
-	kernel_debug_files=../kernel_debug_files.$debug_flavour
-	echo "%{_bootdir}/vmlinux-%{kversion}-$debug_flavour-%{buildrpmrel}" >> $kernel_debug_files
+	kernel_debug_files=kernel_debug_files.$debug_flavour
+	printf '%s\n' "%{_bootdir}/vmlinux-%{kversion}-$debug_flavour-%{buildrpmrel}" >> $kernel_debug_files
 
-	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" | %kxargs -I '{}' objcopy --only-keep-debug '{}' '{}'.debug
-	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" | %kxargs -I '{}' sh -c 'cd $(dirname {}); objcopy --add-gnu-debuglink=$(basename {}).debug --strip-debug $(basename {})'
+	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f | %kxargs -I '{}' objcopy --only-keep-debug --remove-section '.BTF' '{}' '{}'.debug
+	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f | %kxargs -I '{}' sh -c 'cd $(dirname {}); objcopy --add-gnu-debuglink=$(basename {}).debug --strip-debug $(basename {})'
+	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f | %kxargs strip --strip-unneeded --keep-section='.BTF'
 
 	cd %{temp_modules}
-	find %{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko.debug" > debug_module_list
+	find %{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko.debug" -type f > debug_module_list
 	cd -
 	cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%{_modulesdir}/\1|' >> $kernel_debug_files
-	cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%exclude %{_modulesdir}/\1|' >> ../kernel_exclude_debug_files.$debug_flavour
+	cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%exclude %{_modulesdir}/\1|' >> kernel_exclude_debug_files.$debug_flavour
 	rm -f %{temp_modules}/debug_module_list
 }
 
@@ -1868,7 +1857,7 @@ for i in %{target_modules}/*; do
 done
 
 # (tpg) let's compress all modules
-find %{target_modules} -name "*.ko" | %kxargs zstd --format=zstd --ultra -22 -T0 --rm -f -q
+find %{target_modules} -name "*.ko" -type f | %kxargs zstd --format=zstd --ultra -22 -T0 --rm -f -q
 
 # sniff, if we compressed all the modules, we change the stamp :(
 # we really need the depmod -ae here
@@ -1881,7 +1870,7 @@ done
 for i in *; do
     pushd $i
 	printf '%s\n' "Creating modules.description for $i"
-	modules=$(find . -name "*.ko.[gxz]*[z|st]")
+	modules=$(find . -name "*.ko.[gxz]*[z|st]" -type f)
 	echo $modules | %kxargs /sbin/modinfo | perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
     popd
 done
