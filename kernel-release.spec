@@ -36,7 +36,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	16
-%define sublevel	0
+%define sublevel	1
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -50,7 +50,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		2
+%define rpmrel		1
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -1161,6 +1161,10 @@ CONFIG_INIT_STACK_NONE=y
 # CONFIG_LTO_NONE is not set
 CONFIG_LTO_CLANG_FULL=y
 # CONFIG_LTO_CLANG_THIN is not set
+CONFIG_CFI_CLANG=y
+CONFIG_CFI_CLANG_SHADOW=y
+# CONFIG_CFI_PERMISSIVE is not set
+CONFIG_RELR=y
 EOF
 }
 
@@ -1574,24 +1578,23 @@ SaveDebug() {
 	debug_flavour=$1
 
 	install -m 644 vmlinux %{temp_boot}/vmlinux-%{kversion}-$debug_flavour-%{buildrpmrel}
-	kernel_debug_files=kernel_debug_files.$debug_flavour
+	kernel_debug_files=../kernel_debug_files.$debug_flavour
 	printf '%s\n' "%{_bootdir}/vmlinux-%{kversion}-$debug_flavour-%{buildrpmrel}" >> $kernel_debug_files
 
-	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f | %kxargs -I '{}' objcopy --only-keep-debug --remove-section '.BTF' '{}' '{}'.debug
+	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f | %kxargs -I '{}' objcopy --only-keep-debug '{}' '{}'.debug
 	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f | %kxargs -I '{}' sh -c 'cd $(dirname {}); objcopy --add-gnu-debuglink=$(basename {}).debug --strip-debug $(basename {})'
-	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f | %kxargs strip --strip-unneeded --keep-section='.BTF'
 
 	cd %{temp_modules}
 	find %{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko.debug" -type f > debug_module_list
 	cd -
 	cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%{_modulesdir}/\1|' >> $kernel_debug_files
-	cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%exclude %{_modulesdir}/\1|' >> kernel_exclude_debug_files.$debug_flavour
+	cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%exclude %{_modulesdir}/\1|' >> ../kernel_exclude_debug_files.$debug_flavour
 	rm -f %{temp_modules}/debug_module_list
 }
 
 CreateFiles() {
 	kernel_flavour=$1
-	kernel_files=kernel_files.$kernel_flavour
+	kernel_files=../kernel_files.$kernel_flavour
 
 	ker="vmlinuz"
 ### Create the kernel_files.*
@@ -1615,7 +1618,7 @@ CreateFiles() {
 EOF
 
 %if %{with build_debug}
-    cat kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
+    cat ../kernel_exclude_debug_files.$kernel_flavour >> $kernel_files
 %endif
 
 ### Create kernel Posttrans script
