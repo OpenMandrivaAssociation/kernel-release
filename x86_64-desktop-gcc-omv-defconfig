@@ -6576,6 +6576,7 @@ CONFIG_FB_MODE_HELPERS=y
 # CONFIG_FB_ARC is not set
 # CONFIG_FB_VGA16 is not set
 # CONFIG_FB_N411 is not set
+# CONFIG_FB_HGA is not set
 # CONFIG_FB_LE80578 is not set
 # CONFIG_FB_INTEL is not set
 # CONFIG_FB_VIA is not set
