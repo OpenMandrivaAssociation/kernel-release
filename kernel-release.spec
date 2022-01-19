@@ -214,14 +214,12 @@ Source4:	%{name}.rpmlintrc
 ## all in one configs for each kernel
 Source10:	x86_64-desktop-gcc-omv-defconfig
 Source11:	x86_64-server-gcc-omv-defconfig
-Source12:	x86_64-znver-desktop-gcc-omv-defconfig
-Source13:	x86_64-znver-server-gcc-omv-defconfig
-Source14:	i686-desktop-gcc-omv-defconfig
-Source15:	i686-server-gcc-omv-defconfig
-Source16:	armv7hnl-desktop-omv-defconfig
-Source17:	armv7hnl-server-omv-defconfig
-Source18:	aarch64-desktop-omv-defconfig
-Source19:	aarch64-server-omv-defconfig
+Source12:	i686-desktop-gcc-omv-defconfig
+Source13:	i686-server-gcc-omv-defconfig
+Source14:	armv7hnl-desktop-omv-defconfig
+Source15:	armv7hnl-server-omv-defconfig
+Source16:	aarch64-desktop-omv-defconfig
+Source17:	aarch64-server-omv-defconfig
 
 # config and systemd service file from fedora
 Source30:	cpupower.service
@@ -1167,6 +1165,29 @@ CONFIG_CFI_CLANG_SHADOW=y
 CONFIG_RELR=y
 EOF
 }
+amdify() {
+	# Yes, it is intentional that CONFIG_AMD_NUMA gets disabled
+	# for the AMD kernel -- AMD_NUMA is only for pre-ACPI systems
+	# such as initial Opterons. Not useful for current AMD boxes.
+	sed -i -E \
+		-e 's/^CONFIG_GENERIC_CPU=y/# CONFIG_GENERIC_CPU is not set/' \
+		-e 's/^# CONFIG_MZEN is not set/CONFIG_MZEN=y/' \
+		-e '/CONFIG_HAVE_INTEL_TXT/d' \
+		-e 's/^CONFIG_X86_INTEL_LPSS=y/# CONFIG_X86_INTEL_LPSS is not set/' \
+		-e 's/^CONFIG_CPU_SUP_(INTEL|CENTAUR|ZHAOXIN)=y/# CONFIG_CPU_SUP_\1 is not set/' \
+		-e 's/^CONFIG_X86_MCE_INTEL=y/# CONFIG_X86_MCE_INTEL is not set/' \
+		-e 's/^CONFIG_MICROCODE_INTEL=y/# CONFIG_MICROCODE_INTEL is not set/' \
+		-e 's/^CONFIG_X86_INTEL_PSTATE=y/# CONFIG_X86_INTEL_PSTATE is not set/' \
+		-e 's/^CONFIG_INTEL_IDLE=y/# CONFIG_INTEL_IDLE is not set/' \
+		-e 's/^CONFIG_INTEL_WMI(.*)=(y|m)/# CONFIG_INTEL_WMI\1 is not set/' \
+		-e 's,^CONFIG_SND_SOC_INTEL(.*)=.*,# CONFIG_SND_SOC_INTEL\1 is not set,' \
+		-e 's,^CONFIG_SND_SOC_SOF_INTEL(.*)=.*,# CONFIG_SND_SOC_SOF_INTEL\1 is not set,' \
+		-e 's,^CONFIG_AMD_NUMA=y,# CONFIG_AMD_NUMA is not set,' \
+		-e 's,^CONFIG_KVM_INTEL=m,# CONFIG_KVM_INTEL is not set,' \
+		-e 's,^CONFIG_INTEL_SOC(.*)=(y|m),# CONFIG_INTEL_SOC\1 is not set,' \
+		-e 's,^CONFIG_AGP_(INTEL|SIS|VIA)=(y|m),# CONFIG_AGP_\1 is not set,' \
+		"$1"
+}
 
 CreateConfig() {
 	arch="$1"
@@ -1211,16 +1232,18 @@ CreateConfig() {
 			;;
 		esac
 		;;
-	x86_64|x86)
+	x86_64|x86|znver1)
 		case ${type} in
 		desktop|desktop-clang)
 			rm -rf .config
 			cp -v ${config_dir}/x86_64-desktop-gcc-omv-defconfig .config
+			[ "${arch}" = "znver1" ] && amdify .config
 			echo ${type} |grep -q clang && clangify .config
 			;;
 		server|server-clang)
 			rm -rf .config
 			cp -v ${config_dir}/x86_64-server-gcc-omv-defconfig .config
+			[ "${arch}" = "znver1" ] && amdify .config
 			echo ${type} |grep -q clang && clangify .config
 			;;
 		*)
@@ -1257,24 +1280,6 @@ CreateConfig() {
 		server|server-clang)
 			rm -rf .config
 			cp -v ${config_dir}/aarch64-server-omv-defconfig .config
-			echo ${type} |grep -q clang && clangify .config
-			;;
-		*)
-			printf '%s\n' "ERROR: no such type ${type} for ${arch}"
-			exit 1
-			;;
-		esac
-		;;
-	znver1)
-		case ${type} in
-		desktop|desktop-clang)
-			rm -rf .config
-			cp -v ${config_dir}/x86_64-znver-desktop-gcc-omv-defconfig .config
-			echo ${type} |grep -q clang && clangify .config
-			;;
-		server|server-clang)
-			rm -rf .config
-			cp -v ${config_dir}/x86_64-znver-server-gcc-omv-defconfig .config
 			echo ${type} |grep -q clang && clangify .config
 			;;
 		*)
