@@ -1583,7 +1583,7 @@ SaveDebug() {
 	debug_flavour=$1
 
 	install -m 644 vmlinux %{temp_boot}/vmlinux-%{kversion}-$debug_flavour-%{buildrpmrel}
-	kernel_debug_files=../kernel_debug_files.$debug_flavour
+	kernel_debug_files=kernel_debug_files.$debug_flavour
 	printf '%s\n' "%{_bootdir}/vmlinux-%{kversion}-$debug_flavour-%{buildrpmrel}" >> $kernel_debug_files
 
 	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f | %kxargs -I '{}' objcopy --only-keep-debug '{}' '{}'.debug
