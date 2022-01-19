@@ -1599,7 +1599,7 @@ SaveDebug() {
 
 CreateFiles() {
 	kernel_flavour=$1
-	kernel_files=../kernel_files.$kernel_flavour
+	kernel_files=kernel_files.$kernel_flavour
 
 	ker="vmlinuz"
 ### Create the kernel_files.*
