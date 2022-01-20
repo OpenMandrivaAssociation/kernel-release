@@ -36,7 +36,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	16
-%define sublevel	1
+%define sublevel	2
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -494,6 +494,8 @@ BuildRequires:	git-core
 # For power tools
 BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	pkgconfig(libkmod)
+# For sign-file
+BuildRequires:	pkgconfig(openssl)
 
 %ifarch %{x86_64} %{aarch64}
 BuildRequires:	pkgconfig(numa)
@@ -1588,6 +1590,10 @@ SaveDebug() {
 
 	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f | %kxargs -I '{}' objcopy --only-keep-debug '{}' '{}'.debug
 	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f | %kxargs -I '{}' sh -c 'cd $(dirname {}); objcopy --add-gnu-debuglink=$(basename {}).debug --strip-debug $(basename {})'
+	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f |while read r; do
+		# sign modules after stripping
+		scripts/sign-file sha1 certs/signing_key.pem certs/signing_key.x509 $r
+	done
 
 	cd %{temp_modules}
 	find %{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko.debug" -type f > debug_module_list
@@ -1797,7 +1803,7 @@ sed -ri "s|^(EXTRAVERSION =).*|\1 -%{rpmrel}|" Makefile
 
 # We install all tools here too (rather than in %%install
 # where it really belongs): make mrproper in preparation
-# for packaging kernel-source would force a rebuilda
+# for packaging kernel-source would force a rebuild
 
 %if %{with build_cpupower}
 # make sure version-gen.sh is executable.
