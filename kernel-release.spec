@@ -50,7 +50,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
@@ -90,7 +90,7 @@
 # Build defines
 %bcond_with build_doc
 %ifarch %{ix86} %{x86_64} aarch64
-%bcond_with uksm
+%bcond_without uksm
 %else
 %bcond_with uksm
 %endif
@@ -279,11 +279,10 @@ Patch42:	linux-5.11-disable-ICF-for-CONFIG_UNWINDER_ORC.patch
 # The Ultra Kernel Same Page Deduplication
 # http://kerneldedup.org/en/projects/uksm/download/
 # sources can be found here https://github.com/dolohow/uksm
+# Usually faster ports to new kernel releases can be found at
+# https://github.com/sirlucjan/kernel-patches/tree/master/5.16/uksm-patches
 %if %{with uksm}
-# breaks armx builds
-Patch43:	https://raw.githubusercontent.com/dolohow/uksm/master/v5.x/uksm-5.15.patch
-# And make it build with gcc 11
-Patch44:	uksm-5.14-gcc-11.patch
+Patch43:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.16/uksm-patches/0001-UKSM-for-5.16.patch
 %endif
 
 # (crazy) see: https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
