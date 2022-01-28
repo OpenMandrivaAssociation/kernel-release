@@ -155,7 +155,7 @@
 
 # ARM builds
 %ifarch %{armx}
-%bcond_with build_desktop
+%bcond_without build_desktop
 %bcond_without build_server
 %endif
 
