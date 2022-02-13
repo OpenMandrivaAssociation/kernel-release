@@ -1154,7 +1154,6 @@ CONFIG_LD_IS_LLD=y
 CONFIG_INIT_STACK_NONE=y
 # CONFIG_INIT_STACK_ALL_PATTERN is not set
 # CONFIG_INIT_STACK_ALL_ZERO is not set
-
 # CONFIG_KCSAN is not set
 # CONFIG_SHADOW_CALL_STACK is not set
 # CONFIG_LTO_NONE is not set
@@ -1166,6 +1165,7 @@ CONFIG_CFI_CLANG_SHADOW=y
 CONFIG_RELR=y
 EOF
 }
+
 amdify() {
 	# Yes, it is intentional that CONFIG_AMD_NUMA gets disabled
 	# for the AMD kernel -- AMD_NUMA is only for pre-ACPI systems
@@ -1320,12 +1320,12 @@ CreateConfig() {
 
 # ( crazy) remove along with the old configs once ARM* and ppc* is finished
 	if [[ -n ${CONFIGS} ]]; then
-		make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 $CONFIGS
+		make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=0 $CONFIGS
 	else
 %if %{without lazy_developer}
 ## YES, intentionally, DIE on wrong config
 		CheckConfig
-		make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=1 oldconfig
+		make ARCH="${arch}" CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" V=0 oldconfig
 %else
 		printf '%s\n' "Lazy developer option is enabled!!. Don't be lazy!."
 ## that takes kernel defaults on missing or changed things
@@ -1378,7 +1378,7 @@ BuildKernel() {
 %ifarch %{aarch64}
 	TARGETS="$TARGETS dtbs"
 %endif
-	%make_build ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" $TARGETS
+	%make_build V=0 VERBOSE=0 ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" $TARGETS
 
 # Start installing stuff
 	install -d %{temp_boot}
@@ -1398,10 +1398,10 @@ BuildKernel() {
 
 # modules
 	install -d %{temp_modules}/$KernelVer
-	%make_build INSTALL_MOD_PATH=%{temp_root} ARCH=%{target_arch} SRCARCH=%{target_arch} KERNELRELEASE=$KernelVer CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" INSTALL_MOD_STRIP=1 modules_install
+	%make_build V=0 VERBOSE=0 INSTALL_MOD_PATH=%{temp_root} ARCH=%{target_arch} SRCARCH=%{target_arch} KERNELRELEASE=$KernelVer CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" INSTALL_MOD_STRIP=1 modules_install
 
 # headers
-	%make_build INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer ARCH=%{target_arch} SRCARCH=%{target_arch} headers_install
+	%make_build V=0 VERBOSE=0 INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer ARCH=%{target_arch} SRCARCH=%{target_arch} headers_install
 
 %ifarch %{armx} %{ppc}
 	%make_build ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
@@ -1475,7 +1475,7 @@ SaveDevel() {
 # Clean the scripts tree, and make sure everything is ok (sanity check)
 # running prepare+scripts (tree was already "prepared" in build)
 	cd $TempDevelRoot >/dev/null
-	%make_build ARCH=%{target_arch} clean
+	%make_build V=0 VERBOSE=0 ARCH=%{target_arch} clean
 	cd - >/dev/null
 
 	rm -f $TempDevelRoot/.config.old
@@ -1590,7 +1590,7 @@ SaveDebug() {
 	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f | %kxargs -I '{}' objcopy --only-keep-debug '{}' '{}'.debug
 	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f | %kxargs -I '{}' sh -c 'cd $(dirname {}); objcopy --add-gnu-debuglink=$(basename {}).debug --strip-debug $(basename {})'
 	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f |while read r; do
-		# sign modules after stripping
+# sign modules after stripping
 		scripts/sign-file sha1 certs/signing_key.pem certs/signing_key.x509 $r
 	done
 
@@ -1922,11 +1922,14 @@ rm -f %{target_source}/*_files.* %{target_source}/README.kernel-sources
 for i in alpha arc avr32 blackfin c6x cris csky frv h8300 hexagon ia64 m32r m68k m68knommu metag microblaze \
 	mips nds32 nios2 openrisc parisc s390 score sh sh64 sparc tile unicore32 v850 xtensa mn10300; do
     rm -rf %{target_source}/arch/$i
+    rm -rf %{target_source}/scripts/dtc/include-prefixes/$i
+    rm -rf %{target_source}/tools/arch/$i
+    rm -rf %{target_source}/tools/testing/selftests/$i
 done
 
 # other misc files
-rm -f %{target_source}/{.config.old,.config.cmd,.gitignore,.lst,.mailmap,.gitattributes}
-rm -f %{target_source}/{.missing-syscalls.d,arch/.gitignore,firmware/.gitignore}
+rm -f %{target_source}/{.clang-format,.config.old,.config.cmd,.gitignore,.lst,.mailmap,.gitattributes,.get_maintainer.ignore}
+rm -f %{target_source}/{.missing-syscalls.d,arch/.gitignore,firmware/.gitignore,.cocciconfig,.gitattributes}
 rm -rf %{target_source}/.tmp_depmod/
 rm -rf %{buildroot}/usr/src/linux-*/uksm.txt
 
@@ -1936,10 +1939,11 @@ cd %{target_source}
 # lots of gitignore files
 find -iname ".gitignore" -delete
 # clean tools tree
-%make_build -C tools clean -j1
-%make_build -C tools/build clean -j1
-%make_build -C tools/build/feature clean -j1
+%make_build -C tools clean -j1 V=0 VERBOSE=0
+%make_build -C tools/build clean -j1 V=0 VERBOSE=0
+%make_build -C tools/build/feature clean -j1 V=0 VERBOSE=0
 rm -f .cache.mk
+
 # Drop script binaries that can be rebuilt
 find tools scripts -executable |while read r; do
     if file $r |grep -q ELF; then
