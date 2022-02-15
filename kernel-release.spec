@@ -1928,8 +1928,8 @@ for i in alpha arc avr32 blackfin c6x cris csky frv h8300 hexagon ia64 m32r m68k
 done
 
 # other misc files
-rm -f %{target_source}/{.clang-format,.config.old,.config.cmd,.gitignore,.lst,.mailmap,.gitattributes,.get_maintainer.ignore}
-rm -f %{target_source}/{.missing-syscalls.d,arch/.gitignore,firmware/.gitignore,.cocciconfig,.gitattributes}
+rm -f %{target_source}/{.config.old,.config.cmd,.gitignore,.lst,.mailmap,.gitattributes,.get_maintainer.ignore}
+rm -f %{target_source}/{.missing-syscalls.d,arch/.gitignore,firmware/.gitignore,.gitattributes}
 rm -rf %{target_source}/.tmp_depmod/
 rm -rf %{buildroot}/usr/src/linux-*/uksm.txt
 
