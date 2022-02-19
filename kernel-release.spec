@@ -24,7 +24,7 @@
 %global _empty_manifest_terminate_build 0
 
 %ifarch aarch64
-%bcond_without gcc
+%bcond_with gcc
 %bcond_without clang
 %else
 %bcond_without gcc
@@ -36,7 +36,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	16
-%define sublevel	9
+%define sublevel	10
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -155,7 +155,7 @@
 
 # ARM builds
 %ifarch %{armx}
-%bcond_without build_desktop
+%bcond_with build_desktop
 %bcond_without build_server
 %endif
 
