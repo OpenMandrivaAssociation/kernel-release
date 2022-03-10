@@ -24,7 +24,7 @@
 %global _empty_manifest_terminate_build 0
 
 %ifarch aarch64
-%bcond_without gcc
+%bcond_with gcc
 %bcond_without clang
 %else
 %bcond_without gcc
@@ -36,7 +36,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	16
-%define sublevel	9
+%define sublevel	13
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -155,7 +155,7 @@
 
 # ARM builds
 %ifarch %{armx}
-%bcond_without build_desktop
+%bcond_with build_desktop
 %bcond_without build_server
 %endif
 
@@ -391,7 +391,6 @@ Patch287:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/maste
 Patch288:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0005-staging-add-rtl8723cs-driver.patch
 Patch289:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0006-pinetab-accelerometer.patch
 Patch290:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0007-enable-jack-detection-pinetab.patch
-Patch291:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-drm-rockchip-RK356x-VOP2-support.patch
 Patch292:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-arm64-dts-rockchip-enable-vop2-and-hdmi-tx-on-quartz64a.patch
 Patch293:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-add-GPU-for-RK356x-SoCs.patch
 Patch294:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0004-power-supply-Add-Support-for-RK817-Charger.patch
