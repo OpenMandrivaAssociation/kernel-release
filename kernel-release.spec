@@ -360,6 +360,7 @@ Patch250:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/ar
 Patch251:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.14/add-rockchip-iep-driver.patch
 
 # (tpg) Manjaro ARM Patches
+%if 0
 Patch260:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0001-arm64-dts-rockchip-Add-back-cdn_dp-to-Pinebook-Pro.patch
 Patch261:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0002-arm64-dts-allwinner-add-hdmi-sound-to-pine-devices.patch
 Patch262:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0003-arm64-dts-allwinner-add-ohci-ehci-to-h5-nanopi.patch
@@ -398,13 +399,14 @@ Patch295:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/maste
 Patch296:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0006-HDMI-Audio-on-RK356x-Quartz64-Model-A.patch
 Patch297:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0007-phy-rockchip-add-naneng-combo-phy-for-RK3568.patch
 Patch298:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/master/0008-arm64-dts-rockchip-enable-sdmmc1-on-Quartz64-Model-A.patch
+%endif
 
 # (tpg) patches taken from https://github.com/OpenMandrivaSoftware/os-image-builder/tree/master/device/rockchip/generic/kernel-patches
 Patch300:	add-board-orangepi-4.patch
 Patch301:	general-btsdio-ignore-uart-devs.patch
 Patch302:	general-emmc-hs400es-init-tweak.patch
 Patch303:	rk3399-add-sclk-i2sout-src-clock.patch
-Patch304:	rtl8723cs-compile.patch
+#Patch304:	rtl8723cs-compile.patch
 
 # (tpg) patches taken from LibreELEC
 #Patch400:	https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/master/projects/Rockchip/patches/linux/default/linux-2000-v4l-wip-rkvdec-vp9.patch
