@@ -1375,10 +1375,19 @@ BuildKernel() {
 		BUILD_TOOLS=""
 	fi
 
-	TARGETS=all
+%ifarch %{arm}
+	IMAGE=zImage
+	TARGETS="${IMAGE} modules"
+%else
 %ifarch %{aarch64}
-	TARGETS="$TARGETS dtbs"
+	IMAGE=Image
+	TARGETS="${IMAGE} modules dtbs"
+%else
+	IMAGE=bzImage
+	TARGETS="${IMAGE} modules"
 %endif
+%endif
+
 	%make_build V=0 VERBOSE=0 ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" $TARGETS
 
 # Start installing stuff
@@ -1386,15 +1395,6 @@ BuildKernel() {
 	install -m 644 System.map %{temp_boot}/System.map-$KernelVer
 	install -m 644 .config %{temp_boot}/config-$KernelVer
 
-%ifarch %{arm}
-	IMAGE=zImage
-%else
-%ifarch %{aarch64}
-	IMAGE=Image.gz
-%else
-	IMAGE=bzImage
-%endif
-%endif
 	cp -f arch/%{target_arch}/boot/$IMAGE %{temp_boot}/vmlinuz-$KernelVer
 
 # modules
@@ -1405,7 +1405,7 @@ BuildKernel() {
 	%make_build V=0 VERBOSE=0 INSTALL_HDR_PATH=%{temp_root}%{_prefix} KERNELRELEASE=$KernelVer ARCH=%{target_arch} SRCARCH=%{target_arch} headers_install
 
 %ifarch %{armx} %{ppc}
-	%make_build ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
+	%make_build  V=0 VERBOSE=0 ARCH=%{target_arch} CC="$CC" HOSTCC="$CC" CXX="$CXX" HOSTCXX="$CXX" LD="$BUILD_LD" HOSTLD="$BUILD_LD" $BUILD_TOOLS KBUILD_HOSTLDFLAGS="$BUILD_KBUILD_LDFLAGS" INSTALL_DTBS_PATH=%{temp_boot}/dtb-$KernelVer dtbs_install
 %endif
 
 # remove /lib/firmware, we use a separate kernel-firmware
@@ -1590,13 +1590,14 @@ SaveDebug() {
 
 	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f | %kxargs -I '{}' objcopy --only-keep-debug '{}' '{}'.debug
 	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f | %kxargs -I '{}' sh -c 'cd $(dirname {}); objcopy --add-gnu-debuglink=$(basename {}).debug --strip-debug $(basename {})'
+	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f -exec strip --strip-debug {} +
 	find %{temp_modules}/%{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko" -type f |while read r; do
 # sign modules after stripping
 		scripts/sign-file sha1 certs/signing_key.pem certs/signing_key.x509 $r
 	done
 
 	cd %{temp_modules}
-	find %{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko.debug" -type f > debug_module_list
+	    find %{kversion}-$debug_flavour-%{buildrpmrel}/kernel -name "*.ko.debug" -type f > debug_module_list
 	cd -
 	cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%{_modulesdir}/\1|' >> $kernel_debug_files
 	cat %{temp_modules}/debug_module_list | sed 's|\(.*\)|%exclude %{_modulesdir}/\1|' >> ../kernel_exclude_debug_files.$debug_flavour
