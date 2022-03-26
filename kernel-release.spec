@@ -35,8 +35,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	16
-%define sublevel	15
+%define patchlevel	17
+%define sublevel	0
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -282,7 +282,7 @@ Patch42:	linux-5.11-disable-ICF-for-CONFIG_UNWINDER_ORC.patch
 # Usually faster ports to new kernel releases can be found at
 # https://github.com/sirlucjan/kernel-patches/tree/master/5.16/uksm-patches
 %if %{with uksm}
-Patch43:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.16/uksm-patches/0001-UKSM-for-5.16.patch
+Patch43:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.17/uksm-patches-v2/0001-UKSM-for-5.17.patch
 %endif
 
 # (crazy) see: https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
@@ -326,11 +326,11 @@ Patch209:	extra-wifi-drivers-port-to-5.6.patch
 # because they need to be applied after stuff from the
 # virtualbox-kernel-module-sources package is copied around
 Source1005:	vbox-6.1-fix-build-on-znver1-hosts.patch
+Source1006:	vboxnetadp-kernel-5.17.patch
 Source1007:	vboxnet-clang.patch
 
 # Better support for newer x86 processors
-# More actively maintained for newer kernels
-Patch211:	https://github.com/sirlucjan/kernel-patches/blob/master/5.2/cpu-patches/0001-cpu-5.2-merge-graysky-s-patchset.patch
+Patch211:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.17/cpu-patches/0001-cpu-patches.patch
 
 # Assorted fixes
 
@@ -403,10 +403,11 @@ Patch298:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/maste
 
 # (tpg) patches taken from https://github.com/OpenMandrivaSoftware/os-image-builder/tree/master/device/rockchip/generic/kernel-patches
 Patch300:	add-board-orangepi-4.patch
-Patch301:	general-btsdio-ignore-uart-devs.patch
 Patch302:	general-emmc-hs400es-init-tweak.patch
 Patch303:	rk3399-add-sclk-i2sout-src-clock.patch
 #Patch304:	rtl8723cs-compile.patch
+
+Patch350:	rtla-5.17-fix-make-clean.patch
 
 # (tpg) patches taken from LibreELEC
 #Patch400:	https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/master/projects/Rockchip/patches/linux/default/linux-2000-v4l-wip-rkvdec-vp9.patch
@@ -428,7 +429,6 @@ Patch904:	0105-ksm-wakeups.patch
 Patch905:	0106-intel_idle-tweak-cpuidle-cstates.patch
 Patch907:	0108-smpboot-reuse-timer-calibration.patch
 Patch908:	0109-initialize-ata-before-graphics.patch
-Patch909:	0110-give-rdrand-some-credit.patch
 Patch910:	0111-ipv4-tcp-allow-the-memory-tuning-for-tcp-to-go-a-lit.patch
 Patch913:	0117-migrate-some-systemd-defaults-to-the-kernel-defaults.patch
 Patch914:	0120-use-lfence-instead-of-rep-and-nop.patch
@@ -1101,6 +1101,7 @@ sed -i -e "s,^KERN_DIR.*,KERN_DIR := $(pwd)," drivers/pci/vboxpci/Makefile*
 echo 'obj-m += vboxpci/' >>drivers/pci/Makefile
 %endif
 patch -p1 -z .1005~ -b <%{S:1005}
+patch -p1 -z .1006~ -b <%{S:1006}
 patch -p1 -z .1007~ -b <%{S:1007}
 %endif
 
@@ -1134,6 +1135,11 @@ CheckConfig() {
 	printf '%s\n' "Please do not disable CONFIG_MODULE_COMPRESS_NONE=y or set any other module compression inside .config, as this will bloat main package instead of debuginfo subpackage, killing the build."
 	exit 1
     fi
+# (tpg) stop enabling CONFIG_DEBUG_KERNEL
+    if ! grep -Fxq "CONFIG_DEBUG_KERNEL=y .config ; then
+	printf '%s\n' "Please do not set CONFIG_DEBUG_KERNEL=y as this is relase build, and we are not developing kernel or its modules."
+	exit 1
+    fi
 }
 
 clangify() {
@@ -1158,8 +1164,8 @@ CONFIG_INIT_STACK_NONE=y
 # CONFIG_KCSAN is not set
 # CONFIG_SHADOW_CALL_STACK is not set
 # CONFIG_LTO_NONE is not set
-CONFIG_LTO_CLANG_FULL=y
-# CONFIG_LTO_CLANG_THIN is not set
+# CONFIG_LTO_CLANG_FULL is not set
+CONFIG_LTO_CLANG_THIN=y
 CONFIG_CFI_CLANG=y
 CONFIG_CFI_CLANG_SHADOW=y
 # CONFIG_CFI_PERMISSIVE is not set
