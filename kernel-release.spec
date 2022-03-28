@@ -36,7 +36,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	17
-%define sublevel	0
+%define sublevel	1
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -1136,7 +1136,7 @@ CheckConfig() {
 	exit 1
     fi
 # (tpg) stop enabling CONFIG_DEBUG_KERNEL
-    if ! grep -Fxq "CONFIG_DEBUG_KERNEL=y .config ; then
+    if grep -Fxq "CONFIG_DEBUG_KERNEL=y" .config ; then
 	printf '%s\n' "Please do not set CONFIG_DEBUG_KERNEL=y as this is relase build, and we are not developing kernel or its modules."
 	exit 1
     fi
