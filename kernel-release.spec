@@ -50,7 +50,7 @@
 %define rpmrel		0.rc%{relc}.1
 %define tar_ver		%{kernelversion}.%{patchlevel}-rc%{relc}
 %else
-%define rpmrel		1
+%define rpmrel		2
 %define tar_ver		%{kernelversion}.%{patchlevel}
 %endif
 %define buildrpmrel	%{rpmrel}%{rpmtag}
