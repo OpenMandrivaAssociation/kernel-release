@@ -36,7 +36,7 @@
 # compose tar.xz name and release
 %define kernelversion	5
 %define patchlevel	17
-%define sublevel	3
+%define sublevel	7
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -403,7 +403,6 @@ Patch298:	https://gitlab.manjaro.org/manjaro-arm/packages/core/linux/-/raw/maste
 
 # (tpg) patches taken from https://github.com/OpenMandrivaSoftware/os-image-builder/tree/master/device/rockchip/generic/kernel-patches
 Patch300:	add-board-orangepi-4.patch
-Patch302:	general-emmc-hs400es-init-tweak.patch
 Patch303:	rk3399-add-sclk-i2sout-src-clock.patch
 #Patch304:	rtl8723cs-compile.patch
 
