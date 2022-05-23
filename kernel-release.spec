@@ -35,8 +35,8 @@
 # This is the place where you set kernel version i.e 4.5.0
 # compose tar.xz name and release
 %define kernelversion	5
-%define patchlevel	17
-%define sublevel	7
+%define patchlevel	18
+%define sublevel	0
 %define relc		0
 # Only ever wrong on x.0 releases...
 %define previous	%{kernelversion}.%(echo $((%{patchlevel}-1)))
@@ -89,8 +89,13 @@
 
 # Build defines
 %bcond_with build_doc
-%ifarch %{ix86} %{x86_64}
+%ifarch %{ix86} %{x86_64} aarch64
+%if %{relc}
+# UKSM is usually not supported for -rc releases
+%bcond_with uksm
+%else
 %bcond_without uksm
+%endif
 %else
 %bcond_with uksm
 %endif
@@ -253,9 +258,7 @@ Source1002:	revert-9d55bebd9816903b821a403a69a94190442ac043.patch
 Patch30:	linux-5.6-fix-disassembler-4args-detection.patch
 Patch31:	die-floppy-die.patch
 Patch32:	0001-Add-support-for-Acer-Predator-macro-keys.patch
-Patch33:	linux-4.7-intel-dvi-duallink.patch
 Patch34:	kernel-5.6-kvm-gcc10.patch
-Patch35:	linux-5.2.9-riscv-compile.patch
 # Work around rpm dependency generator screaming about
 # error: Illegal char ']' (0x5d) in: 1.2.1[50983]_custom
 # caused by aacraid versioning ("1.2.1[50983]-custom")
@@ -282,7 +285,7 @@ Patch42:	linux-5.11-disable-ICF-for-CONFIG_UNWINDER_ORC.patch
 # Usually faster ports to new kernel releases can be found at
 # https://github.com/sirlucjan/kernel-patches/tree/master/5.16/uksm-patches
 %if %{with uksm}
-Patch43:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.17/uksm-patches-v2/0001-UKSM-for-5.17.patch
+Patch43:	https://raw.githubusercontent.com/sirlucjan/kernel-patches/master/5.18/uksm-patches/0001-UKSM-for-5.18.patch
 %endif
 
 # (crazy) see: https://forum.openmandriva.org/t/nvme-ssd-m2-not-seen-by-omlx-4-0/2407
@@ -357,7 +360,6 @@ Patch247:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/ar
 Patch248:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/rk3399-sd-drive-level-8ma.patch
 Patch249:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/rk3399-pci-rockchip-support-ep-gpio-undefined-case.patch
 Patch250:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.11/board-rockpi4-FixMMCFreq.patch
-Patch251:	https://raw.githubusercontent.com/armbian/build/master/patch/kernel/archive/rockchip64-5.14/add-rockchip-iep-driver.patch
 
 # (tpg) Manjaro ARM Patches
 %if 0
@@ -1193,6 +1195,7 @@ amdify() {
 		-e 's,^CONFIG_KVM_INTEL=m,# CONFIG_KVM_INTEL is not set,' \
 		-e 's,^CONFIG_INTEL_SOC(.*)=(y|m),# CONFIG_INTEL_SOC\1 is not set,' \
 		-e 's,^CONFIG_AGP_(INTEL|SIS|VIA)=(y|m),# CONFIG_AGP_\1 is not set,' \
+		-e 's,^CONFIG_PECI=(y|m),# CONFIG_PECI is not set,' \
 		"$1"
 }
 
