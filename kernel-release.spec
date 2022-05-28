@@ -94,7 +94,7 @@
 # UKSM is usually not supported for -rc releases
 %bcond_with uksm
 %else
-%bcond_without uksm
+%bcond_with uksm
 %endif
 %else
 %bcond_with uksm
